@@ -6,7 +6,7 @@
 #    By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /    #
 #                                                  (|     | )|_| |_| |>  <     #
 #    Created: 2022/07/07 17:49:38 by safoh        /'\_   _/`\__|\__,_/_/\_\    #
-#    Updated: 2022/09/12 17:52:23 by safoh        \___)=(___/                  #
+#    Updated: 2022/09/12 18:05:41 by safoh        \___)=(___/                  #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,9 +17,9 @@ include makerc/config.mk
 
 NAME			:=minishell
 
-CC				:=gcc -lreadline
+CC				:=gcc
 RM				:=rm -rfv
-CFLAGS			=-Wall -Wextra -Werror$(if $(FSAN), -g -fsanitize=address)$(if $(DEBUG), -g)
+CFLAGS			=-Wall -Wextra -Werror -lreadline $(if $(FSAN), -g -fsanitize=address)$(if $(DEBUG), -g)
 
 ################################################################################
 all: $(NAME)
@@ -27,7 +27,7 @@ all: $(NAME)
 $(NAME): SHELL :=/bin/bash
 
 $(NAME): $(OBJS) $(MAIN_OBJ) $(LIBFT)
-	$(CC) $(CFLAGS) $^ $(INCLUDE_FLAGS) -o $(NAME)
+	$(CC) $(CFLAGS)$^ $(INCLUDE_FLAGS) -o $(NAME)
 	@printf "$(BLUE_FG)$(NAME)$(RESET_COLOR) created\n"
 
 $(MAIN_OBJ) $(OBJS): $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(HEADER)
