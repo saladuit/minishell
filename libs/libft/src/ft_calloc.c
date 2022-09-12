@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ft_calloc.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: saladin <saladin@student.codam.nl>           +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2020/10/29 02:50:46 by saladin       #+#    #+#                 */
-/*   Updated: 2021/07/26 16:02:00 by safoh         ########   odam.nl         */
+/*                                                    .--.  _                 */
+/*   ft_calloc.c                                     |o_o || |                */
+/*                                                   |:_/ || |_ _   ___  __   */
+/*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
+/*                                                 (|     | )|_| |_| |>  <    */
+/*   Created: 2022/06/23 15:11:38 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
+/*   Updated: 2022/07/21 20:25:44 by saladuit     \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/libft.h"
+#include "libft.h"
 
 void	*ft_calloc(size_t nmemb, size_t size)
 {
@@ -21,9 +21,8 @@ void	*ft_calloc(size_t nmemb, size_t size)
 		size = 1;
 		nmemb = 1;
 	}
-	p = (void *)malloc(nmemb * size);
-	if (p == 0)
-		return (0);
-	ft_bzero(p, nmemb * size);
+	p = malloc(nmemb * size);
+	if (p)
+		ft_bzero(p, nmemb * size);
 	return (p);
 }

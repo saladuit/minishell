@@ -5,19 +5,19 @@
 /*                                                   |:_/ || |_ _   ___  __   */
 /*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
 /*                                                 (|     | )|_| |_| |>  <    */
-/*   Created: 2021/10/01 17:10:35 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
-/*   Updated: 2021/10/01 17:12:33 by safoh        \___)=(___/                 */
+/*   Created: 2022/06/23 15:11:38 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
+/*   Updated: 2022/07/21 20:37:03 by saladuit     \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/libft.h"
+#include "libft.h"
 
 char	*ft_strnew(size_t size)
 {
 	char	*str;
 
-	if (size == __SIZE_MAX__)
+	if (size >= __SIZE_MAX__)
 		return (NULL);
-	str = (char *)ft_memalloc(size + 1);
+	str = ft_calloc(size + 1, sizeof(char));
 	return (str);
 }

@@ -5,12 +5,12 @@
 /*                                                   |:_/ || |_ _   ___  __   */
 /*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
 /*                                                 (|     | )|_| |_| |>  <    */
-/*   Created: 2021/09/22 14:43:34 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
-/*   Updated: 2021/09/22 14:45:48 by safoh        \___)=(___/                 */
+/*   Created: 2022/06/23 15:11:38 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
+/*   Updated: 2022/07/20 20:12:32 by saladuit     \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/libft.h"
+#include "libft.h"
 
 size_t	ft_sgdnumlen(long long num)
 {

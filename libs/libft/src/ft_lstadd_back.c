@@ -5,16 +5,16 @@
 /*                                                   |:_/ || |_ _   ___  __   */
 /*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
 /*                                                 (|     | )|_| |_| |>  <    */
-/*   Created: 2022/02/09 14:42:04 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
-/*   Updated: 2022/03/28 18:42:41 by safoh        \___)=(___/                 */
+/*   Created: 2022/06/23 15:11:38 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
+/*   Updated: 2022/07/20 20:01:34 by saladuit     \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/libft.h"
+#include "libft.h"
 
 void	ft_lstadd_back(t_list **lst, t_list *lnew)
 {
-	t_list *last;
+	t_list	*last;
 
 	if (*lst == NULL)
 	{
@@ -23,5 +23,6 @@ void	ft_lstadd_back(t_list **lst, t_list *lnew)
 	}
 	last = ft_lstlast(*lst);
 	last->next = lnew;
+	lnew->next = NULL;
 	return ;
 }

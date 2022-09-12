@@ -1,32 +1,30 @@
 # **************************************************************************** #
 #                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: safoh <safoh@student.codam.nl>             +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/06/11 13:49:39 by safoh             #+#    #+#              #
-#    Updated: 2022/06/13 16:11:38 by safoh            ###   ########.fr        #
+#                                                     .--.  _                  #
+#    Makefile                                        |o_o || |                 #
+#                                                    |:_/ || |_ _   ___  __    #
+#    By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /    #
+#                                                  (|     | )|_| |_| |>  <     #
+#    Created: 2022/07/07 17:49:38 by safoh        /'\_   _/`\__|\__,_/_/\_\    #
+#    Updated: 2022/09/12 17:46:17 by safoh        \___)=(___/                  #
 #                                                                              #
 # **************************************************************************** #
 
 include makerc/colours.mk
-include makerc/makefile.mk
-include makerc/unit_makefile.mk
+include makerc/config.mk
 
 ################################################################################
 
-NAME			:=	push_swap
+NAME			:=minishell
 
-CC				:=	gcc
-RM				:=	rm -rfv
-CFLAGS			=	-Wall -Wextra -Werror $(if $(DEBUG), -g) \
-					$(if $(FSAN), -fsanitize=address -g)
+CC				:=gcc
+RM				:=rm -rfv
+CFLAGS			=-Wall -Wextra -Werror$(if $(FSAN), -g -fsanitize=address)$(if $(DEBUG), -g)
 
 ################################################################################
 all: $(NAME)
 
-$(NAME): SHELL := /bin/bash
+$(NAME): SHELL :=/bin/bash
 
 $(NAME): $(OBJS) $(MAIN_OBJ) $(LIBFT)
 	$(CC) $(CFLAGS) $^ $(INCLUDE_FLAGS) -o $(NAME)
@@ -34,44 +32,48 @@ $(NAME): $(OBJS) $(MAIN_OBJ) $(LIBFT)
 
 $(MAIN_OBJ) $(OBJS): $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(HEADER)
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(INCLUDE_FLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDE_FLAGS) -c $< -o $@
 
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR)
 
 ################################################################################
 
+clean:
+	@$(RM) $(OBJS) $(MAIN_OBJ)
+	@$(MAKE) clean -C $(LIBFT_DIR)
+
+fclean: clean
+	@$(RM) $(NAME)
+	@$(MAKE) fclean -C $(LIBFT_DIR)
+
+re: fclean
+	@$(MAKE)
+
 debug:
 	@$(MAKE) DEBUG=1
+
+rebug: fclean
+	@$(MAKE) debug
 
 fsan:
 	@$(MAKE) FSAN=1
 
-clean:
-	$(RM) $(OBJS) $(MAIN_OBJ) $(addprefix $(BUILD_DIR)/,$(COVERAGE))
-	@$(MAKE) clean -C $(LIBFT_DIR)
-	@$(MAKE) clean -C $(UNIT_DIR)
+resan: fclean
+	@$(MAKE) fsan
 
-fclean: clean
-	$(RM) $(NAME) $(UNIT_TEST)
-	@$(MAKE) fclean -C $(LIBFT_DIR)
-	@$(MAKE) fclean -C $(UNIT_DIR)
+bonus: all
 
-re: fclean
-	$(MAKE)
+re_malloc_test: fclean
+	@$(MAKE) malloc_test
 
-tests_run: CFLAGS +=-g --coverage ## Launch tests
-tests_run: $(OBJS) $(LIBFT)
-	$(MAKE) -C $(UNIT_DIR)
-	./$(UNIT_TEST)
-	gcov -n $(COVERAGE) -o=$(BUILD_DIR)
+malloc_test: $(OBJS) $(MAIN_OBJ) $(LIBFT)
+	@$(MAKE) DEBUG=1
+	$(CC) $(CFLAGS) $^ -fsanitize=undefined -rdynamic -o $@ $(INCLUDE_FLAGS) -L../ft_mallocator -lmallocator
 
-re_tests: fclean
-	$(MAKE) tests_run
+valgrind: debug ## Launch valgrind
+	valgrind --leak-check=full ./$(NAME)
 
-valgrind: all ## Launch valgrind
-	valgrind --leak-check=full ./$(TARGET)
-
-.PHONY: all clean fclean re tests_run debug fsan valgrind
+.PHONY: all clean fclean re debug rebug valgrind malloc_test re_malloc_test fsan resan
 
 ################################################################################

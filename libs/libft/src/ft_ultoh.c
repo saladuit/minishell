@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
+/*                                                    .--.  _                 */
 /*   ft_ultoh.c                                      |o_o || |                */
-/*                                                     +:+                    */
-/*   By: safoh <safoh@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2021/08/26 17:58:42 by safoh         #+#    #+#                 */
-/*   Updated: 2021/09/22 14:00:15 by safoh        \___)=(___/                 */
+/*                                                   |:_/ || |_ _   ___  __   */
+/*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
+/*                                                 (|     | )|_| |_| |>  <    */
+/*   Created: 2022/06/23 15:11:38 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
+/*   Updated: 2022/07/20 20:14:53 by saladuit     \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/libft.h"
+#include "libft.h"
 
 static size_t	hexlen(unsigned long n)
 {
@@ -30,9 +30,9 @@ static size_t	hexlen(unsigned long n)
 char	*ft_ultoh(unsigned long n)
 {
 	const char	hex[17] = "0123456789abcdef";
-	char	*result;
-	size_t	len;
-	size_t	i;
+	char		*result;
+	size_t		len;
+	size_t		i;
 
 	len = hexlen(n);
 	i = 0;

@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
+/*                                                    .--.  _                 */
 /*   ft_atoi.c                                       |o_o || |                */
-/*                                                     +:+                    */
-/*   By: saladin <saladin@student.codam.nl>           +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2020/10/28 18:50:33 by saladin       #+#    #+#                 */
-/*   Updated: 2022/04/11 17:27:53 by safoh        \___)=(___/                 */
+/*                                                   |:_/ || |_ _   ___  __   */
+/*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
+/*                                                 (|     | )|_| |_| |>  <    */
+/*   Created: 2022/06/23 15:11:38 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
+/*   Updated: 2022/08/30 14:40:37 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/libft.h"
-
+#include "libft.h"
 
 static size_t	init_atoi(const char *nptr, int *sign)
 {
@@ -30,11 +29,11 @@ static size_t	init_atoi(const char *nptr, int *sign)
 	return (len);
 }
 
-int	ft_atoi(const char *nptr)
+int32_t	ft_atoi(const char *nptr)
 {
 	long long	nbr;
 	size_t		i;
-	int			sign;
+	int32_t		sign;
 
 	nbr = 0;
 	sign = 1;
@@ -43,8 +42,8 @@ int	ft_atoi(const char *nptr)
 	{
 		nbr = nbr * 10 + nptr[i] - '0';
 		i++;
-	}
-	if (nbr * sign < -2147483648 || nbr * sign > 2147483647)
+		if (nbr * sign < -2147483648 || nbr * sign > 2147483647)
 			return (0);
-	return ((int)nbr * sign);
+	}
+	return ((int32_t)nbr * sign);
 }

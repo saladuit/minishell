@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                                        0   */
+/*                                                    .--.  _                 */
 /*   ft_lstiter.c                                    |o_o || |                */
-/*                                                                        0   */
-/*   By: safoh <safoh@student.codam.nl>                                   0   */
-/*                                                                        0   */
-/*   Created: 2022/02/09 20:56:55 by safoh                                0   */
-/*   Updated: 2022/02/09 21:34:47 by safoh        \___)=(___/                 */
+/*                                                   |:_/ || |_ _   ___  __   */
+/*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
+/*                                                 (|     | )|_| |_| |>  <    */
+/*   Created: 2022/06/23 15:11:38 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
+/*   Updated: 2022/07/20 20:02:40 by saladuit     \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/libft.h"
+#include "libft.h"
 
 void	ft_lstiter(t_list *lst, void (*f)(void *))
 {
-	int size;
+	int	size;
 
 	size = ft_lstsize(lst);
 	while (size)

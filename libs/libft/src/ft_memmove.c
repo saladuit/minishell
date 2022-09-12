@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ft_memmove.c                                       :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: saladin <saladin@student.codam.nl>           +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2020/10/29 02:51:00 by saladin       #+#    #+#                 */
-/*   Updated: 2021/07/26 15:56:40 by safoh         ########   odam.nl         */
+/*                                                    .--.  _                 */
+/*   ft_memmove.c                                    |o_o || |                */
+/*                                                   |:_/ || |_ _   ___  __   */
+/*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
+/*                                                 (|     | )|_| |_| |>  <    */
+/*   Created: 2022/06/23 15:11:38 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
+/*   Updated: 2022/07/20 20:08:44 by saladuit     \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/libft.h"
+#include "libft.h"
 
 void	*ft_memmove(void *dest, const void *src, size_t n)
 {

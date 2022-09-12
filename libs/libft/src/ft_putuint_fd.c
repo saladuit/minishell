@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ft_putuint_fd.c                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: safoh <safoh@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2021/08/20 11:41:53 by safoh         #+#    #+#                 */
-/*   Updated: 2021/08/20 11:43:45 by safoh         ########   odam.nl         */
+/*                                                    .--.  _                 */
+/*   ft_putuint_fd.c                                 |o_o || |                */
+/*                                                   |:_/ || |_ _   ___  __   */
+/*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
+/*                                                 (|     | )|_| |_| |>  <    */
+/*   Created: 2022/06/23 15:11:38 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
+/*   Updated: 2022/07/20 20:12:25 by saladuit     \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/libft.h"
+#include "libft.h"
 
 void	ft_putuint_fd(unsigned int nb, int fd)
 {

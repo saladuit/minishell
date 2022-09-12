@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
-/*                                                     +:+                    */
-/*   By: saladin <saladin@student.codam.nl>           +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2020/10/29 02:51:05 by saladin       #+#    #+#                 */
-/*   Updated: 2022/06/11 18:48:35 by safoh            ###   ########.fr       */
+/*                                                    .--.  _                 */
+/*   ft_putendl_fd.c                                 |o_o || |                */
+/*                                                   |:_/ || |_ _   ___  __   */
+/*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
+/*                                                 (|     | )|_| |_| |>  <    */
+/*   Created: 2022/06/23 15:11:38 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
+/*   Updated: 2022/07/20 20:12:02 by saladuit     \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/libft.h"
+#include "libft.h"
 
-void	ft_putendl_fd(char *s, int fd)
+void	ft_putendl_fd(const char *s, int fd)
 {
 	ft_putstr_fd(s, fd);
 	ft_putchar_fd('\n', fd);

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
+/*                                                    .--.  _                 */
 /*   ft_strbapi.c                                    |o_o || |                */
-/*                                                     +:+                    */
-/*   By: saladin <saladin@student.codam.nl>           +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2020/10/29 02:51:25 by saladin       #+#    #+#                 */
-/*   Updated: 2022/03/31 18:52:55 by safoh        \___)=(___/                 */
+/*                                                   |:_/ || |_ _   ___  __   */
+/*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
+/*                                                 (|     | )|_| |_| |>  <    */
+/*   Created: 2022/06/23 15:11:38 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
+/*   Updated: 2022/07/20 20:12:47 by saladuit     \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/libft.h"
+#include "libft.h"
 
 bool	ft_strbapi(char const *s, bool (*f)(int))
 {
@@ -23,7 +23,7 @@ bool	ft_strbapi(char const *s, bool (*f)(int))
 	len = ft_strlen(s);
 	while (i < len)
 	{
-		if(!f(s[i]))
+		if (!f(s[i]))
 			return (false);
 		i++;
 	}

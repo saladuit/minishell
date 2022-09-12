@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   ft_strchr.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: saladin <saladin@student.codam.nl>           +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2020/10/29 02:51:13 by saladin       #+#    #+#                 */
-/*   Updated: 2021/07/26 15:34:53 by safoh         ########   odam.nl         */
+/*                                                    .--.  _                 */
+/*   ft_strchr.c                                     |o_o || |                */
+/*                                                   |:_/ || |_ _   ___  __   */
+/*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
+/*                                                 (|     | )|_| |_| |>  <    */
+/*   Created: 2022/06/23 15:11:38 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
+/*   Updated: 2022/07/22 11:11:27 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/libft.h"
+#include "libft.h"
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -23,9 +23,9 @@ char	*ft_strchr(const char *s, int c)
 		{
 			return (p);
 		}
+		if (*p == '\0')
+			return (NULL);
 		p++;
 	}
-	if (c == '\0')
-		return (p);
-	return (0);
+	return (NULL);
 }
