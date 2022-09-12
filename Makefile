@@ -6,7 +6,7 @@
 #    By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /    #
 #                                                  (|     | )|_| |_| |>  <     #
 #    Created: 2022/07/07 17:49:38 by safoh        /'\_   _/`\__|\__,_/_/\_\    #
-#    Updated: 2022/09/12 17:46:17 by safoh        \___)=(___/                  #
+#    Updated: 2022/09/12 17:52:23 by safoh        \___)=(___/                  #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ include makerc/config.mk
 
 NAME			:=minishell
 
-CC				:=gcc
+CC				:=gcc -lreadline
 RM				:=rm -rfv
 CFLAGS			=-Wall -Wextra -Werror$(if $(FSAN), -g -fsanitize=address)$(if $(DEBUG), -g)
 
