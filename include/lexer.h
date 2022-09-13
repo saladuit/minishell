@@ -6,13 +6,16 @@
 /*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
 /*                                                 (|     | )|_| |_| |>  <    */
 /*   Created: 2022/09/13 16:02:56 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
-/*   Updated: 2022/09/13 16:14:46 by safoh        \___)=(___/                 */
+/*   Updated: 2022/09/13 17:14:05 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 
-int32_t	lexer(char **argv, char **envp, t_tree *astree);
+# include <libft.h>
+# include <stdint.h>
+
+int32_t	lexer(char **envp, t_list **tokens);
 
 #endif

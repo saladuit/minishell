@@ -6,11 +6,15 @@
 /*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
 /*                                                 (|     | )|_| |_| |>  <    */
 /*   Created: 2022/09/13 16:21:39 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
-/*   Updated: 2022/09/13 16:22:01 by safoh        \___)=(___/                 */
+/*   Updated: 2022/09/13 17:29:08 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
-int32_t	expander(t_tree *astree)
+#include <message.h>
+#include <expander.h>
+
+int32_t	expander(t_tree *command_table)
 {
+	(void)command_table;
 	return (SUCCESS);
 }

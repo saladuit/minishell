@@ -6,14 +6,16 @@
 /*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
 /*                                                 (|     | )|_| |_| |>  <    */
 /*   Created: 2022/09/13 16:20:44 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
-/*   Updated: 2022/09/13 16:21:18 by safoh        \___)=(___/                 */
+/*   Updated: 2022/09/13 17:26:26 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
-int32_t	lexer(char **argv, char **envp, t_tree *astree)
+#include <lexer.h>
+#include <message.h>
+
+int32_t	lexer(char **envp, t_list **tokens)
 {
-	(void)argv;
 	(void)envp;
-	(void)astree;
+	(void)tokens;
 	return (SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
 /*                                                 (|     | )|_| |_| |>  <    */
 /*   Created: 2022/09/12 17:26:23 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
-/*   Updated: 2022/09/13 16:13:51 by safoh        \___)=(___/                 */
+/*   Updated: 2022/09/13 17:24:50 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,6 @@
 # include <executor.h>
 # include <ft_tree.h>
 
+int32_t	minishell(char **envp);
 
 #endif
