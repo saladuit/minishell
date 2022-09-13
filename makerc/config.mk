@@ -6,12 +6,12 @@
 #    By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /    #
 #                                                  (|     | )|_| |_| |>  <     #
 #    Created: 2022/07/16 21:50:54 by safoh        /'\_   _/`\__|\__,_/_/\_\    #
-#    Updated: 2022/09/12 17:45:45 by safoh        \___)=(___/                  #
+#    Updated: 2022/09/13 14:56:28 by safoh        \___)=(___/                  #
 #                                                                              #
 # **************************************************************************** #
 
 
-SRCS			=
+SRCS			=minishell.c lexer.c parer.c expander.c executor.c
 MAIN 			:=main.c
 
 SRC_DIR			:=src
