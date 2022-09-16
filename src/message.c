@@ -6,7 +6,7 @@
 /*   By: safoh <safoh@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 15:52:38 by safoh         #+#    #+#                 */
-/*   Updated: 2022/09/16 10:08:18 by dritsema      ########   odam.nl         */
+/*   Updated: 2022/09/16 15:16:09 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 int32_t	ft_minishell_exit(t_message code)
 {
 	if (code == SUCCESS)
-		 exit(EXIT_SUCCESS);
+		exit(EXIT_SUCCESS);
 	if (code == USAGE)
 		ft_putendl_fd((char *)messages_lookup(code), STDOUT_FILENO);
 	else

@@ -6,7 +6,7 @@
 /*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/06/07 12:51:11 by dritsema      #+#    #+#                 */
-/*   Updated: 2022/09/16 10:26:22 by dritsema      ########   odam.nl         */
+/*   Updated: 2022/09/16 15:35:37 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@
  *
  * @param pointer The 2d array to measure.
  * @return The total "length" of the 2d array. */
-size_t				ft_matrixlen(void **matrix);
+size_t			ft_matrixlen(void **matrix);
 
-char	*ft_joinmatrix(const char **matrix, size_t count);
+char			*ft_joinmatrix(const char **matrix, size_t count);
 
 // ############### Ascii ###############
 
