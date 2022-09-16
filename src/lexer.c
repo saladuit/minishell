@@ -6,13 +6,15 @@
 /*   By: safoh <safoh@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 16:20:44 by safoh         #+#    #+#                 */
-/*   Updated: 2022/09/16 11:33:57 by dritsema      ########   odam.nl         */
+/*   Updated: 2022/09/16 13:58:09 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <lexer.h>
 #include <message.h>
 #include <stdio.h> // Remove
+// Meta characters: SPACE, TAB, NEWLINE, ;, (, ), <, >, |, &.
+// Types of tokens: words, keywords, I/O redirectors, and semicolons.
 
 t_token	*make_token(const char *input_line, int len)
 {
@@ -23,8 +25,7 @@ t_token	*make_token(const char *input_line, int len)
 	ft_strlcpy(token->symbol, input_line, len);
 	return (token);
 }
-// Meta characters: SPACE, TAB, NEWLINE, ;, (, ), <, >, |, &.
-// Types of tokens: words, keywords, I/O redirectors, and semicolons.
+
 int32_t	get_token_len(const char *input)
 {
 	int32_t	i;
