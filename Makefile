@@ -6,7 +6,7 @@
 #    By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /    #
 #                                                  (|     | )|_| |_| |>  <     #
 #    Created: 2022/07/07 17:49:38 by safoh        /'\_   _/`\__|\__,_/_/\_\    #
-#    Updated: 2022/09/16 10:12:58 by safoh        \___)=(___/                  #
+#    Updated: 2022/09/16 10:22:36 by safoh        \___)=(___/                  #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,13 +67,13 @@ resan: fclean
 
 bonus: all
 
-tests_run: CFLAGS +=-g --coverage ## Launch tests
-tests_run: $(OBJS) $(LIBFT)
+unit_test: CFLAGS +=-g --coverage ## Launch tests
+unit_test: $(OBJS) $(LIBFT)
 	@$(MAKE) -C $(UNIT_DIR)
 	@./$(UNIT_TEST) -j0
 	@gcov $(addprefix build/, $(SRCS)) -n -b -f -a
 
-re_tests: fclean
+re_unitests: fclean
 	@$(MAKE) tests_run
 
 re_malloc_test: fclean
@@ -86,6 +86,6 @@ malloc_test: $(OBJS) $(MAIN_OBJ) $(LIBFT)
 valgrind: debug ## Launch valgrind
 	valgrind --leak-check=full ./$(NAME)
 
-.PHONY: all clean fclean re debug rebug valgrind malloc_test re_malloc_test fsan resan tests_run re_tests
+.PHONY: all clean fclean re debug rebug valgrind malloc_test re_malloc_test fsan resan unit_test renuit_test
 
 ################################################################################
