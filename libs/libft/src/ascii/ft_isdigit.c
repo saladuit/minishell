@@ -1,27 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   lexer.h                                            :+:    :+:            */
+/*   ft_isdigit.c                                       :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: safoh <safoh@student.codam.nl>               +#+                     */
+/*   By: dritsema <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/09/13 16:02:56 by safoh         #+#    #+#                 */
-/*   Updated: 2022/09/16 09:38:56 by dritsema      ########   odam.nl         */
+/*   Created: 2021/10/05 18:37:42 by dritsema      #+#    #+#                 */
+/*   Updated: 2022/06/07 23:32:45 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
-
-# include <libft.h>
-# include <stdint.h>
-
-typedef s_token
+/**
+ * @brief Tests for a decimal digit character.
+ *
+ * @param c The character to test.
+ * @return 1 if 'c' is a decimal digit character, 0 otherwise.
+ */
+int	ft_isdigit(int c)
 {
-	int		type;
-	char	*symbol;
-}	t_token;
-
-int32_t	lexer(char *input_line, char **envp, t_list **tokens);
-
-#endif
+	return (c >= 48 && c <= 57);
+}

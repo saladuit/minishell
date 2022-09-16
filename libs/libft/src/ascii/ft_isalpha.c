@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_printf.h                                        :+:    :+:            */
+/*   ft_isalpha.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/12/10 13:37:12 by dritsema      #+#    #+#                 */
-/*   Updated: 2022/06/18 22:23:42 by dritsema      ########   odam.nl         */
+/*   Created: 2022/05/26 19:05:17 by dritsema      #+#    #+#                 */
+/*   Updated: 2022/06/07 23:22:50 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
-
-int	ft_printf(const char *s, ...);
-int	ft_printhex(unsigned long n);
-int	ft_upprinthex(unsigned long n);
-int	ft_printun(unsigned int n);
-int	ft_printchar(char c);
-int	ft_printnbr(int n);
-int	ft_printstr(char *s);
-
-#endif // FT_PRINTF_H
+/**
+ * @brief Tests for any character for which
+ * ft_isupper() or ft_islower() is true.
+ *
+ * @param c The character to test.
+ * @return 1 if 'c' is an alphabetical character, 0 otherwise.
+ */
+int	ft_isalpha(int c)
+{
+	return ((c >= 65 && c <= 90) || (c >= 97 && c <= 122));
+}

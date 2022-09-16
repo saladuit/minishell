@@ -1,24 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_printf.h                                        :+:    :+:            */
+/*   ft_2darlen.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/12/10 13:37:12 by dritsema      #+#    #+#                 */
-/*   Updated: 2022/06/18 22:23:42 by dritsema      ########   odam.nl         */
+/*   Created: 2022/06/22 14:18:41 by dritsema      #+#    #+#                 */
+/*   Updated: 2022/06/22 14:39:26 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+/**
+ * @brief Takes a NULL terminated 2d array and returns
+ * the amount of arrays in it.
+ *
+ * @param pointer The 2d array to measure.
+ * @return The total "length" of the 2d array. */
+int	ft_2darlen(void **pointer)
+{
+	int	i;
 
-int	ft_printf(const char *s, ...);
-int	ft_printhex(unsigned long n);
-int	ft_upprinthex(unsigned long n);
-int	ft_printun(unsigned int n);
-int	ft_printchar(char c);
-int	ft_printnbr(int n);
-int	ft_printstr(char *s);
-
-#endif // FT_PRINTF_H
+	i = 0;
+	while (pointer[i])
+	{
+		i++;
+	}
+	return (i);
+}

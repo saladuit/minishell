@@ -1,24 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_printf.h                                        :+:    :+:            */
+/*   ft_printstr.c                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/12/10 13:37:12 by dritsema      #+#    #+#                 */
-/*   Updated: 2022/06/18 22:23:42 by dritsema      ########   odam.nl         */
+/*   Created: 2021/11/06 15:45:58 by dritsema      #+#    #+#                 */
+/*   Updated: 2022/06/16 13:45:49 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include <unistd.h>
 
-int	ft_printf(const char *s, ...);
-int	ft_printhex(unsigned long n);
-int	ft_upprinthex(unsigned long n);
-int	ft_printun(unsigned int n);
-int	ft_printchar(char c);
-int	ft_printnbr(int n);
-int	ft_printstr(char *s);
+static size_t	ft_strlen(const char *s)
+{
+	size_t	i;
 
-#endif // FT_PRINTF_H
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+
+int	ft_printstr(char *s)
+{
+	int	slen;
+
+	if (!s)
+		return (write(1, "(null)", 6));
+	slen = ft_strlen(s);
+	return (write(1, s, slen));
+}

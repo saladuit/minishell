@@ -1,27 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   lexer.h                                            :+:    :+:            */
+/*   ft_isprint.c                                       :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: safoh <safoh@student.codam.nl>               +#+                     */
+/*   By: dritsema <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/09/13 16:02:56 by safoh         #+#    #+#                 */
-/*   Updated: 2022/09/16 09:38:56 by dritsema      ########   odam.nl         */
+/*   Created: 2021/10/06 16:18:55 by dritsema      #+#    #+#                 */
+/*   Updated: 2022/06/07 23:34:44 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
-
-# include <libft.h>
-# include <stdint.h>
-
-typedef s_token
+/**
+ * @brief Tests for any printing character, including space.
+ *
+ * @param c The character to test.
+ * @return 1 if 'c' is a printable character, 0 otherwise.
+ */
+int	ft_isprint(int c)
 {
-	int		type;
-	char	*symbol;
-}	t_token;
-
-int32_t	lexer(char *input_line, char **envp, t_list **tokens);
-
-#endif
+	return (c >= 32 && c <= 126);
+}
