@@ -15,7 +15,7 @@ RESTORE	= \0338
 INSET	= $(BEGIN)$(GREEN)+ $(BLUE)
 
 SRCS	=	$(SRC_ARRAY) $(SRC_ASCII) $(SRC_CONVERT) $(SRC_GNL)\
-			$(SRC_LST) $(SRC_MEM) $(SRC_MISC) $(SRC_PRINTF)\
+			$(SRC_LST) $(SRC_MEM) $(SRC_MESSAGE) $(SRC_MISC) $(SRC_PRINTF)\
 			$(SRC_PUT) $(SRC_STR)
 
 SRC_ARRAY	=	array/ft_2darlen.c
@@ -53,6 +53,8 @@ SRC_MEM		=	mem/ft_bzero.c \
 				mem/ft_memcpy.c \
 				mem/ft_memmove.c \
 				mem/ft_memset.c
+
+SRC_MESSAGE	=	message/ft_error.c
 
 SRC_MISC	=	misc/ft_abs.c \
 				misc/ft_numlen.c
@@ -114,11 +116,11 @@ all: heading status comp
 comp: $(NAME)
 
 heading:
-	@printf "$(CYAN)---< $(ORANGE)Duco's libft $(CYAN)>---\n"
+	@printf "$(CYAN)---< $(ORANGE)Duco's libft $(CYAN)>---\n$(RESET)"
 
 status:
 ifneq ($(filter $(OBJS), $(wildcard obj/*/*.o)),)
-	@printf "$(INSET)Nothing to be done.\n"
+	@printf "$(INSET)Nothing to be done.\n$(RESET)"
 endif
 
 obj/%.o: src/%.c
@@ -130,7 +132,7 @@ obj/%.o: src/%.c
 $(NAME): $(OBJS)
 	@printf "$(INSET)"
 	@ar rcs $(NAME) $(OBJS)
-	@printf "$(ORANGE)Created archive.\n"
+	@printf "$(ORANGE)Created archive.\n$(RESET)"
 
 clean: heading
 	@rm -rf obj

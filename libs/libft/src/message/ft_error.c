@@ -1,27 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   lexer.h                                            :+:    :+:            */
+/*   ft_error.c                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: safoh <safoh@student.codam.nl>               +#+                     */
+/*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/09/13 16:02:56 by safoh         #+#    #+#                 */
-/*   Updated: 2022/09/16 09:55:34 by dritsema      ########   odam.nl         */
+/*   Created: 2022/09/16 09:58:37 by dritsema      #+#    #+#                 */
+/*   Updated: 2022/09/16 10:08:54 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#include "libft.h"
+#include <unistd.h>
 
-# include <libft.h>
-# include <stdint.h>
-
-typedef struct s_token
+void	ft_error(void)
 {
-	int		type;
-	char	*symbol;
-}	t_token;
-
-int32_t	lexer(char *input_line, char **envp, t_list **tokens);
-
-#endif
+	ft_putendl_fd("Error", STDERR_FILENO);
+}
