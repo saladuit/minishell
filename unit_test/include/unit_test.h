@@ -6,7 +6,7 @@
 /*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
 /*                                                 (|     | )|_| |_| |>  <    */
 /*   Created: 2022/03/25 17:34:35 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
-/*   Updated: 2022/09/16 09:59:36 by safoh        \___)=(___/                 */
+/*   Updated: 2022/09/16 10:24:13 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define UNIT_TEST_H
 # include <criterion/criterion.h>
 # include <criterion/redirect.h>
-# include "so_long.h"
+# include "minishell.h"
 
 void	redirect_all_std(void);
 void	assert_empty_stdout();
