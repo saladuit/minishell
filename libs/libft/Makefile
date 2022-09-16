@@ -102,7 +102,7 @@ PERCENT		=	$(INSET)$(CYAN)$(shell echo \
 ifeq ($(TESTFLAGS), 1)
 CFLAGS	= -Wall -Wextra -Werror -fsanitize=address -g
 else
-CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra -Werror$(if $(FSAN), -g -fsanitize=address)$(if $(DEBUG), -g)
 endif
 
 NAME	= libft.a
