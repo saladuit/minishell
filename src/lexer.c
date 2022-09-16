@@ -6,7 +6,7 @@
 /*   By: safoh <safoh@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 16:20:44 by safoh         #+#    #+#                 */
-/*   Updated: 2022/09/16 13:58:09 by dritsema      ########   odam.nl         */
+/*   Updated: 2022/09/16 16:22:57 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,21 @@
 // Meta characters: SPACE, TAB, NEWLINE, ;, (, ), <, >, |, &.
 // Types of tokens: words, keywords, I/O redirectors, and semicolons.
 
+// int32_t	is_metachar(char c)
+// {
+// 	if ()
+// 	{
+
+// 	}
+// }
+
 t_token	*make_token(const char *input_line, int len)
 {
 	t_token	*token;
 
 	token = malloc(sizeof(t_token));
 	token->symbol = malloc(len + 1);
-	ft_strlcpy(token->symbol, input_line, len);
+	ft_strlcpy(token->symbol, input_line, len + 1);
 	return (token);
 }
 
@@ -31,7 +39,7 @@ int32_t	get_token_len(const char *input)
 	int32_t	i;
 
 	i = 0;
-	while (!ft_iswhitespace(input[i]))
+	while (!ft_iswhitespace(input[i]) && input[i])
 	{
 		i++;
 	}
@@ -54,8 +62,10 @@ int32_t	lexer(const char *input_line, t_list **tokens)
 			token_len = get_token_len(&input_line[i]);
 			node = ft_lstnew(make_token(&input_line[i], token_len));
 			ft_lstadd_back(tokens, node);
+			i += token_len;
 		}
-		i++;
+		else
+			i++;
 	}
 	return (SUCCESS);
 }
