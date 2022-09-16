@@ -125,7 +125,7 @@ endif
 
 obj/%.o: src/%.c
 	@mkdir -p $(@D)
-	@$(CC) $(CFLAGS) $(INC) -c $^ -o $@
+	$(CC) $(CFLAGS) $(INC) -c $^ -o $@
 	@printf "$(PERCENT) $(BLUE)Compiling: $(GREEN)%s$(RESET)\n" "$^"
 	$(eval COMPILED=$(shell echo $$(($(COMPILED)+1))))
 
