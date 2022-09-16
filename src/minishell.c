@@ -6,7 +6,7 @@
 /*   By: safoh <safoh@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 15:44:40 by safoh         #+#    #+#                 */
-/*   Updated: 2022/09/16 10:04:10 by dritsema      ########   odam.nl         */
+/*   Updated: 2022/09/16 11:34:25 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,13 @@ int32_t	minishell(char **envp)
 
 	command_table = NULL;
 	tokens = NULL;
+	(void)envp;
 	while (true)
 	{
 		input_line = readline(messages_lookup(PROMPT));
-		if (lexer(input_line, envp, &tokens) == ERROR)
+		if (lexer(input_line, &tokens) == ERROR)
 			return (EXIT_FAILURE);
+		free(input_line);
 		if (parser(tokens, &command_table) == ERROR)
 			return (EXIT_FAILURE);
 		if (expander(command_table) == ERROR)

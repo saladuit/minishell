@@ -6,7 +6,7 @@
 /*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/06/07 12:51:11 by dritsema      #+#    #+#                 */
-/*   Updated: 2022/09/16 10:14:53 by dritsema      ########   odam.nl         */
+/*   Updated: 2022/09/16 10:26:22 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,10 +245,7 @@ void			*ft_memset(void *b, int c, size_t len);
 
 // ############### Message #################
 
-/**
- * @brief Gives an error message
- *
- */
+// @brief Prints "Error" on the screen
 void			ft_error(void);
 
 // ############# Miscellaneous #############
