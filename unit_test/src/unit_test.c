@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                    .--.  _                 */
-/*   make_positive_test.c                            |o_o || |                */
+/*   unit_test.c                                     |o_o || |                */
 /*                                                   |:_/ || |_ _   ___  __   */
 /*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
 /*                                                 (|     | )|_| |_| |>  <    */
-/*   Created: 2022/07/04 11:39:40 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
-/*   Updated: 2022/07/16 15:40:03 by safoh        \___)=(___/                 */
+/*   Created: 2022/07/16 21:15:45 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
+/*   Updated: 2022/09/16 10:05:54 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "unit_test.h"
 
-void	make_positive_test(const int len, int *input, const int *expected)
-{
-	size_t	i;
+//Test(so_long, fixed_tests)
+//{
+//	so_long_helper(1, (const char *[]){"1"}, true);
+//}
 
-	i = 0;
-	make_positive(len, input);
-	while (i < (size_t)len)
-	{
-		cr_assert(eq(int, input[i], expected[i]));
-		i++;
-	}
+Test(minishell, fixed_tests)
+{
+	minishell_tester(NULL, EXIT_SUCCESS);
 }
