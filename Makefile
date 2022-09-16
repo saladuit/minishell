@@ -6,7 +6,7 @@
 #    By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /    #
 #                                                  (|     | )|_| |_| |>  <     #
 #    Created: 2022/07/07 17:49:38 by safoh        /'\_   _/`\__|\__,_/_/\_\    #
-#    Updated: 2022/09/12 18:25:56 by safoh        \___)=(___/                  #
+#    Updated: 2022/09/16 09:42:52 by safoh        \___)=(___/                  #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,10 +42,12 @@ $(LIBFT):
 clean:
 	@$(RM) $(OBJS) $(MAIN_OBJ)
 	@$(MAKE) clean -C $(LIBFT_DIR)
+	@$(MAKE) clean -C $(UNIT_DIR)
 
 fclean: clean
 	@$(RM) $(NAME)
 	@$(MAKE) fclean -C $(LIBFT_DIR)
+	@$(MAKE) fclean -C $(UNIT_DIR)
 
 re: fclean
 	@$(MAKE)
@@ -64,6 +66,15 @@ resan: fclean
 
 bonus: all
 
+tests_run: CFLAGS +=-g --coverage ## Launch tests
+tests_run: $(OBJS) $(LIBFT)
+	@$(MAKE) -C $(UNIT_DIR)
+	@./$(UNIT_TEST) -j0
+	@gcov $(addprefix build/, $(SRCS)) -n -b -f -a
+
+re_tests: fclean
+	@$(MAKE) tests_run
+
 re_malloc_test: fclean
 	@$(MAKE) malloc_test
 
@@ -74,6 +85,6 @@ malloc_test: $(OBJS) $(MAIN_OBJ) $(LIBFT)
 valgrind: debug ## Launch valgrind
 	valgrind --leak-check=full ./$(NAME)
 
-.PHONY: all clean fclean re debug rebug valgrind malloc_test re_malloc_test fsan resan
+.PHONY: all clean fclean re debug rebug valgrind malloc_test re_malloc_test fsan resan tests_run re_tests
 
 ################################################################################
