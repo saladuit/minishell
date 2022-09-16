@@ -6,7 +6,7 @@
 /*   By: safoh <safoh@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 16:20:44 by safoh         #+#    #+#                 */
-/*   Updated: 2022/09/16 16:55:16 by safoh        \___)=(___/                 */
+/*   Updated: 2022/09/16 17:42:27 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ int32_t	lexer(const char *command_line, t_list **tokens)
 
 	i = 0;
 	(void)tokens;
-	printf("%s\n", command_line);
 	while (command_line[i])
 	{
 		if (!ft_iswhitespace(command_line[i]))
