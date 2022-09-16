@@ -6,7 +6,7 @@
 /*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
 /*                                                 (|     | )|_| |_| |>  <    */
 /*   Created: 2022/07/16 21:15:45 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
-/*   Updated: 2022/09/16 10:05:54 by safoh        \___)=(___/                 */
+/*   Updated: 2022/09/16 11:32:32 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,12 @@
 //	so_long_helper(1, (const char *[]){"1"}, true);
 //}
 
-Test(minishell, fixed_tests)
+//Test(minishell, fixed_tests)
+//{
+//	minishell_test(NULL, 0, EXIT_SUCCESS);
+//}
+
+Test(lexer, fixed_tests)
 {
-	minishell_tester(NULL, EXIT_SUCCESS);
+	lexer_test("ls -la", (const char *[]){"ls", "-la"},  0);
 }

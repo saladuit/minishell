@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   libft.h                                            :+:    :+:            */
+/*   libft.h                                         |o_o || |                */
 /*                                                     +:+                    */
 /*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/06/07 12:51:11 by dritsema      #+#    #+#                 */
-/*   Updated: 2022/09/16 10:14:53 by dritsema      ########   odam.nl         */
+/*   Updated: 2022/09/16 11:05:52 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@
  *
  * @param pointer The 2d array to measure.
  * @return The total "length" of the 2d array. */
-int				ft_2darlen(void **pointer);
+size_t				ft_matrixlen(void **matrix);
+
+char	*ft_joinmatrix(const char **matrix, size_t count);
 
 // ############### Ascii ###############
 

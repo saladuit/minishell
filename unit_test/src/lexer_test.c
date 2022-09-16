@@ -1,30 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                    .--.  _                 */
-/*   minishell_test.c                                |o_o || |                */
+/*   lexer_test.c                                    |o_o || |                */
 /*                                                   |:_/ || |_ _   ___  __   */
 /*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
 /*                                                 (|     | )|_| |_| |>  <    */
-/*   Created: 2022/07/16 21:12:40 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
-/*   Updated: 2022/09/16 10:53:19 by safoh        \___)=(___/                 */
+/*   Created: 2022/09/16 11:16:10 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
+/*   Updated: 2022/09/16 11:33:10 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "unit_test.h"
+#include <unit_test.h>
 
-void	minishell_test(const char *envp[], const size_t count, int32_t expected)
+void	lexer_test(const char input[], const char **expect, const int32_t ret)
 {
 	int32_t submitted;
-	char	*input;
+	t_list *tokens;
 
-	input = ft_joinmatrix(envp, count);
-	submitted = minishell((char **)envp);
-	cr_assert(submitted == expected,
-			"Called:\tminishell()\nenvp:\t\t%s\n\
-			expected:\t%d \nsubmitted:\t%d\n",
-			input,
-			expected,
-			submitted);
-	free(input);
+	tokens = NULL;
+	submitted = lexer(input, &tokens);
+	while (tokens)
+	{
+	cr_assert(tokens->content->symbol == expected,
+			"Called:\nlexer()\nsymbol:\t%s \nexpected:\t%d\n",
+			tokens->content->symbol,
+			*expected);
+		tokens = tokens->next;
+	}
+	cr_assert(submitted == expected);
+	ft_lstclear(input, free);
 	return ;
 }

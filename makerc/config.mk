@@ -6,7 +6,7 @@
 #    By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /    #
 #                                                  (|     | )|_| |_| |>  <     #
 #    Created: 2022/07/16 21:50:54 by safoh        /'\_   _/`\__|\__,_/_/\_\    #
-#    Updated: 2022/09/16 10:29:46 by safoh        \___)=(___/                  #
+#    Updated: 2022/09/16 10:48:04 by safoh        \___)=(___/                  #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,13 +30,13 @@ OBJS			=$(addprefix $(BUILD_DIR)/, $(SRCS:%.c=%.o))
 MAIN_OBJ		=$(addprefix $(BUILD_DIR)/, $(MAIN:%.c=%.o))
 
 HEADERS			=$(LIBFT_INCLUDE_DIR)/libft.h \
-				../$(INCLUDE_DIR)/minishell.h \
-				../$(INCLUDE_DIR)/executor.h \
-				../$(INCLUDE_DIR)/expander.h \
-				../$(INCLUDE_DIR)/lexer.h \
-				../$(INCLUDE_DIR)/parser.h \
-				../$(INCLUDE_DIR)/message.h \
-				../$(INCLUDE_DIR)/ft_tree.h \
+				$(INCLUDE_DIR)/minishell.h \
+				$(INCLUDE_DIR)/executor.h \
+				$(INCLUDE_DIR)/expander.h \
+				$(INCLUDE_DIR)/lexer.h \
+				$(INCLUDE_DIR)/parser.h \
+				$(INCLUDE_DIR)/message.h \
+				$(INCLUDE_DIR)/ft_tree.h \
 					$(READLINE_INCLUDE_DIR)/readline.h
 INCLUDE_FLAGS	:=$(addprefix -I, $(sort $(dir $(HEADERS))))
 
