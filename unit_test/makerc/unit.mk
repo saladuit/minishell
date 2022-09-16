@@ -6,11 +6,11 @@
 #    By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /    #
 #                                                  (|     | )|_| |_| |>  <     #
 #    Created: 2022/07/16 22:37:05 by safoh        /'\_   _/`\__|\__,_/_/\_\    #
-#    Updated: 2022/09/16 10:10:01 by safoh        \___)=(___/                  #
+#    Updated: 2022/09/16 10:20:49 by safoh        \___)=(___/                  #
 #                                                                              #
 # **************************************************************************** #
 
-UNIT_TEST			=unit_test
+UNIT_TEST			=unit-test
 UNIT_SRCS			=unit_test.c redirect_all_std.c minishell_test.c
 
 UNIT_OBJS			=$(addprefix ../$(BUILD_DIR)/, $(UNIT_SRCS:%.c=%.o))
