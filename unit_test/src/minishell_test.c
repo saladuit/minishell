@@ -1,31 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                    .--.  _                 */
-/*   init_stack_test.c                               |o_o || |                */
+/*   minishell_test.c                                |o_o || |                */
 /*                                                   |:_/ || |_ _   ___  __   */
 /*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
 /*                                                 (|     | )|_| |_| |>  <    */
-/*   Created: 2022/06/27 18:00:18 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
-/*   Updated: 2022/07/16 15:27:53 by safoh        \___)=(___/                 */
+/*   Created: 2022/07/16 21:12:40 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
+/*   Updated: 2022/09/16 10:07:29 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "unit_test.h"
 
-void	init_stack_test(const int len, const int *array)
+void	minishell_test(const char *envp[], int32_t expected)
 {
-	t_list	*stack;
-	int		number;
-	size_t	i;
+	int32_t submitted;
+	char	*input;
 
-	i = 0;
-	stack = init_stack(len, array);
-	while (i < (size_t)len)
-	{
-		number = *(int *)stack->content;
-		cr_assert_eq(number, array[i]);
-		stack = stack->next;
-		i++;
-	}
+	input = ft_joinmatrix(envp);
+	submitted = minishell(envp);
+	cr_assert(submitted == expected,
+			"Called:\tminishell()\nenvp:\t\t%s\n\
+			expected:\t%d \nsubmitted:\t%d\n",
+			input,
+			expected,
+			submitted);
+	free(input);
 	return ;
 }

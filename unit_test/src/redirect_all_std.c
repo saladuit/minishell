@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                    .--.  _                 */
-/*   redirect_all_std.c                              |o_o || |                */
+/*   redirect_all_std.c                                 :+:      :+:    :+:   */
 /*                                                   |:_/ || |_ _   ___  __   */
 /*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
 /*                                                 (|     | )|_| |_| |>  <    */
-/*   Created: 2022/06/23 15:18:40 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
-/*   Updated: 2022/07/16 15:38:38 by safoh        \___)=(___/                 */
+/*   Created: 2022/03/25 17:46:31 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
+/*   Updated: 2022/06/12 19:38:01 by safoh            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "unit_test.h"
 
-void	redirect_all_std(void)
+void redirect_all_std(void)
 {
-	cr_redirect_stdout();
-	cr_redirect_stderr();
+        cr_redirect_stdout();
+        cr_redirect_stderr();
 }
