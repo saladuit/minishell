@@ -126,8 +126,9 @@ endif
 
 obj/%.o: src/%.c
 	@mkdir -p $(@D)
+	@printf "$(PERCENT): $(BLUE)"
 	$(CC) $(CFLAGS) $(INC) -c $^ -o $@
-	@printf "$(PERCENT) $(BLUE)Compiling: $(GREEN)%s$(RESET)\n" "$^"
+	@printf "$(RESET)"
 	$(eval COMPILED=$(shell echo $$(($(COMPILED)+1))))
 
 $(NAME): $(OBJS)

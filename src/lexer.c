@@ -6,7 +6,7 @@
 /*   By: safoh <safoh@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 16:20:44 by safoh         #+#    #+#                 */
-/*   Updated: 2022/09/16 09:54:16 by dritsema      ########   odam.nl         */
+/*   Updated: 2022/09/16 11:33:57 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,47 @@
 #include <message.h>
 #include <stdio.h> // Remove
 
-// t_token	*get_next_token()
-// {
-
-// }
-
-int32_t	lexer(char *input_line, char **envp, t_list **tokens)
+t_token	*make_token(const char *input_line, int len)
 {
-	// int	i;
+	t_token	*token;
 
-	(void)envp;
+	token = malloc(sizeof(t_token));
+	token->symbol = malloc(len + 1);
+	ft_strlcpy(token->symbol, input_line, len);
+	return (token);
+}
+// Meta characters: SPACE, TAB, NEWLINE, ;, (, ), <, >, |, &.
+// Types of tokens: words, keywords, I/O redirectors, and semicolons.
+int32_t	get_token_len(const char *input)
+{
+	int32_t	i;
+
+	i = 0;
+	while (!ft_iswhitespace(input[i]))
+	{
+		i++;
+	}
+	return (i);
+}
+
+int32_t	lexer(const char *input_line, t_list **tokens)
+{
+	int32_t	i;
+	int32_t	token_len;
+	t_list	*node;
+
+	i = 0;
 	(void)tokens;
 	printf("%s\n", input_line);
-	// while (input_line[i])
-	// {
-	// 	if (!ft_iswhitespace(input_line[i]))
-
-	// 	i++;
-	// }
-	free(input_line);
+	while (input_line[i])
+	{
+		if (!ft_iswhitespace(input_line[i]))
+		{
+			token_len = get_token_len(&input_line[i]);
+			node = ft_lstnew(make_token(&input_line[i], token_len));
+			ft_lstadd_back(tokens, node);
+		}
+		i++;
+	}
 	return (SUCCESS);
 }
