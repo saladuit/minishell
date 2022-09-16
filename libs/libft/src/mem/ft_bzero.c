@@ -1,24 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_printf.h                                        :+:    :+:            */
+/*   ft_bzero.c                                         :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/12/10 13:37:12 by dritsema      #+#    #+#                 */
-/*   Updated: 2022/06/18 22:23:42 by dritsema      ########   odam.nl         */
+/*   Created: 2021/10/08 19:16:42 by dritsema      #+#    #+#                 */
+/*   Updated: 2022/06/08 00:31:58 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "libft.h"
 
-int	ft_printf(const char *s, ...);
-int	ft_printhex(unsigned long n);
-int	ft_upprinthex(unsigned long n);
-int	ft_printun(unsigned int n);
-int	ft_printchar(char c);
-int	ft_printnbr(int n);
-int	ft_printstr(char *s);
+/**
+ * @brief Writes n zeroed bytes to the string s. If n is zero, do nothing.
+ *
+ * @param s String to write to.
+ * @param n Amount to write.
+ */
+void	ft_bzero(void *s, size_t n)
+{
+	unsigned char	*a;
 
-#endif // FT_PRINTF_H
+	a = s;
+	while (n > 0)
+	{
+		*a = '\0';
+		a++;
+		n--;
+	}
+}

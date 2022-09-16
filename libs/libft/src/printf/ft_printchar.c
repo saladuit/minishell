@@ -1,27 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   lexer.h                                            :+:    :+:            */
+/*   ft_printchar.c                                     :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: safoh <safoh@student.codam.nl>               +#+                     */
+/*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/09/13 16:02:56 by safoh         #+#    #+#                 */
-/*   Updated: 2022/09/16 09:38:56 by dritsema      ########   odam.nl         */
+/*   Created: 2021/11/06 15:19:02 by dritsema      #+#    #+#                 */
+/*   Updated: 2021/11/09 13:05:12 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#include <unistd.h>
 
-# include <libft.h>
-# include <stdint.h>
-
-typedef s_token
+int	ft_printchar(char c)
 {
-	int		type;
-	char	*symbol;
-}	t_token;
-
-int32_t	lexer(char *input_line, char **envp, t_list **tokens);
-
-#endif
+	return (write(1, &c, 1));
+}

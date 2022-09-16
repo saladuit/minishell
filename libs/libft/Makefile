@@ -1,64 +1,143 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                     .--.  _                  #
-#    Makefile                                        |o_o || |                 #
-#                                                    |:_/ || |_ _   ___  __    #
-#    By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /    #
-#                                                  (|     | )|_| |_| |>  <     #
-#    Created: 2022/02/09 17:06:29 by safoh        /'\_   _/`\__|\__,_/_/\_\    #
-#    Updated: 2022/09/06 19:57:47 by safoh        \___)=(___/                  #
-#                                                                              #
-# **************************************************************************** #
+CC		=	gcc
 
-include makerc/colours.mk
-include makerc/libft.mk
+SHELL	:= /bin/bash
 
-################################################################################
-NAME			=libft.a
+RED		= \033[1;31m
+BLUE	= \033[1;34m
+CYAN	= \033[1;36m
+ORANGE	= \033[1;38;5;214m
+GREEN	= \033[1;32m
+RESET	= \033[0m
+UP1		= \033[1F
+BEGIN	= \033[0G
+SAVE	= \0337
+RESTORE	= \0338
+INSET	= $(BEGIN)$(GREEN)+ $(BLUE)
 
-CC				:=gcc
-RM				:=rm -rf
-CFLAGS			=-Wall -Wextra -Werror$(if $(FSAN), -g -fsanitize=thread)$(if $(DEBUG), -g)
+SRCS	=	$(SRC_ARRAY) $(SRC_ASCII) $(SRC_CONVERT) $(SRC_GNL)\
+			$(SRC_LST) $(SRC_MEM) $(SRC_MISC) $(SRC_PRINTF)\
+			$(SRC_PUT) $(SRC_STR)
 
-SRC_DIR 		:=./src
-BUILD_DIR		:=./build
-OBJS			=$(addprefix $(BUILD_DIR)/, $(SRCS:%.c=%.o))
-HEADERS			=include/libft.h
-INCLUDE_FLAGS	=$(addprefix -I, $(sort $(dir $(HEADERS))))
+SRC_ARRAY	=	array/ft_2darlen.c
 
-################################################################################
-all: $(NAME)
+SRC_ASCII	=	ascii/ft_isalnum.c \
+				ascii/ft_isalpha.c \
+				ascii/ft_isascii.c \
+				ascii/ft_isdigit.c \
+				ascii/ft_isprint.c \
+				ascii/ft_iswhitespace.c
 
-$(NAME): SHELL :=/bin/bash
+SRC_CONVERT	=	convert/ft_atoi.c \
+				convert/ft_hextoi.c \
+				convert/ft_itoa.c \
+				convert/ft_tolower.c \
+				convert/ft_toupper.c
+
+SRC_GNL		=	gnl/get_next_line.c \
+				gnl/get_next_line_utils.c
+
+SRC_LST		=	lst/ft_lstadd_back.c \
+				lst/ft_lstadd_front.c \
+				lst/ft_lstclear.c \
+				lst/ft_lstdelone.c \
+				lst/ft_lstiter.c \
+				lst/ft_lstlast.c \
+				lst/ft_lstmap.c \
+				lst/ft_lstnew.c \
+				lst/ft_lstsize.c \
+
+SRC_MEM		=	mem/ft_bzero.c \
+				mem/ft_calloc.c \
+				mem/ft_memchr.c \
+				mem/ft_memcmp.c \
+				mem/ft_memcpy.c \
+				mem/ft_memmove.c \
+				mem/ft_memset.c
+
+SRC_MISC	=	misc/ft_abs.c \
+				misc/ft_numlen.c
+
+SRC_PRINTF	=	printf/ft_printchar.c \
+				printf/ft_printf.c \
+				printf/ft_printhex.c \
+				printf/ft_printnbr.c \
+				printf/ft_printstr.c \
+				printf/ft_printun.c \
+				printf/ft_upprinthex.c
+
+SRC_PUT		=	put/ft_putchar_fd.c \
+				put/ft_putendl_fd.c \
+				put/ft_putnbr_fd.c \
+				put/ft_putstr_fd.c
+
+SRC_STR		=	str/ft_split.c \
+				str/ft_strchr.c \
+				str/ft_strdup.c \
+				str/ft_striteri.c \
+				str/ft_strjoin_free.c \
+				str/ft_strjoin.c \
+				str/ft_strlcat.c \
+				str/ft_strlcpy.c \
+				str/ft_strlen.c \
+				str/ft_strmapi.c \
+				str/ft_strncmp.c \
+				str/ft_strnstr.c \
+				str/ft_strrchr.c \
+				str/ft_strtrim.c \
+				str/ft_substr.c
+
+INC			=	-I ./include
+
+COMPILED	=	0
+
+DONE_OBJS	=	$(wildcard obj/*.o)
+
+TO_COMPILE	=	$(words $(filter-out $(DONE_OBJS), $(OBJS)))
+
+PERCENT		=	$(INSET)$(CYAN)$(shell echo \
+				$$(($(COMPILED)*100/$(TO_COMPILE)))%%)
+
+ifeq ($(TESTFLAGS), 1)
+CFLAGS	= -Wall -Wextra -Werror -fsanitize=address -g
+else
+CFLAGS	= -Wall -Wextra -Werror
+endif
+
+NAME	= libft.a
+
+OBJS	= $(patsubst %.c, obj/%.o, $(SRCS))
+
+all: heading status comp
+
+.PHONY: heading status comp clean fclean re
+
+comp: $(NAME)
+
+heading:
+	@printf "$(CYAN)---< $(ORANGE)Duco's libft $(CYAN)>---\n"
+
+status:
+ifneq ($(filter $(OBJS), $(wildcard obj/*/*.o)),)
+	@printf "$(INSET)Nothing to be done.\n"
+endif
+
+obj/%.o: src/%.c
+	@mkdir -p $(@D)
+	@$(CC) $(CFLAGS) $(INC) -c $^ -o $@
+	@printf "$(PERCENT) $(BLUE)Compiling: $(GREEN)%s$(RESET)\n" "$^"
+	$(eval COMPILED=$(shell echo $$(($(COMPILED)+1))))
 
 $(NAME): $(OBJS)
-	@ar rc $@ $^
-	@printf "$(BLUE_FG)$(NAME)$(RESET_COLOR) created\n"
+	@printf "$(INSET)"
+	@ar rcs $(NAME) $(OBJS)
+	@printf "$(ORANGE)Created archive.\n"
 
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS)
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(INCLUDE_FLAGS) -c $< -o $@
-
-################################################################################
-clean:
-	@$(RM) $(OBJS)
+clean: heading
+	@rm -rf obj
+	@printf "$(RED)- $(BLUE)Removed object files\n$(RESET)"
 
 fclean: clean
-	@$(RM) $(NAME) *.a *.dSYM
+	@rm -f libft.a
+	@printf "$(RED)- $(BLUE)Removed archive file\n$(RESET)"
 
-re: all
-	@$(MAKE) fclean
-
-debug:
-	@$(MAKE) DEBUG=1
-
-rebug: fclean
-	@$(MAKE) debug
-bonus: all
-fsan:
-	@$(MAKE) FSAN=1
-
-resan: fclean
-	@$(MAKE) fsan
-.PHONY: all clean fclean re debug
-################################################################################
+re: fclean comp

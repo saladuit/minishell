@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_printf.h                                        :+:    :+:            */
+/*   ft_lstadd_front.c                                  :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/12/10 13:37:12 by dritsema      #+#    #+#                 */
-/*   Updated: 2022/06/18 22:23:42 by dritsema      ########   odam.nl         */
+/*   Created: 2021/10/26 13:34:08 by dritsema      #+#    #+#                 */
+/*   Updated: 2022/06/08 00:08:14 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "libft.h"
 
-int	ft_printf(const char *s, ...);
-int	ft_printhex(unsigned long n);
-int	ft_upprinthex(unsigned long n);
-int	ft_printun(unsigned int n);
-int	ft_printchar(char c);
-int	ft_printnbr(int n);
-int	ft_printstr(char *s);
-
-#endif // FT_PRINTF_H
+/**
+ * @brief Adds the node ’new’ at the beginning of the list.
+ *
+ * @param lst The address of a pointer to the first link of a list.
+ * @param lstnew The address of a pointer to the node to be added to the list.
+ */
+void	ft_lstadd_front(t_list **lst, t_list *new)
+{
+	new->next = *lst;
+	*lst = new;
+}

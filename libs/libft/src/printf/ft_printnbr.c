@@ -1,24 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_printf.h                                        :+:    :+:            */
+/*   ft_printnbr.c                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/12/10 13:37:12 by dritsema      #+#    #+#                 */
-/*   Updated: 2022/06/18 22:23:42 by dritsema      ########   odam.nl         */
+/*   Created: 2021/11/06 15:40:28 by dritsema      #+#    #+#                 */
+/*   Updated: 2021/11/09 13:25:24 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include <unistd.h>
 
-int	ft_printf(const char *s, ...);
-int	ft_printhex(unsigned long n);
-int	ft_upprinthex(unsigned long n);
-int	ft_printun(unsigned int n);
-int	ft_printchar(char c);
-int	ft_printnbr(int n);
-int	ft_printstr(char *s);
+static int	recurse(unsigned int n)
+{
+	int	count;
 
-#endif // FT_PRINTF_H
+	count = 0;
+	if (n > 9)
+	{
+		count = recurse(n / 10);
+	}
+	n = n % 10 + 48;
+	return (count + write(1, &n, 1));
+}
+
+int	ft_printnbr(int n)
+{
+	unsigned int	ncpy;
+	int				count;
+
+	count = 0;
+	ncpy = n;
+	if (n < 0)
+	{
+		write(1, "-", 1);
+		ncpy = n * -1;
+		count++;
+	}
+	count += recurse(ncpy);
+	return (count);
+}

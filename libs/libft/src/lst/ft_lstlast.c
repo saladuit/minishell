@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_printf.h                                        :+:    :+:            */
+/*   ft_lstlast.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/12/10 13:37:12 by dritsema      #+#    #+#                 */
-/*   Updated: 2022/06/18 22:23:42 by dritsema      ########   odam.nl         */
+/*   Created: 2021/10/26 14:07:28 by dritsema      #+#    #+#                 */
+/*   Updated: 2022/06/08 00:18:49 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "libft.h"
 
-int	ft_printf(const char *s, ...);
-int	ft_printhex(unsigned long n);
-int	ft_upprinthex(unsigned long n);
-int	ft_printun(unsigned int n);
-int	ft_printchar(char c);
-int	ft_printnbr(int n);
-int	ft_printstr(char *s);
-
-#endif // FT_PRINTF_H
+/**
+ * @brief Returns the last node of the list.
+ *
+ * @param lst The beginning of the list.
+ * @return Last node of the list.
+ */
+t_list	*ft_lstlast(t_list *lst)
+{
+	if (lst == NULL)
+		return (NULL);
+	while (lst->next != NULL)
+		lst = lst->next;
+	return (lst);
+}

@@ -1,27 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   lexer.h                                            :+:    :+:            */
+/*   ft_printun.c                                       :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: safoh <safoh@student.codam.nl>               +#+                     */
+/*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/09/13 16:02:56 by safoh         #+#    #+#                 */
-/*   Updated: 2022/09/16 09:38:56 by dritsema      ########   odam.nl         */
+/*   Created: 2021/11/06 15:27:01 by dritsema      #+#    #+#                 */
+/*   Updated: 2021/11/06 15:56:42 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#include <unistd.h>
 
-# include <libft.h>
-# include <stdint.h>
-
-typedef s_token
+int	ft_printun(unsigned int n)
 {
-	int		type;
-	char	*symbol;
-}	t_token;
+	int	count;
 
-int32_t	lexer(char *input_line, char **envp, t_list **tokens);
-
-#endif
+	count = 0;
+	if (n > 9)
+		count = ft_printun(n / 10);
+	n = n % 10 + 48;
+	write(1, &n, 1);
+	return (count + 1);
+}
