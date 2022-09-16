@@ -6,7 +6,7 @@
 #    By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /    #
 #                                                  (|     | )|_| |_| |>  <     #
 #    Created: 2022/07/07 17:49:38 by safoh        /'\_   _/`\__|\__,_/_/\_\    #
-#    Updated: 2022/09/16 10:31:52 by safoh        \___)=(___/                  #
+#    Updated: 2022/09/16 13:16:52 by safoh        \___)=(___/                  #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,7 +67,7 @@ resan: fclean
 
 bonus: all
 
-mini_test: CFLAGS +=-g --coverage ## Launch tests
+mini_test: CFLAGS +=-g ## Launch tests
 mini_test: $(OBJS) $(LIBFT)
 	@$(MAKE) -C $(UNIT_DIR)
 	@./$(UNIT_TEST) -j0

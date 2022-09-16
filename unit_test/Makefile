@@ -6,7 +6,7 @@
 #    By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /    #
 #                                                  (|     | )|_| |_| |>  <     #
 #    Created: 2022/07/17 00:40:12 by safoh        /'\_   _/`\__|\__,_/_/\_\    #
-#    Updated: 2022/09/16 11:07:58 by safoh        \___)=(___/                  #
+#    Updated: 2022/09/16 13:17:09 by safoh        \___)=(___/                  #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ NAME			:= ../$(UNIT_TEST)
 
 CC				:=gcc
 RM				:=rm -rfv
-CFLAGS			:=-Wall -Wextra -Werror --coverage -g
+CFLAGS			:=-Wall -Wextra -Werror -g
 UNIT_LFLAGS		:=-lcriterion -lreadline
 
 all: $(NAME)
