@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         ::::::::             #
-#    Makefile                                           :+:    :+:             #
+#    Makefile                                        |o_o || |                 #
 #                                                      +:+                     #
 #    By: safoh <safoh@student.codam.nl>               +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/07/07 17:49:38 by safoh         #+#    #+#                  #
-#    Updated: 2022/09/16 14:27:08 by dritsema      ########   odam.nl          #
+#    Updated: 2022/09/17 15:57:56 by safoh        \___)=(___/                  #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,7 +71,7 @@ mini_test: CFLAGS +=-g ## Launch tests
 mini_test: $(OBJS) $(LIBFT)
 	@$(MAKE) -C $(UNIT_DIR)
 	@./$(UNIT_TEST) -j0
-	@gcov $(addprefix build/, $(SRCS)) -n -b -f -a
+#	@gcov $(addprefix build/, $(SRCS)) -n -b -f -a
 
 remini_test: fclean
 	@$(MAKE) mini_test

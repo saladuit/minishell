@@ -1,16 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        ::::::::            */
-/*   unit_test.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: safoh <safoh@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2022/07/16 21:15:45 by safoh         #+#    #+#                 */
-/*   Updated: 2022/09/17 15:42:48 by dritsema      ########   odam.nl         */
-/*                                                                            */
-/* ************************************************************************** */
-
-
 #include "unit_test.h"
 
 //Test(so_long, fixed_tests)
@@ -23,7 +10,7 @@
 //	minishell_test(NULL, 0, EXIT_SUCCESS);
 //}
 
-Test(lexer, fixed_tests)
+Test(lexer, valid_input)
 {
 	lexer_test("ls", (const char *[]){"ls"},  0);
 	lexer_test("ls -la", (const char *[]){"ls", "-la"},  0);
