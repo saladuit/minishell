@@ -68,6 +68,9 @@ mini_fsan_test: fsan
 remini_test: fclean
 	@$(MAKE) mini_test
 
+remini_fsan_test: fclean
+	@$(MAKE) mini_fsan_test
+
 re_malloc_test: fclean
 	@$(MAKE) malloc_test
 
