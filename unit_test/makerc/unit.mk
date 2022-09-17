@@ -6,12 +6,12 @@
 #    By: safoh <safoh@student.codam.nl>               +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/07/16 22:37:05 by safoh         #+#    #+#                  #
-#    Updated: 2022/09/17 16:05:05 by dritsema      ########   odam.nl          #
+#    Updated: 2022/09/17 17:19:34 by dritsema      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 UNIT_TEST			=mini_test
-UNIT_SRCS			=lexer_cases.c redirect_all_std.c minishell_test.c lexer_test.c
+UNIT_SRCS			=lexer_cases.c redirect_all_std.c minishell_test.c tokenizer_test.c
 
 UNIT_OBJS			=$(addprefix ../$(BUILD_DIR)/, $(UNIT_SRCS:%.c=%.o))
 PRODUCTION_OBJS		=$(addprefix ../, $(OBJS))
