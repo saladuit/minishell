@@ -1,6 +1,6 @@
 #include <unit_test.h>
 
-void	lexer_test(const char input[], const char **expect, const int32_t ret)
+void	tokenizer_test(const char input[], const char **expect, const int32_t ret)
 {
 	int32_t	submitted;
 	t_list	*tokens;
