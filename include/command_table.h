@@ -1,29 +1,28 @@
 #ifndef COMMAND_TABLE_H
 # define COMMAND_TABLE_H
 
-typedef struct s_simple_command
+typedef struct s_command
 {
-	int32_t	argument_count;
-	char	**arguments;
-}	t_simple_command;
+	int32_t	arg_count;
+	t_list	*tokens;
+}	t_command;
 
 void	insert_argument(char *argument);
 
-typedef struct s_command
+typedef struct s_command_table
 {
-	int32_t				simple_command_count;
-	t_simple_command	**simple_commands;
-	char				*out_file;
-	char				*input_file;
-	char				*err_file;
-	int32_t				background;
-}
+	int32_t		command_count;
+	t_list		*commands;
+	char		*out_file;
+	char		*input_file;
+	char		*err_file;
+}	t_command_table;
 
-void	insert_simple_command(t_simple_command *simple_command);
+void	insert_simple_command(t_command *command);
 
-void	prompt(void);
-void	print(void);
-void	execute(void);
-void	clear(void);
+//void	prompt(void);
+//void	print(void);
+//void	execute(void);
+//void	clear(void);
 
 #endif
