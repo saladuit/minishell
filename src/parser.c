@@ -6,11 +6,12 @@
 /*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
 /*                                                 (|     | )|_| |_| |>  <    */
 /*   Created: 2022/09/13 17:09:43 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
-/*   Updated: 2022/09/17 15:42:18 by safoh        \___)=(___/                 */
+/*   Updated: 2022/09/17 17:36:09 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parser.h>
+#include <stdio.h>
 
 bool	ft_ismetachar(const char meta_c)
 {
@@ -29,13 +30,15 @@ t_command	*get_command(t_list **tokens)
 	t_command	*command;
 	char 		*token;
 
-	command = ft_calloc(1, sizeof(t_command));
+	command = malloc(sizeof(t_command));
 	if (!command)
 		return (NULL);
-	token = (char *)(*tokens)->content;
-	while ((*tokens)->content && !ft_isdelimiter(*token))
+	while (*tokens)
 	{
-		ft_lstadd_back(&command->tokens, *tokens);
+		token = (char *)(*tokens)->content;
+		if (ft_isdelimiter(*token))
+				break ;
+		ft_lstadd_back(&command->tokens, ft_lstnew(*tokens));
 		*tokens = (*tokens)->next;
 	}
 	return (command);
@@ -71,7 +74,6 @@ t_list		*get_abstract_syntax_tree(t_list *tokens)
 		ft_lstadd_back(&abstract_syntax_tree, abstract_syntax_tree);
 		if (!abstract_syntax_tree)
 			return (NULL);
-		tokens = tokens->next;
 	}
 	return (abstract_syntax_tree);
 }

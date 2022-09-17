@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         ::::::::             #
-#    Makefile                                        |o_o || |                 #
-#                                                      +:+                     #
-#    By: safoh <safoh@student.codam.nl>               +#+                      #
-#                                                    +#+                       #
-#    Created: 2022/07/07 17:49:38 by safoh         #+#    #+#                  #
-#    Updated: 2022/09/17 15:57:56 by safoh        \___)=(___/                  #
-#                                                                              #
-# **************************************************************************** #
-
 include makerc/colours.mk
 include makerc/config.mk
 include unit_test/makerc/unit.mk
@@ -67,9 +55,13 @@ resan: fclean
 
 bonus: all
 
-mini_test: CFLAGS +=-g ## Launch tests
-mini_test: $(OBJS) $(LIBFT)
-	@$(MAKE) -C $(UNIT_DIR)
+mini_test: debug
+	@$(MAKE) debug -C $(UNIT_DIR)
+	@./$(UNIT_TEST) -j0
+#	@gcov $(addprefix build/, $(SRCS)) -n -b -f -a
+
+mini_fsan_test: fsan
+	@$(MAKE) fsan -C $(UNIT_DIR)
 	@./$(UNIT_TEST) -j0
 #	@gcov $(addprefix build/, $(SRCS)) -n -b -f -a
 

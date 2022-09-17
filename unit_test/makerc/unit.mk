@@ -1,17 +1,6 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         ::::::::             #
-#    unit.mk                                            :+:    :+:             #
-#                                                      +:+                     #
-#    By: safoh <safoh@student.codam.nl>               +#+                      #
-#                                                    +#+                       #
-#    Created: 2022/07/16 22:37:05 by safoh         #+#    #+#                  #
-#    Updated: 2022/09/17 16:05:05 by dritsema      ########   odam.nl          #
-#                                                                              #
-# **************************************************************************** #
-
 UNIT_TEST			=mini_test
-UNIT_SRCS			=lexer_cases.c redirect_all_std.c minishell_test.c lexer_test.c
+UNIT_SRCS			=lexer_cases.c lexer_test.c redirect_all_std.c minishell_test.c \
+					 parser_cases.c parser_test.c
 
 UNIT_OBJS			=$(addprefix ../$(BUILD_DIR)/, $(UNIT_SRCS:%.c=%.o))
 PRODUCTION_OBJS		=$(addprefix ../, $(OBJS))
@@ -27,6 +16,7 @@ UNIT_HEADERS		:=include/unit_test.h \
 				../$(INCLUDE_DIR)/expander.h \
 				../$(INCLUDE_DIR)/lexer.h \
 				../$(INCLUDE_DIR)/parser.h \
+				../$(INCLUDE_DIR)/command.h \
 				../$(INCLUDE_DIR)/message.h \
 				../$(INCLUDE_DIR)/ft_tree.h \
 					$(READLINE_INCLUDE_DIR)/readline.h

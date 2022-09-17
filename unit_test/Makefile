@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         ::::::::             #
-#    Makefile                                           :+:    :+:             #
-#                                                      +:+                     #
-#    By: safoh <safoh@student.codam.nl>               +#+                      #
-#                                                    +#+                       #
-#    Created: 2022/07/17 00:40:12 by safoh         #+#    #+#                  #
-#    Updated: 2022/09/16 14:27:18 by dritsema      ########   odam.nl          #
-#                                                                              #
-# **************************************************************************** #
-
 include makerc/colours.mk
 include ../makerc/config.mk
 include makerc/unit.mk
@@ -18,7 +6,7 @@ NAME			:= ../$(UNIT_TEST)
 
 CC				:=gcc
 RM				:=rm -rfv
-CFLAGS			:=-Wall -Wextra -Werror -g
+CFLAGS			:=-Wall -Wextra -Werror$(if $(FSAN), -g -fsanitize=address)$(if $(DEBUG), -g)
 UNIT_LFLAGS		:=-lcriterion -lreadline
 
 all: $(NAME)
@@ -41,4 +29,16 @@ fclean: clean
 re: fclean
 	$(MAKE)
 
-.PHONY: all clean fclean re
+debug:
+	@$(MAKE) DEBUG=1
+
+rebug: fclean
+	@$(MAKE) debug
+
+fsan:
+	@$(MAKE) FSAN=1
+
+resan: fclean
+	@$(MAKE) fsan
+
+.PHONY: all clean fclean re debug rebug fsan resan

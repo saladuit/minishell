@@ -136,6 +136,8 @@ $(NAME): $(OBJS)
 	@ar rcs $(NAME) $(OBJS)
 	@printf "$(ORANGE)Created archive.\n$(RESET)"
 
+bonus: all
+
 clean: heading
 	@rm -rf obj
 	@printf "$(RED)- $(BLUE)Removed object files\n$(RESET)"
