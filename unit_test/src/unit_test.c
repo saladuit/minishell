@@ -1,15 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                    .--.  _                 */
-/*   unit_test.c                                     |o_o || |                */
-/*                                                   |:_/ || |_ _   ___  __   */
-/*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
-/*                                                 (|     | )|_| |_| |>  <    */
-/*   Created: 2022/07/16 21:15:45 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
-/*   Updated: 2022/09/16 17:07:03 by safoh        \___)=(___/                 */
-/*   Updated: 2022/09/16 16:22:50 by safoh        \___)=(___/                 */
+/*                                                        ::::::::            */
+/*   unit_test.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: safoh <safoh@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/07/16 21:15:45 by safoh         #+#    #+#                 */
+/*   Updated: 2022/09/17 15:42:48 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "unit_test.h"
 
@@ -30,6 +30,7 @@ Test(lexer, fixed_tests)
 	lexer_test("ls -la | ", (const char *[]){"ls", "-la", "|"},  0);
 	lexer_test("ls -la| ", (const char *[]){"ls", "-la", "|"},  0);
 	lexer_test("|ls -la| ", (const char *[]){"|", "ls", "-la", "|"},  0);
-	lexer_test("\"|ls -la| \"", (const char *[]){"|ls -la|"},  0);
-	lexer_test("'|ls -la|$ '", (const char *[]){"|ls -la|$"},  0);
+	lexer_test("\"|ls -la| \"", (const char *[]){"\"|ls -la| \""},  0);
+	lexer_test("'|ls -la|$ '", (const char *[]){"\'|ls -la|$ \'"},  0);
+	lexer_test("\"\"\"\"'|ls -la|$ '", (const char *[]){"\"\"\"\"'|ls -la|$ '"},  0);
 }
