@@ -1,5 +1,5 @@
 UNIT_TEST			=mini_test
-UNIT_SRCS			=lexer_cases.c lexer_test.c redirect_all_std.c minishell_test.c \
+UNIT_SRCS			=lexer_cases.c tokenizer_test.c redirect_all_std.c minishell_test.c \
 					 parser_cases.c parser_test.c
 
 UNIT_OBJS			=$(addprefix ../$(BUILD_DIR)/, $(UNIT_SRCS:%.c=%.o))
