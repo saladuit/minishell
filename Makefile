@@ -60,16 +60,16 @@ mini_test: debug
 	@./$(UNIT_TEST) -j0
 #	@gcov $(addprefix build/, $(SRCS)) -n -b -f -a
 
-mini_fsan_test: fsan
+fsan_test: fsan
 	@$(MAKE) fsan -C $(UNIT_DIR)
 	@./$(UNIT_TEST) -j0
 #	@gcov $(addprefix build/, $(SRCS)) -n -b -f -a
 
-remini_test: fclean
+re_test: fclean
 	@$(MAKE) mini_test
 
-remini_fsan_test: fclean
-	@$(MAKE) mini_fsan_test
+resan_test: fclean
+	@$(MAKE) fsan_test
 
 re_malloc_test: fclean
 	@$(MAKE) malloc_test

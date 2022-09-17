@@ -1,5 +1,7 @@
 #include <parser.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 bool	ft_ismetachar(const char meta_c)
 {
@@ -18,15 +20,15 @@ t_command	*get_command(t_list **tokens)
 	t_command	*command;
 	char 		*token;
 
-	command = malloc(sizeof(t_command));
+	command = ft_calloc(1, sizeof(t_command));
 	if (!command)
 		return (NULL);
 	while (*tokens)
 	{
-		token = (char *)(*tokens)->content;
+		token = (char *)((*tokens)->content);
 		if (ft_isdelimiter(*token))
 				break ;
-		ft_lstadd_back(&command->tokens, ft_lstnew(*tokens));
+		ft_lstadd_back(&command->tokens, ft_lstnew(token));
 		*tokens = (*tokens)->next;
 	}
 	return (command);

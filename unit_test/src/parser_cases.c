@@ -8,4 +8,5 @@ Test(make_command, fixed_tests)
 {
 	get_command_test("ls", (const char *[]){"ls", NULL});
 	get_command_test("ls la", (const char *[]){"ls", "la", NULL});
+	get_command_test("ls la |", (const char *[]){"ls", "la",  NULL});
 }

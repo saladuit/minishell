@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_lstlast.c                                       :+:    :+:            */
+/*   ft_lstlast.c                                    |o_o || |                */
 /*                                                     +:+                    */
 /*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/26 14:07:28 by dritsema      #+#    #+#                 */
-/*   Updated: 2022/06/08 00:18:49 by dritsema      ########   odam.nl         */
+/*   Updated: 2022/09/17 18:17:49 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_list	*ft_lstlast(t_list *lst)
 {
 	if (lst == NULL)
 		return (NULL);
-	while (lst->next != NULL)
+	while (lst->next)
 		lst = lst->next;
 	return (lst);
 }

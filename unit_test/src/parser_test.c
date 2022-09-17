@@ -13,10 +13,10 @@ void	get_command_test(const char input[], const char *expect[])
 	command = get_command(&tokens);
 	while (*expect)
 	{
-		token = (char *)command->tokens->content;	
-		cr_assert(eq(str, token, (char *)*expect));
-		expect++;
+		token = command->tokens->content;	
+		cr_assert(eq(str, token, (char *)(*expect)));
 		command->tokens = command->tokens->next;
+		expect++;
 	}
 	ft_lstclear(&command->tokens, free);
 	free(command);
