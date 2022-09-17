@@ -1,17 +1,17 @@
 # **************************************************************************** #
 #                                                                              #
-#                                                     .--.  _                  #
-#    unit.mk                                         |o_o || |                 #
-#                                                    |:_/ || |_ _   ___  __    #
-#    By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /    #
-#                                                  (|     | )|_| |_| |>  <     #
-#    Created: 2022/07/16 22:37:05 by safoh        /'\_   _/`\__|\__,_/_/\_\    #
-#    Updated: 2022/09/16 11:33:45 by safoh        \___)=(___/                  #
+#                                                         ::::::::             #
+#    unit.mk                                            :+:    :+:             #
+#                                                      +:+                     #
+#    By: safoh <safoh@student.codam.nl>               +#+                      #
+#                                                    +#+                       #
+#    Created: 2022/07/16 22:37:05 by safoh         #+#    #+#                  #
+#    Updated: 2022/09/17 16:05:05 by dritsema      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 UNIT_TEST			=mini_test
-UNIT_SRCS			=unit_test.c redirect_all_std.c minishell_test.c lexer_test.c
+UNIT_SRCS			=lexer_cases.c redirect_all_std.c minishell_test.c lexer_test.c
 
 UNIT_OBJS			=$(addprefix ../$(BUILD_DIR)/, $(UNIT_SRCS:%.c=%.o))
 PRODUCTION_OBJS		=$(addprefix ../, $(OBJS))
