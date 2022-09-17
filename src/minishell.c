@@ -12,13 +12,13 @@ int32_t	minishell(char **envp)
 	const char	*command_line; // should be converted into dlist
 
 	abstract_syntax_tree = NULL;
-	tokens = NULL;
+	command_line = NULL;
 	(void)envp;
 	while (true)
 	{
 		command_line = readline(messages_lookup(PROMPT));
-		if (lexer(command_line) == ERROR)
-			return (EXIT_FAILURE);
+//		if (lexer(command_line) == ERROR)
+//			return (EXIT_FAILURE);
 		if (parser(&abstract_syntax_tree, command_line) == ERROR)
 			return (EXIT_FAILURE);
 //		if (expander(command_table) == ERROR)

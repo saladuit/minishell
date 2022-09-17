@@ -1,5 +1,5 @@
-#ifndef COMMAND_TABLE_H
-# define COMMAND_TABLE_H
+#ifndef COMMAND_H
+# define COMMAND_H
 
 typedef struct s_command
 {
@@ -13,9 +13,9 @@ typedef struct s_command_table
 {
 	int32_t		command_count;
 	t_list		*commands;
-	char		*out_file;
-	char		*input_file;
-	char		*err_file;
+	t_list		*out_file;
+	t_list		*input_file;
+	t_list		*err_file;
 }	t_command_table;
 
 void	insert_simple_command(t_command *command);
