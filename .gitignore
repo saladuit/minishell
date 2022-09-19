@@ -68,3 +68,11 @@ dkms.conf
 .vscode
 unit_test/.normignore
 *.normignore
+
+# Coc.nvim
+node_modules
+.cache
+
+# nvim
+*.json
+.ccls

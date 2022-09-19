@@ -1,43 +1,53 @@
 #include <parser.h>
 #include <stdio.h>
-#include <unistd.h>
 #include <stdlib.h>
+#include <unistd.h>
 
-bool	ft_ismetachar(const char meta_c)
+bool ft_ismetachar(const char meta_c)
 {
 	if (meta_c == '>' || meta_c == '<' || meta_c == '|')
 		return (true);
 	return (false);
 }
-bool	ft_isdelimiter(const char sep)
+
+bool ft_isredir(const char redir)
+{
+	if (redir == '>' || redir == '<')
+		return (true);
+	return (false);
+}
+
+bool ft_isdelimiter(const char sep)
 {
 	if (sep == '|')
 		return (true);
 	return (false);
 }
-t_command	*get_command(t_list **tokens)
-{
-	t_command	*command;
-	char 		*token;
+
+t_command *get_command(t_list **tokens) {
+	t_command *command;
+	t_list		*arguments;
+	char *token;
 
 	command = ft_calloc(1, sizeof(t_command));
 	if (!command)
 		return (NULL);
-	while (*tokens)
-	{
+	while (*tokens) {
 		token = (char *)((*tokens)->content);
 		if (ft_isdelimiter(*token))
-				break ;
-		ft_lstadd_back(&command->tokens, ft_lstnew(token));
+			break;
+		if (!ft_isredir(*token))
+			ft_lstadd_back(&arguments, ft_lstnew(token));
+		command->arg_count++;
 		*tokens = (*tokens)->next;
 	}
 	return (command);
 }
 
-t_command_table	*get_command_table(t_list **tokens)
+t_command_table *get_command_table(t_list **tokens) 
 {
 	t_command_table *command_table;
-	t_list		*command;
+	t_list *command;
 
 	command_table = ft_calloc(1, sizeof(t_command_table));
 	if (!command_table)
@@ -52,23 +62,23 @@ t_command_table	*get_command_table(t_list **tokens)
 	return (command_table);
 }
 
-t_list		*get_abstract_syntax_tree(t_list *tokens)
+t_list *get_abstract_syntax_tree(t_list *tokens) 
 {
-	t_list	*abstract_syntax_tree;
+	t_list *abstract_syntax_tree;
 
-	while (tokens)
-	{
+	while (tokens) {
 		abstract_syntax_tree = ft_lstnew((void *)get_command_table(&tokens));
 		if (!abstract_syntax_tree)
 			return (NULL);
 		ft_lstadd_back(&abstract_syntax_tree, abstract_syntax_tree);
 		if (!abstract_syntax_tree)
 			return (NULL);
+		tokens = tokens->next;
 	}
 	return (abstract_syntax_tree);
 }
 
-int32_t	parser(t_list **abstract_syntax_tree, t_list *tokens)
+int32_t parser(t_list **abstract_syntax_tree, t_list *tokens)
 {
 	*abstract_syntax_tree = get_abstract_syntax_tree(tokens);
 	if (!*abstract_syntax_tree)
