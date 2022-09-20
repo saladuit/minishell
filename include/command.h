@@ -1,6 +1,9 @@
 #ifndef COMMAND_H
 # define COMMAND_H
 
+# include <stdint.h>
+# include <libft.h>
+
 typedef struct s_command
 {
 	int32_t	arg_count;

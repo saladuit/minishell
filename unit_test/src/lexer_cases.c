@@ -25,14 +25,14 @@
 
 Test(tokenizer, valid_input)
 {
-	tokenizer_test("ls", (const char *[]){"ls"},  0);
-	tokenizer_test("ls -la", (const char *[]){"ls", "-la"},  0);
-	tokenizer_test("ls -la | ", (const char *[]){"ls", "-la", "|"},  0);
-	tokenizer_test("ls -la| ", (const char *[]){"ls", "-la", "|"},  0);
-	tokenizer_test("|ls -la| ", (const char *[]){"|", "ls", "-la", "|"},  0);
-	tokenizer_test("\"|ls -la| \"", (const char *[]){"\"|ls -la| \""},  0);
-	tokenizer_test("'|ls -la|$ '", (const char *[]){"\'|ls -la|$ \'"},  0);
-	tokenizer_test("\"\"\"\"'|ls -la|$ '", (const char *[]){"\"\"\"\"'|ls -la|$ '"},  0);
+	tokenizer_test("ls", (const char *[]){"ls"}, 0);
+	tokenizer_test("ls -la", (const char *[]){"ls", "-la"}, 0);
+	tokenizer_test("ls -la | ", (const char *[]){"ls", "-la", "|"}, 0);
+	tokenizer_test("ls -la| ", (const char *[]){"ls", "-la", "|"}, 0);
+	tokenizer_test("|ls -la| ", (const char *[]){"|", "ls", "-la", "|"}, 0);
+	tokenizer_test("\"|ls -la| \"", (const char *[]){"\"|ls -la| \""}, 0);
+	tokenizer_test("'|ls -la|$ '", (const char *[]){"\'|ls -la|$ \'"}, 0);
+	tokenizer_test("\"\"\"\"'|ls -la|$ '", (const char *[]){"\"\"\"\"'|ls -la|$ '"}, 0);
 	tokenizer_test("'|ls -la|$", (const char *[]){"\'|ls -la|$"}, 0);
 	tokenizer_test("|", (const char *[]){"|"}, 0);
 	tokenizer_test("<", (const char *[]){"<"}, 0);
@@ -50,12 +50,12 @@ Test(tokenizer, valid_input)
 
 // Test(analyzer, valid_input)
 // {
-// 	lexer_test("ls", (const char *[]){"ls"}, 0);
-// 	lexer_test("ls -la", (const char *[]){"ls", "-la"}, 0);
-// 	lexer_test("ls -la | ", (const char *[]){"ls", "-la", "|"}, 0);
-// 	lexer_test("ls -la| ", (const char *[]){"ls", "-la", "|"}, 0);
-// 	lexer_test("|ls -la| ", (const char *[]){"|", "ls", "-la", "|"}, 0);
-// 	lexer_test("\"|ls -la| \"", (const char *[]){"\"|ls -la| \""}, 0);
-// 	lexer_test("'|ls -la|$ '", (const char *[]){"\'|ls -la|$ \'"}, 0);
-// 	lexer_test("\"\"\"\"'|ls -la|$ '", (const char *[]){"\"\"\"\"'|ls -la|$ '"}, 0);
+// 	analyzer_test("ls", (const char *[]){"ls"}, 0);
+// 	analyzer_test("ls -la", (const char *[]){"ls", "-la"}, 0);
+// 	analyzer_test("ls -la | ", (const char *[]){"ls", "-la", "|"}, 0);
+// 	analyzer_test("ls -la| ", (const char *[]){"ls", "-la", "|"}, 0);
+// 	analyzer_test("|ls -la| ", (const char *[]){"|", "ls", "-la", "|"}, 0);
+// 	analyzer_test("\"|ls -la| \"", (const char *[]){"\"|ls -la| \""}, 0);
+// 	analyzer_test("'|ls -la|$ '", (const char *[]){"\'|ls -la|$ \'"}, 0);
+// 	analyzer_test("\"\"\"\"'|ls -la|$ '", (const char *[]){"\"\"\"\"'|ls -la|$ '"}, 0);
 // }

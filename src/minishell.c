@@ -1,7 +1,7 @@
 #include <minishell.h>
 #include <stdbool.h>
 
-/* 
+/*
  * Abstract_syntax_tree gathers one or more command tables
  * It is only created when the input is valid
  */
@@ -24,8 +24,8 @@ int32_t	minishell(char **envp)
 			return (EXIT_FAILURE);
 //		if (expander(command_table) == ERROR)
 //			return (EXIT_FAILURE);
-//		if (executor(command_table) == ERROR)
-//			return (EXIT_FAILURE);
+		if (executor(abstract_syntax_tree) == ERROR)
+			return (EXIT_FAILURE);
 		// return (EXIT_SUCCESS);
 	}
 }

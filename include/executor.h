@@ -1,21 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                    .--.  _                 */
-/*   executor.h                                      |o_o || |                */
-/*                                                   |:_/ || |_ _   ___  __   */
-/*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
-/*                                                 (|     | )|_| |_| |>  <    */
-/*   Created: 2022/09/13 16:04:29 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
-/*   Updated: 2022/09/13 17:14:15 by safoh        \___)=(___/                 */
+/*                                                        ::::::::            */
+/*   executor.h                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: safoh <safoh@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/09/13 16:04:29 by safoh         #+#    #+#                 */
+/*   Updated: 2022/09/19 15:39:25 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXECUTOR_H
 # define EXECUTOR_H
 
-# include <ft_tree.h>
 # include <stdint.h>
+# include <ft_tree.h>
+# include <command.h>
 
-int32_t	executor(t_tree *command_table);
+int32_t	execute(char **args, char **envp);
+int32_t	executor(t_list *abstract_syntax_tree);
 
 #endif
