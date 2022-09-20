@@ -116,8 +116,8 @@ all: heading status comp
 
 comp: $(NAME)
 
-heading:
-	@printf "$(CYAN)---< $(ORANGE)Duco's libft $(CYAN)>---\n$(RESET)"
+#heading:
+#	@printf "$(CYAN)---< $(ORANGE)Duco's libft $(CYAN)>---\n$(RESET)"
 
 status:
 ifneq ($(filter $(OBJS), $(wildcard obj/*/*.o)),)
@@ -126,10 +126,10 @@ endif
 
 obj/%.o: src/%.c
 	@mkdir -p $(@D)
-	@printf "$(PERCENT): $(BLUE)"
+#	@printf "$(PERCENT): $(BLUE)"
 	$(CC) $(CFLAGS) $(INC) -c $^ -o $@
-	@printf "$(RESET)"
-	$(eval COMPILED=$(shell echo $$(($(COMPILED)+1))))
+#	@printf "$(RESET)"
+#	$(eval COMPILED=$(shell echo $$(($(COMPILED)+1))))
 
 $(NAME): $(OBJS)
 	@printf "$(INSET)"

@@ -3,6 +3,12 @@
 # include <libft.h>
 # include <stdint.h>
 
+<<<<<<< HEAD
+# include <stdint.h>
+# include <libft.h>
+
+typedef struct s_command
+=======
 typedef enum e_type 
 {
 	INPUT,
@@ -17,13 +23,14 @@ typedef struct s_redir
 	t_type	type;
 }	t_redir;
 
-typedef struct s_command
+typedef struct s_command 
+>>>>>>> saladin
 {
 	int32_t	arg_count;
 	char	**arguments;
 }	t_command;
 
-typedef struct s_command_table
+typedef struct s_command_table 
 {
 	int32_t	command_count;
 	t_list	*commands;
