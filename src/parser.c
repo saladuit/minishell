@@ -73,7 +73,6 @@ t_list *get_abstract_syntax_tree(t_list *tokens)
 		ft_lstadd_back(&abstract_syntax_tree, abstract_syntax_tree);
 		if (!abstract_syntax_tree)
 			return (NULL);
-		tokens = tokens->next;
 	}
 	return (abstract_syntax_tree);
 }
