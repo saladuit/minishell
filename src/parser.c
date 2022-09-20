@@ -151,11 +151,23 @@ t_list	*add_argument(t_list **tokens, t_command *command, t_list **arguments)
 
 t_command	*deconstruct_command(t_command **command)
 {
+	char *filename;
+
+	filename = (*command)->redir->content;
+	free(filename);
 	ft_matrixclear(&(*command)->arguments);
 	ft_lstclear(&(*command)->redir, free);
 	free(*command);
 	*command = NULL;
 	return (NULL);
+}
+
+void	clean_command(void *ptr)
+{
+	t_command *command;
+
+	command = ptr;
+	deconstruct_command(&command);
 }
 
 t_command	*clear_get_command(t_command **command, t_list **arguments)
@@ -198,12 +210,15 @@ t_command_table	*get_command_table(t_list **tokens)
 	if (!command_table)
 		return (NULL);
 	while (*tokens)
+	{
 		if (!ft_lstadd_backnew(&command_table->commands, get_command(tokens)))
 		{
 			ft_lstclear(&command_table->commands, free);
 			free(command_table);
 			return (NULL);
 		}
+		command_table->command_count++;
+	}
 	return (command_table);
 }
 
@@ -221,11 +236,21 @@ t_list	*get_abstract_syntax_tree(t_list *tokens)
 		}
 	return (abstract_syntax_tree);
 }
+void	clean_abstract_sytax_tree(t_list **abstract_syntax_tree)
+{
+	t_command_table *command_table;
 
+	command_table = (*abstract_syntax_tree)->content;
+	ft_lstclear(&command_table->commands, clean_command);
+	ft_lstclear(abstract_syntax_tree, free);
+}
 int32_t parser(t_list **abstract_syntax_tree, t_list *tokens)
 {
 	*abstract_syntax_tree = get_abstract_syntax_tree(tokens);
 	if (!*abstract_syntax_tree)
+	{
+		ft_lstclear(&tokens, free);
 		return (ERROR);
+	}
 	return (SUCCESS);
 }
