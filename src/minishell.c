@@ -1,5 +1,6 @@
 #include <minishell.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 /*
  * Abstract_syntax_tree gathers one or more command tables
@@ -14,7 +15,6 @@ int32_t	minishell(char **envp)
 
 	abstract_syntax_tree = NULL;
 	command_line = NULL;
-	(void)envp;
 	while (true)
 	{
 		command_line = readline(messages_lookup(PROMPT));
@@ -24,8 +24,8 @@ int32_t	minishell(char **envp)
 			return (EXIT_FAILURE);
 //		if (expander(command_table) == ERROR)
 //			return (EXIT_FAILURE);
-//		if (executor(abstract_syntax_tree) == ERROR)
-//			return (EXIT_FAILURE);
+		if (executor(abstract_syntax_tree, envp) == ERROR)
+			return (EXIT_FAILURE);
 		// return (EXIT_SUCCESS);
 	}
 }
