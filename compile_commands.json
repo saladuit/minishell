@@ -1,0 +1,1262 @@
+[
+ {
+  "directory": "/Users/safoh/repos/minishell",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-Iinclude/",
+   "-Ilibs/libft/include/",
+   "-I~/.brew/opt/readline/include/",
+   "-c",
+   "src/minishell.c",
+   "-o",
+   "build/minishell.o"
+  ],
+  "file": "src/minishell.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-Iinclude/",
+   "-Ilibs/libft/include/",
+   "-I~/.brew/opt/readline/include/",
+   "-c",
+   "src/lexer.c",
+   "-o",
+   "build/lexer.o"
+  ],
+  "file": "src/lexer.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-Iinclude/",
+   "-Ilibs/libft/include/",
+   "-I~/.brew/opt/readline/include/",
+   "-c",
+   "src/parser.c",
+   "-o",
+   "build/parser.o"
+  ],
+  "file": "src/parser.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-Iinclude/",
+   "-Ilibs/libft/include/",
+   "-I~/.brew/opt/readline/include/",
+   "-c",
+   "src/expander.c",
+   "-o",
+   "build/expander.o"
+  ],
+  "file": "src/expander.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-Iinclude/",
+   "-Ilibs/libft/include/",
+   "-I~/.brew/opt/readline/include/",
+   "-c",
+   "src/executor.c",
+   "-o",
+   "build/executor.o"
+  ],
+  "file": "src/executor.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-Iinclude/",
+   "-Ilibs/libft/include/",
+   "-I~/.brew/opt/readline/include/",
+   "-c",
+   "src/message.c",
+   "-o",
+   "build/message.o"
+  ],
+  "file": "src/message.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-Iinclude/",
+   "-Ilibs/libft/include/",
+   "-I~/.brew/opt/readline/include/",
+   "-c",
+   "src/main.c",
+   "-o",
+   "build/main.o"
+  ],
+  "file": "src/main.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/array/ft_matrixlen.c",
+   "-o",
+   "obj/array/ft_matrixlen.o"
+  ],
+  "file": "src/array/ft_matrixlen.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/array/ft_joinmatrix.c",
+   "-o",
+   "obj/array/ft_joinmatrix.o"
+  ],
+  "file": "src/array/ft_joinmatrix.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/ascii/ft_isalnum.c",
+   "-o",
+   "obj/ascii/ft_isalnum.o"
+  ],
+  "file": "src/ascii/ft_isalnum.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/ascii/ft_isalpha.c",
+   "-o",
+   "obj/ascii/ft_isalpha.o"
+  ],
+  "file": "src/ascii/ft_isalpha.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/ascii/ft_isascii.c",
+   "-o",
+   "obj/ascii/ft_isascii.o"
+  ],
+  "file": "src/ascii/ft_isascii.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/ascii/ft_isdigit.c",
+   "-o",
+   "obj/ascii/ft_isdigit.o"
+  ],
+  "file": "src/ascii/ft_isdigit.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/ascii/ft_isprint.c",
+   "-o",
+   "obj/ascii/ft_isprint.o"
+  ],
+  "file": "src/ascii/ft_isprint.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/ascii/ft_iswhitespace.c",
+   "-o",
+   "obj/ascii/ft_iswhitespace.o"
+  ],
+  "file": "src/ascii/ft_iswhitespace.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/convert/ft_atoi.c",
+   "-o",
+   "obj/convert/ft_atoi.o"
+  ],
+  "file": "src/convert/ft_atoi.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/convert/ft_hextoi.c",
+   "-o",
+   "obj/convert/ft_hextoi.o"
+  ],
+  "file": "src/convert/ft_hextoi.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/convert/ft_itoa.c",
+   "-o",
+   "obj/convert/ft_itoa.o"
+  ],
+  "file": "src/convert/ft_itoa.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/convert/ft_tolower.c",
+   "-o",
+   "obj/convert/ft_tolower.o"
+  ],
+  "file": "src/convert/ft_tolower.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/convert/ft_toupper.c",
+   "-o",
+   "obj/convert/ft_toupper.o"
+  ],
+  "file": "src/convert/ft_toupper.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/gnl/get_next_line.c",
+   "-o",
+   "obj/gnl/get_next_line.o"
+  ],
+  "file": "src/gnl/get_next_line.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/gnl/get_next_line_utils.c",
+   "-o",
+   "obj/gnl/get_next_line_utils.o"
+  ],
+  "file": "src/gnl/get_next_line_utils.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/lst/ft_lstadd_back.c",
+   "-o",
+   "obj/lst/ft_lstadd_back.o"
+  ],
+  "file": "src/lst/ft_lstadd_back.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/lst/ft_lstadd_front.c",
+   "-o",
+   "obj/lst/ft_lstadd_front.o"
+  ],
+  "file": "src/lst/ft_lstadd_front.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/lst/ft_lstclear.c",
+   "-o",
+   "obj/lst/ft_lstclear.o"
+  ],
+  "file": "src/lst/ft_lstclear.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/lst/ft_lstdelone.c",
+   "-o",
+   "obj/lst/ft_lstdelone.o"
+  ],
+  "file": "src/lst/ft_lstdelone.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/lst/ft_lstiter.c",
+   "-o",
+   "obj/lst/ft_lstiter.o"
+  ],
+  "file": "src/lst/ft_lstiter.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/lst/ft_lstlast.c",
+   "-o",
+   "obj/lst/ft_lstlast.o"
+  ],
+  "file": "src/lst/ft_lstlast.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/lst/ft_lstmap.c",
+   "-o",
+   "obj/lst/ft_lstmap.o"
+  ],
+  "file": "src/lst/ft_lstmap.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/lst/ft_lstnew.c",
+   "-o",
+   "obj/lst/ft_lstnew.o"
+  ],
+  "file": "src/lst/ft_lstnew.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/lst/ft_lstsize.c",
+   "-o",
+   "obj/lst/ft_lstsize.o"
+  ],
+  "file": "src/lst/ft_lstsize.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/mem/ft_bzero.c",
+   "-o",
+   "obj/mem/ft_bzero.o"
+  ],
+  "file": "src/mem/ft_bzero.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/mem/ft_calloc.c",
+   "-o",
+   "obj/mem/ft_calloc.o"
+  ],
+  "file": "src/mem/ft_calloc.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/mem/ft_memchr.c",
+   "-o",
+   "obj/mem/ft_memchr.o"
+  ],
+  "file": "src/mem/ft_memchr.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/mem/ft_memcmp.c",
+   "-o",
+   "obj/mem/ft_memcmp.o"
+  ],
+  "file": "src/mem/ft_memcmp.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/mem/ft_memcpy.c",
+   "-o",
+   "obj/mem/ft_memcpy.o"
+  ],
+  "file": "src/mem/ft_memcpy.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/mem/ft_memmove.c",
+   "-o",
+   "obj/mem/ft_memmove.o"
+  ],
+  "file": "src/mem/ft_memmove.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/mem/ft_memset.c",
+   "-o",
+   "obj/mem/ft_memset.o"
+  ],
+  "file": "src/mem/ft_memset.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/message/ft_error.c",
+   "-o",
+   "obj/message/ft_error.o"
+  ],
+  "file": "src/message/ft_error.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/misc/ft_abs.c",
+   "-o",
+   "obj/misc/ft_abs.o"
+  ],
+  "file": "src/misc/ft_abs.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/misc/ft_numlen.c",
+   "-o",
+   "obj/misc/ft_numlen.o"
+  ],
+  "file": "src/misc/ft_numlen.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/printf/ft_printchar.c",
+   "-o",
+   "obj/printf/ft_printchar.o"
+  ],
+  "file": "src/printf/ft_printchar.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/printf/ft_printf.c",
+   "-o",
+   "obj/printf/ft_printf.o"
+  ],
+  "file": "src/printf/ft_printf.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/printf/ft_printhex.c",
+   "-o",
+   "obj/printf/ft_printhex.o"
+  ],
+  "file": "src/printf/ft_printhex.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/printf/ft_printnbr.c",
+   "-o",
+   "obj/printf/ft_printnbr.o"
+  ],
+  "file": "src/printf/ft_printnbr.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/printf/ft_printstr.c",
+   "-o",
+   "obj/printf/ft_printstr.o"
+  ],
+  "file": "src/printf/ft_printstr.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/printf/ft_printun.c",
+   "-o",
+   "obj/printf/ft_printun.o"
+  ],
+  "file": "src/printf/ft_printun.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/printf/ft_upprinthex.c",
+   "-o",
+   "obj/printf/ft_upprinthex.o"
+  ],
+  "file": "src/printf/ft_upprinthex.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/put/ft_putchar_fd.c",
+   "-o",
+   "obj/put/ft_putchar_fd.o"
+  ],
+  "file": "src/put/ft_putchar_fd.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/put/ft_putendl_fd.c",
+   "-o",
+   "obj/put/ft_putendl_fd.o"
+  ],
+  "file": "src/put/ft_putendl_fd.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/put/ft_putnbr_fd.c",
+   "-o",
+   "obj/put/ft_putnbr_fd.o"
+  ],
+  "file": "src/put/ft_putnbr_fd.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/put/ft_putstr_fd.c",
+   "-o",
+   "obj/put/ft_putstr_fd.o"
+  ],
+  "file": "src/put/ft_putstr_fd.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/str/ft_split.c",
+   "-o",
+   "obj/str/ft_split.o"
+  ],
+  "file": "src/str/ft_split.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/str/ft_strchr.c",
+   "-o",
+   "obj/str/ft_strchr.o"
+  ],
+  "file": "src/str/ft_strchr.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/str/ft_strdup.c",
+   "-o",
+   "obj/str/ft_strdup.o"
+  ],
+  "file": "src/str/ft_strdup.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/str/ft_striteri.c",
+   "-o",
+   "obj/str/ft_striteri.o"
+  ],
+  "file": "src/str/ft_striteri.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/str/ft_strjoin_free.c",
+   "-o",
+   "obj/str/ft_strjoin_free.o"
+  ],
+  "file": "src/str/ft_strjoin_free.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/str/ft_strjoin.c",
+   "-o",
+   "obj/str/ft_strjoin.o"
+  ],
+  "file": "src/str/ft_strjoin.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/str/ft_strlcat.c",
+   "-o",
+   "obj/str/ft_strlcat.o"
+  ],
+  "file": "src/str/ft_strlcat.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/str/ft_strlcpy.c",
+   "-o",
+   "obj/str/ft_strlcpy.o"
+  ],
+  "file": "src/str/ft_strlcpy.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/str/ft_strlen.c",
+   "-o",
+   "obj/str/ft_strlen.o"
+  ],
+  "file": "src/str/ft_strlen.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/str/ft_strmapi.c",
+   "-o",
+   "obj/str/ft_strmapi.o"
+  ],
+  "file": "src/str/ft_strmapi.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/str/ft_strncmp.c",
+   "-o",
+   "obj/str/ft_strncmp.o"
+  ],
+  "file": "src/str/ft_strncmp.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/str/ft_strnstr.c",
+   "-o",
+   "obj/str/ft_strnstr.o"
+  ],
+  "file": "src/str/ft_strnstr.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/str/ft_strrchr.c",
+   "-o",
+   "obj/str/ft_strrchr.o"
+  ],
+  "file": "src/str/ft_strrchr.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/str/ft_strtrim.c",
+   "-o",
+   "obj/str/ft_strtrim.o"
+  ],
+  "file": "src/str/ft_strtrim.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/libs/libft",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I",
+   "./include",
+   "-c",
+   "src/str/ft_substr.c",
+   "-o",
+   "obj/str/ft_substr.o"
+  ],
+  "file": "src/str/ft_substr.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/unit_test",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I../include/",
+   "-I../libs/libft/include/",
+   "-Iinclude/",
+   "-I~/.brew/opt/readline/include/",
+   "-c",
+   "src/lexer_cases.c",
+   "-o",
+   "../build/lexer_cases.o"
+  ],
+  "file": "src/lexer_cases.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/unit_test",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I../include/",
+   "-I../libs/libft/include/",
+   "-Iinclude/",
+   "-I~/.brew/opt/readline/include/",
+   "-c",
+   "src/tokenizer_test.c",
+   "-o",
+   "../build/tokenizer_test.o"
+  ],
+  "file": "src/tokenizer_test.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/unit_test",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I../include/",
+   "-I../libs/libft/include/",
+   "-Iinclude/",
+   "-I~/.brew/opt/readline/include/",
+   "-c",
+   "src/redirect_all_std.c",
+   "-o",
+   "../build/redirect_all_std.o"
+  ],
+  "file": "src/redirect_all_std.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/unit_test",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I../include/",
+   "-I../libs/libft/include/",
+   "-Iinclude/",
+   "-I~/.brew/opt/readline/include/",
+   "-c",
+   "src/minishell_test.c",
+   "-o",
+   "../build/minishell_test.o"
+  ],
+  "file": "src/minishell_test.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/unit_test",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I../include/",
+   "-I../libs/libft/include/",
+   "-Iinclude/",
+   "-I~/.brew/opt/readline/include/",
+   "-c",
+   "src/parser_cases.c",
+   "-o",
+   "../build/parser_cases.o"
+  ],
+  "file": "src/parser_cases.c"
+ },
+ {
+  "directory": "/Users/safoh/repos/minishell/unit_test",
+  "arguments": [
+   "gcc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-g",
+   "-I../include/",
+   "-I../libs/libft/include/",
+   "-Iinclude/",
+   "-I~/.brew/opt/readline/include/",
+   "-c",
+   "src/parser_test.c",
+   "-o",
+   "../build/parser_test.o"
+  ],
+  "file": "src/parser_test.c"
+ }
+]
