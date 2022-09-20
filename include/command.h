@@ -23,8 +23,6 @@ typedef struct s_command
 	char	**arguments;
 }	t_command;
 
-void insert_argument(char *argument);
-
 typedef struct s_command_table 
 {
 	int32_t	command_count;
