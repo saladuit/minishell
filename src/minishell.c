@@ -24,8 +24,8 @@ int32_t	minishell(char **envp)
 			return (EXIT_FAILURE);
 //		if (expander(command_table) == ERROR)
 //			return (EXIT_FAILURE);
-		if (executor(abstract_syntax_tree) == ERROR)
-			return (EXIT_FAILURE);
+//		if (executor(abstract_syntax_tree) == ERROR)
+//			return (EXIT_FAILURE);
 		// return (EXIT_SUCCESS);
 	}
 }

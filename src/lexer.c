@@ -24,55 +24,59 @@ int32_t	is_tokenchar(char c)
 	return (0);
 }
 
-char	*make_token(const char *input_line, int len)
+void	ft_skip_whitespaces(const char **input)
 {
-	char	*symbol;
-
-	symbol = malloc(len + 1);
-	ft_strlcpy(symbol, input_line, len + 1);
-	return (symbol);
+	while (ft_iswhitespace(**input) && **input)
+		(*input)++;
 }
 
-int32_t	get_token_len(const char *input)
+int32_t	get_token_len(const char *command_line)
 {
 	int32_t	i;
 	int32_t	quoted;
 
 	i = 0;
 	quoted = 0;
-	if (is_tokenchar(input[i]))
+	if (is_tokenchar(command_line[i]))
 		return (1);
-	while ((!ft_iswhitespace(input[i]) || quoted) && input[i])
+	while ((!ft_iswhitespace(command_line[i]) || quoted) && command_line[i])
 	{
-		if (is_quotechar(input[i]) && !quoted)
-			quoted = input[i];
-		else if (is_tokenchar(input[i]) && !quoted)
+		if (is_quotechar(command_line[i]) && !quoted)
+			quoted = command_line[i];
+		else if (is_tokenchar(command_line[i]) && !quoted)
 			break ;
-		else if (is_quotechar(input[i]) && quoted == input[i])
+		else if (is_quotechar(command_line[i]) && quoted == command_line[i])
 			quoted = 0;
 		i++;
 	}
 	return (i);
 }
 
-int32_t	lexer(const char *input_line, t_list **tokens)
+char	*make_token(const char **command_line)
 {
-	int32_t	i;
+	char	*symbol;
 	int32_t	token_len;
+
+	token_len = get_token_len(*command_line);
+	symbol = ft_calloc(token_len + 1, sizeof(char));
+	if (!symbol)
+		return (NULL);
+	ft_strlcpy(symbol, *command_line, token_len + 1);
+	*command_line += token_len;
+	return (symbol);
+}
+
+int32_t	lexer(const char *command_line, t_list **tokens)
+{
 	t_list	*node;
 
-	i = 0;
-	while (input_line[i])
+	while (*command_line)
 	{
-		if (!ft_iswhitespace(input_line[i]))
-		{
-			token_len = get_token_len(&input_line[i]);
-			node = ft_lstnew(make_token(&input_line[i], token_len));
-			ft_lstadd_back(tokens, node);
-			i += token_len;
-		}
-		else
-			i++;
+		ft_skip_whitespaces(&command_line);
+		node = ft_lstnew(make_token(&command_line));
+		if (!node)
+			return (ERROR);
+		ft_lstadd_back(tokens, node);
 	}
 	return (SUCCESS);
 }
