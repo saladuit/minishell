@@ -43,7 +43,6 @@ int32_t	ft_matrixclear(char ***string)
 	size_t	i;
 
 	i = 0;
-	
 	if (!*string)
 		return (ERROR);
 	while ((*string)[i])
@@ -119,7 +118,7 @@ t_list	*deconstruct_redir(t_redir **redir)
 t_list	*add_redir(t_list **tokens, t_list **redir)
 {
 	t_list	*new_node;
-	t_redir *new_redir;
+	t_redir	*new_redir;
 
 	new_redir = construct_redir(tokens);
 	if (!new_redir)
@@ -149,6 +148,7 @@ t_list	*add_argument(t_list **tokens, t_command *command, t_list **arguments)
 	*tokens = (*tokens)->next;
 	return (new_node);
 }
+
 t_command	*deconstruct_command(t_command **command)
 {
 	ft_matrixclear(&(*command)->arguments);
@@ -158,21 +158,18 @@ t_command	*deconstruct_command(t_command **command)
 	return (NULL);
 }
 
-t_command	*deconstruct_command_and_arguments(t_command **command, t_list **arguments)
+t_command	*clear_get_command(t_command **command, t_list **arguments)
 {
-	ft_matrixclear(&(*command)->arguments);
-	ft_lstclear(&(*command)->redir, free);
+	deconstruct_command(command);
 	ft_lstclear(arguments, free);
-	free(*command);
-	*command = NULL;
 	return (NULL);
 }
 
-t_command *get_command(t_list **tokens)
+t_command	*get_command(t_list **tokens)
 {
-	t_command *command;
+	t_command	*command;
 	t_list		*arguments;
-	char *token;
+	char		*token;
 
 	command = ft_calloc(1, sizeof(t_command));
 	if (!command)
@@ -182,39 +179,46 @@ t_command *get_command(t_list **tokens)
 	{
 		token = (*tokens)->content;
 		if (ft_isdelimiter(*token))
-			break;
+			break ;
 		if (ft_isredir(*token) && !add_redir(tokens, &command->redir))
-			return (deconstruct_command_and_arguments(&command, &arguments));
+			return (clear_get_command(&command, &arguments));
 		else if (!add_argument(tokens, command, &arguments))
-			return (deconstruct_command_and_arguments(&command, &arguments));
+			return (clear_get_command(&command, &arguments));
 	}
 	if (fill_arguments(command, &arguments) == ERROR)
-		return (deconstruct_command_and_arguments(&command, &arguments));
+		return (clear_get_command(&command, &arguments));
 	return (command);
 }
 
-t_command_table *get_command_table(t_list **tokens)
+t_command_table	*get_command_table(t_list **tokens)
 {
-	t_command_table *command_table;
+	t_command_table	*command_table;
 
-	command_table = NULL;
 	command_table = ft_calloc(1, sizeof(t_command_table));
 	if (!command_table)
 		return (NULL);
 	while (*tokens)
 		if (!ft_lstadd_backnew(&command_table->commands, get_command(tokens)))
+		{
+			ft_lstclear(&command_table->commands, free);
+			free(command_table);
 			return (NULL);
+		}
 	return (command_table);
 }
 
-t_list *get_abstract_syntax_tree(t_list *tokens)
+t_list	*get_abstract_syntax_tree(t_list *tokens)
 {
-	t_list *abstract_syntax_tree;
+	t_list	*abstract_syntax_tree;
 
 	abstract_syntax_tree = NULL;
 	while (tokens)
-		if (!ft_lstadd_backnew(&abstract_syntax_tree, (void *)get_command_table(&tokens)))
+		if (!ft_lstadd_backnew(&abstract_syntax_tree, \
+					(void *)get_command_table(&tokens)))
+		{
+			ft_lstclear(&abstract_syntax_tree, free);
 			return (NULL);
+		}
 	return (abstract_syntax_tree);
 }
 
