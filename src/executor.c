@@ -71,6 +71,11 @@ int32_t	executor(t_list *abstract_syntax_tree, char **envp)
 	command_table = (t_command_table *)abstract_syntax_tree->content;
 	command = (t_command *)command_table->commands->content;
 	args = command->arguments;
+	while (*args)
+	{
+		fprintf(stderr, "Hallo: %s\n", *args);
+		args++;
+	}
 	command_path = get_command_path(args);
 	pid = execute(command_path, args, envp);
 	waitpid(pid, &status, WUNTRACED);

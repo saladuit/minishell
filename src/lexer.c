@@ -1,3 +1,4 @@
+#include "libft.h"
 #include <lexer.h>
 #include <message.h>
 #include <stdio.h> // Remove
@@ -26,27 +27,33 @@ int32_t	is_tokenchar(char c)
 
 void	ft_skip_whitespaces(const char **input)
 {
-	while (ft_iswhitespace(**input) && **input)
+	while (ft_iswhitespace(**input))
 		(*input)++;
 }
-
-int32_t	get_token_len(const char *command_line)
+int32_t	find_next_quote(const char *command_line, char c)
 {
-	int32_t	i;
-	int32_t	quoted;
+	size_t	i;
+	
+	i = 0;
+	while (command_line[i] != c && command_line[i])
+		i++;
+	return (i);
+}
+size_t	get_token_len(const char *command_line)
+{
+	size_t	i;
 
 	i = 0;
-	quoted = 0;
-	if (is_tokenchar(command_line[i]))
+	if (is_tokenchar(command_line[i])) //FIXME doens't work for << or >>
 		return (1);
-	while ((!ft_iswhitespace(command_line[i]) || quoted) && command_line[i])
+	while (command_line[i] && !ft_iswhitespace(command_line[i]) && \
+			!is_tokenchar(command_line[i]))
 	{
-		if (is_quotechar(command_line[i]) && !quoted)
-			quoted = command_line[i];
-		else if (is_tokenchar(command_line[i]) && !quoted)
-			break ;
-		else if (is_quotechar(command_line[i]) && quoted == command_line[i])
-			quoted = 0;
+		if (is_quotechar(command_line[i]))
+		{
+			i += find_next_quote(command_line, command_line[i]);
+			continue ;
+		}
 		i++;
 	}
 	return (i);
@@ -55,13 +62,12 @@ int32_t	get_token_len(const char *command_line)
 char	*make_token(const char **command_line)
 {
 	char	*symbol;
-	int32_t	token_len;
+	size_t	token_len;
 
 	token_len = get_token_len(*command_line);
-	symbol = ft_calloc(token_len + 1, sizeof(char));
+	symbol = ft_substr((char *)command_line, 0, token_len);
 	if (!symbol)
 		return (NULL);
-	ft_strlcpy(symbol, *command_line, token_len + 1);
 	*command_line += token_len;
 	return (symbol);
 }
