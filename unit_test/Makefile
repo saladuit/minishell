@@ -10,11 +10,10 @@ CFLAGS			:=-Wall -Wextra -Werror$(if $(FSAN), -g -fsanitize=address)$(if $(DEBUG
 UNIT_LFLAGS		:=-lcriterion -lreadline
 
 all: $(NAME)
-
 $(NAME): SHELL := /bin/bash
 
-$(NAME): $(UNIT_OBJS)
-	$(CC) $(CFLAGS) $^ $(UNIT_LIBS) $(PRODUCTION_OBJS) $(UNIT_LFLAGS) $(UNIT_INCLUDE_FLAGS) -o $(NAME)
+$(NAME): $(UNIT_OBJS) $(PRODUCTION_OBJS)
+	$(CC) $(CFLAGS) $^ $(UNIT_LIBS) $(UNIT_LFLAGS) $(UNIT_INCLUDE_FLAGS) -o $(NAME)
 
 $(UNIT_OBJS): ../$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)

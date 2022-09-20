@@ -11,7 +11,7 @@ void	tokenizer_test(const char input[], const char **expect, const int32_t ret)
 	while (tokens)
 	{
 		token = (char *)tokens->content;
-	cr_assert(eq(str, token, (char *)*expect, "Called:\tlexer()\nsymbol:\t%s \nexpected:\t%s\n", token, *expect));
+		cr_assert(eq(str, token, (char *)*expect, "Called:\tlexer()\nsymbol:\t%s \nexpected:\t%s\n", token, *expect));
 		tokens = tokens->next;
 		expect++;
 	}

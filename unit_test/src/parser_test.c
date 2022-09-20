@@ -1,19 +1,21 @@
+#include <stdio.h>
 #include <unit_test.h>
 
-void	get_command_test(const char input[], const char *expect[])
+void	get_command_test(const char input[], char *expect[])
 {
 	t_list		*tokens;
 	t_command	*command;
+	size_t		i;
 
 	command = NULL;
 	tokens = NULL;
+	i = 0;
 	lexer(input, &tokens);
 	command = get_command(&tokens);
-	while (*expect)
+	while (expect[i])
 	{
-		cr_expect(eq(str, *command->arguments, (char *)(*expect)));
-		command->arguments++;
-		expect++;
+		cr_expect(eq(str, command->arguments[i], expect[i]));
+		i++;
 	}
 	free(command->arguments);
 	free(command);

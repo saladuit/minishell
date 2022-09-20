@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        ::::::::            */
-/*   executor.c                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: safoh <safoh@student.codam.nl>               +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2022/09/13 16:19:58 by safoh         #+#    #+#                 */
-/*   Updated: 2022/09/20 16:09:16 by dritsema      ########   odam.nl         */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <executor.h>
 #include <message.h>
 #include <command.h>
@@ -54,7 +42,7 @@ int32_t	executor(t_list *abstract_syntax_tree)
 	char			*envp[] = {NULL};
 
 	command_table = (t_command_table *)abstract_syntax_tree->content;
-	args = get_args(command_table);
-	execute(args, envp);
+	command = command_table->commands->content;
+	execute(command->arguments, envp);
 	return (SUCCESS);
 }

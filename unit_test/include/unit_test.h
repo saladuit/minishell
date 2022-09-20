@@ -6,7 +6,7 @@
 /*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
 /*                                                 (|     | )|_| |_| |>  <    */
 /*   Created: 2022/03/25 17:34:35 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
-/*   Updated: 2022/09/18 10:59:31 by safoh        \___)=(___/                 */
+/*   Updated: 2022/09/20 11:09:28 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	minishell_test(const char *envp[], const size_t count, int32_t expected);
 void	tokenizer_test(const char input[], const char **expect, const int32_t ret);
 void	lexer_test(const char input[], const char **expect, const int32_t ret);
 
-void	get_command_test(const char input[], const char *expect[]);
+void	get_command_test(const char input[], char *expect[]);
 
 void	execute_test(const char *path, char **args, char **envp, const int32_t ret);
 void	get_redir_test(const char input[], const char *expect[]);
