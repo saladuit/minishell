@@ -66,7 +66,7 @@ int32_t	fill_arguments(t_command *command, t_list **arg_list)
 	while (*arg_list)
 	{
 		command->arguments[i] = ft_strdup((*arg_list)->content);
-		fprintf(stderr, "arguments: %s\n", command->arguments[i]);
+		// fprintf(stderr, "arguments: %s\n", command->arguments[i]);
 		if (!command->arguments[i])
 			return (ft_matrixclear(&command->arguments));
 		arg_list = &(*arg_list)->next;

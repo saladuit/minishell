@@ -15,6 +15,7 @@ int32_t	minishell(char **envp)
 
 	abstract_syntax_tree = NULL;
 	command_line = NULL;
+	tokens = NULL;
 	while (true)
 	{
 		command_line = readline(messages_lookup(PROMPT));
@@ -24,7 +25,7 @@ int32_t	minishell(char **envp)
 			return (EXIT_FAILURE);
 //		if (expander(command_table) == ERROR)
 //			return (EXIT_FAILURE);
-		if (executor(abstract_syntax_tree, envp) == ERROR)
+		if (executor(abstract_syntax_tree, envp) == ERROR) // Fix segfault
 			return (EXIT_FAILURE);
 		// return (EXIT_SUCCESS);
 	}
