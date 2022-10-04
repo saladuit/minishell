@@ -88,6 +88,5 @@ int32_t	lexer(const char *command_line, t_list **tokens)
 			return (ERROR);
 		ft_lstadd_back(tokens, node);
 	}
-
 	return (SUCCESS);
 }
