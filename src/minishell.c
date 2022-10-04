@@ -25,6 +25,7 @@ int32_t	minishell(char **envp)
 	abstract_syntax_tree = NULL;
 	command_line = NULL;
 	tokens = NULL;
+	init_handlers();
 	while (true)
 	{
 		command_line = readline(messages_lookup(PROMPT));

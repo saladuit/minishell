@@ -1,17 +1,17 @@
 # **************************************************************************** #
 #                                                                              #
-#                                                     .--.  _                  #
-#    config.mk                                       |o_o || |                 #
-#                                                    |:_/ || |_ _   ___  __    #
-#    By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /    #
-#                                                  (|     | )|_| |_| |>  <     #
-#    Created: 2022/07/16 21:50:54 by safoh        /'\_   _/`\__|\__,_/_/\_\    #
-#    Updated: 2022/09/16 10:48:04 by safoh        \___)=(___/                  #
+#                                                         ::::::::             #
+#    config.mk                                          :+:    :+:             #
+#                                                      +:+                     #
+#    By: safoh <safoh@student.codam.nl>               +#+                      #
+#                                                    +#+                       #
+#    Created: 2022/07/16 21:50:54 by safoh         #+#    #+#                  #
+#    Updated: 2022/10/04 16:37:10 by dritsema      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 
-SRCS			=minishell.c lexer.c parser.c expander.c executor.c message.c
+SRCS			=minishell.c lexer.c parser.c expander.c executor.c message.c signal_handler.c
 MAIN 			:=main.c
 
 SRC_DIR			:=src

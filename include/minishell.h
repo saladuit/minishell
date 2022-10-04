@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                    .--.  _                 */
-/*   minishell.h                                     |o_o || |                */
-/*                                                   |:_/ || |_ _   ___  __   */
-/*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
-/*                                                 (|     | )|_| |_| |>  <    */
-/*   Created: 2022/09/12 17:26:23 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
-/*   Updated: 2022/09/13 17:24:50 by safoh        \___)=(___/                 */
+/*                                                        ::::::::            */
+/*   minishell.h                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: safoh <safoh@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/09/12 17:26:23 by safoh         #+#    #+#                 */
+/*   Updated: 2022/10/04 16:41:34 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <executor.h>
 # include <ft_tree.h>
 
+int32_t	init_handlers(void);
 int32_t	minishell(char **envp);
 
 #endif
