@@ -237,7 +237,7 @@ t_list	*get_abstract_syntax_tree(t_list *tokens)
 		}
 	return (abstract_syntax_tree);
 }
-void	clean_abstract_sytax_tree(t_list **abstract_syntax_tree)
+void	clean_abstract_syntax_tree(t_list **abstract_syntax_tree)
 {
 	t_command_table *command_table;
 
@@ -247,6 +247,8 @@ void	clean_abstract_sytax_tree(t_list **abstract_syntax_tree)
 }
 int32_t parser(t_list **abstract_syntax_tree, t_list *tokens)
 {
+	if (*abstract_syntax_tree != NULL)
+		clean_abstract_syntax_tree(abstract_syntax_tree);
 	*abstract_syntax_tree = get_abstract_syntax_tree(tokens);
 	if (!*abstract_syntax_tree)
 	{

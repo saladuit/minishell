@@ -49,7 +49,7 @@ size_t	get_token_len(const char *command_line)
 
 	i = 0;
 	if (is_tokenchar(&command_line[i])) //FIXME doens't work for << or >>
-		return (1);
+		return (is_tokenchar(&command_line[i]));
 	while (command_line[i] && !ft_iswhitespace(command_line[i]) && \
 			!is_tokenchar(&command_line[i]))
 	{
