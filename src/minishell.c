@@ -32,11 +32,13 @@ int32_t	minishell(char **envp)
 	{
 		command_line = readline(messages_lookup(PROMPT));
 		// printf("Input:\"%s\"\n", command_line);
-		if (*command_line)
+		if (!command_line)
+			exit(0);
+		else if (*command_line)
 		{
 			if (!ft_strncmp(command_line, "exit", 5))
 				exit(1);
-			// printf("lexer\n");
+			printf("lexer\n");
 			if (lexer(command_line, &tokens) == ERROR)
 				return (EXIT_FAILURE);
 			// print_tokens(tokens);
