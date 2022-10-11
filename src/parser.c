@@ -152,10 +152,16 @@ t_list	*add_argument(t_list **tokens, t_command *command, t_list **arguments)
 
 t_command	*deconstruct_command(t_command **command)
 {
-	char *filename;
+	char	*filename;
+	t_redir	*redir;
 
-	filename = (*command)->redir->content;
-	free(filename);
+	if ((*command)->redir)
+	{
+		redir = (*command)->redir->content;
+		filename = redir->filename;
+		free(filename);
+		free(redir);
+	}
 	ft_matrixclear(&(*command)->arguments);
 	ft_lstclear(&(*command)->redir, free);
 	free(*command);
@@ -165,7 +171,7 @@ t_command	*deconstruct_command(t_command **command)
 
 void	clean_command(void *ptr)
 {
-	t_command *command;
+	t_command	*command;
 
 	command = ptr;
 	deconstruct_command(&command);
@@ -239,7 +245,7 @@ t_list	*get_abstract_syntax_tree(t_list *tokens)
 }
 void	clean_abstract_syntax_tree(t_list **abstract_syntax_tree)
 {
-	t_command_table *command_table;
+	t_command_table	*command_table;
 
 	command_table = (*abstract_syntax_tree)->content;
 	ft_lstclear(&command_table->commands, clean_command);
@@ -247,8 +253,6 @@ void	clean_abstract_syntax_tree(t_list **abstract_syntax_tree)
 }
 int32_t parser(t_list **abstract_syntax_tree, t_list *tokens)
 {
-	if (*abstract_syntax_tree != NULL)
-		clean_abstract_syntax_tree(abstract_syntax_tree);
 	*abstract_syntax_tree = get_abstract_syntax_tree(tokens);
 	if (!*abstract_syntax_tree)
 	{

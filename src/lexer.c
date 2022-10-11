@@ -38,7 +38,7 @@ int32_t	find_next_quote(const char *command_line, char c)
 {
 	size_t	i;
 
-	i = 0;
+	i = 1;
 	while (command_line[i] != c && command_line[i])
 		i++;
 	return (i);
@@ -55,8 +55,7 @@ size_t	get_token_len(const char *command_line)
 	{
 		if (is_quotechar(command_line[i]))
 		{
-			i += find_next_quote(command_line, command_line[i]);
-			continue ;
+			i += find_next_quote(&command_line[i], command_line[i]);
 		}
 		i++;
 	}

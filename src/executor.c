@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <libft.h>
 #include <stdio.h>
+#include <errno.h>
+#include <string.h>
 
 int32_t	check_path(char **args, char *path)
 {
@@ -55,8 +57,9 @@ pid_t	execute(char *command_path, char **args, char **envp)
 	pid = fork();
 	if (pid != 0)
 		return (pid);
+	signal(SIGINT, SIG_DFL);
 	execve(command_path, args, envp);
-	exit(EXIT_FAILURE);
+	exit(errno);
 }
 
 int32_t	executor(t_list *abstract_syntax_tree, char **envp)
@@ -76,7 +79,7 @@ int32_t	executor(t_list *abstract_syntax_tree, char **envp)
 	waitpid(pid, &status, WUNTRACED);
 	if (status)
 	{
-		perror(command_path);
+		ft_printf("%s: %s: %i\n", command_path, strerror(status), status);
 	}
 	return (SUCCESS);
 }

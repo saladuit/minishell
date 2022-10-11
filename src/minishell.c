@@ -21,7 +21,9 @@ int32_t	minishell(char **envp)
 	t_list		*abstract_syntax_tree;
 	t_list		*tokens;
 	char		*command_line; // should be converted into dlist
+	extern int	rl_catch_signals;
 
+	rl_catch_signals = 0;
 	abstract_syntax_tree = NULL;
 	command_line = NULL;
 	tokens = NULL;
@@ -32,6 +34,8 @@ int32_t	minishell(char **envp)
 		// printf("Input:\"%s\"\n", command_line);
 		if (*command_line)
 		{
+			if (!ft_strncmp(command_line, "exit", 5))
+				exit(1);
 			// printf("lexer\n");
 			if (lexer(command_line, &tokens) == ERROR)
 				return (EXIT_FAILURE);
@@ -46,6 +50,11 @@ int32_t	minishell(char **envp)
 				return (EXIT_FAILURE);
 			ft_lstclear(&tokens, free);
 			// return (EXIT_SUCCESS);
+		}
+		if (abstract_syntax_tree != NULL)
+		{
+			clean_abstract_syntax_tree(&abstract_syntax_tree);
+			abstract_syntax_tree = NULL;
 		}
 		free(command_line);
 	}
