@@ -5,6 +5,9 @@ UNIT_SRCS			=lexer_cases.c tokenizer_test.c redirect_all_std.c minishell_test.c 
 UNIT_OBJS			=$(addprefix ../$(BUILD_DIR)/, $(UNIT_SRCS:%.c=%.o))
 PRODUCTION_OBJS		=$(addprefix ../, $(OBJS))
 
+LIB_DIR			:=libs
+READLINE_DIR	:=$(LIB_DIR)/readline
+READLINE_INCLUDE_DIR	:=$(READLINE_DIR)/$(INCLUDE_DIR)
 UNIT_LIBS			=$(addprefix ../, $(LIBFT))
 
 UNIT_HEADERS		:=include/unit_test.h \

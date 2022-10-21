@@ -1,13 +1,23 @@
-#include "command.h"
-#include "libft.h"
-#include "message.h"
-#include <parser.h>
-#include <redir.h>
-#include <minitype.h>
-#include <parser_clean.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include <command.h>
+
+t_command	*deconstruct_command(t_command **command)
+{
+	char	*filename;
+	t_redir	*redir;
+
+	if ((*command)->redir)
+	{
+		redir = (*command)->redir->content;
+		filename = redir->filename;
+		free(filename);
+		free(redir);
+	}
+	ft_matrixfree(&(*command)->arguments);
+	ft_lstclear(&(*command)->redir, free);
+	free(*command);
+	*command = NULL;
+	return (NULL);
+}
 
 int32_t	fill_arguments(t_command *command, t_list **arg_list)
 {
@@ -80,50 +90,4 @@ t_command	*get_command(t_list **tokens)
 	if (fill_arguments(command, &arguments) == ERROR)
 		return (clear_get_command(&command, &arguments));
 	return (command);
-}
-
-t_command_table	*get_command_table(t_list **tokens)
-{
-	t_command_table	*command_table;
-
-	command_table = ft_calloc(1, sizeof(t_command_table));
-	if (!command_table)
-		return (NULL);
-	while (*tokens)
-	{
-		if (!ft_lstadd_backnew(&command_table->commands, get_command(tokens)))
-		{
-			ft_lstclear(&command_table->commands, free);
-			free(command_table);
-			return (NULL);
-		}
-		command_table->command_count++;
-	}
-	return (command_table);
-}
-
-t_list	*get_abstract_syntax_tree(t_list *tokens)
-{
-	t_list	*abstract_syntax_tree;
-
-	abstract_syntax_tree = NULL;
-	while (tokens)
-		if (!ft_lstadd_backnew(&abstract_syntax_tree, \
-					(void *)get_command_table(&tokens)))
-		{
-			ft_lstclear(&abstract_syntax_tree, free);
-			return (NULL);
-		}
-	return (abstract_syntax_tree);
-}
-
-int32_t parser(t_list **abstract_syntax_tree, t_list *tokens)
-{
-	*abstract_syntax_tree = get_abstract_syntax_tree(tokens);
-	if (!*abstract_syntax_tree)
-	{
-		ft_lstclear(&tokens, free);
-		return (ERROR);
-	}
-	return (SUCCESS);
 }

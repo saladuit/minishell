@@ -3,21 +3,6 @@
 # include <libft.h>
 # include <stdint.h>
 
-typedef enum e_type
-{
-	DEFAULT,
-	INFILE,
-	OUTFILE,
-	APPEND,
-	HEREDOC,
-	END
-}	t_type;
-
-typedef struct s_redir
-{
-	char	*filename;
-	t_type	type;
-}	t_redir;
 
 typedef struct s_command
 {
