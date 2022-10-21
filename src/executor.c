@@ -62,6 +62,45 @@ pid_t	execute(char *command_path, char **args, char **envp)
 	exit(errno);
 }
 
+t_command	get_command(t_command_table *command_table, int32_t element)
+{
+	t_command	command;
+	int32_t		i;
+	t_list		*commands;
+
+	commands = command_table->commands;
+	i = 0;
+	while (i <= element && commands)
+	{
+		i++;
+		commands = commands->next;
+	}
+	if (commands)
+		return ((t_command)commands->content);
+	else
+		return (NULL);
+}
+
+int32_t	run_commands(t_command_table *command_table, char **envp)
+{
+	int32_t		i;
+	int32_t		*pipe_fds[2];
+	t_command	command;
+	int32_t		input;
+
+	i = 0;
+	while (i < command_table->command_count)
+	{
+		command = get_command(command_table, i);
+		if (i > 0)
+		{
+			pipe(pipe_fds);
+			execute_process(pipe_fds, command, envp);
+		}
+		i++;
+	}
+}
+
 int32_t	executor(t_list *abstract_syntax_tree, char **envp)
 {
 	t_command_table	*command_table;

@@ -83,11 +83,11 @@ t_redir	*construct_redir(t_list **tokens)
 	if (!redir)
 		return (NULL);
 	if (!ft_strncmp("<", (*tokens)->content, 2))
-		redir->type = INPUT;
+		redir->type = INFILE;
 	if (!ft_strncmp("<<", (*tokens)->content, 3))
 		redir->type = HEREDOC;
 	if (!ft_strncmp(">", (*tokens)->content, 2))
-		redir->type = OUTPUT;
+		redir->type = OUTFILE;
 	if (!ft_strncmp(">>", (*tokens)->content, 3))
 		redir->type = APPEND;
 	*tokens = (*tokens)->next;
