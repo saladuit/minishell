@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   libft.h                                            :+:    :+:            */
+/*   libft.h                                         |o_o || |                */
 /*                                                     +:+                    */
 /*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/06/07 12:51:11 by dritsema      #+#    #+#                 */
-/*   Updated: 2022/09/16 15:35:37 by dritsema      ########   odam.nl         */
+/*   Updated: 2022/10/21 13:44:10 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,13 @@
 size_t			ft_matrixlen(void **matrix);
 
 char			*ft_joinmatrix(const char **matrix, size_t count);
+
+/**
+ * @brief deallocates memory of a 2d array 
+ *
+ * @param pointer to The 2d array to delete.
+ * @return nothing */
+void			ft_matrixfree(char ***string);
 
 // ############### Ascii ###############
 
@@ -120,6 +127,7 @@ typedef struct s_list
 	void			*content;
 	struct s_list	*next;
 }	t_list;
+t_list			*ft_lstadd_backnew(t_list **lst, void *content);
 /**
  * @brief Adds the node ’lstnew’ at the end of the list.
  * @param lst The address of a pointer to the first link of a list.

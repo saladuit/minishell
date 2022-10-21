@@ -1,17 +1,17 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         ::::::::             #
-#    config.mk                                          :+:    :+:             #
-#                                                      +:+                     #
-#    By: safoh <safoh@student.codam.nl>               +#+                      #
-#                                                    +#+                       #
-#    Created: 2022/07/16 21:50:54 by safoh         #+#    #+#                  #
-#    Updated: 2022/10/10 14:54:39 by dritsema      ########   odam.nl          #
-#                                                                              #
-# **************************************************************************** #
+SRCS			=minishell.c \
+				 lexer.c \
+				 parser.c \
+				 redir.c \
+				 command.c \
+				 command_table.c \
+				 expander.c \
+				 executor.c \
+				 message.c \
+				 signal_handler.c \
+				 ft_isredir.c \
+				 ft_isdelimiter.c \
+				 ft_ismetachar.c
 
-
-SRCS			=minishell.c lexer.c parser.c expander.c executor.c message.c signal_handler.c
 MAIN 			:=main.c
 
 SRC_DIR			:=src
@@ -35,7 +35,11 @@ HEADERS			=$(LIBFT_INCLUDE_DIR)/libft.h \
 				$(INCLUDE_DIR)/expander.h \
 				$(INCLUDE_DIR)/lexer.h \
 				$(INCLUDE_DIR)/parser.h \
+				$(INCLUDE_DIR)/redir.h \
+				$(INCLUDE_DIR)/command.h \
+				$(INCLUDE_DIR)/command_table.h \
 				$(INCLUDE_DIR)/message.h \
+				$(INCLUDE_DIR)/minitype.h \
 				$(INCLUDE_DIR)/ft_tree.h \
 				$(READLINE_INCLUDE_DIR)/readline.h
 
