@@ -2,7 +2,6 @@
 # define COMMAND_TABLE_H
 # include <libft.h>
 # include <stdint.h>
-# include <command.h>
 # include <message.h>
 
 typedef struct s_command_table {
@@ -10,5 +9,5 @@ typedef struct s_command_table {
     t_list* commands;
 }	t_command_table;
 
-t_command_table	*get_command_table(t_list **tokens)
+t_command_table	*get_command_table(t_list **tokens);
 #endif

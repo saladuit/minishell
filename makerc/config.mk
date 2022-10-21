@@ -1,6 +1,7 @@
 SRCS			=minishell.c \
 				 lexer.c \
 				 parser.c \
+				 argument.c \
 				 redir.c \
 				 command.c \
 				 command_table.c \
@@ -35,6 +36,7 @@ HEADERS			=$(LIBFT_INCLUDE_DIR)/libft.h \
 				$(INCLUDE_DIR)/expander.h \
 				$(INCLUDE_DIR)/lexer.h \
 				$(INCLUDE_DIR)/parser.h \
+				$(INCLUDE_DIR)/argument.h \
 				$(INCLUDE_DIR)/redir.h \
 				$(INCLUDE_DIR)/command.h \
 				$(INCLUDE_DIR)/command_table.h \
@@ -48,6 +50,6 @@ INCLUDE_FLAGS	:=$(addprefix -I, $(sort $(dir $(HEADERS))))
 LIBFT			:=$(LIBFT_DIR)/libft.a
 
 COVERAGE		=$(SRCS:.c=.gcda) \
-	$(SRCS:.c=.gcno) \
-	$(UNIT_SRCS:.c=.gcno) \
-	$(UNIT_SRCS:.c=.gcda)
+				$(SRCS:.c=.gcno) \
+				$(UNIT_SRCS:.c=.gcno) \
+				$(UNIT_SRCS:.c=.gcda)

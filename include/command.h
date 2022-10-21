@@ -11,10 +11,4 @@ typedef struct s_command
 	t_list	*redir;
 }	t_command;
 
-typedef struct s_command_table
-{
-	int32_t	command_count;
-	t_list	*commands;
-}	t_command_table;
-
 #endif
