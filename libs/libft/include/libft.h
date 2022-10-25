@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   libft.h                                         |o_o || |                */
+/*   libft.h                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/06/07 12:51:11 by dritsema      #+#    #+#                 */
-/*   Updated: 2022/10/21 13:44:10 by safoh        \___)=(___/                 */
+/*   Updated: 2022/10/25 15:18:16 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ size_t			ft_matrixlen(void **matrix);
 char			*ft_joinmatrix(const char **matrix, size_t count);
 
 /**
- * @brief deallocates memory of a 2d array 
+ * @brief deallocates memory of a 2d array
  *
  * @param pointer to The 2d array to delete.
  * @return nothing */

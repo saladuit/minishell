@@ -1,4 +1,5 @@
 #include <command.h>
+#include <argument.h>
 
 t_command	*deconstruct_command(t_command **command)
 {

@@ -19,7 +19,8 @@ SRCS	=	$(SRC_ARRAY) $(SRC_ASCII) $(SRC_CONVERT) $(SRC_GNL)\
 			$(SRC_PUT) $(SRC_STR)
 
 SRC_ARRAY	=	array/ft_matrixlen.c \
-				array/ft_joinmatrix.c
+				array/ft_joinmatrix.c \
+				array/ft_matrixclear.c
 
 SRC_ASCII	=	ascii/ft_isalnum.c \
 				ascii/ft_isalpha.c \
@@ -46,6 +47,7 @@ SRC_LST		=	lst/ft_lstadd_back.c \
 				lst/ft_lstmap.c \
 				lst/ft_lstnew.c \
 				lst/ft_lstsize.c \
+				lst/ft_lstadd_backnew.c
 
 SRC_MEM		=	mem/ft_bzero.c \
 				mem/ft_calloc.c \

@@ -42,12 +42,12 @@ int32_t	minishell(char **envp)
 			if (lexer(command_line, &tokens) == ERROR)
 				return (EXIT_FAILURE);
 			// print_tokens(tokens);
-			// printf("parser\n");
+			printf("parser\n");
 			if (parser(&abstract_syntax_tree, tokens) == ERROR)
 				return (EXIT_FAILURE);
 	//		if (expander(command_table) == ERROR)
 	//			return (EXIT_FAILURE);
-			// printf("executor\n");
+			printf("executor\n");
 			if (executor(abstract_syntax_tree, envp) == ERROR) // Fix segfault
 				return (EXIT_FAILURE);
 			ft_lstclear(&tokens, free);

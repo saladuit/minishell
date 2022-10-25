@@ -3,6 +3,7 @@
 # include <libft.h>
 # include <stdint.h>
 # include <message.h>
+# include <command.h>
 
 typedef struct s_command_table {
     int32_t command_count;

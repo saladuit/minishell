@@ -7,11 +7,13 @@ SRCS			=minishell.c \
 				 command_table.c \
 				 expander.c \
 				 executor.c \
+				 execute_utils.c \
 				 message.c \
 				 signal_handler.c \
 				 ft_isredir.c \
 				 ft_isdelimiter.c \
-				 ft_ismetachar.c
+				 ft_ismetachar.c \
+				 ft_tree.c
 
 MAIN 			:=main.c
 
