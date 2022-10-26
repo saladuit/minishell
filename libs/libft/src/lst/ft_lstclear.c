@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_lstclear.c                                      :+:    :+:            */
+/*   ft_lstclear.c                                   |o_o || |                */
 /*                                                     +:+                    */
 /*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/10/26 17:28:59 by dritsema      #+#    #+#                 */
-/*   Updated: 2022/06/08 00:11:30 by dritsema      ########   odam.nl         */
+/*   Updated: 2022/10/26 16:15:04 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,5 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 		ft_lstdelone(*lst, del);
 		*lst = temp;
 	}
-	lst = NULL;
+	*lst = NULL;
 }

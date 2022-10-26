@@ -1,63 +1,54 @@
 #include <minishell.h>
-#include <stdbool.h>
-#include <stdio.h>
-
-void	print_tokens(t_list *tokens)
-{
-	while (tokens != NULL)
-	{
-		printf("%s\n", tokens->content);
-		tokens = tokens->next;
-	}
-}
+#include <lexer.h>
+#include <parser.h>
+#include <expander.h>
+#include <executor.h>
+#include <stdlib.h>
 
 /*
  * Abstract_syntax_tree gathers one or more command tables
  * It is only created when the input is valid
  */
+int32_t	clean_minishell(char **cl, t_list **tokens, t_list **ast)
+{
+	if (*cl)
+	{
+		free(*cl);
+		*cl = NULL;
+	}
+	if (*tokens)
+	{
+		ft_lstclear(tokens, free);
+		*tokens = NULL;
+	}
+	if (*ast)
+	{
+		ft_lstclear(ast, free);
+		*ast = NULL;
+	}
+	return (EXIT_FAILURE);
+}
 
 int32_t	minishell(char **envp)
 {
-	t_list		*abstract_syntax_tree;
+	t_list		*ast;
 	t_list		*tokens;
 	char		*command_line; // should be converted into dlist
-	extern int	rl_catch_signals;
 
-	rl_catch_signals = 0;
-	abstract_syntax_tree = NULL;
-	command_line = NULL;
-	tokens = NULL;
 	init_handlers();
-	while (true)
-	{
-		command_line = readline(messages_lookup(PROMPT));
-		// printf("Input:\"%s\"\n", command_line);
-		if (!command_line)
-			exit(0);
-		else if (*command_line)
-		{
-			if (!ft_strncmp(command_line, "exit", 5))
-				exit(1);
-			printf("lexer\n");
-			if (lexer(command_line, &tokens) == ERROR)
-				return (EXIT_FAILURE);
-			// print_tokens(tokens);
-			printf("parser\n");
-			if (parser(&abstract_syntax_tree, tokens) == ERROR)
-				return (EXIT_FAILURE);
+	command_line = readline(messages_lookup(PROMPT));
+	if (!command_line)
+		return (EXIT_FAILURE);
+	if (lexer(command_line, &tokens) == ERROR)
+		return (clean_minishell(&command_line, NULL, NULL));
+	if (parser(&ast, tokens) == ERROR)
+		return (clean_minishell(&command_line, &tokens, &ast));
 	//		if (expander(command_table) == ERROR)
 	//			return (EXIT_FAILURE);
-			printf("executor\n");
-			if (executor(abstract_syntax_tree, envp) == ERROR) // Fix segfault
-				return (EXIT_FAILURE);
-			ft_lstclear(&tokens, free);
-			// return (EXIT_SUCCESS);
-		}
-		if (abstract_syntax_tree != NULL)
-		{
-			clean_abstract_syntax_tree(&abstract_syntax_tree);
-			abstract_syntax_tree = NULL;
-		}
-		free(command_line);
-	}
+	if (executor(ast, envp) == ERROR) // Fix segfault
+		return (clean_minishell(&command_line, &tokens, &ast));
+	ft_lstclear(&tokens, free);
+	clean_ast(&ast);
+	free(command_line);
+	return (EXIT_SUCCESS);
 }

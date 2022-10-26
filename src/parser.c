@@ -1,34 +1,35 @@
 #include <parser.h>
 
 
-void	clean_abstract_syntax_tree(t_list **abstract_syntax_tree)
+void	clean_ast(t_list **ast)
 {
 	t_command_table	*command_table;
 
-	command_table = (*abstract_syntax_tree)->content;
+	command_table = (*ast)->content;
 	ft_lstclear(&command_table->commands, clean_command);
-	ft_lstclear(abstract_syntax_tree, free);
+	ft_lstclear(ast, free);
 }
 
-t_list	*construct_abstract_syntax_tree(t_list *tokens)
+t_list	*construct_ast(t_list *tokens)
 {
-	t_list	*abstract_syntax_tree;
+	t_list	*ast;
 
-	abstract_syntax_tree = NULL;
+	ast = NULL;
 	while (tokens)
-		if (!ft_lstadd_backnew(&abstract_syntax_tree, \
-					(void *)get_command_table(&tokens)))
+	{
+		if (!ft_lstadd_backnew(&ast, (void *)get_command_table(&tokens)))
 		{
-			ft_lstclear(&abstract_syntax_tree, free);
+			ft_lstclear(&ast, free);
 			return (NULL);
 		}
-	return (abstract_syntax_tree);
+	}
+	return (ast);
 }
 
-int32_t parser(t_list **abstract_syntax_tree, t_list *tokens)
+int32_t parser(t_list **ast, t_list *tokens)
 {
-	*abstract_syntax_tree = construct_abstract_syntax_tree(tokens);
-	if (!*abstract_syntax_tree)
+	*ast = construct_ast(tokens);
+	if (!*ast)
 	{
 		ft_lstclear(&tokens, free);
 		return (ERROR);

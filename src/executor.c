@@ -8,6 +8,9 @@
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
+#include <signal.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 pid_t	execute_process(int32_t in_fd, int32_t out_fd, t_command *command, char **envp)
 {

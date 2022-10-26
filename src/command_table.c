@@ -15,6 +15,7 @@ t_command_table	*get_command_table(t_list **tokens)
 			free(command_table);
 			return (NULL);
 		}
+		*tokens = (*tokens)->next;
 		command_table->command_count++;
 	}
 	return (command_table);

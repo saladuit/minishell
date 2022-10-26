@@ -79,6 +79,7 @@ int32_t	lexer(const char *command_line, t_list **tokens)
 {
 	t_list	*node;
 
+	*tokens = NULL;
 	while (*command_line)
 	{
 		ft_skip_whitespaces(&command_line);

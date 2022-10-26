@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_tree.c                                          :+:    :+:            */
+/*   ft_tree.c                                       |o_o || |                */
 /*                                                     +:+                    */
 /*   By: safoh <safoh@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 14:53:16 by safoh         #+#    #+#                 */
-/*   Updated: 2022/10/25 16:03:46 by dritsema      ########   odam.nl         */
+/*   Updated: 2022/10/26 12:55:42 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,9 @@
 
 void	add_tree_node(t_tree **tree, void *data)
 {
-	t_tree *tmp;
-
-	tmp = NULL;
-	tmp = malloc(sizeof(t_tree));
-	(void)data;
 	(void)tree;
+	(void)data;
+
 }
 
 void	print_tree(t_tree *tree)
