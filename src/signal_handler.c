@@ -1,4 +1,5 @@
 #include <minishell.h>
+#include <message.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <signal.h>
@@ -7,7 +8,7 @@ void	sighandler(int32_t signum)
 {
 	(void)signum;
 	printf("\n");
-	rl_replace_line("", 0);
+//	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
 }

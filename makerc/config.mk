@@ -3,6 +3,7 @@ SRCS			=minishell.c \
 				 parser.c \
 				 argument.c \
 				 redir.c \
+				 ast.c \
 				 command.c \
 				 command_table.c \
 				 expander.c \
@@ -40,6 +41,7 @@ HEADERS			=$(LIBFT_INCLUDE_DIR)/libft.h \
 				$(INCLUDE_DIR)/parser.h \
 				$(INCLUDE_DIR)/argument.h \
 				$(INCLUDE_DIR)/redir.h \
+				$(INCLUDE_DIR)/ast.h \
 				$(INCLUDE_DIR)/command.h \
 				$(INCLUDE_DIR)/command_table.h \
 				$(INCLUDE_DIR)/message.h \

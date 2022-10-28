@@ -1,3 +1,4 @@
+#include "ast.h"
 #include <minishell.h>
 #include <lexer.h>
 #include <parser.h>
@@ -48,7 +49,7 @@ int32_t	minishell(char **envp)
 	if (executor(ast, envp) == ERROR) // Fix segfault
 		return (clean_minishell(&command_line, &tokens, &ast));
 	ft_lstclear(&tokens, free);
-	clean_ast(&ast);
+	deconstruct_ast(&ast);
 	free(command_line);
 	return (EXIT_SUCCESS);
 }
