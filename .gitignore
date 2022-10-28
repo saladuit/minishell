@@ -1,5 +1,8 @@
+# Project specific
 minishell
 mini_test
+build
+
 # Prerequisites
 *.d
 push_swap

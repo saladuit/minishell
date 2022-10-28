@@ -19,6 +19,5 @@ typedef struct s_redir
 
 t_redir	*construct_redir(t_list **tokens);
 t_list	*deconstruct_redir(t_redir **redir);
-t_list	*add_redir(t_list **tokens, t_list **redir);
 
 #endif

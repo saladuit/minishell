@@ -1,4 +1,17 @@
+#include "message.h"
 #include <redir.h>
+
+t_type	set_type(char *symbol, size_t len)
+{
+	if (!ft_strncmp("<", symbol, len))
+		return (INPUT);
+	if (!ft_strncmp("<<", symbol, len))
+		return (HEREDOC);
+	if (!ft_strncmp(">", symbol, len))
+		return (OUTPUT);
+	else
+		return (APPEND);
+}
 
 t_redir	*construct_redir(t_list **tokens)
 {
@@ -6,23 +19,12 @@ t_redir	*construct_redir(t_list **tokens)
 
 	redir = ft_calloc(1, sizeof(t_redir));
 	if (!redir)
-		return (NULL);
-	if (!ft_strncmp("<", (*tokens)->content, 2))
-		redir->type = INPUT;
-	if (!ft_strncmp("<<", (*tokens)->content, 3))
-		redir->type = HEREDOC;
-	if (!ft_strncmp(">", (*tokens)->content, 2))
-		redir->type = OUTPUT;
-	if (!ft_strncmp(">>", (*tokens)->content, 3))
-		redir->type = APPEND;
+		ft_minishell_exit(EMALLOC);
+	redir->type = set_type((*tokens)->content, ft_strlen((*tokens)->content));
 	*tokens = (*tokens)->next;
 	redir->filename = ft_strdup((*tokens)->content);
 	if (!redir->filename)
-	{
-		free(redir);
-		return (NULL);
-	}
-	*tokens = (*tokens)->next;
+		ft_minishell_exit(EMALLOC);
 	return (redir);
 }
 
@@ -41,17 +43,3 @@ t_list	*deconstruct_redir(t_redir **redir)
 	return (NULL);
 }
 
-t_list	*add_redir(t_list **tokens, t_list **redir)
-{
-	t_list	*new_node;
-	t_redir	*new_redir;
-
-	new_redir = construct_redir(tokens);
-	if (!new_redir)
-		return (NULL);
-	new_node = ft_lstadd_backnew(redir, new_redir);
-	if (!new_node)
-		return (deconstruct_redir(&new_redir));
-	*tokens = (*tokens)->next;
-	return (new_node);
-}

@@ -5,6 +5,7 @@
 #include <expander.h>
 #include <executor.h>
 #include <stdlib.h>
+#include <astapi.h>
 
 /*
  * Abstract_syntax_tree gathers one or more command tables
@@ -42,8 +43,7 @@ int32_t	minishell(char **envp)
 		return (EXIT_FAILURE);
 	if (lexer(command_line, &tokens) == ERROR)
 		return (clean_minishell(&command_line, NULL, NULL));
-	if (parser(&ast, tokens) == ERROR)
-		return (clean_minishell(&command_line, &tokens, &ast));
+	ast = parser(tokens);
 	//		if (expander(command_table) == ERROR)
 	//			return (EXIT_FAILURE);
 	if (executor(ast, envp) == ERROR) // Fix segfault

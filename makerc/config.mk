@@ -1,7 +1,6 @@
 SRCS			=minishell.c \
 				 lexer.c \
 				 parser.c \
-				 argument.c \
 				 redir.c \
 				 ast.c \
 				 command.c \
@@ -39,7 +38,6 @@ HEADERS			=$(LIBFT_INCLUDE_DIR)/libft.h \
 				$(INCLUDE_DIR)/expander.h \
 				$(INCLUDE_DIR)/lexer.h \
 				$(INCLUDE_DIR)/parser.h \
-				$(INCLUDE_DIR)/argument.h \
 				$(INCLUDE_DIR)/redir.h \
 				$(INCLUDE_DIR)/ast.h \
 				$(INCLUDE_DIR)/command.h \

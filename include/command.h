@@ -5,18 +5,33 @@
 # include <redir.h>
 # include <message.h>
 # include <minitype.h>
+# include <message.h>
 
 
 typedef struct s_command
 {
 	int32_t	arg_count;
-	char	**arguments;
-	t_list	*redir;
+	t_list	*arguments;
+	t_list	*redirs;
 }	t_command;
 
+/*
+ * @brief Returns the current command and iterates to the next one for future use
+ * Exits on failure
+ *
+ * @param command	-	Commands to iterate over
+ * @return 			-	NULL to indicate end of list
+ */
 t_command	*deconstruct_command(t_command **command);
-t_command	*clear_get_command(t_command **command, t_list **arguments);
-void		clean_command(void *ptr);
-t_command	*get_command(t_list **tokens);
+
+/*
+ * @brief Returns the current command and iterates to the next one for future use
+ * Exits on failure
+ *
+ * @param command	-	Commands to iterate over
+ * @return 			-	NULL to indicate end of list
+ */
+
+t_command	*construct_command(t_list **tokens);
 
 #endif
