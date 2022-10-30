@@ -30,10 +30,10 @@
  *  These are defined in the astapi.h
  *  - Iterating to the next command table.
  *  - Iterating to the next command.
- *  - Getting the next array of arguments.
- *  - Getting the next list of redirections.
+ *  - Getting the command arguments.
+ *  - Getting the next redirection struct.
  *
- *  @param ast		-	Empty list linked list
+ *  @param ast		-	Empty linked list
  *  @param tokens	-	The tokens to be placed incside the AST
  *
  *  @return 		- The constructed AST

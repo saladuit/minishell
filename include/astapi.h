@@ -1,6 +1,7 @@
 #ifndef ASTAPI_H
 # define ASTAPI_H
 
+#include "command.h"
 # include <ast.h>
 
 /*
@@ -11,11 +12,10 @@
  * @return 			-	NULL to indicate end of list
  */
 
-char			*get_next_argument(t_list	**arguments);
-t_redir			*get_next_redir(t_list	**redirs);
-t_command*		get_next_command(t_list** commands);
+char			**get_arguments(t_command *cmd);
+t_redir			*get_next_redir(t_command *cmd);
+t_command*		get_next_command(t_command_table *cmdt);
 t_command_table *get_next_command_table(t_list **ast);
 
-void			deconstruct_ast(t_list **ast);
 
 # endif

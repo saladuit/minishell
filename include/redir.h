@@ -17,7 +17,15 @@ typedef struct s_redir
 	t_type	type;
 }	t_redir;
 
+/*
+ * @brief contructs a redirection struct out of two tokens
+ * the first token will become the redirection type and the second
+ * whill become the filname
+ *
+ * @param command	-	Linked list with tokens
+ * @return 			-	Redirection struct
+ */
+
 t_redir	*construct_redir(t_list **tokens);
-t_list	*deconstruct_redir(t_redir **redir);
 
 #endif

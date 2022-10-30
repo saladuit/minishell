@@ -1,59 +1,52 @@
+#include "command_table.h"
 #include <command.h>
 
-t_command	*deconstruct_command(t_command **command)
+char	**get_arguments(t_command	*cmd)
 {
-	char	*filename;
-	t_redir	*redir;
+	t_list *tmp;
+	char	**arguments;
 
-	if ((*command)->redirs)
-	{
-		redir = (*command)->redirs->content;
-		filename = redir->filename;
-		free(filename);
-		free(redir);
-	}
-	ft_lstclear(&(*command)->arguments, free);
-	ft_lstclear(&(*command)->redirs, free);
-	free(*command);
-	*command = NULL;
-	return (NULL);
-}
-
-char	*get_next_argument(t_list	**arguments)
-{
-	char	*argument;
-
+	if (!cmd->arguments)
+		ft_minishell_exit(EREQUEST);
+	if (!cmd->arguments->content)
+		return (NULL);
+	arguments = ft_calloc(cmd->arg_count + 1, sizeof(char *));
 	if (!arguments)
-		ft_minishell_exit(EREQUEST);
-	if (!*arguments)
-		return (NULL);
-	argument = (*arguments)->content;
-	*arguments = (*arguments)->next;
-	return (argument);
+		ft_minishell_exit(EMALLOC);
+	arguments[cmd->arg_count] = NULL;
+	while (cmd->arguments)
+	{
+		*arguments = cmd->arguments->content;
+		tmp = cmd->arguments;
+		cmd->arguments = cmd->arguments->next;
+		free(tmp);
+	}
+	return (arguments);
 }
-t_redir	*get_next_redir(t_list	**redirs)
+
+t_redir	*get_next_redir(t_command	*cmd)
 {
 	t_redir	*redir;
 
-	if (!redirs)
+	if (!cmd->redirs)
 		ft_minishell_exit(EREQUEST);
-	if (!*redirs)
+	if (!cmd->redirs->content)
 		return (NULL);
-	redir = (*redirs)->content;
-	*redirs = (*redirs)->next;
+	redir = cmd->redirs->content;
+	cmd->redirs = cmd->redirs->next;
 	return (redir);
 }
-t_command	*get_next_command(t_list **command)
+t_command	*get_next_command(t_command_table *ct)
 {
-	t_command	*next_command;
+	t_command	*next;
 
-	if (!command)
+	if (!ct->commands)
 		ft_minishell_exit(EREQUEST);
-	if (!*command)
+	if (!ct->commands->content)
 		return (NULL);
-	next_command = (*command)->content;
-	*command = (*command)->next;
-	return (next_command);
+	next = ct->commands->content;
+	ct->commands = ct->commands->next;
+	return (next);
 }
 
 t_command	*construct_command(t_list **tokens)

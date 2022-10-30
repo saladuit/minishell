@@ -3,13 +3,16 @@
 t_command_table	*get_next_command_table(t_list **ast)
 {
 	t_command_table	*next_ct;
+	t_list			*tmp;
 
 	if (!ast)
 		ft_minishell_exit(EREQUEST);
 	if (!*ast) 
 		return (NULL);
 	next_ct = (*ast)->content;
+	tmp = *ast;
 	*ast = (*ast)->next;
+	free(tmp);
 	return (next_ct);
 }
 

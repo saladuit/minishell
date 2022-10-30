@@ -9,8 +9,7 @@ t_type	set_type(char *symbol, size_t len)
 		return (HEREDOC);
 	if (!ft_strncmp(">", symbol, len))
 		return (OUTPUT);
-	else
-		return (APPEND);
+	return (APPEND);
 }
 
 t_redir	*construct_redir(t_list **tokens)
@@ -27,19 +26,3 @@ t_redir	*construct_redir(t_list **tokens)
 		ft_minishell_exit(EMALLOC);
 	return (redir);
 }
-
-t_list	*deconstruct_redir(t_redir **redir)
-{
-	if ((*redir)->filename)
-	{
-		free((*redir)->filename);
-		(*redir)->filename = NULL;
-	}
-	if (*redir)
-	{
-		free(*redir);
-		*redir = NULL;
-	}
-	return (NULL);
-}
-

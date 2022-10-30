@@ -7,7 +7,6 @@
 # include <minitype.h>
 # include <message.h>
 
-
 typedef struct s_command
 {
 	int32_t	arg_count;
@@ -16,17 +15,7 @@ typedef struct s_command
 }	t_command;
 
 /*
- * @brief Returns the current command and iterates to the next one for future use
- * Exits on failure
- *
- * @param command	-	Commands to iterate over
- * @return 			-	NULL to indicate end of list
- */
-t_command	*deconstruct_command(t_command **command);
-
-/*
- * @brief Returns the current command and iterates to the next one for future use
- * Exits on failure
+ * @brief Constructs a command from 
  *
  * @param command	-	Commands to iterate over
  * @return 			-	NULL to indicate end of list
