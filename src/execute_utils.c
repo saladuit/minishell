@@ -6,23 +6,6 @@
 #include <redir.h>
 #include <command.h>
 
-char	*get_redir_file(t_command *command, t_type type)
-{
-	t_redir	*redir;
-	char	*filename;
-
-	filename = NULL;
-	if (command->redir)
-	{
-		while (command->redir->next)
-		{
-			redir = (t_redir *)command->redir->content;
-			if (redir->type == type)
-				filename = redir->filename;
-		}
-	}
-	return (filename);
-}
 
 int	is_dir(char *path)
 {

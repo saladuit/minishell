@@ -49,7 +49,6 @@ int32_t	minishell(char **envp)
 	if (executor(ast, envp) == ERROR) // Fix segfault
 		return (clean_minishell(&command_line, &tokens, &ast));
 	ft_lstclear(&tokens, free);
-	deconstruct_ast(&ast);
 	free(command_line);
 	return (EXIT_SUCCESS);
 }
