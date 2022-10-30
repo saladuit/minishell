@@ -61,7 +61,10 @@ t_command	*construct_command(t_list **tokens)
 	{
 		token = (*tokens)->content;
 		if (ft_isdelimiter(*token))
+		{
+			*tokens = (*tokens)->next;
 			break ;
+		}
 		if (ft_isredir(*token) && !ft_lstadd_backnew(&command->redirs, construct_redir(tokens)))
 				ft_minishell_exit(EMALLOC);
 		else if (!ft_lstadd_backnew(&command->arguments, (*tokens)->content))
