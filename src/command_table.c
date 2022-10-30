@@ -27,7 +27,6 @@ t_command_table	*construct_command_table(t_list **tokens)
 	{
 		if (!ft_lstadd_backnew(&command_table->commands, construct_command(tokens)))
 			ft_minishell_exit(EMALLOC);
-		*tokens = (*tokens)->next;
 		command_table->command_count++;
 	}
 	return (command_table);

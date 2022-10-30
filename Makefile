@@ -8,7 +8,8 @@ NAME			:=minishell
 
 CC				:=gcc
 RM				:=rm -rfv
-CFLAGS			=-Wall -Wextra -Werror$(if $(FSAN), -g -fsanitize=address)$(if $(DEBUG), -g)
+CFLAGS			=-Wall -Wextra -Werror
+CFLAGS			+=$(if $(FSAN), -g -fsanitize=address)$(if $(DEBUG), -g)
 
 ################################################################################
 all: $(NAME)
