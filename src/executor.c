@@ -84,18 +84,16 @@
 //	close(in_fd);
 //	return (pid);
 //}
-pid_t	run_command(t_command *command, char **envp)
+pid_t	run_command(char **arguments, char **envp)
 {
-	char	**arguments;
-	char	*command_path;
+//	char	*command_path;
 	pid_t	pid;
 
 	pid = fork();
 	if (pid != 0)
 		return (pid);
-	arguments = get_arguments(command);
-	command_path = get_cmd_path(envp, arguments[0]);
-	execve(command_path, arguments, envp);
+//	command_path = get_cmd_path(envp, arguments[0]);
+	execve(arguments[0], arguments, envp);
 	return (pid);
 }
 
@@ -103,14 +101,20 @@ int32_t	executor(t_list *ast, char **envp)
 {
 	t_command_table	*ct;
 	t_command		*command;
+	char	**arguments;
 	pid_t			pid;
 	int32_t			status;
 
 	ct = get_next_command_table(&ast);
 	while (ct)
 	{
+		printf("hoi\n");
 		command = get_next_command(ct);
-		pid = run_command(command, envp);
+		arguments = get_arguments(command);
+		pid = run_command(arguments, envp);
+		ft_matrixfree(&arguments);
+		free(command);
+		free(ct);
 		ct = get_next_command_table(&ast);
 	}
 	waitpid(pid, &status, WUNTRACED);

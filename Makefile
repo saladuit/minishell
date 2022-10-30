@@ -4,7 +4,7 @@ include unit_test/makerc/unit.mk
 
 ################################################################################
 
-NAME			:=minishell
+NAME			:=minishell.out
 
 CC				:=gcc
 RM				:=rm -rfv
