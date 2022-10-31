@@ -15,7 +15,7 @@
 
 int32_t	minishell(char **envp)
 {
-//	t_list		*ast;
+	t_list		*ast;
 	t_list		*tokens;
 	char		*command_line;
 
@@ -24,11 +24,13 @@ int32_t	minishell(char **envp)
 	command_line = readline(messages_lookup(PROMPT));
 	if (!command_line)
 		ft_minishell_exit(EMALLOC);
+	if (!*command_line)
+		return (SUCCESS);
 	lexer(command_line, &tokens);
-	parser(tokens);
-//	ast = parser(tokens);
-//	executor(ast, envp);
-	ft_lstclear(&tokens, free);
+	
+	ast = parser(tokens);
+	executor(ast, envp);
+	ft_lstclear(&tokens, NULL);
 	free(command_line);
 	return (EXIT_SUCCESS);
 }

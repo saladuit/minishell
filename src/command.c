@@ -1,4 +1,5 @@
 #include "command_table.h"
+#include "libft.h"
 #include <command.h>
 
 char	**get_arguments(t_command *cmd)
@@ -6,12 +7,11 @@ char	**get_arguments(t_command *cmd)
 	t_list *tmp;
 	char	**arguments;
 
-	if (!cmd->arguments)
+	if (!cmd)
 		ft_minishell_exit(EREQUEST);
-	arguments = ft_calloc(cmd->arg_count + 1, sizeof(char *));
-	if (!arguments)
-		ft_minishell_exit(EMALLOC);
-	arguments[cmd->arg_count] = NULL;
+	if (!cmd->arguments)
+		return (NULL);
+	arguments = ft_calloc(ft_lstsize(cmd->arguments) + 1, sizeof(char *));
 	while (cmd->arguments)
 	{
 		*arguments = cmd->arguments->content;
@@ -24,34 +24,32 @@ char	**get_arguments(t_command *cmd)
 
 t_redir	*get_next_redir(t_command *cmd)
 {
-	t_redir	*next;
+	t_redir	*current;
 	t_list 	*tmp;
 
 	if (!cmd->redirs)
 		ft_minishell_exit(EREQUEST);
+	current = cmd->redirs->content;
 	tmp = cmd->redirs;
 	cmd->redirs = cmd->redirs->next;
-	if (cmd->redirs == NULL)
-		return (NULL);
-	next = tmp->content;
 	free(tmp);
-	return (next);
+	return (current);
 }
 
 t_command	*get_next_command(t_command_table *ct)
 {
-	t_command	*next;
+	t_command	*current;
 	t_list		*tmp;
 
-	if (!ct->commands)
+	if (!ct)
 		ft_minishell_exit(EREQUEST);
+	if (!ct->commands)
+		return (NULL);
+	current = ct->commands->content;
 	tmp = ct->commands;
 	ct->commands = ct->commands->next;
-	if (ct->commands == NULL)
-		return (NULL);
-	next = tmp->content;
 	free(tmp);
-	return (next);
+	return (current);
 }
 
 t_command	*construct_command(t_list **tokens)

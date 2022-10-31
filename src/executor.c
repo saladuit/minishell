@@ -102,22 +102,22 @@ int32_t	executor(t_list *ast, char **envp)
 	t_command_table	*ct;
 	t_command		*command;
 	char	**arguments;
-	pid_t			pid;
+//	pid_t			pid;
 	int32_t			status;
 
+	(void)envp;
+	status = 0;
 	ct = get_next_command_table(&ast);
 	while (ct)
 	{
-		printf("hoi\n");
 		command = get_next_command(ct);
 		arguments = get_arguments(command);
-		pid = run_command(arguments, envp);
+//		pid = run_command(arguments, envp);
+//		waitpid(pid, &status, WUNTRACED);
 		ft_matrixfree(&arguments);
 		free(command);
 		free(ct);
 		ct = get_next_command_table(&ast);
 	}
-	waitpid(pid, &status, WUNTRACED);
-	wait(NULL);
 	return (WEXITSTATUS(status));
 }

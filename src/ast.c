@@ -4,6 +4,8 @@ t_list	*construct_ast(t_list *tokens)
 {
 	t_list	*ast;
 
+	if (tokens == NULL)
+		return (NULL);
 	ast = NULL;
 	while (tokens)
 	{

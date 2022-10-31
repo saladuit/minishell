@@ -1,19 +1,21 @@
+#include "libft.h"
 #include <command_table.h>
+#include <stdio.h>
 
 t_command_table	*get_next_command_table(t_list **ast)
 {
-	t_command_table	*next;
+	t_command_table	*current;
 	t_list			*tmp;
 
 	if (!ast)
 		ft_minishell_exit(EREQUEST);
-	tmp = *ast;
-	*ast = (*ast)->next;
-	if (*ast == NULL) 
+	if (!*ast)
 		return (NULL);
-	next = tmp->content;
+	current = (*ast)->content;
+	tmp = (*ast);
+	*ast = (*ast)->next;
 	free(tmp);
-	return (next);
+	return (current);
 }
 
 t_command_table	*construct_command_table(t_list **tokens)
