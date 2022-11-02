@@ -84,7 +84,7 @@ char	*check_env_paths(char **envp, char *cmd)
 	cmd_path = NULL;
 	paths = get_env_paths(envp);
 	suffix = ft_strjoin("/", cmd);
-	if (ft_strncmp("./", cmd, 2) && ft_strncmp("/", cmd, 1) && paths && suffix)
+	if (paths && suffix)
 	{
 		while (paths[i])
 		{
@@ -107,17 +107,20 @@ char	*get_cmd_path(char **envp, char *cmd)
 
 	if (!cmd)
 		return (0);
-	cmd_path = check_env_paths(envp, cmd);
-	if (cmd_path)
+	if (ft_strncmp("./", cmd, 2) && ft_strncmp("/", cmd, 1))
 	{
-		if (is_dir(cmd_path))
-			return (free(cmd_path), NULL);
-		return (cmd_path);
+		cmd_path = check_env_paths(envp, cmd);
+		if (cmd_path)
+		{
+			if (is_dir(cmd_path))
+				return (free(cmd_path), NULL);
+			return (cmd_path);
+		}
 	}
 	if (!access(cmd, X_OK))
 	{
 		if (is_dir(cmd))
-			return (free(cmd_path), NULL);
+			return (NULL);
 		return (cmd);
 	}
 	return (NULL);

@@ -27,7 +27,6 @@ int32_t	minishell(char **envp)
 	if (!*command_line)
 		return (SUCCESS);
 	lexer(command_line, &tokens);
-	
 	ast = parser(tokens);
 	executor(ast, envp);
 	ft_lstclear(&tokens, NULL);
