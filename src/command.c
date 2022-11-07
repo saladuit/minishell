@@ -1,8 +1,6 @@
 #include "command_table.h"
 #include "libft.h"
 #include <command.h>
-#include <stdio.h>
-
 
 char	**get_arguments(t_command *cmd)
 {
