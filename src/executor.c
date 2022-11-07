@@ -30,7 +30,7 @@ void	print_command(t_command *command)
 pid_t	execute_command(int32_t in_fd, int32_t out_fd, t_command *command, char **envp)
 {
 	pid_t	pid;
-	// t_redir	redir;
+	t_redir	*redir;
 	char	*command_path;
 	char	**arguments;
 
@@ -39,35 +39,29 @@ pid_t	execute_command(int32_t in_fd, int32_t out_fd, t_command *command, char **
 	if (pid != 0)
 		return (pid);
 	signal(SIGINT, SIG_DFL);
-	// redir = get_next_redir(command)
-	// while (redir)
-	// {
-	// 	if (redir->type == INPUT)
-	// 	{
-	// 		if (in_fd != -1)
-	// 			close(in_fd);
-	// 		if (!open_redir(&in_fd, infile, INPUT))
-	// 			exit(errno);
-	// 		if (outfile)
-	// 		{
-	// 			if (out_fd != -1)
-	// 				close(out_fd);
-	// 			if (!open_redir(&out_fd, outfile, OUTPUT))
-	// 				exit(errno);
-	// 		}
-	// 		else if (out_fd != -1 && !protected_dup2(out_fd, OUTPUT))
-	// 			exit(errno);
-	// 	}
-	// 	else if (in_fd != -1 && !protected_dup2(in_fd, INPUT))
-	// 		exit(errno);
-	// 	redir = get_next_redir(command)
-	// }
-	// printf("input\n");
-	// printf("output");
 	if (in_fd != -1 && !protected_dup2(in_fd, INPUT))
 		exit(errno);
 	if (out_fd != -1 && !protected_dup2(out_fd, OUTPUT))
 		exit(errno);
+	redir = get_next_redir(command);
+	while (redir)
+	{
+		if (redir->type == INPUT)
+		{
+			if (in_fd != -1)
+				close(in_fd);
+			if (!open_redir(&in_fd, redir->filename, INPUT))
+				exit(errno);
+		}
+		if (redir->type == OUTPUT)
+		{
+			if (out_fd != -1)
+				close(out_fd);
+			if (!open_redir(&out_fd, redir->filename, OUTPUT))
+				exit(errno);
+		}
+		redir = get_next_redir(command);
+	}
 	arguments = get_arguments(command);
 	command_path = get_cmd_path(envp, arguments[0]);
 	if (access(command_path, X_OK))
