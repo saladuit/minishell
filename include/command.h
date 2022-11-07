@@ -15,7 +15,7 @@ typedef struct s_command
 }	t_command;
 
 /*
- * @brief Constructs a command from 
+ * @brief Constructs a command from
  *
  * @param command	-	Commands to iterate over
  * @return 			-	NULL to indicate end of list

@@ -1,23 +1,28 @@
 #include "command_table.h"
 #include "libft.h"
 #include <command.h>
+#include <stdio.h>
+
 
 char	**get_arguments(t_command *cmd)
 {
-	t_list *tmp;
+	t_list	*tmp;
 	char	**arguments;
+	int32_t	i;
 
 	if (!cmd)
 		ft_minishell_exit(EREQUEST);
 	if (!cmd->arguments)
 		return (NULL);
 	arguments = ft_calloc(ft_lstsize(cmd->arguments) + 1, sizeof(char *));
+	i = 0;
 	while (cmd->arguments)
 	{
-		*arguments = cmd->arguments->content;
+		arguments[i] = cmd->arguments->content;
 		tmp = cmd->arguments;
 		cmd->arguments = cmd->arguments->next;
 		free(tmp);
+		i++;
 	}
 	return (arguments);
 }
@@ -25,7 +30,7 @@ char	**get_arguments(t_command *cmd)
 t_redir	*get_next_redir(t_command *cmd)
 {
 	t_redir	*current;
-	t_list 	*tmp;
+	t_list	*tmp;
 
 	if (!cmd->redirs)
 		ft_minishell_exit(EREQUEST);

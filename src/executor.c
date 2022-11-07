@@ -11,6 +11,22 @@
 #include <sys/wait.h>
 #include <astapi.h>
 
+void	print_command(t_command *command)
+{
+	char	**arguments;
+	int32_t	i;
+
+	arguments = get_arguments(command);
+	printf("Command: %s\n", arguments[0]);
+	printf("arguments:\n");
+	i = 0;
+	while (arguments[i])
+	{
+		printf("	%s\n", arguments[i]);
+		i++;
+	}
+}
+
 pid_t	execute_command(int32_t in_fd, int32_t out_fd, t_command *command, char **envp)
 {
 	pid_t	pid;
@@ -73,6 +89,7 @@ int32_t	run_commands(t_command_table *ct, char **envp)
 	command = get_next_command(ct);
 	while (command)
 	{
+		// print_command(command);
 		if (ct->commands)
 		{
 			if (pipe(pipe_fds) == -1)

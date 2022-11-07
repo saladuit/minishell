@@ -1,8 +1,8 @@
 #include <parser.h>
 
-t_list *parser(t_list *tokens)
+t_list	*parser(t_list *tokens)
 {
-	t_list *ast;
+	t_list	*ast;
 
 	ast = construct_ast(tokens);
 	if (!ast)
