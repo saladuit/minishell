@@ -14,6 +14,7 @@
 void	print_command(t_command *command)
 {
 	char	**arguments;
+	t_redir	*redir;
 	int32_t	i;
 
 	arguments = get_arguments(command);
@@ -24,6 +25,17 @@ void	print_command(t_command *command)
 	{
 		printf("	%s\n", arguments[i]);
 		i++;
+	}
+	printf("redirects:\n");
+	redir = get_next_redir(command);
+	while (redir)
+	{
+		if (redir->type == INPUT)
+			printf("Type: INPUT\n");
+		else
+			printf("Type: OUTPUT\n");
+		printf("Filename: %s\n", redir->filename);
+		redir = get_next_redir(command);
 	}
 }
 
