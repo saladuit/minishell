@@ -114,42 +114,16 @@ int32_t	run_commands(t_command_table *ct, char **envp)
 	return (pid);
 }
 
-// pid_t	run_command(char **arguments, char **envp)
-// {
-// 	char	*command_path;
-// 	pid_t	pid;
-
-// 	pid = fork();
-// 	if (pid != 0)
-// 		return (pid);
-// 	command_path = get_cmd_path(envp, arguments[0]);
-// 	execve(command_path, arguments, envp);
-// 	return (pid);
-// }
-
 int32_t	executor(t_list *ast, char **envp)
 {
 	t_command_table	*ct;
-	// t_command	*command;
-	// char			**arguments;
-	// t_redir		*redir;
-	int32_t status;
-	pid_t pid;
+	int32_t			status;
+	pid_t			pid;
 
-	(void)envp;
 	status = 0;
 	ct = get_next_command_table(&ast);
 	while (ct)
 	{
-		// while (command)
-		// {
-		// 	arguments = get_arguments(command);
-		// 	// redir = get_next_redir(command);
-		// 	pid = run_command(arguments, envp);
-		// 	ft_matrixfree(&arguments);
-		// 	free(command);
-		// 	command = get_next_command(ct);
-		// }
 		pid = run_commands(ct, envp);
 		waitpid(pid, &status, WUNTRACED);
 		wait(NULL);
