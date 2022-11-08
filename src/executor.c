@@ -39,12 +39,6 @@ void	print_command(t_command *command)
 	}
 }
 
-void	free_redir(t_redir	*redir)
-{
-	free(redir->filename);
-	free(redir);
-}
-
 pid_t	execute_command(int32_t in_fd, int32_t out_fd, t_command *command, char **envp)
 {
 	pid_t	pid;
@@ -77,7 +71,7 @@ pid_t	execute_command(int32_t in_fd, int32_t out_fd, t_command *command, char **
 			if (!open_redir(&out_fd, redir->filename, OUTPUT))
 				exit(errno);
 		}
-		free_redir(redir);
+		free(redir);
 		redir = get_next_redir(command);
 	}
 	arguments = get_arguments(command);

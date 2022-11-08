@@ -65,8 +65,6 @@ t_command	*construct_command(t_list **tokens)
 	command = ft_calloc(1, sizeof(t_command));
 	if (!command)
 		ft_minishell_exit(EMALLOC);
-	command->redirs = NULL;
-	command->arguments = NULL;
 	while (*tokens)
 	{
 		token = (*tokens)->content;
@@ -75,13 +73,8 @@ t_command	*construct_command(t_list **tokens)
 			*tokens = (*tokens)->next;
 			break ;
 		}
-		if (ft_isredir(*token))
-		{
-			if (!ft_lstadd_backnew(&command->redirs, construct_redir(tokens)))
+		if (ft_isredir(*token) && !ft_lstadd_backnew(&command->redirs, construct_redir(tokens)))
 				ft_minishell_exit(EMALLOC);
-			*tokens = (*tokens)->next;
-			break ;
-		}
 		else if (!ft_lstadd_backnew(&command->arguments, (*tokens)->content))
 			ft_minishell_exit(EMALLOC);
 		*tokens = (*tokens)->next;

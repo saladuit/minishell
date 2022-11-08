@@ -9,11 +9,9 @@
 
 int	main(int argc, char **argv, char **envp)
 {
-	int32_t exit_status;
-
 	(void)argv;
 	if (argc > 1)
 		ft_minishell_exit(USAGE);
 	while (1)
-		exit_status = minishell(envp);
+		minishell(envp);
 }

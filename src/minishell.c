@@ -29,7 +29,7 @@ int32_t	minishell(char **envp)
 	lexer(command_line, &tokens);
 	ast = parser(tokens);
 	executor(ast, envp);
-	ft_lstclear(&tokens, NULL);
+	ft_lstclear(&tokens, free);
 	free(command_line);
 	return (EXIT_SUCCESS);
 }
