@@ -27,9 +27,7 @@ static bool	openfile(int *fd, char *path, t_type type)
 	if (type == OUTPUT)
 		*fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0664);
 	if (*fd == -1)
-	{
 		return (false);
-	}
 	return (true);
 }
 
@@ -42,9 +40,7 @@ bool	protected_dup2(int fd, t_type type)
 	if (type == OUTPUT)
 		ret = dup2(fd, STDOUT_FILENO);
 	if (ret == -1)
-	{
 		return (false);
-	}
 	return (true);
 }
 

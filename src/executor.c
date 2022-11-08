@@ -39,6 +39,12 @@ void	print_command(t_command *command)
 	}
 }
 
+void	free_redir(t_redir	*redir)
+{
+	free(redir->filename);
+	free(redir);
+}
+
 pid_t	execute_command(int32_t in_fd, int32_t out_fd, t_command *command, char **envp)
 {
 	pid_t	pid;
@@ -71,6 +77,7 @@ pid_t	execute_command(int32_t in_fd, int32_t out_fd, t_command *command, char **
 			if (!open_redir(&out_fd, redir->filename, OUTPUT))
 				exit(errno);
 		}
+		free_redir(redir);
 		redir = get_next_redir(command);
 	}
 	arguments = get_arguments(command);
@@ -94,7 +101,6 @@ int32_t	run_commands(t_command_table *ct, char **envp)
 	command = get_next_command(ct);
 	while (command)
 	{
-		// print_command(command);
 		if (ct->commands)
 		{
 			if (pipe(pipe_fds) == -1)
@@ -102,7 +108,8 @@ int32_t	run_commands(t_command_table *ct, char **envp)
 			out_fd = pipe_fds[1];
 		}
 		pid = execute_command(in_fd, out_fd, command, envp);
-		close(out_fd);
+		if (out_fd != -1)
+			close(out_fd);
 		out_fd = -1;
 		if (in_fd != -1)
 			close(in_fd);
