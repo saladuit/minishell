@@ -46,7 +46,6 @@ pid_t	execute_command(int32_t in_fd, int32_t out_fd, t_command *command, char **
 	char	*command_path;
 	char	**arguments;
 
-	(void)envp;
 	pid = fork();
 	if (pid != 0)
 		return (pid);
@@ -108,6 +107,7 @@ int32_t	run_commands(t_command_table *ct, char **envp)
 		if (in_fd != -1)
 			close(in_fd);
 		in_fd = pipe_fds[0];
+		free(command);
 		command = get_next_command(ct);
 	}
 	close(in_fd);
