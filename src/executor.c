@@ -39,10 +39,33 @@ void	print_command(t_command *command)
 	}
 }
 
+void	setup_redirects(t_command *command, int32_t *in_fd, int32_t *out_fd)
+{
+	t_redir	*redir;
+
+	redir = get_next_redir(command);
+	while (redir)
+	{
+		if (redir->type == INPUT)
+		{
+			close(*in_fd);
+			if (!open_redir(in_fd, redir->filename, INPUT))
+				exit(errno);
+		}
+		if (redir->type == OUTPUT)
+		{
+			close(*out_fd);
+			if (!open_redir(out_fd, redir->filename, OUTPUT))
+				exit(errno);
+		}
+		free(redir);
+		redir = get_next_redir(command);
+	}
+}
+
 pid_t	execute_command(int32_t in_fd, int32_t out_fd, t_command *command, char **envp)
 {
 	pid_t	pid;
-	t_redir	*redir;
 	char	*command_path;
 	char	**arguments;
 
@@ -50,30 +73,9 @@ pid_t	execute_command(int32_t in_fd, int32_t out_fd, t_command *command, char **
 	if (pid != 0)
 		return (pid);
 	signal(SIGINT, SIG_DFL);
-	if (in_fd != -1 && !protected_dup2(in_fd, INPUT))
+	if (!protected_dup2(in_fd, INPUT) || !protected_dup2(out_fd, OUTPUT))
 		exit(errno);
-	if (out_fd != -1 && !protected_dup2(out_fd, OUTPUT))
-		exit(errno);
-	redir = get_next_redir(command);
-	while (redir)
-	{
-		if (redir->type == INPUT)
-		{
-			if (in_fd != -1)
-				close(in_fd);
-			if (!open_redir(&in_fd, redir->filename, INPUT))
-				exit(errno);
-		}
-		if (redir->type == OUTPUT)
-		{
-			if (out_fd != -1)
-				close(out_fd);
-			if (!open_redir(&out_fd, redir->filename, OUTPUT))
-				exit(errno);
-		}
-		free(redir);
-		redir = get_next_redir(command);
-	}
+	setup_redirects(command, &in_fd, &out_fd);
 	arguments = get_arguments(command);
 	command_path = get_cmd_path(envp, arguments[0]);
 	if (access(command_path, X_OK))
@@ -90,8 +92,8 @@ int32_t	run_commands(t_command_table *ct, char **envp)
 	int32_t		out_fd;
 	pid_t		pid;
 
-	in_fd = -1;
-	out_fd = -1;
+	in_fd = dup(STDIN_FILENO);
+	out_fd = dup(STDOUT_FILENO);
 	command = get_next_command(ct);
 	while (command)
 	{
@@ -102,11 +104,9 @@ int32_t	run_commands(t_command_table *ct, char **envp)
 			out_fd = pipe_fds[1];
 		}
 		pid = execute_command(in_fd, out_fd, command, envp);
-		if (out_fd != -1)
-			close(out_fd);
-		out_fd = -1;
-		if (in_fd != -1)
-			close(in_fd);
+		close(out_fd);
+		out_fd = dup(STDOUT_FILENO);
+		close(in_fd);
 		in_fd = pipe_fds[0];
 		free(command);
 		command = get_next_command(ct);
