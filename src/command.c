@@ -65,8 +65,6 @@ t_command	*construct_command(t_list **tokens)
 	command = ft_calloc(1, sizeof(t_command));
 	if (!command)
 		ft_minishell_exit(EMALLOC);
-	command->redirs = NULL;
-	command->arguments = NULL;
 	while (*tokens)
 	{
 		token = (*tokens)->content;
