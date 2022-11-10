@@ -50,33 +50,41 @@ connected to the input of the next command via a pipe.
 
 | Function		| Manual Page		| From lib			| Description
 | :--			| :--				| :--				| :--
-| **printf**	| `man 3 printf`	| `<stdio.h>`		| write output to stdout
-| **malloc**	| `man malloc`		| `<stdlib.h>`		| allocate dynamic memory
-| **free**		| `man 3 free`		| `<stdlib.h>`		| free dynamic memory
-| **read**		| `man 2 read`		| `<unistd.h>`		| read from a file descriptor
-| **write**		| `man 2 write`		| `<unistd.h>`		| write to a file descriptor
-| **open**		| `man 2 open`		| `<fcntl.h>`		| open and possibly create a file
-| **close**		| `man 2 open`		| `<unistd.h>`		| close a file descriptor
-| **fork**		| `man fork`		| `<unistd.h>`		| create a child process
-| **wait**		| `man wait`		| `<sys/wait.h>`	| wait for process to change state
-| **waitpid**	| `man waitpid`		| `<sys/wait.h>`	| wait for process to change state
-| **wait3**		| `man wait3`		| `<sys/wait.h>`	| (obsolete) wait for process to change state, BSD style
-| **wait4**		| `man wait4`		| `<sys/wait.h>`	| (obsolete) wait for process to change state, BSD style
-| **signal**	| `man signal`		| `<signal.h>`		| ANSI C signal handling
-| **kill**		| `man 2 kill`		| `<signal.h>`		| send signal to a process
-| **exit**		| `man exit`		| `<stdlib.h>`		| cause normal process termination
-| **getcwd**	| `man getcwd`		| `<unistd.h>`		| get current working directory
-| **chdir**		| `man chdir`		| `<unistd.h>`		| change working directory
-| **stat**		| `man 2 stat`		| `<sys/stat.h>`	| get file status by pathname
-| **lstat**		| `man lstat`		| `<sys/stat.h>`	| get file status by pathname (for symlinks)
-| **fstat**		| `man fstat`		| `<sys/stat.h>`	| get file status by fd
-| **execve**	| `man execve`		| `<unistd.h>`		| execute program
-| **dup**		| `man dup`			| `<unistd.h>`		| duplicate a file descriptor
-| **dup2**		| `man dup2`		| `<unistd.h>`		| duplicate a file descriptor
-| **pipe**		| `man pipe`		| `<unistd.h>`		| create pipe
-| **opendir**	| `man opendir`		| `<dirent.h>`		| open a directory
-| **readdir**	| `man readdir`		| `<dirent.h>`		| read a directory
-| **closedir**	| `man closedir`	| `<dirent.h>`		| close a directory
-| **strerror**	| `man strerror`	| `<string.h>`		| return string describing error number
-| **errno**		| `man errno`		| `<errno.h>`		| number of last error
-| **termcap**	| `man termcap`, `man termios`		| `<term.h>`		| direct curses interface to the terminfo capability database
+| **readline**	| get a line from a user with editing
+| **rl_clear_history**	| free readline history
+| **rl_on_new_line**	| write output to stdout
+| **add_history**	| write output to stdout
+| **printf**	| write output to stdout
+| **printf**	| write output to stdout
+| **malloc**	| allocate dynamic memory
+| **free**		| free dynamic memory
+| **read**		| read from a file descriptor
+| **write**		| write to a file descriptor
+| **open**		| open and possibly create a file
+| **close**		| close a file descriptor
+| **fork**		| create a child process
+| **wait**		| wait for process to change state
+| **waitpid**	| wait for process to change state
+| **wait3**		| (deprecated) wait for process to change state, BSD style
+| **wait4**		| (deprecated) wait for process to change state, BSD style
+| **signal**	| ANSI C signal handling
+| **kill**		| send signal to a process
+| **exit**		| cause normal process termination
+| **getcwd**	| get current working directory
+| **chdir**		| change working directory
+| **stat**		| get file status by pathname
+| **lstat**		| get file status by pathname (for symlinks)
+| **fstat**		| get file status by fd
+| **execve**	| execute program
+| **dup**	    | duplicate a file descriptor
+| **dup2**		| duplicate a file descriptor
+| **pipe**		| create pipe
+| **opendir**	| open a directory
+| **readdir**	| read a directory
+| **closedir**	| close a directory
+| **strerror**	| return string describing error number
+| **errno**		| number of last error
+| **termcap**	| direct curses interface to the terminfo capability database
+
+#### Useful Sources
+- Readline guide: https://web.mit.edu/gnu/doc/html/rlman_2.html
