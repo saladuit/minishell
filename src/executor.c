@@ -84,7 +84,7 @@ pid_t	execute_command(int32_t in_fd, int32_t out_fd, t_command *command, char **
 	exit(errno);
 }
 
-int32_t	run_commands(t_command_table *ct, char **envp)
+int32_t	pipe_commands(t_command_table *ct, char **envp)
 {
 	int32_t		pipe_fds[2];
 	t_command	*command;
@@ -125,7 +125,7 @@ int32_t	executor(t_list *ast, char **envp)
 	ct = get_next_command_table(&ast);
 	while (ct)
 	{
-		pid = run_commands(ct, envp);
+		pid = pipe_commands(ct, envp);
 		waitpid(pid, &status, WUNTRACED);
 		wait(NULL);
 		free(ct);
