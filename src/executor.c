@@ -69,6 +69,10 @@ pid_t	execute_command(int32_t in_fd, int32_t out_fd, t_command *command, char **
 	char	*command_path;
 	char	**arguments;
 
+	arguments = get_arguments(command);
+	if (is_builtin(arguments[0]))
+		return (run_builtin(in_fd, out_fd, arguments, envp));
+	command_path = get_cmd_path(envp, arguments[0]);
 	pid = fork();
 	if (pid != 0)
 		return (pid);
@@ -76,8 +80,6 @@ pid_t	execute_command(int32_t in_fd, int32_t out_fd, t_command *command, char **
 	if (!protected_dup2(in_fd, INPUT) || !protected_dup2(out_fd, OUTPUT))
 		exit(errno);
 	setup_redirects(command, &in_fd, &out_fd);
-	arguments = get_arguments(command);
-	command_path = get_cmd_path(envp, arguments[0]);
 	if (access(command_path, X_OK))
 		printf("%s: %s: %s\n", "Minishell", arguments[0], "Command not found");
 	execve(command_path, arguments, envp);
@@ -127,7 +129,9 @@ int32_t	executor(t_list *ast, char **envp)
 	{
 		pid = pipe_commands(ct, envp);
 		waitpid(pid, &status, WUNTRACED);
-		wait(NULL);
+		while (wait(NULL) != -1)
+		{
+		}
 		free(ct);
 		ct = get_next_command_table(&ast);
 	}
