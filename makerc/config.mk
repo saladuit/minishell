@@ -13,7 +13,14 @@ SRCS			=minishell.c \
 				 ft_isredir.c \
 				 ft_isdelimiter.c \
 				 ft_ismetachar.c \
-				 ft_tree.c
+				 ft_tree.c \
+				 echo.c \
+				 cd.c \
+				 pwd.c \
+				 export.c \
+				 unset.c \
+				 env.c \
+				 exit.c \
 
 MAIN 			:=main.c
 
@@ -35,6 +42,7 @@ MAIN_OBJ		=$(addprefix $(BUILD_DIR)/, $(MAIN:%.c=%.o))
 HEADERS			=$(LIBFT_INCLUDE_DIR)/libft.h \
 				$(INCLUDE_DIR)/minishell.h \
 				$(INCLUDE_DIR)/executor.h \
+				$(INCLUDE_DIR)/builtins.h \
 				$(INCLUDE_DIR)/expander.h \
 				$(INCLUDE_DIR)/lexer.h \
 				$(INCLUDE_DIR)/parser.h \

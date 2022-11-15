@@ -1,4 +1,7 @@
-#include "command_table.h"
+#include <command_table.h>
+#include <builtins.h>
+#include "minishell.h"
+#include <builtins.h>
 #include <executor.h>
 #include <message.h>
 #include <redir.h>
@@ -84,15 +87,7 @@ pid_t	execute_command(int32_t in_fd, int32_t out_fd, t_command *command, char **
 
 int32_t	pipe_commands(t_command_table *ct, char **envp)
 {
-	int32_t		pipe_fds[2];
-	t_command	*command;
-	int32_t		in_fd;
-	int32_t		out_fd;
-	pid_t		pid;
 
-	in_fd = dup(STDIN_FILENO);
-	out_fd = dup(STDOUT_FILENO);
-	command = get_next_command(ct);
 	while (command)
 	{
 		if (ct->commands)
@@ -106,11 +101,32 @@ int32_t	pipe_commands(t_command_table *ct, char **envp)
 		out_fd = dup(STDOUT_FILENO);
 		close(in_fd);
 		in_fd = pipe_fds[0];
-		free(command);
-		command = get_next_command(ct);
 	}
 	close(in_fd);
 	return (pid);
+}
+
+
+t_builtin 	lookup_builtin(char *cmd)
+{
+	int const static lookup[] = 
+	{.name = "echo", .builtin = ft_echo},
+	{.name = "cd", .builtin = ft_cd},
+	{.name = "pwd", .builtin = ft_pwd},
+	{.name = "export", .builtin = ft_export},
+	{.name = "unset", .builtin = ft_unset},
+	{.name = "env", .builtin = ft_env},
+	{.name = "exit", .builtin = ft_exit},
+	{.name = NULL, .builtin = NULL};
+	int32_t i;
+
+	i = 0;
+	while (ft_strncmp(lookup[i++].name, cmd, ft_strlen(cmd)))
+	{
+		if (lookup[i].name == NULL)
+			return (NULL);
+	}
+	return (lookup[i]);
 }
 
 int32_t execute_simple_command(t_command_table *ct, char **envp)
@@ -120,9 +136,9 @@ int32_t execute_simple_command(t_command_table *ct, char **envp)
 	char	*command_path;
 	char	**arguments;
 
-	cmnd = get_next_command(ct);
+	cmd = get_next_command(ct);
 	arguments = get_arguments(cmd);
-	if (is_builtin_command(arguments))
+	if (is_builtin_command(arguments[i]))
 		return (execute_builtin(arguments, envp));
 	command_path = get_cmd_path(envp, arguments[0]);
 	pid = fork();
@@ -131,16 +147,47 @@ int32_t execute_simple_command(t_command_table *ct, char **envp)
 	setup_redirects(command, &in_fd, &out_fd);
 }
 
-int32_t execute_pipeline(t_command_table *ct, char **envp)
+int32_t	wait_for_child_processes(t_list *pids)
 {
 	int32_t status;
-	t_list	*pid;
-	while (pid)
+
+	while (pids)
 	{
-		waitpid(*(int *)pid->content, &status, WUNTRACED);
-		pid = pid->next;
+		waitpid(*(int *)pids->content, &status, WUNTRACED);
+		pids = pids->next;
 	}
-	ft_lstclear(&pid, free);
+	ft_lstclear(&pids, free);
+	return (WEXITSTATUS(status));
+}
+
+int32_t	init_fds(int32_t *pipe_fds, int32_t *std_fds)
+{
+	std_fds[STDIN_FILENO] = dup(STDIN_FILENO);
+	std_fds[STDOUT_FILENO] = dup(STDOUT_FILENO);
+	if (std_fds[STDIN_FILENO] == ERROR || std_fds[STDOUT_FILENO] == ERROR)
+		return (ERROR);
+	if (pipe(pipe_fds) == -1)
+		return (ERROR);
+	return (SUCCESS);
+}
+
+int32_t execute_pipeline(t_command_table *ct, char **envp)
+{
+	t_command *cmd;
+	int32_t	pipe_fds[2];
+	int32_t	std_fds[2];
+	int32_t status;
+	t_list	*pids;
+
+	if (init_fds(pipe_fds, std_fds)
+			return (ERROR);
+	cmd = get_next_command(ct);
+	while (cmd)
+	{
+		free(cmd);
+		cmd = get_next_command(ct);
+	}
+	return (wait_for_child_processes(pids));
 }
 
 int32_t	execute_command_table(t_command_table *ct, char **envp)
@@ -162,8 +209,7 @@ int32_t executor(t_list *ast, char **envp)
 	{
 		status = execute_command_table(ct, envp);
 		free(ct);
-		ct = NULL;
 		ct = get_next_command_table(&ast);
 	}
-	return (status); //should be removed from here
+	return (status);
 }
