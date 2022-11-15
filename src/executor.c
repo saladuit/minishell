@@ -15,34 +15,6 @@
 #include <sys/wait.h>
 #include <astapi.h>
 
-void	print_command(t_command *command)
-{
-	char	**arguments;
-	t_redir	*redir;
-	int32_t	i;
-
-	arguments = get_arguments(command);
-	printf("Command: %s\n", arguments[0]);
-	printf("arguments:\n");
-	i = 0;
-	while (arguments[i])
-	{
-		printf("	%s\n", arguments[i]);
-		i++;
-	}
-	printf("redirects:\n");
-	redir = get_next_redir(command);
-	while (redir)
-	{
-		if (redir->type == INPUT)
-			printf("Type: INPUT\n");
-		else
-			printf("Type: OUTPUT\n");
-		printf("Filename: %s\n", redir->filename);
-		redir = get_next_redir(command);
-	}
-}
-
 void	setup_redirects(t_command *command, int32_t *in_fd, int32_t *out_fd)
 {
 	t_redir	*redir;
@@ -97,35 +69,26 @@ int32_t	pipe_commands(t_command_table *ct, char **envp)
 			out_fd = pipe_fds[1];
 		}
 		pid = execute_command(in_fd, out_fd, command, envp);
-		close(out_fd);
-		out_fd = dup(STDOUT_FILENO);
-		close(in_fd);
-		in_fd = pipe_fds[0];
 	}
-	close(in_fd);
 	return (pid);
 }
 
 
-t_builtin 	lookup_builtin(char *cmd)
+t_builtin 	builtin_lookup(char *cmd)
 {
-	int const static lookup[] = 
-	{.name = "echo", .builtin = ft_echo},
-	{.name = "cd", .builtin = ft_cd},
-	{.name = "pwd", .builtin = ft_pwd},
-	{.name = "export", .builtin = ft_export},
-	{.name = "unset", .builtin = ft_unset},
-	{.name = "env", .builtin = ft_env},
-	{.name = "exit", .builtin = ft_exit},
-	{.name = NULL, .builtin = NULL};
+	const static  t_builtin lookup[] = 
+	{{.name = "echo", .func = ft_echo},
+	{.name = "cd", .func = ft_cd},
+	{.name = "pwd", .func = ft_pwd},
+	{.name = "export", .func = ft_export},
+	{.name = "unset", .func = ft_unset},
+	{.name = "env", .func = ft_env},
+	{.name = "exit", .func = ft_exit},
+	{.name = NULL, .func = NULL}};
 	int32_t i;
 
 	i = 0;
-	while (ft_strncmp(lookup[i++].name, cmd, ft_strlen(cmd)))
-	{
-		if (lookup[i].name == NULL)
-			return (NULL);
-	}
+	while (ft_strncmp(lookup[i++].name, cmd, ft_strlen(cmd)) && lookup[i].name == NULL)
 	return (lookup[i]);
 }
 
@@ -160,7 +123,7 @@ int32_t	wait_for_child_processes(t_list *pids)
 	return (WEXITSTATUS(status));
 }
 
-int32_t	init_fds(int32_t *pipe_fds, int32_t *std_fds)
+int32_t	init_first_pipe(int32_t *pipe_fds, int32_t *std_fds)
 {
 	std_fds[STDIN_FILENO] = dup(STDIN_FILENO);
 	std_fds[STDOUT_FILENO] = dup(STDOUT_FILENO);
@@ -171,6 +134,19 @@ int32_t	init_fds(int32_t *pipe_fds, int32_t *std_fds)
 	return (SUCCESS);
 }
 
+int32_t	prepare_next_pipe(int32_t *pipe_fds, int32_t *std_fds, bool last)
+{
+		close(std_fds[STDIN_FILENO]);
+		close(std_fds[STDOUT_FILENO]);
+		std_fds[STDIN_FILENO] = pipe_fds[0];
+		std_fds[STDOUT_FILENO] = dup(STDOUT_FILENO);
+		if (std_fds[STDOUT_FILENO] == ERROR)
+			return (ERROR);
+		if (!last && pipe(pipe_fds) == -1)
+			return (ERROR);
+		return (SUCCESS);
+}
+
 int32_t execute_pipeline(t_command_table *ct, char **envp)
 {
 	t_command *cmd;
@@ -179,13 +155,14 @@ int32_t execute_pipeline(t_command_table *ct, char **envp)
 	int32_t status;
 	t_list	*pids;
 
-	if (init_fds(pipe_fds, std_fds)
+	if (init_first_pipe(pipe_fds, std_fds))
 			return (ERROR);
 	cmd = get_next_command(ct);
 	while (cmd)
 	{
 		free(cmd);
 		cmd = get_next_command(ct);
+		prepare_next_pipe(pipe_fds, std_fds);
 	}
 	return (wait_for_child_processes(pids));
 }

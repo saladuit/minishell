@@ -6,7 +6,7 @@
 typedef	struct s_builtin 
 {
 	const char *name;
-	int (*builtin)(char **arguments, char **envp); //TODO turn into linked list to be able to change the content
+	int (*func)(char **arguments, char **envp); //TODO turn into linked list to be able to change the content
 }	t_builtin;
 
 int ft_echo(char **arguments, char **envp);
