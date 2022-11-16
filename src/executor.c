@@ -15,6 +15,14 @@
 #include <sys/wait.h>
 #include <astapi.h>
 
+int32_t	redirect(t_redir *redir, int32_t *fd, t_type type)
+{
+	close(*fd);
+	if (!open_redir(fd, redir->filename, type))
+		return (ERROR);
+	return (SUCCESS);
+}
+
 void	setup_redirects(t_command *command, int32_t *in_fd, int32_t *out_fd)
 {
 	t_redir	*redir;
@@ -23,56 +31,13 @@ void	setup_redirects(t_command *command, int32_t *in_fd, int32_t *out_fd)
 	while (redir)
 	{
 		if (redir->type == INPUT)
-		{
-			close(*in_fd);
-			if (!open_redir(in_fd, redir->filename, INPUT))
-				exit(errno);
-		}
+			redirect(redir, in_fd, INPUT);
 		if (redir->type == OUTPUT)
-		{
-			close(*out_fd);
-			if (!open_redir(out_fd, redir->filename, OUTPUT))
-				exit(errno);
-		}
+			redirect(redir, out_fd, OUTPUT);
 		free(redir);
 		redir = get_next_redir(command);
 	}
 }
-
-pid_t	execute_command(int32_t in_fd, int32_t out_fd, t_command *command, char **envp)
-{
-	pid_t	pid;
-	char	*command_path;
-	char	**arguments;
-
-	pid = fork();
-	if (pid != 0)
-		return (pid);
-	signal(SIGINT, SIG_DFL);
-	if (!protected_dup2(in_fd, INPUT) || !protected_dup2(out_fd, OUTPUT))
-		exit(errno);
-	if (access(command_path, X_OK))
-		printf("%s: %s: %s\n", "Minishell", arguments[0], "Command not found");
-	execve(command_path, arguments, envp);
-	exit(errno);
-}
-
-int32_t	pipe_commands(t_command_table *ct, char **envp)
-{
-
-	while (command)
-	{
-		if (ct->commands)
-		{
-			if (pipe(pipe_fds) == -1)
-				return (ERROR);
-			out_fd = pipe_fds[1];
-		}
-		pid = execute_command(in_fd, out_fd, command, envp);
-	}
-	return (pid);
-}
-
 
 t_builtin 	builtin_lookup(char *cmd)
 {
@@ -88,26 +53,43 @@ t_builtin 	builtin_lookup(char *cmd)
 	int32_t i;
 
 	i = 0;
-	while (ft_strncmp(lookup[i++].name, cmd, ft_strlen(cmd)) && lookup[i].name == NULL)
+	while (ft_strncmp(lookup[i].name, cmd, ft_strlen(cmd)) && lookup[i].name == NULL)
+		i++;
 	return (lookup[i]);
+}
+
+int32_t execute_builtin(char **arguments, char **envp)
+{
+	t_builtin builtin_function;
+
+	builtin_function = builtin_lookup(arguments[0]);
+	if (builtin_function.name == NULL)
+		return (-1);
+	return (builtin_function.func(arguments, envp));
 }
 
 int32_t execute_simple_command(t_command_table *ct, char **envp)
 {
-	t_command	cmd;
-	pit_t		pid;
+	t_command	*cmd;
+	pid_t		pid;
+	int32_t		status;
 	char	*command_path;
 	char	**arguments;
 
 	cmd = get_next_command(ct);
 	arguments = get_arguments(cmd);
-	if (is_builtin_command(arguments[i]))
-		return (execute_builtin(arguments, envp));
-	command_path = get_cmd_path(envp, arguments[0]);
+	status = execute_builtin(arguments, envp);
+	if (status >= 0)
+		return (status);
 	pid = fork();
 	if (pid != 0)
 		return (pid);
+	command_path = get_cmd_path(envp, arguments[0]);
 	setup_redirects(command, &in_fd, &out_fd);
+	if (access(command_path, X_OK))
+		printf("%s: %s: %s\n", "Minishell", arguments[0], "Command not found");
+	execve(command_path, arguments, envp);
+	exit(errno);
 }
 
 int32_t	wait_for_child_processes(t_list *pids)

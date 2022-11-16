@@ -1,8 +1,6 @@
 #ifndef BUILTINS
 # define BUILTINS
 
-#define NOBUILTIN = -1
-
 typedef	struct s_builtin 
 {
 	const char *name;

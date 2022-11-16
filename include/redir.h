@@ -20,7 +20,7 @@ typedef struct s_redir
 /*
  * @brief contructs a redirection struct out of two tokens
  * the first token will become the redirection type and the second
- * whill become the filname
+ * will become the filname
  *
  * @param command	-	Linked list with tokens
  * @return 			-	Redirection struct
