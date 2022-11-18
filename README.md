@@ -48,19 +48,21 @@ connected to the input of the next command via a pipe.
  
 ### Functions allowed in this project
 
-| Function		| Manual Page		| From lib			| Description
-| :--			| :--				| :--				| :--
+| Function		| Description
+| :--			| :--
 | **readline**	| get a line from a user with editing
 | **rl_clear_history**	| free readline history
 | **rl_on_new_line**	| write output to stdout
-| **add_history**	| write output to stdout
-| **printf**	| write output to stdout
+| **rl_replace_line**	| replaces line with new content
+| **rl_redisplay**	| redisplays line
+| **add_history**	| Add user input to history
 | **printf**	| write output to stdout
 | **malloc**	| allocate dynamic memory
 | **free**		| free dynamic memory
-| **read**		| read from a file descriptor
 | **write**		| write to a file descriptor
+| **access**		| check accessibility of a file
 | **open**		| open and possibly create a file
+| **read**		| read from a file descriptor
 | **close**		| close a file descriptor
 | **fork**		| create a child process
 | **wait**		| wait for process to change state
@@ -68,6 +70,7 @@ connected to the input of the next command via a pipe.
 | **wait3**		| (deprecated) wait for process to change state, BSD style
 | **wait4**		| (deprecated) wait for process to change state, BSD style
 | **signal**	| ANSI C signal handling
+| **sigaction**	| ANSI C signal handling
 | **kill**		| send signal to a process
 | **exit**		| cause normal process termination
 | **getcwd**	| get current working directory
@@ -87,4 +90,6 @@ connected to the input of the next command via a pipe.
 | **termcap**	| direct curses interface to the terminfo capability database
 
 #### Useful Sources
-- Readline guide: https://web.mit.edu/gnu/doc/html/rlman_2.html
+- [Readline guide](https://web.mit.edu/gnu/doc/html/rlman_2.html)
+- [GNU Bash Manual](https://www.gnu.org/savannah-checkouts/gnu/bash/manual)
+- [Readline Manual](https://man7.org/linux/man-pages/man3/readline.3.html)
