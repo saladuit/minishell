@@ -44,12 +44,15 @@ bool	protected_dup2(int fd, t_type type)
 	return (true);
 }
 
-bool	open_redir(int *fd, char *path, t_type type)
+bool	open_redir(char *path, t_type type)
 {
-	if (!openfile(fd, path, type))
+	int32_t	fd;
+
+	if (!openfile(&fd, path, type))
 		return (false);
-	if (!protected_dup2(*fd, type))
+	if (!protected_dup2(fd, type))
 		return (false);
+	close(fd);
 	return (true);
 }
 
