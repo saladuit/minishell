@@ -51,7 +51,10 @@ bool	open_redir(char *path, t_type type)
 	if (!openfile(&fd, path, type))
 		return (false);
 	if (!protected_dup2(fd, type))
+	{
+		close(fd);
 		return (false);
+	}
 	close(fd);
 	return (true);
 }
