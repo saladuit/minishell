@@ -1,26 +1,26 @@
 SRCS			=minishell.c \
-				 lexer.c \
-				 parser.c \
+				 lexer/lexer.c \
+				 parser/parser.c \
 				 redir.c \
 				 ast.c \
 				 command.c \
 				 command_table.c \
-				 expander.c \
-				 executor.c \
-				 execute_utils.c \
+				 expander/expander.c \
+				 executor/executor.c \
+				 executor/execute_utils.c \
 				 message.c \
 				 signal_handler.c \
-				 ft_isredir.c \
-				 ft_isdelimiter.c \
-				 ft_ismetachar.c \
+				 utils/ft_isredir.c \
+				 utils/ft_isdelimiter.c \
+				 utils/ft_ismetachar.c \
 				 ft_tree.c \
-				 echo.c \
-				 cd.c \
-				 pwd.c \
-				 export.c \
-				 unset.c \
-				 env.c \
-				 exit.c \
+				 builtins/echo.c \
+				 builtins/cd.c \
+				 builtins/pwd.c \
+				 builtins/export.c \
+				 builtins/unset.c \
+				 builtins/env.c \
+				 builtins/exit.c \
 
 MAIN 			:=main.c
 

@@ -1,5 +1,6 @@
-
-int	cd(char *directory)
+int ft_cd(char **arguments, char **envp)
 {
-	return
+	(void)arguments;
+	(void)envp;
+	return (0);
 }
