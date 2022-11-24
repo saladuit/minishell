@@ -97,6 +97,7 @@ int32_t	execute_command(t_command *cmd, char **envp)
 	arguments = get_arguments(cmd);
 	status = execute_builtin(arguments, envp);
 	setup_redirects(cmd);
+	free(cmd);
 	if (status >= 0)
 		return (status);
 	command_path = get_cmd_path(envp, arguments[0]);
@@ -115,6 +116,7 @@ int32_t	execute_simple_command(t_command *cmd, char **envp)
 
 	arguments = get_arguments(cmd);
 	setup_redirects(cmd);
+	free(cmd);
 	status = execute_builtin(arguments, envp);
 	if (status >= 0)
 		return (status);
