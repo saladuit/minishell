@@ -8,9 +8,11 @@ char	*get_env_var(char **env, char *var_name)
 	int32_t	len;
 	char	*str;
 
-	len = ft_strlen(var_name);
 	i = 0;
 	str = NULL;
+	len = 0;
+	while (var_name[len] && ft_isalpha(var_name[len]))
+		len++;
 	while (env[i])
 	{
 		if (!ft_strncmp(env[i], var_name, len) && env[i][len + 1] == '=')
@@ -41,9 +43,10 @@ int32_t	expand(t_list *token, t_minishell *shell)
 			i++;
 		tmp = ft_substr(to_expand, start, i);
 		expanded = ft_strjoin_free(expanded, tmp);
-
+		free(tmp);
+		tmp = get_env_var(shell->env, to_expand)
 	}
-
+	return (0);
 }
 
 int32_t	check_expand(char *str)
