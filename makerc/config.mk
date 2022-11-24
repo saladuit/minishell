@@ -10,6 +10,7 @@ SRCS			=minishell.c \
 				 executor/execute_utils.c \
 				 message.c \
 				 signal_handler.c \
+				 utils/dup_envp.c \
 				 utils/ft_isredir.c \
 				 utils/ft_isdelimiter.c \
 				 utils/ft_ismetachar.c \

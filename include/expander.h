@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                    .--.  _                 */
-/*   expander.h                                      |o_o || |                */
-/*                                                   |:_/ || |_ _   ___  __   */
-/*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
-/*                                                 (|     | )|_| |_| |>  <    */
-/*   Created: 2022/09/13 16:04:07 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
-/*   Updated: 2022/09/13 17:14:22 by safoh        \___)=(___/                 */
+/*                                                        ::::::::            */
+/*   expander.h                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: safoh <safoh@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/09/13 16:04:07 by safoh         #+#    #+#                 */
+/*   Updated: 2022/11/24 11:51:25 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 # include <ft_tree.h>
 # include <stdint.h>
+# include <minishell.h>
 
-int32_t	expander(t_tree *command_table);
+int32_t	expander(t_minishell *shell);
 
 #endif

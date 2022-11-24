@@ -1,4 +1,3 @@
-#include "ast.h"
 #include "message.h"
 #include <minishell.h>
 #include <lexer.h>
@@ -15,21 +14,24 @@
 
 int32_t	minishell(char **envp)
 {
-	t_list		*ast;
-	t_list		*tokens;
+	t_minishell	sheldon;
 	char		*command_line;
 
 	(void)envp;
+	sheldon.env = dup_envp(envp);
+	if (sheldon.env == NULL)
+		return (ft_minishell_exit(EMALLOC));
 	//init_handlers();
 	command_line = readline(messages_lookup(PROMPT));
 	if (!command_line)
 		ft_minishell_exit(EMALLOC);
 	if (!*command_line)
 		return (SUCCESS);
-	lexer(command_line, &tokens);
-	ast = parser(tokens);
-	executor(ast, envp);
-	ft_lstclear(&tokens, free);
+	lexer(command_line, &sheldon.tokens);
+	expander(&sheldon);
+	sheldon.ast = parser(sheldon.tokens);
+	executor(sheldon.ast, sheldon.env);
+	ft_lstclear(&sheldon.tokens, free);
 	free(command_line);
 	return (EXIT_SUCCESS);
 }
