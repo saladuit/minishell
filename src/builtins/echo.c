@@ -1,19 +1,29 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <unistd.h>
+#include <libft.h>
 
-void	echo(int32_t in_fd, int32_t out_fd, char **arguments, char **envp)
+int32_t	ft_echo(char **arguments, char **envp)
 {
 	int32_t	i;
 	bool	newline;
 
+	(void)envp;
 	newline = true;
-	close(in_fd);
-	if (ft_strlcmp())
-
-	while (arguments[i])
+	i = 1;
+	if (!ft_strncmp(arguments[i], "-n\0", 3))
 	{
-		write(out_fd, arguments[i], ft_strlen(arguments[i]));
-		write(out_fd, " ", 1);
+		newline = false;
 		i++;
 	}
+	while (arguments[i])
+	{
+		write(1, arguments[i], ft_strlen(arguments[i]));
+		i++;
+		if (arguments[i])
+			write(1, " ", 1);
+	}
+	if (newline)
+		write(1, "\n", 1);
+	return (0);
 }
