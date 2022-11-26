@@ -1,19 +1,28 @@
 SRCS			=minishell.c \
-				 lexer.c \
-				 parser.c \
+				 lexer/lexer.c \
+				 parser/parser.c \
 				 redir.c \
 				 ast.c \
 				 command.c \
 				 command_table.c \
-				 expander.c \
-				 executor.c \
-				 execute_utils.c \
+				 expander/expander.c \
+				 expander/expander_utils.c \
+				 executor/executor.c \
+				 executor/execute_utils.c \
 				 message.c \
 				 signal_handler.c \
-				 ft_isredir.c \
-				 ft_isdelimiter.c \
-				 ft_ismetachar.c \
-				 ft_tree.c
+				 utils/dup_envp.c \
+				 utils/ft_isredir.c \
+				 utils/ft_isdelimiter.c \
+				 utils/ft_ismetachar.c \
+				 ft_tree.c \
+				 builtins/echo.c \
+				 builtins/cd.c \
+				 builtins/pwd.c \
+				 builtins/export.c \
+				 builtins/unset.c \
+				 builtins/env.c \
+				 builtins/exit.c \
 
 MAIN 			:=main.c
 
@@ -35,6 +44,7 @@ MAIN_OBJ		=$(addprefix $(BUILD_DIR)/, $(MAIN:%.c=%.o))
 HEADERS			=$(LIBFT_INCLUDE_DIR)/libft.h \
 				$(INCLUDE_DIR)/minishell.h \
 				$(INCLUDE_DIR)/executor.h \
+				$(INCLUDE_DIR)/builtins.h \
 				$(INCLUDE_DIR)/expander.h \
 				$(INCLUDE_DIR)/lexer.h \
 				$(INCLUDE_DIR)/parser.h \

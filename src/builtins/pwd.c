@@ -1,4 +1,5 @@
-int ft_cd(char **arguments, char **envp)
+
+int ft_pwd(char **arguments, char **envp)
 {
 	(void)arguments;
 	(void)envp;

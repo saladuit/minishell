@@ -73,9 +73,11 @@ t_command	*construct_command(t_list **tokens)
 			*tokens = (*tokens)->next;
 			break ;
 		}
-		if (ft_isredir(*token) && !ft_lstadd_backnew(&command->redirs, construct_redir(tokens)))
-				ft_minishell_exit(EMALLOC);
-		else if (!ft_lstadd_backnew(&command->arguments, (*tokens)->content))
+		if (!ft_isredir(*token)
+			&& !ft_lstadd_backnew(&command->arguments, (*tokens)->content))
+			ft_minishell_exit(EMALLOC);
+		if (ft_isredir(*token)
+			&& !ft_lstadd_backnew(&command->redirs, construct_redir(tokens)))
 			ft_minishell_exit(EMALLOC);
 		*tokens = (*tokens)->next;
 	}

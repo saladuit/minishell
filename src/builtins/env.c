@@ -1,4 +1,5 @@
-int ft_cd(char **arguments, char **envp)
+
+int ft_env(char **arguments, char **envp)
 {
 	(void)arguments;
 	(void)envp;

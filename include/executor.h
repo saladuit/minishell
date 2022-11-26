@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   executor.h                                      |o_o || |                */
+/*   executor.h                                         :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: safoh <safoh@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 16:04:29 by safoh         #+#    #+#                 */
-/*   Updated: 2022/10/25 15:48:53 by dritsema      ########   odam.nl         */
+/*   Updated: 2022/11/22 12:24:13 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 int32_t		execute(char *command_path, char **args, char **envp);
 int32_t		executor(t_list *abstract_syntax_tree, char **envp);
 bool		protected_dup2(int fd, t_type type);
-bool		open_redir(int *fd, char *path, t_type type);
+bool		open_redir(char *path, t_type type);
 char		*get_redir_file(t_command *command, t_type type);
 int			is_dir(char *path);
 char		**get_env_paths(char **envp);
