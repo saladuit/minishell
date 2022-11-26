@@ -6,6 +6,7 @@ SRCS			=minishell.c \
 				 command.c \
 				 command_table.c \
 				 expander/expander.c \
+				 expander/expander_utils.c \
 				 executor/executor.c \
 				 executor/execute_utils.c \
 				 message.c \

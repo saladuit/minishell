@@ -30,13 +30,6 @@ char	*get_env_var(char **env, char *var_name, t_minishell *shell)
 	return (str);
 }
 
-char	*strjoin_free_free(char *expanded, char *tmp)
-{
-	expanded = ft_strjoin_free(expanded, tmp);
-	free(tmp);
-	return (expanded);
-}
-
 char	*expand_loop(char *content, char *expanded, t_minishell *shell)
 {
 	int32_t	i;
@@ -70,47 +63,15 @@ char	*expand(char *content, t_minishell *shell)
 {
 	char	*expanded;
 
+	if (!content)
+		return (content);
 	expanded = calloc(1, 1);
 	expanded = expand_loop(content, expanded, shell);
 	free(content);
 	return (expanded);
 }
 
-int32_t	check_expand(char *str)
-{
-	int32_t	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '$')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int32_t	is_double_quoted(char *str)
-{
-	if (*str == '\"')
-	{
-		if (str[ft_strlen(str) - 1] == '\"')
-			return (1);
-	}
-	return (0);
-}
-
-int32_t	is_single_quoted(char *str)
-{
-	if (*str == '\'')
-	{
-		if (str[ft_strlen(str) - 1] == '\'')
-			return (1);
-	}
-	return (0);
-}
-
-char	*quote_trim(char *str)
+char	*trim_quotes(char *str)
 {
 	int32_t	len;
 	char	*new_str;
@@ -140,20 +101,18 @@ int32_t	expander(t_minishell *shell)
 		content = (char *)tokens->content;
 		if (is_double_quoted(content))
 		{
-			content = quote_trim(content);
-			if (!content)
-				return (EMALLOC);
+			content = trim_quotes(content);
 			if (check_expand(content))
 				content = expand(content, shell);
 		}
 		else if (is_single_quoted(content))
 		{
-			content = quote_trim(content);
-			if (!content)
-				return (EMALLOC);
+			content = trim_quotes(content);
 		}
 		else if (check_expand(content))
 			content = expand(content, shell);
+		if (!content)
+			return (EMALLOC);
 		tokens->content = (void *)content;
 		tokens = tokens->next;
 	}
