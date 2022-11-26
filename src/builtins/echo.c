@@ -3,6 +3,21 @@
 #include <unistd.h>
 #include <libft.h>
 
+static bool	validflag(char *flag)
+{
+	int32_t	i;
+
+	if (flag[0] == '-')
+	{
+		i = 1;
+		while (flag[i] && flag[i] == 'n')
+			i++;
+		if (!flag[i] && i > 1)
+			return (1);
+	}
+	return (0);
+}
+
 int32_t	ft_echo(char **arguments, char **envp)
 {
 	int32_t	i;
@@ -11,7 +26,7 @@ int32_t	ft_echo(char **arguments, char **envp)
 	(void)envp;
 	newline = true;
 	i = 1;
-	if (!ft_strncmp(arguments[i], "-n\0", 3))
+	if (validflag(arguments[i]))
 	{
 		newline = false;
 		i++;
