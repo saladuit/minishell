@@ -1,6 +1,7 @@
 #include <message.h>
 #include <expander.h>
 #include <minishell.h>
+#include <lexer.h>
 
 char	*get_env_var(char **env, char *var_name, t_minishell *shell)
 {
@@ -11,7 +12,7 @@ char	*get_env_var(char **env, char *var_name, t_minishell *shell)
 	i = 0;
 	len = 0;
 	str = calloc(1, 1);
-	while (var_name[len] && !ft_iswhitespace(var_name[len]))
+	while (var_name[len] && valid_varchar(var_name[len]))
 		len++;
 	if (!ft_strncmp(var_name, "?", len))
 	{
@@ -51,7 +52,7 @@ char	*expand_loop(char *content, char *expanded, t_minishell *shell)
 			if (!tmp)
 				return (NULL);
 			expanded = strjoin_free_free(expanded, tmp);
-			while (!ft_iswhitespace(content[i]) && content[i])
+			while (valid_varchar(content[i]))
 				i++;
 			start = i;
 		}

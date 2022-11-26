@@ -1,19 +1,19 @@
 #include "libft.h"
 #include <lexer.h>
 #include <message.h>
-#include <stdio.h> // Remove
+#include <stdbool.h>
 // Meta characters: SPACE, TAB, NEWLINE, ;, (, ), <, >, |, &.
 // Types of tokens: words, keywords, I/O redirectors, and semicolons.
 
 // Delimiters ";", "|", "&".
 
-int32_t	is_quotechar(char c)
+bool	is_quotechar(const char c)
 {
 	if (c == '\"' || c == '\'')
 	{
-		return (1);
+		return (true);
 	}
-	return (0);
+	return (false);
 }
 
 int32_t	is_tokenchar(const char *str)

@@ -1,4 +1,10 @@
 #include <expander.h>
+#include <stdbool.h>
+
+bool	valid_varchar(char c)
+{
+	return (!ft_iswhitespace(c) && !is_quotechar(c) && c);
+}
 
 int32_t	check_expand(char *str)
 {
