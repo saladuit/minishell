@@ -73,15 +73,8 @@ int32_t	execute_builtin(char **arguments, char **envp)
 int32_t	wait_for_child_processes(pid_t pid)
 {
 	int32_t	status;
-	// t_list	*tmp_pids;
 
-	// tmp_pids = pids;
-	// while (pids)
-	// {
-	// 	waitpid(*(int *)pids->content, &status, WUNTRACED);
-	// 	pids = pids->next;
-	// }
-	// ft_lstclear(&tmp_pids, free);
+	status = 0;
 	waitpid(pid, &status, WUNTRACED);
 	while (wait(NULL) != -1 && errno != ECHILD)
 		;
@@ -95,16 +88,16 @@ int32_t	execute_command(t_command *cmd, char **envp)
 	char	*command_path;
 
 	arguments = get_arguments(cmd);
-	status = execute_builtin(arguments, envp);
 	setup_redirects(cmd);
+	status = execute_builtin(arguments, envp);
 	free(cmd);
 	if (status >= 0)
 		return (status);
 	command_path = get_cmd_path(envp, arguments[0]);
 	if (access(command_path, X_OK))
-		printf("%s: %s: %s\n", "Minishell", arguments[0], "Command not found");
+		printf("%s: %s: %s\n", "Minishell", arguments[0], "Command not found"); // TODO stderr
 	execve(command_path, arguments, envp);
-	exit(errno);
+	exit(127); // TODO make one func call
 }
 
 int32_t	execute_simple_command(t_command *cmd, char **envp)
@@ -125,9 +118,9 @@ int32_t	execute_simple_command(t_command *cmd, char **envp)
 		return (wait_for_child_processes(pid));
 	command_path = get_cmd_path(envp, arguments[0]);
 	if (access(command_path, X_OK))
-		printf("%s: %s: %s\n", "Minishell", arguments[0], "Command not found");
-	execve(command_path, arguments, envp);
-	exit(errno);
+		printf("%s: %s: %s\n", "Minishell", arguments[0], "Command not found"); // TODO stderr
+	execve(command_path, arguments, envp); // TODO make one func call
+	exit(127);
 }
 
 int32_t	init_first_pipe(int32_t *pipe_fds)
@@ -140,16 +133,24 @@ int32_t	init_first_pipe(int32_t *pipe_fds)
 	return (SUCCESS);
 }
 
-int32_t	prepare_next_pipe(int32_t *pipe_fds)
+int32_t	prepare_next_pipe(int32_t *pipe_fds, int32_t *std_fds, bool last)
 {
 	if (dup2(pipe_fds[0], STDIN_FILENO) == -1)
 		return (ERROR);
 	close(pipe_fds[0]);
-	if (pipe(pipe_fds) == -1)
-		return (ERROR);
-	if (dup2(pipe_fds[1], STDOUT_FILENO) == -1)
-		return (ERROR);
-	close(pipe_fds[1]);
+	if (last)
+	{
+		if (dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO) == -1)
+			return (ERROR);
+	}
+	else
+	{
+		if (pipe(pipe_fds) == -1)
+			return (ERROR);
+		if (dup2(pipe_fds[1], STDOUT_FILENO) == -1)
+			return (ERROR);
+		close(pipe_fds[1]);
+	}
 	return (SUCCESS);
 }
 
@@ -167,49 +168,45 @@ int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds, char **envp)
 		pid = fork();
 		if (pid == 0)
 			execute_command(cmd, envp);
-		// ft_lstadd_backnew(&pids, (void *)&pid);
-		free(cmd);
+		free(cmd); // Leaks content should also be freed as this is the parent
 		cmd = get_next_command(ct);
+		if (!cmd)
+			break ;
 		if (ct->commands)
-			prepare_next_pipe(pipe_fds);
-		else if (cmd)
-		{
-			if (dup2(pipe_fds[0], STDIN_FILENO) == -1)
-				return (ERROR);
-			close(pipe_fds[0]);
-			if (dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO) == -1)
-				return (ERROR);
-		}
+			prepare_next_pipe(pipe_fds, std_fds, false);
+		else
+			prepare_next_pipe(pipe_fds, std_fds, true);
 	}
 	return (wait_for_child_processes(pid));
 }
 
-int32_t	execute_command_table(t_command_table *ct, int32_t *std_fds, char **envp)
+int32_t	execute_command_table(t_command_table *ct,
+	int32_t *std_fds, t_minishell *shell)
 {
 	if (ct->commands->next == NULL)
-		return (execute_simple_command(get_next_command(ct), envp));
-	return (execute_pipeline(ct, std_fds, envp));
+		return (execute_simple_command(get_next_command(ct), shell->env));
+	return (execute_pipeline(ct, std_fds, shell->env));
 }
 
-int32_t	executor(t_list *ast, char **envp)
+int32_t	executor(t_minishell *shell)
 {
 	t_command_table	*ct;
 	int32_t			status;
 	int32_t			std_fds[2];
 
 	status = 0;
-	ct = get_next_command_table(&ast);
+	ct = get_next_command_table(&shell->ast);
+	std_fds[STDIN_FILENO] = dup(STDIN_FILENO);
+	std_fds[STDOUT_FILENO] = dup(STDOUT_FILENO);
 	while (ct)
 	{
-		std_fds[STDIN_FILENO] = dup(STDIN_FILENO);
-		std_fds[STDOUT_FILENO] = dup(STDOUT_FILENO);
-		status = execute_command_table(ct, std_fds, envp);
+		status = execute_command_table(ct, std_fds, shell);
 		free(ct);
-		ct = get_next_command_table(&ast);
+		ct = get_next_command_table(&shell->ast);
 		dup2(std_fds[STDIN_FILENO], STDIN_FILENO);
 		dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO);
-		close(std_fds[STDIN_FILENO]);
-		close(std_fds[STDOUT_FILENO]);
 	}
+	close(std_fds[STDIN_FILENO]);
+	close(std_fds[STDOUT_FILENO]);
 	return (status);
 }

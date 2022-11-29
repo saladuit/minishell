@@ -6,7 +6,7 @@
 /*   By: safoh <safoh@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 16:04:29 by safoh         #+#    #+#                 */
-/*   Updated: 2022/11/22 12:24:13 by dritsema      ########   odam.nl         */
+/*   Updated: 2022/11/29 14:01:04 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <redir.h>
 
 int32_t		execute(char *command_path, char **args, char **envp);
-int32_t		executor(t_list *abstract_syntax_tree, char **envp);
+int32_t		executor(t_minishell *shell);
 bool		protected_dup2(int fd, t_type type);
 bool		open_redir(char *path, t_type type);
 char		*get_redir_file(t_command *command, t_type type);

@@ -9,7 +9,6 @@
 
 typedef struct s_command
 {
-	int32_t	arg_count;
 	t_list	*arguments;
 	t_list	*redirs;
 }	t_command;

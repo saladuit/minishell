@@ -18,6 +18,6 @@ typedef struct s_minishell
 
 char	**dup_envp(char **envp);
 int32_t	init_handlers(void);
-int32_t	minishell(char **envp);
+int32_t	minishell(t_minishell *shell, char **envp);
 
 #endif

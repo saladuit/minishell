@@ -15,7 +15,6 @@ SRCS			=minishell.c \
 				 utils/ft_isredir.c \
 				 utils/ft_isdelimiter.c \
 				 utils/ft_ismetachar.c \
-				 ft_tree.c \
 				 builtins/echo.c \
 				 builtins/cd.c \
 				 builtins/pwd.c \

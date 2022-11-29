@@ -1,0 +1,8 @@
+NAME			:=minishell
+all: $(NAME)
+$(NAME): SHELL :=/bin/bash
+$(NAME): $(OBJS) $(MAIN_OBJ) $(LIBFT)
+	$(CC) $(CFLAGS) -L /Users/$(USER)/.brew/opt/readline/lib -lreadline $^ $(INCLUDE_FLAGS) -o $(NAME)
+	@printf "$(BLUE_FG)$(NAME)$(RESET_COLOR) created\n"
+	@$(RM) $(NAME)
+	valgrind --leak-check=full ./$(NAME)
