@@ -1,7 +1,16 @@
+#include <stdlib.h>
+#include <stdio.h>
 
-int ft_env(char **arguments, char **envp)
+int	ft_env(char **arguments, char **envp)
 {
+	int32_t	i;
+
 	(void)arguments;
-	(void)envp;
+	i = 0;
+	while (envp[i])
+	{
+		printf("%s\n", envp[i]);
+		i++;
+	}
 	return (0);
 }

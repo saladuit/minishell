@@ -12,9 +12,12 @@ int	main(int argc, char **argv, char **envp)
 	t_minishell	sheldon;
 
 	(void)argv;
-	sheldon.exit_code = 0;
 	if (argc > 1)
 		ft_minishell_exit(USAGE);
+	sheldon.env = dup_envp(envp);
+	if (sheldon.env == NULL)
+		return (ft_minishell_exit(EMALLOC));
+	sheldon.exit_code = 0;
 	while (1)
-		minishell(&sheldon, envp);
+		minishell(&sheldon);
 }

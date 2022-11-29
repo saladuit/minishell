@@ -81,6 +81,7 @@ int32_t	wait_for_child_processes(pid_t pid)
 	return (WEXITSTATUS(status));
 }
 
+// Needs to always exit even if it is builtin
 int32_t	execute_command(t_command *cmd, char **envp)
 {
 	int32_t	status;
@@ -90,9 +91,9 @@ int32_t	execute_command(t_command *cmd, char **envp)
 	arguments = get_arguments(cmd);
 	setup_redirects(cmd);
 	status = execute_builtin(arguments, envp);
-	free(cmd);
+	free(cmd); // TODO Fix leaks if any.
 	if (status >= 0)
-		return (status);
+		exit(status);
 	command_path = get_cmd_path(envp, arguments[0]);
 	if (access(command_path, X_OK))
 		printf("%s: %s: %s\n", "Minishell", arguments[0], "Command not found"); // TODO stderr
