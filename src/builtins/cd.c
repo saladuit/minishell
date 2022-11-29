@@ -1,6 +1,8 @@
-int ft_cd(char **arguments, char **envp)
+#include <minishell.h>
+
+int ft_cd(char **arguments, t_minishell *shell)
 {
 	(void)arguments;
-	(void)envp;
+	(void)shell;
 	return (0);
 }

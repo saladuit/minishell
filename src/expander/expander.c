@@ -3,7 +3,7 @@
 #include <minishell.h>
 #include <lexer.h>
 
-char	*get_env_var(char **env, char *var_name, t_minishell *shell)
+char	*get_env_var(char *var_name, t_minishell *shell)
 {
 	int32_t	i;
 	int32_t	len;
@@ -19,12 +19,13 @@ char	*get_env_var(char **env, char *var_name, t_minishell *shell)
 		free(str);
 		str = ft_itoa(shell->exit_code);
 	}
-	while (env[i])
+	while (shell->env[i])
 	{
-		if (!ft_strncmp(env[i], var_name, len) && env[i][len] == '=')
+		if (!ft_strncmp(shell->env[i], var_name, len)
+			&& shell->env[i][len] == '=')
 		{
 			free(str);
-			str = ft_strdup(&env[i][len + 1]);
+			str = ft_strdup(&shell->env[i][len + 1]);
 		}
 		i++;
 	}
@@ -48,7 +49,7 @@ char	*expand_loop(char *content, char *expanded, t_minishell *shell)
 			if (!tmp)
 				return (NULL);
 			expanded = strjoin_free_free(expanded, tmp);
-			tmp = get_env_var(shell->env, &content[i + 1], shell);
+			tmp = get_env_var(&content[i + 1], shell);
 			if (!tmp)
 				return (NULL);
 			expanded = strjoin_free_free(expanded, tmp);

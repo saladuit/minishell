@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <libft.h>
+#include <minishell.h>
 
 static bool	validflag(char *flag)
 {
@@ -18,12 +19,12 @@ static bool	validflag(char *flag)
 	return (0);
 }
 
-int32_t	ft_echo(char **arguments, char **envp)
+int32_t	ft_echo(char **arguments, t_minishell *shell)
 {
 	int32_t	i;
 	bool	newline;
 
-	(void)envp;
+	(void)shell;
 	newline = true;
 	i = 1;
 	if (validflag(arguments[i]))

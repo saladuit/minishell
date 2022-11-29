@@ -60,14 +60,14 @@ t_builtin	builtin_lookup(char *cmd)
 	return (lookup[i]);
 }
 
-int32_t	execute_builtin(char **arguments, char **envp)
+int32_t	execute_builtin(char **arguments, t_minishell *shell)
 {
 	t_builtin	builtin_function;
 
 	builtin_function = builtin_lookup(arguments[0]);
 	if (builtin_function.name == NULL)
 		return (-1);
-	return (builtin_function.func(arguments, envp));
+	return (builtin_function.func(arguments, shell));
 }
 
 int32_t	wait_for_child_processes(pid_t pid)
@@ -82,7 +82,7 @@ int32_t	wait_for_child_processes(pid_t pid)
 }
 
 // Needs to always exit even if it is builtin
-int32_t	execute_command(t_command *cmd, char **envp)
+int32_t	execute_command(t_command *cmd, t_minishell *shell)
 {
 	int32_t	status;
 	char	**arguments;
@@ -90,18 +90,18 @@ int32_t	execute_command(t_command *cmd, char **envp)
 
 	arguments = get_arguments(cmd);
 	setup_redirects(cmd);
-	status = execute_builtin(arguments, envp);
+	status = execute_builtin(arguments, shell);
 	free(cmd); // TODO Fix leaks if any.
 	if (status >= 0)
 		exit(status);
-	command_path = get_cmd_path(envp, arguments[0]);
+	command_path = get_cmd_path(shell->env, arguments[0]);
 	if (access(command_path, X_OK))
 		printf("%s: %s: %s\n", "Minishell", arguments[0], "Command not found"); // TODO stderr
-	execve(command_path, arguments, envp);
+	execve(command_path, arguments, shell->env);
 	exit(127); // TODO make one func call
 }
 
-int32_t	execute_simple_command(t_command *cmd, char **envp)
+int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
 {
 	pid_t		pid;
 	int32_t		status;
@@ -111,16 +111,16 @@ int32_t	execute_simple_command(t_command *cmd, char **envp)
 	arguments = get_arguments(cmd);
 	setup_redirects(cmd);
 	free(cmd);
-	status = execute_builtin(arguments, envp);
+	status = execute_builtin(arguments, shell);
 	if (status >= 0)
 		return (status);
 	pid = fork();
 	if (pid != 0)
 		return (wait_for_child_processes(pid));
-	command_path = get_cmd_path(envp, arguments[0]);
+	command_path = get_cmd_path(shell->env, arguments[0]);
 	if (access(command_path, X_OK))
 		printf("%s: %s: %s\n", "Minishell", arguments[0], "Command not found"); // TODO stderr
-	execve(command_path, arguments, envp); // TODO make one func call
+	execve(command_path, arguments, shell->env); // TODO make one func call
 	exit(127);
 }
 
@@ -155,7 +155,7 @@ int32_t	prepare_next_pipe(int32_t *pipe_fds, int32_t *std_fds, bool last)
 	return (SUCCESS);
 }
 
-int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds, char **envp)
+int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *shell)
 {
 	t_command	*cmd;
 	int32_t		pipe_fds[2];
@@ -168,7 +168,7 @@ int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds, char **envp)
 	{
 		pid = fork();
 		if (pid == 0)
-			execute_command(cmd, envp);
+			execute_command(cmd, shell);
 		free(cmd); // Leaks content should also be freed as this is the parent
 		cmd = get_next_command(ct);
 		if (!cmd)
@@ -185,8 +185,8 @@ int32_t	execute_command_table(t_command_table *ct,
 	int32_t *std_fds, t_minishell *shell)
 {
 	if (ct->commands->next == NULL)
-		return (execute_simple_command(get_next_command(ct), shell->env));
-	return (execute_pipeline(ct, std_fds, shell->env));
+		return (execute_simple_command(get_next_command(ct), shell));
+	return (execute_pipeline(ct, std_fds, shell));
 }
 
 int32_t	executor(t_minishell *shell)
