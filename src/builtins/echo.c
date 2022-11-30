@@ -27,7 +27,7 @@ int32_t	ft_echo(char **arguments, t_minishell *shell)
 	(void)shell;
 	newline = true;
 	i = 1;
-	if (validflag(arguments[i]))
+	while (validflag(arguments[i]))
 	{
 		newline = false;
 		i++;
