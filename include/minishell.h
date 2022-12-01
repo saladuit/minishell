@@ -11,6 +11,7 @@
 typedef struct s_minishell
 {
 	char	**env;
+	char	**export;
 	int32_t	exit_code;
 	t_list	*ast;
 	t_list	*tokens;

@@ -8,7 +8,7 @@ static bool	validflag(char *flag)
 {
 	int32_t	i;
 
-	if (flag[0] == '-')
+	if (flag && flag[0] == '-')
 	{
 		i = 1;
 		while (flag[i] && flag[i] == 'n')

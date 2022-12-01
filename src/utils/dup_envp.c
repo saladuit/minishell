@@ -10,7 +10,7 @@ char	**dup_envp(char **envp)
 	i = 0;
 	while (envp[i])
 		i++;
-	env = malloc((i + 1) * sizeof(char *));
+	env = calloc((i + 1), sizeof(char *));
 	if (!env)
 		return (NULL);
 	i = 0;
