@@ -1,5 +1,7 @@
 #include <message.h>
 #include <expander.h>
+#include <minitype.h>
+#include <minishell.h>
 #include <lexer.h>
 #include <stdio.h>
 
@@ -181,9 +183,23 @@ int32_t	expander(t_minishell *shell)
 	ast = shell->ast;
 	while (ast)
 	{
-		cmd_table = (t_command_table *)shell->ast->content;
-		expand_cmd_table(cmd_table);
-		ast = ast->next;
+		content = (char *)tokens->content;
+		if (ft_strbapi(content, is_double_quote))
+		{
+			content = trim_quotes(content);
+			if (check_expand(content))
+				content = expand(content, shell);
+		}
+		else if (ft_strbapi(content, is_single_quote))
+		{
+			content = trim_quotes(content);
+		}
+		else if (check_expand(content))
+			content = expand(content, shell);
+		if (!content)
+			return (EMALLOC);
+		tokens->content = (void *)content;
+		tokens = tokens->next;
 	}
 	return (SUCCESS);
 }

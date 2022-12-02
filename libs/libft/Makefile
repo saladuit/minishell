@@ -84,6 +84,7 @@ SRC_STR		=	str/ft_split.c \
 				str/ft_strlcat.c \
 				str/ft_strlcpy.c \
 				str/ft_strlen.c \
+				str/ft_strbapi.c \
 				str/ft_strmapi.c \
 				str/ft_strncmp.c \
 				str/ft_strnstr.c \

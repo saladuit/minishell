@@ -1,30 +1,26 @@
 #include <expander.h>
+#include <minitype.h>
 #include <stdbool.h>
 
 bool	valid_varchar(char c)
 {
-	return (!ft_iswhitespace(c) && !is_quotechar(c) && c);
+	return (!ft_iswhitespace(c) && !is_quote(c) && c);
 }
 
-int32_t	is_double_quoted(char *str)
+int32_t	check_expand(char *str)
 {
-	if (*str == '\"')
+	int32_t	i;
+
+	i = 0;
+	while (str[i])
 	{
-		if (str[ft_strlen(str) - 1] == '\"')
+		if (str[i] == '$')
 			return (1);
+		i++;
 	}
 	return (0);
 }
 
-int32_t	is_single_quoted(char *str)
-{
-	if (*str == '\'')
-	{
-		if (str[ft_strlen(str) - 1] == '\'')
-			return (1);
-	}
-	return (0);
-}
 
 int32_t	check_expand(char *str)
 {

@@ -1,20 +1,25 @@
 SRCS			=minishell.c \
 				 lexer/lexer.c \
 				 parser/parser.c \
-				 redir.c \
-				 ast.c \
-				 command.c \
-				 command_table.c \
+				 parser/redir.c \
+				 parser/ast.c \
+				 parser/command.c \
+				 parser/command_table.c \
 				 expander/expander.c \
 				 expander/expander_utils.c \
 				 executor/executor.c \
 				 executor/execute_utils.c \
-				 message.c \
-				 signal_handler.c \
-				 utils/dup_envp.c \
-				 utils/ft_isredir.c \
-				 utils/ft_isdelimiter.c \
-				 utils/ft_ismetachar.c \
+				 utils/message.c \
+				 envp/dup_envp.c \
+				 types/is_delimiter.c \
+				 types/is_double_quote.c \
+				 types/is_double_quoted.c \
+				 types/is_expand.c \
+				 types/is_metachar.c \
+				 types/is_quote.c \
+				 types/is_redir.c \
+				 types/is_single_quote.c \
+				 types/is_single_quoted.c \
 				 builtins/echo.c \
 				 builtins/cd.c \
 				 builtins/pwd.c \
@@ -22,6 +27,7 @@ SRCS			=minishell.c \
 				 builtins/unset.c \
 				 builtins/env.c \
 				 builtins/exit.c \
+				 utils/signal.c
 
 MAIN 			:=main.c
 
@@ -53,7 +59,7 @@ HEADERS			=$(LIBFT_INCLUDE_DIR)/libft.h \
 				$(INCLUDE_DIR)/command_table.h \
 				$(INCLUDE_DIR)/message.h \
 				$(INCLUDE_DIR)/minitype.h \
-				$(INCLUDE_DIR)/ft_tree.h \
+				$(INCLUDE_DIR)/minisignal.h \
 				$(READLINE_INCLUDE_DIR)/readline.h
 
 INCLUDE_FLAGS	:=$(addprefix -I, $(sort $(dir $(HEADERS))))
