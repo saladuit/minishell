@@ -1,13 +1,13 @@
 #include <minishell.h>
 #include <expander.h>
 #include <executor.h>
-# include <ast.h>
-# include <lexer.h>
-# include <parser.h>
-# include <message.h>
-# include <stdlib.h>
-# include <astapi.h>
-# include <minisignal.h>
+#include <ast.h>
+#include <lexer.h>
+#include <parser.h>
+#include <message.h>
+#include <stdlib.h>
+#include <astapi.h>
+#include <minisignal.h>
 
 /*
  * Abstract_syntax_tree gathers one or more command tables
@@ -20,16 +20,10 @@ int32_t	minishell(t_minishell *sheldon)
 
 	setup_signals();
 	command_line = readline(messages_lookup(PROMPT));
-	if (!command_line)
-	{
-		ft_printf("EXIT\n");
-		return (EXIT_SUCCESS);
-	}
+	if (!command_line && ft_printf("exit"))
+		exit(E_GENERAL);
 	if (!*command_line)
-	{
-		ft_printf("empty\n");
 		return (SUCCESS);
-	}
 	lexer(command_line, &sheldon->tokens);
 	if (!sheldon->tokens)
 		return (SUCCESS);

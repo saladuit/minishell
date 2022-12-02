@@ -13,6 +13,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <astapi.h>
+#include <minisignal.h>
 
 int32_t	redirect(t_redir *redir, t_type type)
 {
@@ -82,12 +83,13 @@ int32_t	wait_for_child_processes(pid_t pid)
 }
 
 // Needs to always exit even if it is builtin
-int32_t	execute_command(t_command *cmd, t_minishell *shell)
+int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
 {
 	int32_t	status;
 	char	**arguments;
 	char	*command_path;
 
+	reset_signals();
 	arguments = get_arguments(cmd);
 	setup_redirects(cmd);
 	status = execute_builtin(arguments, shell);
@@ -117,6 +119,7 @@ int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
 	pid = fork();
 	if (pid != 0)
 		return (wait_for_child_processes(pid));
+	reset_signals();
 	command_path = get_cmd_path(shell->env, arguments[0]);
 	if (access(command_path, X_OK))
 		printf("%s: %s: %s\n", "Minishell", arguments[0], "Command not found"); // TODO stderr
@@ -168,7 +171,7 @@ int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *she
 	{
 		pid = fork();
 		if (pid == 0)
-			execute_command(cmd, shell);
+			execute_pipe_command(cmd, shell);
 		free(cmd); // Leaks content should also be freed as this is the parent
 		cmd = get_next_command(ct);
 		if (!cmd)
