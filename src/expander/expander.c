@@ -1,5 +1,6 @@
 #include <message.h>
 #include <expander.h>
+#include <minitype.h>
 #include <minishell.h>
 #include <lexer.h>
 
@@ -101,13 +102,13 @@ int32_t	expander(t_minishell *shell)
 	while (tokens)
 	{
 		content = (char *)tokens->content;
-		if (is_double_quoted(content))
+		if (ft_strbapi(content, is_double_quote))
 		{
 			content = trim_quotes(content);
 			if (check_expand(content))
 				content = expand(content, shell);
 		}
-		else if (is_single_quoted(content))
+		else if (ft_strbapi(content, is_single_quote))
 		{
 			content = trim_quotes(content);
 		}
