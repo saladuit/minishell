@@ -141,6 +141,14 @@
 // 	return (SUCCESS);
 // }
 
+void	expand_cmd(t_command *cmd)
+{
+	t_list	*arg_list;
+	char	*content;
+
+	content = (char *)arg_list->content
+}
+
 void	expand_cmd_table(t_command_table *cmd_table)
 {
 	t_command	*cmd;
