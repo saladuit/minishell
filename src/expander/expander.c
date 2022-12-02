@@ -1,6 +1,5 @@
 #include <message.h>
 #include <expander.h>
-#include <minishell.h>
 #include <lexer.h>
 #include <stdio.h>
 
@@ -146,7 +145,8 @@ void	expand_cmd(t_command *cmd)
 	t_list	*arg_list;
 	char	*content;
 
-	content = (char *)arg_list->content
+	content = (char *)arg_list->content;
+
 }
 
 void	expand_cmd_table(t_command_table *cmd_table)
