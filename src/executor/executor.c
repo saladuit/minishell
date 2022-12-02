@@ -82,12 +82,21 @@ int32_t	wait_for_child_processes(pid_t pid)
 	return (WEXITSTATUS(status));
 }
 
+void	execute_child_command(t_minishell *shell, char **arguments)
+{
+	char	*command_path;
+
+	command_path = get_cmd_path(shell->env, arguments[0]);
+	if (access(command_path, X_OK))
+		printf("%s: %s: %s\n", "Minishell", arguments[0], "Command not found"); // TODO stderr
+	execve(command_path, arguments, shell->env);
+	exit(127); // TODO make one func call
+}
 // Needs to always exit even if it is builtin
 int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
 {
-	int32_t	status;
 	char	**arguments;
-	char	*command_path;
+	int32_t	status;
 
 	reset_signals();
 	arguments = get_arguments(cmd);
@@ -96,18 +105,14 @@ int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
 	free(cmd); // TODO Fix leaks if any.
 	if (status >= 0)
 		exit(status);
-	command_path = get_cmd_path(shell->env, arguments[0]);
-	if (access(command_path, X_OK))
-		printf("%s: %s: %s\n", "Minishell", arguments[0], "Command not found"); // TODO stderr
-	execve(command_path, arguments, shell->env);
-	exit(127); // TODO make one func call
+	execute_child_command(shell, arguments);
+	return (0);
 }
 
 int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
 {
 	pid_t		pid;
 	int32_t		status;
-	char		*command_path;
 	char		**arguments;
 
 	arguments = get_arguments(cmd);
@@ -120,11 +125,8 @@ int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
 	if (pid != 0)
 		return (wait_for_child_processes(pid));
 	reset_signals();
-	command_path = get_cmd_path(shell->env, arguments[0]);
-	if (access(command_path, X_OK))
-		printf("%s: %s: %s\n", "Minishell", arguments[0], "Command not found"); // TODO stderr
-	execve(command_path, arguments, shell->env); // TODO make one func call
-	exit(127);
+	execute_child_command(shell, arguments);
+	return (0);
 }
 
 int32_t	init_first_pipe(int32_t *pipe_fds)
