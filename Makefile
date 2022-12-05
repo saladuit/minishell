@@ -1,6 +1,5 @@
 include makerc/colours.mk
 include makerc/config.mk
-include unit_test/makerc/unit.mk
 
 ################################################################################
 
@@ -56,22 +55,6 @@ resan: fclean
 
 bonus: all
 
-mini_test: debug
-	@$(MAKE) debug -C $(UNIT_DIR)
-	@./$(UNIT_TEST) -j0
-#	@gcov $(addprefix build/, $(SRCS)) -n -b -f -a
-
-fsan_test: fsan
-	@$(MAKE) fsan -C $(UNIT_DIR)
-	@./$(UNIT_TEST) -j0
-#	@gcov $(addprefix build/, $(SRCS)) -n -b -f -a
-
-re_test: fclean
-	@$(MAKE) mini_test
-
-resan_test: fclean
-	@$(MAKE) fsan_test
-
 re_malloc_test: fclean
 	@$(MAKE) malloc_test
 
@@ -82,6 +65,6 @@ malloc_test: $(OBJS) $(MAIN_OBJ) $(LIBFT)
 valgrind: debug ## Launch valgrind
 	valgrind --leak-check=full ./$(NAME)
 
-.PHONY: all clean fclean re debug rebug valgrind malloc_test re_malloc_test fsan resan mini_test remini_test
+.PHONY: all clean fclean re debug rebug valgrind malloc_test re_malloc_test fsan resan
 
 ################################################################################
