@@ -1,5 +1,4 @@
 #include <minishell.h>
-#include <libft.h>
 
 // static int	in_env(char *var_name, char **env)
 // {

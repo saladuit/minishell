@@ -1,7 +1,3 @@
-#include <unistd.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <libft.h>
 #include <minishell.h>
 
 int ft_pwd(char **arguments, t_minishell *shell)

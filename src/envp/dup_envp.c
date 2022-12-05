@@ -1,6 +1,4 @@
 #include <minishell.h>
-#include <stdlib.h>
-#include <unistd.h>
 
 char	**dup_envp(char **envp)
 {
