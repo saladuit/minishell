@@ -21,3 +21,12 @@ void	reset_signals(void)
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 }
+
+void setup_interactive_mode_signals(void)
+{
+	struct sigaction sa;
+
+	sa.sa_flags = ;
+	sa.sa_mask = ;
+	sigaction(SIGINT, sa, NULL);
+}
