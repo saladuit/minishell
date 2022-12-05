@@ -6,7 +6,7 @@
 /*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/06/07 12:51:11 by dritsema      #+#    #+#                 */
-/*   Updated: 2022/12/02 15:11:01 by dritsema      ########   odam.nl         */
+/*   Updated: 2022/12/05 11:52:43 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,8 @@ char			*get_next_line(int fd);
  * @param s_list Pointer to the next link in the list. */
 typedef struct s_list
 {
-	void			*content;
 	struct s_list	*next;
+	void			*content;
 }	t_list;
 t_list			*ft_lstadd_backnew(t_list **lst, void *content);
 /**

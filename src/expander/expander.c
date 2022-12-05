@@ -1,89 +1,89 @@
 #include <minishell.h>
 
-// char	*get_env_var(char *var_name, t_minishell *shell)
-// {
-// 	int32_t	i;
-// 	int32_t	len;
-// 	char	*str;
+char	*get_env_var(char *var_name, t_minishell *shell)
+{
+	int32_t	i;
+	int32_t	len;
+	char	*str;
 
-// 	i = 0;
-// 	len = 0;
-// 	str = calloc(1, 1);
-// 	while (var_name[len] && valid_varchar(var_name[len]))
-// 		len++;
-// 	if (!ft_strncmp(var_name, "?", len))
-// 	{
-// 		free(str);
-// 		str = ft_itoa(shell->exit_code);
-// 	}
-// 	while (shell->env[i])
-// 	{
-// 		if (!ft_strncmp(shell->env[i], var_name, len)
-// 			&& shell->env[i][len] == '=')
-// 		{
-// 			free(str);
-// 			str = ft_strdup(&shell->env[i][len + 1]);
-// 		}
-// 		i++;
-// 	}
-// 	return (str);
-// }
+	i = 0;
+	len = 0;
+	str = calloc(1, 1);
+	while (var_name[len] && valid_varchar(var_name[len]))
+		len++;
+	if (!ft_strncmp(var_name, "?", len))
+	{
+		free(str);
+		str = ft_itoa(shell->exit_code);
+	}
+	while (shell->env[i])
+	{
+		if (!ft_strncmp(shell->env[i], var_name, len)
+			&& shell->env[i][len] == '=')
+		{
+			free(str);
+			str = ft_strdup(&shell->env[i][len + 1]);
+		}
+		i++;
+	}
+	return (str);
+}
 
-// char	*expand_loop(char *content, char *expanded, t_minishell *shell)
-// {
-// 	int32_t	i;
-// 	int32_t	start;
-// 	char	*tmp;
+char	*expand_loop(char *content, char *expanded, t_minishell *shell)
+{
+	int32_t	i;
+	int32_t	start;
+	char	*tmp;
 
-// 	i = 0;
-// 	while (content[i])
-// 	{
-// 		while (content[i] != '$' && content[i])
-// 			i++;
-// 		if (content[i] == '$')
-// 		{
-// 			tmp = ft_substr(content, start, i);
-// 			if (!tmp)
-// 				return (NULL);
-// 			expanded = strjoin_free_free(expanded, tmp);
-// 			tmp = get_env_var(&content[i + 1], shell);
-// 			if (!tmp)
-// 				return (NULL);
-// 			expanded = strjoin_free_free(expanded, tmp);
-// 			while (valid_varchar(content[i]))
-// 				i++;
-// 			start = i;
-// 		}
-// 	}
-// 	return (ft_strjoin_free(expanded, &content[start]));
-// }
+	i = 0;
+	while (content[i])
+	{
+		while (content[i] != '$' && content[i])
+			i++;
+		if (content[i] == '$')
+		{
+			tmp = ft_substr(content, start, i);
+			if (!tmp)
+				return (NULL);
+			expanded = strjoin_free_free(expanded, tmp);
+			tmp = get_env_var(&content[i + 1], shell);
+			if (!tmp)
+				return (NULL);
+			expanded = strjoin_free_free(expanded, tmp);
+			while (valid_varchar(content[i]))
+				i++;
+			start = i;
+		}
+	}
+	return (ft_strjoin_free(expanded, &content[start]));
+}
 
-// char	*expand(char *content, t_minishell *shell)
-// {
-// 	char	*expanded;
+char	*expand(char *content, t_minishell *shell)
+{
+	char	*expanded;
 
-// 	if (!content)
-// 		return (content);
-// 	expanded = calloc(1, 1);
-// 	if (expanded)
-// 		expanded = expand_loop(content, expanded, shell);
-// 	free(content);
-// 	return (expanded);
-// }
+	if (!content)
+		return (content);
+	expanded = calloc(1, 1);
+	if (expanded)
+		expanded = expand_loop(content, expanded, shell);
+	// free(content);
+	return (expanded);
+}
 
-// char	*trim_quotes(char *str)
-// {
-// 	int32_t	len;
-// 	char	*new_str;
+char	*trim_quotes(char *str)
+{
+	int32_t	len;
+	char	*new_str;
 
-// 	len = ft_strlen(str);
-// 	new_str = malloc((len - 1) * sizeof(char));
-// 	if (!new_str)
-// 		return (NULL);
-// 	ft_strlcpy(new_str, str + 1, len - 1);
-// 	free(str);
-// 	return (new_str);
-// }
+	len = ft_strlen(str);
+	new_str = malloc((len - 1) * sizeof(char));
+	if (!new_str)
+		return (NULL);
+	ft_strlcpy(new_str, str + 1, len - 1);
+	free(str);
+	return (new_str);
+}
 
 // void	pop_token(t_list **token, t_list *prev_token, t_minishell *shell)
 // {
@@ -107,59 +107,167 @@
 // */
 // int32_t	expander(t_minishell *shell)
 // {
-// 	t_list	*tokens;
-// 	t_list	*previous_token;
 // 	char	*content;
 
-// 	tokens = shell->tokens;
-// 	while (tokens)
+// 	if (is_double_quoted(content) || is_single_quoted(content))
 // 	{
-// 		content = (char *)tokens->content;
-// 		if (is_double_quoted(content) || is_single_quoted(content))
-// 		{
-// 			if (!is_single_quoted(content) && check_expand(content))
-// 				content = expand(content, shell);
-// 			content = trim_quotes(content);
-// 		}
-// 		else if (check_expand(content))
+// 		if (!is_single_quoted(content) && check_expand(content))
 // 			content = expand(content, shell);
-// 		if (!content)
-// 			return (EMALLOC);
-// 		if (!*content)
-// 			pop_token(&tokens, previous_token, shell);
-// 		else
-// 		{
-// 			tokens->content = (void *)content;
-// 			previous_token = tokens;
-// 			tokens = tokens->next;
-// 		}
+// 		content = trim_quotes(content);
 // 	}
+// 	else if (check_expand(content))
+// 		content = expand(content, shell);
+// 	if (!content)
+// 		return (EMALLOC);
 // 	return (SUCCESS);
 // }
 
+static int32_t	split_count(char *str)
+{
+	int32_t	i;
 
-//void	expand_cmd(t_command *cmd)
-//{
-//	t_list	*arg_list;
-//	char	*content;
-//
-//	content = (char *)arg_list->content;
-//
-//}
+	i = 0;
+	while (*str)
+	{
+		while (ft_iswhitespace(*str))
+			str++;
+		if (*str)
+			i++;
+		while (!ft_iswhitespace(*str) && *str)
+			str++;
+	}
+	return (i);
+}
 
-//void	expand_cmd_table(t_command_table *cmd_table)
-//{
-//	t_command	*cmd;
-//	t_list		*iter;
-//
-//	iter = cmd_table->commands;
-//	while (iter)
-//	{
-//		cmd = (t_command *)iter->content;
-//		expand_cmd(cmd);
-//		iter = iter->next;
-//	}
-//}
+static char	*get_word(const char *str)
+{
+	char	*word;
+	size_t	word_len;
+
+	word_len = 0;
+	if (!ft_iswhitespace(str[word_len]))
+		word_len++;
+	word = ft_substr(str, 0, word_len);
+	if (!word)
+		return (NULL);
+	return (word);
+}
+
+char	**word_split(char *str)
+{
+	int32_t	i;
+	int32_t	j;
+	char	**split_words;
+
+	i = 0;
+	j = 0;
+	split_words = malloc((split_count(str) + 1) * sizeof(char *));
+	if (!split_words)
+		return (NULL);
+	while (str[i])
+	{
+		while (ft_iswhitespace(str[i]))
+			i++;
+		if (*str)
+		{
+			split_words[j] = get_word(&str[i]);
+			j++;
+		}
+		while (!ft_iswhitespace(str[i]) && str[i])
+			i++;
+	}
+	split_words[j] = NULL;
+	return (split_words);
+}
+
+char	**expand_str(char *str, t_minishell *shell)
+{
+	char	**expanded_str;
+
+	if (is_double_quoted(str) || is_single_quoted(str))
+	{
+		if (!is_single_quoted(str) && check_expand(str))
+			str = expand(str, shell);
+		str = trim_quotes(str);
+		expanded_str = malloc(2 * sizeof(char *));
+		if (str && expanded_str)
+		{
+			expanded_str[0] = str;
+			expanded_str[1] = NULL;
+		}
+	}
+	else if (check_expand(str))
+	{
+		str = expand(str, shell);
+		if (str)
+			expanded_str = word_split(str);
+	}
+	if (!str)
+		return (NULL);
+	return (expanded_str);
+}
+
+int32_t	expand_argument(t_list **arg_node, char *content, t_minishell *shell)
+{
+	t_list	*next;
+	char	**expanded_content;
+	int32_t	i;
+
+	i = 0;
+	expanded_content = expand_str(content, shell);
+	if (!expanded_content)
+		return (i);
+	(*arg_node)->content = (void *)expanded_content[i];
+	next = (*arg_node)->next;
+	i++;
+	while (expanded_content[i])
+	{
+		(*arg_node)->next = ft_lstnew(expanded_content[i]);
+		*arg_node = (*arg_node)->next;
+	}
+	(*arg_node)->next = next;
+	return (i);
+}
+
+void	expand_argument_list(t_list *arg_list, t_minishell *shell)
+{
+	char	*content;
+	int32_t	added_nodes;
+
+	added_nodes = 0;
+	while (arg_list)
+	{
+		content = (char *)arg_list->content;
+		added_nodes = expand_argument(&arg_list, content, shell);
+		while (added_nodes)
+		{
+			arg_list = arg_list->next;
+			added_nodes--;
+		}
+	}
+}
+
+void	expand_cmd(t_command *cmd, t_minishell *shell)
+{
+	t_list	*arg_list;
+
+	arg_list = cmd->arguments;
+	expand_argument_list(arg_list, shell);
+}
+
+void	expand_cmd_table(t_command_table *cmd_table, t_minishell *shell)
+{
+	t_command	*cmd;
+	t_list		*iter;
+
+	iter = cmd_table->commands;
+	while (iter)
+	{
+		cmd = (t_command *)iter->content;
+		expand_cmd(cmd, shell);
+		iter = iter->next;
+	}
+}
 
 /* The expander needs to expand $variable name and $? depending on the quoting.
 	check if it is quoted.
@@ -171,17 +279,17 @@
 	No quotes? and it is a $variable?
 	Expand it into multiple arguments
 */
-//int32_t	expander(t_minishell *shell)
-//{
-//	t_command_table	*cmd_table;
-//	t_list			*ast;
-//
-//	ast = shell->ast;
-//	while (ast)
-//	{
-//		cmd_table = (t_command_table *)ast->content;
-//		expand_cmd_table(cmd_table);
-//		ast = ast->next;
-//	}
-//	return (SUCCESS);
-//}
+int32_t	expander(t_minishell *shell)
+{
+	t_command_table	*cmd_table;
+	t_list			*ast;
+
+	ast = shell->ast;
+	while (ast)
+	{
+		cmd_table = (t_command_table *)ast->content;
+		expand_cmd_table(cmd_table, shell);
+		ast = ast->next;
+	}
+	return (SUCCESS);
+}

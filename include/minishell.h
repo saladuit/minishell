@@ -102,6 +102,11 @@ typedef struct s_builtin
 	int (*func)(char **arguments, t_minishell *shell); //TODO turn into linked list to be able to change the content. NOOOOOO pls no linked list
 }	t_builtin;
 
+typedef struct s_env
+{
+	struct s_env	*next;
+}	t_env;
+
 
 // Main
 

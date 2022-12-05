@@ -53,6 +53,7 @@ int32_t	execute_builtin(char **arguments, t_minishell *shell)
 	builtin_function = builtin_lookup(arguments[0]);
 	if (builtin_function.name == NULL)
 		return (-1);
+	reset_signals();
 	return (builtin_function.func(arguments, shell));
 }
 
@@ -104,6 +105,7 @@ int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
 	setup_redirects(cmd);
 	free(cmd);
 	status = execute_builtin(arguments, shell);
+	setup_signals();
 	if (status >= 0)
 		return (status);
 	pid = fork();
