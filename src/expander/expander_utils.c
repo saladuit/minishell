@@ -22,6 +22,20 @@ int32_t	check_expand(char *str)
 }
 
 
+int32_t	check_expand(char *str)
+{
+	int32_t	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '$')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 char	*strjoin_free_free(char *expanded, char *tmp)
 {
 	expanded = ft_strjoin_free(expanded, tmp);

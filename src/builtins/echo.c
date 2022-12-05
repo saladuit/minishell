@@ -8,7 +8,7 @@ static bool	validflag(char *flag)
 {
 	int32_t	i;
 
-	if (flag[0] == '-')
+	if (flag && flag[0] == '-')
 	{
 		i = 1;
 		while (flag[i] && flag[i] == 'n')
@@ -27,7 +27,7 @@ int32_t	ft_echo(char **arguments, t_minishell *shell)
 	(void)shell;
 	newline = true;
 	i = 1;
-	if (validflag(arguments[i]))
+	while (validflag(arguments[i]))
 	{
 		newline = false;
 		i++;

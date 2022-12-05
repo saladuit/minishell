@@ -8,19 +8,17 @@
 
 typedef struct s_command_table
 {
-    int32_t	command_count;
-    t_list*	commands;
+	int32_t	command_count;
+	t_list	*commands;
 }	t_command_table;
 
-
-/*
- * @brief Returns a Command Table  made from the tokens provides. 
+/**
+ * @brief Returns a Command Table  made from the tokens provides.
  * Exits on failure
- * 
+ *
  * @param ast		-	Abstract Syntax Tree to iterate over
  * @return 			-	Constructed Command Table
  */
-
 t_command_table	*construct_command_table(t_list **tokens);
 
 #endif

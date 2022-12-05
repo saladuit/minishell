@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   libft.h                                         |o_o || |                */
+/*   libft.h                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: dritsema <dritsema@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/06/07 12:51:11 by dritsema      #+#    #+#                 */
-/*   Updated: 2022/12/02 13:38:40 by safoh        \___)=(___/                 */
+/*   Updated: 2022/12/02 15:11:01 by dritsema      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -396,7 +396,7 @@ size_t			ft_strlen(const char *s);
  * @param f The function to apply to each character.
  * @return Whether the character is found.
  * */
-bool	ft_strbapi(char const *s, bool (*f)(int));
+bool			ft_strbapi(char const *s, bool (*f)(int));
 /**
  * @brief Applies the function ’f’ to each character of the string ’s’,
  * and passing its index as first argument to create a new string (with malloc)
