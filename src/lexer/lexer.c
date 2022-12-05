@@ -1,7 +1,4 @@
-#include "libft.h"
-#include <lexer.h>
-#include <message.h>
-#include <stdbool.h>
+# include <minishell.h>
 // Meta characters: SPACE, TAB, NEWLINE, ;, (, ), <, >, |, &.
 // Types of tokens: words, keywords, I/O redirectors, and semicolons.
 

@@ -1,5 +1,4 @@
-#include <minitype.h>
-#include <stdbool.h>
+#include <minishell.h>
 
 bool	is_quote(int c)
 {

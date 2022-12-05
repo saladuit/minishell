@@ -1,19 +1,4 @@
-#include <command_table.h>
-#include <builtins.h>
-#include "minishell.h"
-#include <executor.h>
-#include <message.h>
-#include <redir.h>
-#include <unistd.h>
-#include <libft.h>
-#include <stdio.h>
-#include <errno.h>
-#include <string.h>
-#include <signal.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <astapi.h>
-#include <minisignal.h>
+#include <minishell.h>
 
 int32_t	redirect(t_redir *redir, t_type type)
 {

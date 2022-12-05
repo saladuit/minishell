@@ -48,19 +48,7 @@ MAIN_OBJ		=$(addprefix $(BUILD_DIR)/, $(MAIN:%.c=%.o))
 
 HEADERS			=$(LIBFT_INCLUDE_DIR)/libft.h \
 				$(INCLUDE_DIR)/minishell.h \
-				$(INCLUDE_DIR)/executor.h \
-				$(INCLUDE_DIR)/builtins.h \
-				$(INCLUDE_DIR)/expander.h \
-				$(INCLUDE_DIR)/lexer.h \
-				$(INCLUDE_DIR)/parser.h \
-				$(INCLUDE_DIR)/redir.h \
-				$(INCLUDE_DIR)/ast.h \
-				$(INCLUDE_DIR)/command.h \
-				$(INCLUDE_DIR)/command_table.h \
-				$(INCLUDE_DIR)/message.h \
-				$(INCLUDE_DIR)/minitype.h \
-				$(INCLUDE_DIR)/minisignal.h \
-				$(READLINE_INCLUDE_DIR)/readline.h
+				$(READLINE_INCLUDE_DIR)/readline.h \
 
 INCLUDE_FLAGS	:=$(addprefix -I, $(sort $(dir $(HEADERS))))
 

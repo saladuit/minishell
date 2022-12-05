@@ -1,5 +1,4 @@
-#include <libft.h>
-#include <minitype.h>
+#include <minishell.h>
 
 bool	is_single_quoted(char *str)
 {

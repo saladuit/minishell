@@ -1,5 +1,4 @@
 #include <minishell.h>
-#include <message.h>
 
 /* Start of program responsible for
  * handling the hightest form of abstractions, namely

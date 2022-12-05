@@ -1,13 +1,4 @@
 #include <minishell.h>
-#include <expander.h>
-#include <executor.h>
-#include <ast.h>
-#include <lexer.h>
-#include <parser.h>
-#include <message.h>
-#include <stdlib.h>
-#include <astapi.h>
-#include <minisignal.h>
 
 /*
  * Abstract_syntax_tree gathers one or more command tables
@@ -31,7 +22,7 @@ int32_t	minishell(t_minishell *sheldon)
 	// if (!sheldon->tokens)
 	// 	return (SUCCESS);
 	sheldon->ast = parser(sheldon->tokens);
-	expander(sheldon);
+//	expander(sheldon);
 	sheldon->exit_code = executor(sheldon);
 	ft_lstclear(&sheldon->tokens, free);
 	add_history(command_line);

@@ -10,61 +10,10 @@
 # include <sys/wait.h>
 # include <stdbool.h>
 # include <unistd.h>
+# include <fcntl.h>
 # include <stdlib.h>
 # include <libft.h>
-
-// Ministructs
-
-typedef struct s_minishell
-{
-	char	**env;
-	char	**export;
-	int32_t	exit_code;
-	t_list	*ast;
-	t_list	*tokens;
-
-}	t_minishell;
-
-typedef struct s_redir
-{
-	char	*filename;
-	t_type	type;
-}	t_redir;
-
-typedef struct s_command
-{
-	t_list	*arguments;
-	t_list	*redirs;
-}	t_command;
-
-typedef struct s_command_table
-{
-	int32_t	command_count;
-	t_list	*commands;
-}	t_command_table;
-
-typedef struct s_builtin
-{
-	const char *name;
-	int (*func)(char **arguments, t_minishell *shell); //TODO turn into linked list to be able to change the content. NOOOOOO pls no linked list
-}	t_builtin;
-
-typedef enum e_message
-{
-	SUCCESS,
-	USAGE,
-	PROMPT,
-	EMALLOC,
-	EREQUEST,
-	ETYPE,
-}	t_message;
-typedef enum e_type
-{
-	INPUT,
-	OUTPUT,
-	APPEND,
-	HEREDOC
-}	t_type;
+# include <errno.h>
 
 /*
 E_GENERAL:
@@ -98,6 +47,62 @@ typedef enum e_exitcodes
 	E_EXIT_STATUS_OUT_OF_RANGE = 225
 }	t_exitcodes;
 
+typedef enum e_message
+{
+	SUCCESS,
+	USAGE,
+	PROMPT,
+	EMALLOC,
+	EREQUEST,
+	ETYPE,
+}	t_message;
+
+typedef enum e_type
+{
+	INPUT,
+	OUTPUT,
+	APPEND,
+	HEREDOC
+}	t_type;
+
+// Ministructs
+
+typedef struct s_minishell
+{
+	char	**env;
+	char	**export;
+	int32_t	exit_code;
+	t_list	*ast;
+	t_list	*tokens;
+
+}	t_minishell;
+
+
+typedef struct s_redir
+{
+	char	*filename;
+	t_type	type;
+}	t_redir;
+
+typedef struct s_command
+{
+	t_list	*arguments;
+	t_list	*redirs;
+}	t_command;
+
+typedef struct s_command_table
+{
+	int32_t	command_count;
+	t_list	*commands;
+}	t_command_table;
+
+typedef struct s_builtin
+{
+	const char *name;
+	int (*func)(char **arguments, t_minishell *shell); //TODO turn into linked list to be able to change the content. NOOOOOO pls no linked list
+}	t_builtin;
+
+
 // Main
 
 int32_t			minishell(t_minishell *shell);
@@ -105,6 +110,7 @@ int32_t			init_handlers(void);
 int32_t			ft_minishell_exit(t_message code);
 char			**dup_envp(char **envp);
 void			setup_signals(void);
+void			reset_signals(void);
 
 // Messages
 

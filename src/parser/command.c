@@ -1,6 +1,4 @@
-#include "command_table.h"
-#include "libft.h"
-#include <command.h>
+#include <minishell.h>
 
 char	**get_arguments(t_command *cmd)
 {

@@ -1,10 +1,4 @@
-#include <message.h>
-#include <expander.h>
-#include <minitype.h>
 #include <minishell.h>
-#include <ast.h>
-#include <lexer.h>
-#include <stdio.h>
 
 // char	*get_env_var(char *var_name, t_minishell *shell)
 // {
@@ -143,30 +137,29 @@
 // 	return (SUCCESS);
 // }
 
-void
 
-void	expand_cmd(t_command *cmd)
-{
-	t_list	*arg_list;
-	char	*content;
+//void	expand_cmd(t_command *cmd)
+//{
+//	t_list	*arg_list;
+//	char	*content;
+//
+//	content = (char *)arg_list->content;
+//
+//}
 
-	content = (char *)arg_list->content;
-
-}
-
-void	expand_cmd_table(t_command_table *cmd_table)
-{
-	t_command	*cmd;
-	t_list		*iter;
-
-	iter = cmd_table->commands;
-	while (iter)
-	{
-		cmd = (t_command *)iter->content;
-		expand_cmd(cmd);
-		iter = iter->next;
-	}
-}
+//void	expand_cmd_table(t_command_table *cmd_table)
+//{
+//	t_command	*cmd;
+//	t_list		*iter;
+//
+//	iter = cmd_table->commands;
+//	while (iter)
+//	{
+//		cmd = (t_command *)iter->content;
+//		expand_cmd(cmd);
+//		iter = iter->next;
+//	}
+//}
 
 /* The expander needs to expand $variable name and $? depending on the quoting.
 	check if it is quoted.
@@ -178,17 +171,17 @@ void	expand_cmd_table(t_command_table *cmd_table)
 	No quotes? and it is a $variable?
 	Expand it into multiple arguments
 */
-int32_t	expander(t_minishell *shell)
-{
-	t_command_table	*cmd_table;
-	t_list			*ast;
-
-	ast = shell->ast;
-	while (ast)
-	{
-		cmd_table = (t_command_table *)ast->content;
-		expand_cmd_table(cmd_table);
-		ast = ast->next;
-	}
-	return (SUCCESS);
-}
+//int32_t	expander(t_minishell *shell)
+//{
+//	t_command_table	*cmd_table;
+//	t_list			*ast;
+//
+//	ast = shell->ast;
+//	while (ast)
+//	{
+//		cmd_table = (t_command_table *)ast->content;
+//		expand_cmd_table(cmd_table);
+//		ast = ast->next;
+//	}
+//	return (SUCCESS);
+//}

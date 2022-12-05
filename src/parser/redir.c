@@ -1,6 +1,4 @@
-#include "message.h"
-#include <redir.h>
-
+#include <minishell.h>
 t_type	set_type(char *symbol, size_t len)
 {
 	if (!ft_strncmp("<", symbol, len))

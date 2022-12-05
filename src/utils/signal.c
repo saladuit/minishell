@@ -1,7 +1,5 @@
-#include <stdio.h>
+#include <minishell.h>
 #include <readline/readline.h>
-#include <signal.h>
-#include <sys/signal.h>
 
 void	sigint_handler(int sig)
 {
@@ -22,11 +20,11 @@ void	reset_signals(void)
 	signal(SIGQUIT, SIG_DFL);
 }
 
-void setup_interactive_mode_signals(void)
-{
-	struct sigaction sa;
-
-	sa.sa_flags = ;
-	sa.sa_mask = ;
-	sigaction(SIGINT, sa, NULL);
-}
+//void setup_interactive_mode_signals(void)
+//{
+//	struct sigaction sa;
+//
+//	sa.sa_flags = ;
+//	sa.sa_mask = ;
+//	sigaction(SIGINT, sa, NULL);
+//}

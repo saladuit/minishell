@@ -1,10 +1,4 @@
-#include <libft.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <string.h>
-#include <redir.h>
-#include <command.h>
+#include <minishell.h>
 
 
 int	is_dir(char *path)

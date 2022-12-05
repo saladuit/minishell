@@ -1,26 +1,9 @@
-#include <expander.h>
-#include <minitype.h>
-#include <stdbool.h>
+#include <minishell.h>
 
 bool	valid_varchar(char c)
 {
 	return (!ft_iswhitespace(c) && !is_quote(c) && c);
 }
-
-int32_t	check_expand(char *str)
-{
-	int32_t	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '$')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
 
 int32_t	check_expand(char *str)
 {

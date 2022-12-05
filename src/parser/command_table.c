@@ -1,6 +1,4 @@
-#include "libft.h"
-#include <command_table.h>
-#include <stdio.h>
+#include <minishell.h>
 
 t_command_table	*get_next_command_table(t_list **ast)
 {
