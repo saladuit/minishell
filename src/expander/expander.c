@@ -139,42 +139,53 @@ static int32_t	split_count(char *str)
 	return (i);
 }
 
-static char	*get_word(const char *str)
-{
-	char	*word;
-	size_t	word_len;
+// static char	*get_word(const char *str)
+// {
+// 	char	*word;
+// 	size_t	word_len;
 
-	word_len = 0;
-	if (!ft_iswhitespace(str[word_len]))
-		word_len++;
-	word = ft_substr(str, 0, word_len);
-	if (!word)
-		return (NULL);
-	return (word);
-}
+// 	word_len = 0;
+// 	while (!ft_iswhitespace(str[word_len]))
+// 		word_len++;
+// 	word = ft_substr(str, 0, word_len);
+// 	if (!word)
+// 		return (NULL);
+// 	return (word);
+// }
 
 char	**word_split(char *str)
 {
 	int32_t	i;
 	int32_t	j;
+	int32_t	count;
 	char	**split_words;
 
 	i = 0;
 	j = 0;
-	split_words = malloc((split_count(str) + 1) * sizeof(char *));
+	count = split_count(str);
+	split_words = malloc((count + 1) * sizeof(char *));
+	printf("%i\n", count);
 	if (!split_words)
 		return (NULL);
 	while (str[i])
 	{
-		while (ft_iswhitespace(str[i]))
-			i++;
-		if (*str)
-		{
-			split_words[j] = get_word(&str[i]);
-			j++;
-		}
-		while (!ft_iswhitespace(str[i]) && str[i])
-			i++;
+		// while (ft_iswhitespace(str[i]))
+		// {
+		// 	printf("%i\n", i);
+		// 	i++;
+		// }
+		// if (*str)
+		// {
+		// 	split_words[j] = get_word(&str[i]);
+		// 	j++;
+		// }
+		// while (str[i] && !ft_iswhitespace(str[i]))
+		// {
+		// 	printf("%i\n", i);
+		// 	i++;
+		// }
+		printf("Iterating...");
+		i++;
 	}
 	split_words[j] = NULL;
 	return (split_words);
@@ -184,8 +195,11 @@ char	**expand_str(char *str, t_minishell *shell)
 {
 	char	**expanded_str;
 
+	expanded_str = NULL;
+	printf("->%s<-\n\n", str);
 	if (is_double_quoted(str) || is_single_quoted(str))
 	{
+		printf("Quoted\n");
 		if (!is_single_quoted(str) && check_expand(str))
 			str = expand(str, shell);
 		str = trim_quotes(str);
@@ -198,7 +212,9 @@ char	**expand_str(char *str, t_minishell *shell)
 	}
 	else if (check_expand(str))
 	{
+		printf("Not quoted\n");
 		str = expand(str, shell);
+		printf(">%s<\n", str);
 		if (str)
 			expanded_str = word_split(str);
 	}
@@ -216,7 +232,10 @@ int32_t	expand_argument(t_list **arg_node, char *content, t_minishell *shell)
 	i = 0;
 	expanded_content = expand_str(content, shell);
 	if (!expanded_content)
+	{
+		(*arg_node)->content = (void *)expanded_content;
 		return (i);
+	}
 	(*arg_node)->content = (void *)expanded_content[i];
 	next = (*arg_node)->next;
 	i++;
@@ -233,16 +252,31 @@ void	expand_argument_list(t_list *arg_list, t_minishell *shell)
 {
 	char	*content;
 	int32_t	added_nodes;
+	// t_list	*prev;
+	// t_list	*tmp;
 
 	added_nodes = 0;
+	// prev = arg_list;
 	while (arg_list)
 	{
 		content = (char *)arg_list->content;
 		added_nodes = expand_argument(&arg_list, content, shell);
+		// if (added_nodes == -1)
+		// {
+			// tmp = arg_list;
+			// arg_list = arg_list->next;
+			// prev->next = arg_list;
+			// free(arg_list);
+		// }
 		while (added_nodes)
 		{
 			arg_list = arg_list->next;
 			added_nodes--;
+		}
+		if (arg_list)
+		{
+			// prev = arg_list;
+			arg_list = arg_list->next;
 		}
 	}
 }

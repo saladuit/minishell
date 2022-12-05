@@ -53,7 +53,6 @@ int32_t	execute_builtin(char **arguments, t_minishell *shell)
 	builtin_function = builtin_lookup(arguments[0]);
 	if (builtin_function.name == NULL)
 		return (-1);
-	reset_signals();
 	return (builtin_function.func(arguments, shell));
 }
 
@@ -84,13 +83,13 @@ int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
 	char	**arguments;
 	int32_t	status;
 
-	reset_signals();
 	arguments = get_arguments(cmd);
 	setup_redirects(cmd);
 	status = execute_builtin(arguments, shell);
 	free(cmd); // TODO Fix leaks if any.
 	if (status >= 0)
 		exit(status);
+	reset_signals();
 	execute_child_command(shell, arguments);
 	return (0);
 }
@@ -104,6 +103,7 @@ int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
 	arguments = get_arguments(cmd);
 	setup_redirects(cmd);
 	free(cmd);
+	reset_signals();
 	status = execute_builtin(arguments, shell);
 	setup_signals();
 	if (status >= 0)
