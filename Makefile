@@ -31,12 +31,10 @@ $(LIBFT):
 clean:
 	@$(RM) $(OBJS) $(MAIN_OBJ)
 	@$(MAKE) clean -C $(LIBFT_DIR)
-	@$(MAKE) clean -C $(UNIT_DIR)
 
 fclean: clean
 	@$(RM) $(NAME)
 	@$(MAKE) fclean -C $(LIBFT_DIR)
-	@$(MAKE) fclean -C $(UNIT_DIR)
 
 re: fclean
 	@$(MAKE)
