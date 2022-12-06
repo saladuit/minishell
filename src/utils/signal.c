@@ -13,6 +13,7 @@ void	setup_signals(void)
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
 }
+
 void	reset_signals(void)
 {
 	signal(SIGINT, SIG_DFL);

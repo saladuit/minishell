@@ -2,7 +2,7 @@
 
 bool	valid_varchar(char c)
 {
-	return (!ft_iswhitespace(c) && !is_quote(c) && c);
+	return (ft_isalnum(c) || c == '_');
 }
 
 int32_t	check_expand(char *str)
@@ -12,7 +12,7 @@ int32_t	check_expand(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '$')
+		if (str[i] == '$' || str[i] == '~')
 			return (1);
 		i++;
 	}
