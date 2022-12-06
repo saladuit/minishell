@@ -2,7 +2,7 @@
 
 bool	valid_varchar(char c)
 {
-	return (!ft_iswhitespace(c) && !is_quote(c) && c);
+	return (ft_isalnum(c) || c == '_');
 }
 
 int32_t	check_expand(char *str)

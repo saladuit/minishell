@@ -18,7 +18,14 @@ char	*special_variable(char *var_name, t_minishell *shell)
 	}
 	else if (!ft_strncmp(var_name, "?", 1))
 		return (ft_itoa(shell->exit_code));
-	return (0);
+	if (ft_isdigit(var_name[i]))
+	{
+		i++;
+		while (valid_varchar(var_name[i]))
+			i++;
+		return (ft_substr(var_name, 1, i - 1));
+	}
+	return (NULL);
 }
 
 char	*get_env_var(char *var_name, t_minishell *shell)
@@ -32,7 +39,8 @@ char	*get_env_var(char *var_name, t_minishell *shell)
 		var_name++;
 	while (valid_varchar(var_name[len]))
 		len++;
-	if (!ft_strncmp(var_name, "?", len) || !ft_strncmp(var_name, "~", len))
+	if (!ft_strncmp(var_name, "?", len) || !ft_strncmp(var_name, "~", len)
+		|| ft_isdigit(var_name[0]))
 		return (special_variable(var_name, shell));
 	i = 0;
 	str = calloc(1, 1);
@@ -63,14 +71,11 @@ char	*expand_loop(char *content, char *expanded, t_minishell *shell)
 			i++;
 		if (!content[i])
 			break ;
-		tmp = ft_substr(content, start, i);
-		if (!tmp)
-			return (NULL);
+		tmp = ft_substr(content, start, i - start);
 		expanded = strjoin_free_free(expanded, tmp);
 		tmp = get_env_var(&content[i], shell);
-		if (!tmp)
-			return (NULL);
 		expanded = strjoin_free_free(expanded, tmp);
+		i++;
 		while (valid_varchar(content[i]))
 			i++;
 		start = i;
