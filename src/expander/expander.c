@@ -67,7 +67,7 @@ char	*expand(char *content, t_minishell *shell)
 	expanded = calloc(1, 1);
 	if (expanded)
 		expanded = expand_loop(content, expanded, shell);
-	// free(content);
+	free(content);
 	return (expanded);
 }
 
@@ -77,50 +77,47 @@ char	*trim_quotes(char *str)
 	char	*new_str;
 
 	len = ft_strlen(str);
-	new_str = malloc((len - 1) * sizeof(char));
+	new_str = malloc((len) * sizeof(char));
 	if (!new_str)
 		return (NULL);
-	ft_strlcpy(new_str, str + 1, len - 1);
+	ft_strlcpy(new_str, str, len);
 	free(str);
 	return (new_str);
 }
 
-// void	pop_token(t_list **token, t_list *prev_token, t_minishell *shell)
-// {
-// 	if (*token == shell->tokens)
-// 	{
-// 		shell->tokens = (*token)->next;
-// 		prev_token = *token;
-// 		*token = (*token)->next;
-// 		free(prev_token);
-// 		return ;
-// 	}
-// 	prev_token->next = (*token)->next;
-// 	free(*token);
-// 	*token = prev_token->next;
-// }
+/**
+ * @brief Pops a node from a list, frees content, the node itself
+ * and returns the address to the next node in the list.
+ *
+ * @param list The list from which to pop the node.
+ * @param node The node to be popped.
+ * @return t_list * pointer to the next node from the one that was popped.
+ *  NULL if it was the last node, 'pop_node' if the node was not in the list.
+ */
+t_list	*pop_node(t_list **list, t_list *pop_node)
+{
+	t_list	*tmp;
+	t_list	*prev;
 
-// /* The expander needs to expand $variable name and $? depending on the quoting.
-// 	remove outer quotes.
-
-
-// */
-// int32_t	expander(t_minishell *shell)
-// {
-// 	char	*content;
-
-// 	if (is_double_quoted(content) || is_single_quoted(content))
-// 	{
-// 		if (!is_single_quoted(content) && check_expand(content))
-// 			content = expand(content, shell);
-// 		content = trim_quotes(content);
-// 	}
-// 	else if (check_expand(content))
-// 		content = expand(content, shell);
-// 	if (!content)
-// 		return (EMALLOC);
-// 	return (SUCCESS);
-// }
+	tmp = *list;
+	prev = tmp;
+	while (tmp)
+	{
+		if (tmp == pop_node)
+		{
+			prev->next = tmp->next;
+			if (tmp == *list)
+				*list = tmp->next;
+			tmp = tmp->next;
+			free(pop_node->content);
+			free(pop_node);
+			return (tmp);
+		}
+		prev = tmp;
+		tmp = tmp->next;
+	}
+	return (pop_node);
+}
 
 static int32_t	split_count(char *str)
 {
@@ -139,19 +136,26 @@ static int32_t	split_count(char *str)
 	return (i);
 }
 
-// static char	*get_word(const char *str)
-// {
-// 	char	*word;
-// 	size_t	word_len;
+static char	*get_word(const char *str)
+{
+	char	*word;
+	size_t	word_len;
 
-// 	word_len = 0;
-// 	while (!ft_iswhitespace(str[word_len]))
-// 		word_len++;
-// 	word = ft_substr(str, 0, word_len);
-// 	if (!word)
-// 		return (NULL);
-// 	return (word);
-// }
+	word_len = 0;
+	while (!ft_iswhitespace(str[word_len]) && str[word_len])
+		word_len++;
+	word = ft_substr(str, 0, word_len);
+	if (!word)
+		return (NULL);
+	return (word);
+}
+
+bool	needs_expanding(char *str)
+{
+	return (is_double_quoted(str)
+		|| is_single_quoted(str)
+		|| check_expand(str));
+}
 
 char	**word_split(char *str)
 {
@@ -164,28 +168,19 @@ char	**word_split(char *str)
 	j = 0;
 	count = split_count(str);
 	split_words = malloc((count + 1) * sizeof(char *));
-	printf("%i\n", count);
 	if (!split_words)
 		return (NULL);
 	while (str[i])
 	{
-		// while (ft_iswhitespace(str[i]))
-		// {
-		// 	printf("%i\n", i);
-		// 	i++;
-		// }
-		// if (*str)
-		// {
-		// 	split_words[j] = get_word(&str[i]);
-		// 	j++;
-		// }
-		// while (str[i] && !ft_iswhitespace(str[i]))
-		// {
-		// 	printf("%i\n", i);
-		// 	i++;
-		// }
-		printf("Iterating...");
-		i++;
+		while (ft_iswhitespace(str[i]))
+			i++;
+		if (str[i])
+		{
+			split_words[j] = get_word(&str[i]);
+			j++;
+		}
+		while (str[i] && !ft_iswhitespace(str[i]))
+			i++;
 	}
 	split_words[j] = NULL;
 	return (split_words);
@@ -196,10 +191,8 @@ char	**expand_str(char *str, t_minishell *shell)
 	char	**expanded_str;
 
 	expanded_str = NULL;
-	printf("->%s<-\n\n", str);
 	if (is_double_quoted(str) || is_single_quoted(str))
 	{
-		printf("Quoted\n");
 		if (!is_single_quoted(str) && check_expand(str))
 			str = expand(str, shell);
 		str = trim_quotes(str);
@@ -212,9 +205,7 @@ char	**expand_str(char *str, t_minishell *shell)
 	}
 	else if (check_expand(str))
 	{
-		printf("Not quoted\n");
 		str = expand(str, shell);
-		printf(">%s<\n", str);
 		if (str)
 			expanded_str = word_split(str);
 	}
@@ -223,7 +214,7 @@ char	**expand_str(char *str, t_minishell *shell)
 	return (expanded_str);
 }
 
-int32_t	expand_argument(t_list **arg_node, char *content, t_minishell *shell)
+int32_t	expand_argument(t_list *arg_node, char *content, t_minishell *shell)
 {
 	t_list	*next;
 	char	**expanded_content;
@@ -231,62 +222,59 @@ int32_t	expand_argument(t_list **arg_node, char *content, t_minishell *shell)
 
 	i = 0;
 	expanded_content = expand_str(content, shell);
-	if (!expanded_content)
+	if (!expanded_content || !expanded_content[i])
 	{
-		(*arg_node)->content = (void *)expanded_content;
+		arg_node->content = (void *)expanded_content;
 		return (i);
 	}
-	(*arg_node)->content = (void *)expanded_content[i];
-	next = (*arg_node)->next;
+	arg_node->content = (void *)expanded_content[i];
+	next = arg_node->next;
 	i++;
 	while (expanded_content[i])
 	{
-		(*arg_node)->next = ft_lstnew(expanded_content[i]);
-		*arg_node = (*arg_node)->next;
+		arg_node->next = ft_lstnew(expanded_content[i]);
+		arg_node = arg_node->next;
+		i++;
 	}
-	(*arg_node)->next = next;
+	arg_node->next = next;
 	return (i);
 }
 
-void	expand_argument_list(t_list *arg_list, t_minishell *shell)
+void	expand_argument_list(t_list **arg_list, t_minishell *shell)
 {
-	char	*content;
 	int32_t	added_nodes;
-	// t_list	*prev;
-	// t_list	*tmp;
+	t_list	*node;
 
 	added_nodes = 0;
-	// prev = arg_list;
-	while (arg_list)
+	node = *arg_list;
+	while (node)
 	{
-		content = (char *)arg_list->content;
-		added_nodes = expand_argument(&arg_list, content, shell);
-		// if (added_nodes == -1)
-		// {
-			// tmp = arg_list;
-			// arg_list = arg_list->next;
-			// prev->next = arg_list;
-			// free(arg_list);
-		// }
-		while (added_nodes)
+		if (needs_expanding((char *)node->content))
 		{
-			arg_list = arg_list->next;
-			added_nodes--;
+			added_nodes = expand_argument(node, (char *)node->content, shell);
+			if (added_nodes == 0)
+				node = pop_node(arg_list, node);
 		}
-		if (arg_list)
+		if (added_nodes)
 		{
-			// prev = arg_list;
-			arg_list = arg_list->next;
+			while (added_nodes && node)
+			{
+				node = node->next;
+				added_nodes--;
+			}
 		}
+		else if (node)
+			node = node->next;
 	}
 }
 
 void	expand_cmd(t_command *cmd, t_minishell *shell)
 {
-	t_list	*arg_list;
+	t_list	**arg_list;
 
-	arg_list = cmd->arguments;
+	arg_list = &cmd->arguments;
 	expand_argument_list(arg_list, shell);
+	// expand_redirect_list(cmd->redirs, shell);
 }
 
 void	expand_cmd_table(t_command_table *cmd_table, t_minishell *shell)

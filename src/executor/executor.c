@@ -49,11 +49,14 @@ t_builtin	builtin_lookup(char *cmd)
 int32_t	execute_builtin(char **arguments, t_minishell *shell)
 {
 	t_builtin	builtin_function;
+	int32_t		ret;
 
 	builtin_function = builtin_lookup(arguments[0]);
 	if (builtin_function.name == NULL)
 		return (-1);
-	return (builtin_function.func(arguments, shell));
+	ret = builtin_function.func(arguments, shell);
+	ft_matrixfree(&arguments);
+	return (ret);
 }
 
 int32_t	wait_for_child_processes(pid_t pid)
@@ -85,6 +88,8 @@ int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
 
 	arguments = get_arguments(cmd);
 	setup_redirects(cmd);
+	if (!arguments)
+		exit(0);
 	status = execute_builtin(arguments, shell);
 	free(cmd); // TODO Fix leaks if any.
 	if (status >= 0)
@@ -104,6 +109,8 @@ int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
 	setup_redirects(cmd);
 	free(cmd);
 	reset_signals();
+	if (!arguments)
+		return (0);
 	status = execute_builtin(arguments, shell);
 	setup_signals();
 	if (status >= 0)
