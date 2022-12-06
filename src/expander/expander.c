@@ -1,21 +1,41 @@
 #include <minishell.h>
 
+char	*special_variable(char *var_name, t_minishell *shell)
+{
+	int32_t	i;
+
+	i = 0;
+	if (!ft_strncmp(var_name, "~", 1))
+	{
+		while (shell->env[i])
+		{
+			if (!ft_strncmp(shell->env[i], "HOME=", 5))
+			{
+				return (ft_strdup(&shell->env[i][5]));
+			}
+			i++;
+		}
+	}
+	else if (!ft_strncmp(var_name, "?", 1))
+		return (ft_itoa(shell->exit_code));
+	return (0);
+}
+
 char	*get_env_var(char *var_name, t_minishell *shell)
 {
 	int32_t	i;
 	int32_t	len;
 	char	*str;
 
-	i = 0;
 	len = 0;
-	str = calloc(1, 1);
-	while (var_name[len] && valid_varchar(var_name[len]))
+	if (*var_name == '$')
+		var_name++;
+	while (valid_varchar(var_name[len]))
 		len++;
-	if (!ft_strncmp(var_name, "?", len))
-	{
-		free(str);
-		str = ft_itoa(shell->exit_code);
-	}
+	if (!ft_strncmp(var_name, "?", len) || !ft_strncmp(var_name, "~", len))
+		return (special_variable(var_name, shell));
+	i = 0;
+	str = calloc(1, 1);
 	while (shell->env[i])
 	{
 		if (!ft_strncmp(shell->env[i], var_name, len)
@@ -36,24 +56,24 @@ char	*expand_loop(char *content, char *expanded, t_minishell *shell)
 	char	*tmp;
 
 	i = 0;
+	start = 0;
 	while (content[i])
 	{
-		while (content[i] != '$' && content[i])
+		while (content[i] != '$' && content[i] != '~' && content[i])
 			i++;
-		if (content[i] == '$')
-		{
-			tmp = ft_substr(content, start, i);
-			if (!tmp)
-				return (NULL);
-			expanded = strjoin_free_free(expanded, tmp);
-			tmp = get_env_var(&content[i + 1], shell);
-			if (!tmp)
-				return (NULL);
-			expanded = strjoin_free_free(expanded, tmp);
-			while (valid_varchar(content[i]))
-				i++;
-			start = i;
-		}
+		if (!content[i])
+			break ;
+		tmp = ft_substr(content, start, i);
+		if (!tmp)
+			return (NULL);
+		expanded = strjoin_free_free(expanded, tmp);
+		tmp = get_env_var(&content[i], shell);
+		if (!tmp)
+			return (NULL);
+		expanded = strjoin_free_free(expanded, tmp);
+		while (valid_varchar(content[i]))
+			i++;
+		start = i;
 	}
 	return (ft_strjoin_free(expanded, &content[start]));
 }
@@ -77,10 +97,10 @@ char	*trim_quotes(char *str)
 	char	*new_str;
 
 	len = ft_strlen(str);
-	new_str = malloc((len) * sizeof(char));
+	new_str = malloc((len - 1) * sizeof(char));
 	if (!new_str)
 		return (NULL);
-	ft_strlcpy(new_str, str, len);
+	ft_strlcpy(new_str, str + 1, len - 1);
 	free(str);
 	return (new_str);
 }

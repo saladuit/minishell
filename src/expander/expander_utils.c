@@ -12,7 +12,7 @@ int32_t	check_expand(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '$')
+		if (str[i] == '$' || str[i] == '~')
 			return (1);
 		i++;
 	}
