@@ -13,8 +13,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	if (argc > 1)
 		ft_minishell_exit(USAGE);
-	sheldon.env = dup_envp(envp);
-	if (sheldon.env == NULL)
+	if (dup_envp(&sheldon, envp))
 		return (ft_minishell_exit(EMALLOC));
 	sheldon.exit_code = 0;
 	while (1)

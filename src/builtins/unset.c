@@ -61,16 +61,16 @@ void	unset_copy(char **argv, char **new_env, char **old_env)
 	new_env[j] = NULL;
 }
 
-static int	get_env_len(char **arguments, t_minishell *shell)
+static int	get_env_len(char **arguments, char **env)
 {
 	int		i;
 	int		len;
 
 	i = 0;
 	len = 0;
-	while (shell->env[i])
+	while (env[i])
 	{
-		if (!in_args(arguments, shell->env[i]))
+		if (!in_args(arguments, env[i]))
 			len++;
 		i++;
 	}
@@ -80,14 +80,17 @@ static int	get_env_len(char **arguments, t_minishell *shell)
 int	ft_unset(char **arguments, t_minishell *shell)
 {
 	char	**new_env;
-	int		env_len;
+	char	**new_expo;
 
-	env_len = get_env_len(arguments, shell);
-	new_env = malloc(env_len * sizeof(char *));
-	if (!new_env)
+	new_env = malloc(get_env_len(arguments, shell->env) * sizeof(char *));
+	new_expo = malloc(get_env_len(arguments, shell->env) * sizeof(char *));
+	if (!new_env || !new_expo)
 		return (1);
 	unset_copy(arguments, new_env, shell->env);
+	unset_copy(arguments, new_expo, shell->expo);
 	free(shell->env);
+	free(shell->expo);
 	shell->env = new_env;
+	shell->expo = new_expo;
 	return (0);
 }
