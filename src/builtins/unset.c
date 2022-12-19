@@ -31,12 +31,16 @@ static int	in_args(char **argv, char *env_line)
 	while (suffix && argv[i])
 	{
 		var = ft_strjoin(argv[i], suffix);
-		if (var && !ft_strncmp(var, env_line,
-				ft_strlen(var)))
-			return (1);
+		if (var
+			&& !ft_strncmp(var, env_line, ft_strlen(var)))
+			return (free(suffix), 1);
 		free(var);
+		if (argv[i]
+			&& !ft_strncmp(argv[i], env_line, ft_strlen(argv[i]) + 1))
+			return (free(suffix), 1);
 		i++;
 	}
+	free(suffix);
 	return (0);
 }
 
@@ -83,7 +87,7 @@ int	ft_unset(char **arguments, t_minishell *shell)
 	char	**new_expo;
 
 	new_env = malloc(get_env_len(arguments, shell->env) * sizeof(char *));
-	new_expo = malloc(get_env_len(arguments, shell->env) * sizeof(char *));
+	new_expo = malloc(get_env_len(arguments, shell->expo) * sizeof(char *));
 	if (!new_env || !new_expo)
 		return (1);
 	unset_copy(arguments, new_env, shell->env);
