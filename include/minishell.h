@@ -235,10 +235,20 @@ t_list			*construct_ast(t_list *tokens);
 int				ft_echo(char **arguments, t_minishell *shell);
 int				ft_cd(char **arguments, t_minishell *shell);
 int				ft_pwd(char **arguments, t_minishell *shell);
-void			sort_export(char **expo);
 int				ft_export(char **arguments, t_minishell *shell);
 int				ft_unset(char **arguments, t_minishell *shell);
 int				ft_env(char **arguments, t_minishell *shell);
 int				ft_exit(char **arguments, t_minishell *shell);
+
+// Export utils
+void			sort_export(char **expo);
+void			export_error(char *str);
+bool			valid_var(char *str);
+int32_t			varname_len(char *str);
+int32_t			in_env(char *argument, char **env);
+bool			has_equals(char *str);
+void			print_expo(char **expo);
+void			export_replacevar(char **env, char *argument);
+char			**export_addvar(char **env, char *argument);
 
 #endif
