@@ -70,11 +70,10 @@ typedef enum e_type
 typedef struct s_minishell
 {
 	char	**env;
-	char	**export;
+	char	**expo;
 	int32_t	exit_code;
 	t_list	*ast;
 	t_list	*tokens;
-
 }	t_minishell;
 
 
@@ -113,7 +112,7 @@ typedef struct s_env
 int32_t			minishell(t_minishell *shell);
 int32_t			init_handlers(void);
 int32_t			ft_minishell_exit(t_message code);
-char			**dup_envp(char **envp);
+int32_t			dup_envp(t_minishell *shell, char **envp);
 void			setup_signals(void);
 void			reset_signals(void);
 
@@ -240,5 +239,16 @@ int				ft_export(char **arguments, t_minishell *shell);
 int				ft_unset(char **arguments, t_minishell *shell);
 int				ft_env(char **arguments, t_minishell *shell);
 int				ft_exit(char **arguments, t_minishell *shell);
+
+// Export utils
+void			sort_export(char **expo);
+void			export_error(char *str);
+bool			valid_var(char *str);
+int32_t			varname_len(char *str);
+int32_t			in_env(char *argument, char **env);
+bool			has_equals(char *str);
+void			print_expo(char **expo);
+void			export_replacevar(char **env, char *argument);
+char			**export_addvar(char **env, char *argument);
 
 #endif
