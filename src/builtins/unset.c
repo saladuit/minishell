@@ -31,12 +31,16 @@ static int	in_args(char **argv, char *env_line)
 	while (suffix && argv[i])
 	{
 		var = ft_strjoin(argv[i], suffix);
-		if (var && !ft_strncmp(var, env_line,
-				ft_strlen(var)))
-			return (1);
+		if (var
+			&& !ft_strncmp(var, env_line, ft_strlen(var)))
+			return (free(suffix), 1);
 		free(var);
+		if (argv[i]
+			&& !ft_strncmp(argv[i], env_line, ft_strlen(argv[i]) + 1))
+			return (free(suffix), 1);
 		i++;
 	}
+	free(suffix);
 	return (0);
 }
 
@@ -61,16 +65,16 @@ void	unset_copy(char **argv, char **new_env, char **old_env)
 	new_env[j] = NULL;
 }
 
-static int	get_env_len(char **arguments, t_minishell *shell)
+static int	get_env_len(char **arguments, char **env)
 {
 	int		i;
 	int		len;
 
 	i = 0;
 	len = 0;
-	while (shell->env[i])
+	while (env[i])
 	{
-		if (!in_args(arguments, shell->env[i]))
+		if (!in_args(arguments, env[i]))
 			len++;
 		i++;
 	}
@@ -80,14 +84,17 @@ static int	get_env_len(char **arguments, t_minishell *shell)
 int	ft_unset(char **arguments, t_minishell *shell)
 {
 	char	**new_env;
-	int		env_len;
+	char	**new_expo;
 
-	env_len = get_env_len(arguments, shell);
-	new_env = malloc(env_len * sizeof(char *));
-	if (!new_env)
+	new_env = malloc(get_env_len(arguments, shell->env) * sizeof(char *));
+	new_expo = malloc(get_env_len(arguments, shell->expo) * sizeof(char *));
+	if (!new_env || !new_expo)
 		return (1);
 	unset_copy(arguments, new_env, shell->env);
+	unset_copy(arguments, new_expo, shell->expo);
 	free(shell->env);
+	free(shell->expo);
 	shell->env = new_env;
+	shell->expo = new_expo;
 	return (0);
 }

@@ -10,6 +10,7 @@ SRCS			=minishell.c \
 				 executor/executor.c \
 				 executor/execute_utils.c \
 				 utils/message.c \
+				 utils/signal.c \
 				 envp/dup_envp.c \
 				 types/is_delimiter.c \
 				 types/is_double_quote.c \
@@ -24,10 +25,11 @@ SRCS			=minishell.c \
 				 builtins/cd.c \
 				 builtins/pwd.c \
 				 builtins/export.c \
+				 builtins/export_utils.c \
+				 builtins/export_utils2.c \
 				 builtins/unset.c \
 				 builtins/env.c \
-				 builtins/exit.c \
-				 utils/signal.c
+				 builtins/exit.c
 
 MAIN 			:=main.c
 

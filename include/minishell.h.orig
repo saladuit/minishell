@@ -73,6 +73,11 @@ typedef struct s_minishell
 	int32_t	exit_code;
 	t_list	*ast;
 	t_list	*tokens;
+<<<<<<< HEAD
+	
+
+=======
+>>>>>>> 90d7496d6e4fb08f16c7be652580161d05c5daa9
 }	t_minishell;
 
 
@@ -110,9 +115,15 @@ typedef struct s_env
 
 int32_t			minishell(t_minishell *shell);
 int32_t			init_handlers(void);
+<<<<<<< HEAD
+int32_t			ft_minishell_exit(t_message code, t_exitcodes exit_code);
+char			**dup_envp(char **envp);
+int32_t			setup_signals(void);
+=======
 int32_t			ft_minishell_exit(t_message code);
 int32_t			dup_envp(t_minishell *shell, char **envp);
 void			setup_signals(void);
+>>>>>>> 90d7496d6e4fb08f16c7be652580161d05c5daa9
 void			reset_signals(void);
 
 // Messages
