@@ -96,10 +96,20 @@ char	*expand(char *content, t_minishell *shell)
 	return (expanded);
 }
 
+char	*make_trimmed_str()
+{
+
+}
+
 char	*trim_quotes(char *str)
 {
 	int32_t	len;
 	char	*new_str;
+	int32_t	i;
+
+	i = 0;
+	while ((str[i] != '\"' || str[i] != '\'') && str[i])
+		i++;
 
 	len = ft_strlen(str);
 	new_str = malloc((len - 1) * sizeof(char));
@@ -182,7 +192,7 @@ bool	needs_expanding(char *str)
 		|| check_expand(str));
 }
 
-char	**word_split(char *str)
+char	**word_split(char **expanded_str, int32_t *j)
 {
 	int32_t	i;
 	int32_t	j;
@@ -211,23 +221,76 @@ char	**word_split(char *str)
 	return (split_words);
 }
 
+char	**expand_single_quotes(
+			char *str, char **expanded_str, int32_t *i, int32_t *j)
+{
+	int32_t	start;
+	char	*trimmed_part;
+
+	start = *i;
+	while (str[*i] != '\'' && str[*i])
+		*i++;
+	if (str[*i] == '\'')
+	{
+		trimmed_part = ft_substr(str, start, (*i - start));
+		expanded_str[*j] = strjoin_free_free(expanded_str[*j], trimmed_part);
+	}
+	return (expanded_str);
+}
+
+char	**expand_double_quotes(
+			char *str, char **expanded_str, int32_t *i, int32_t *j)
+{
+
+	return (expanded_str);
+}
+
+char	**expand_variable(
+			char *str, char **expanded_str, int32_t *i, int32_t *j)
+{
+	return (expanded_str);
+}
+
 char	**expand_str(char *str, t_minishell *shell)
 {
 	char	**expanded_str;
+	int32_t	i;
+	int32_t	j;
+	int32_t	start;
 
-	expanded_str = NULL;
-	if (is_double_quoted(str) || is_single_quoted(str))
+	i = 0;
+	j = 0;
+	expanded_str = ft_calloc(1, sizeof(char *));
+	while (str[i])
 	{
-		if (!is_single_quoted(str) && check_expand(str))
-			str = expand(str, shell);
-		str = trim_quotes(str);
-		expanded_str = malloc(2 * sizeof(char *));
-		if (str && expanded_str)
+		start = i;
+		while ((str[i] != '\'' || str[i] != '\"' || str[i] != '$') && str[i])
+			i++;
+		expanded_str[j] = strjoin_free_free(expanded_str,
+				ft_substr(str, start, i - start));
+		if (str[i] == '\'')
+			expanded_str = expand_single_quotes(str, expanded_str, &i, &j);
+		else if (str[i] == '\"')
+			expanded_str = expand_double_quotes(str, expanded_str, &i, &j);
+		else if (str[i] == '$')
 		{
-			expanded_str[0] = str;
-			expanded_str[1] = NULL;
+			expanded_str = expand_variable(str, expanded_str, &i, &j);
+			expanded_str = word_split(expanded_str, &j);
 		}
+		i++;
 	}
+	// if (is_double_quoted(str) || is_single_quoted(str))
+	// {
+		// if (!is_single_quoted(str) && check_expand(str))
+		// 	str = expand(str, shell);
+		// str = trim_quotes(str);
+		// expanded_str = malloc(2 * sizeof(char *));
+		// if (str && expanded_str)
+		// {
+		// 	expanded_str[0] = str;
+		// 	expanded_str[1] = NULL;
+		// }
+	// }
 	else if (check_expand(str))
 	{
 		str = expand(str, shell);

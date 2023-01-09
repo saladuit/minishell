@@ -13,13 +13,11 @@ SRCS			=minishell.c \
 				 utils/signal.c \
 				 envp/dup_envp.c \
 				 types/is_delimiter.c \
-				 types/is_double_quote.c \
 				 types/is_double_quoted.c \
 				 types/is_expand.c \
 				 types/is_metachar.c \
 				 types/is_quote.c \
 				 types/is_redir.c \
-				 types/is_single_quote.c \
 				 types/is_single_quoted.c \
 				 builtins/echo.c \
 				 builtins/cd.c \
