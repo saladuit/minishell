@@ -139,7 +139,7 @@ int32_t			lexer(const char *command_line, t_list **tokens);
 // Expander
 
 int32_t			expander(t_minishell *shell);
-char			*strjoin_free_free(char *expanded, char *tmp);
+char			*ft_strjoin_free_free(char *expanded, char *tmp);
 int32_t			check_expand(char *str);
 bool			valid_varchar(char c);
 

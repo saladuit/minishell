@@ -19,7 +19,7 @@ int32_t	check_expand(char *str)
 	return (0);
 }
 
-char	*strjoin_free_free(char *expanded, char *tmp)
+char	*ft_strjoin_free_free(char *expanded, char *tmp)
 {
 	expanded = ft_strjoin_free(expanded, tmp);
 	free(tmp);

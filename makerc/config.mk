@@ -5,7 +5,7 @@ SRCS			=minishell.c \
 				 parser/ast.c \
 				 parser/command.c \
 				 parser/command_table.c \
-				 expander/expander.c \
+				 expander/new_expander.c \
 				 expander/expander_utils.c \
 				 executor/executor.c \
 				 executor/execute_utils.c \

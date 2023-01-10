@@ -72,9 +72,9 @@ char	*expand_loop(char *content, char *expanded, t_minishell *shell)
 		if (!content[i])
 			break ;
 		tmp = ft_substr(content, start, i - start);
-		expanded = strjoin_free_free(expanded, tmp);
+		expanded = ft_strjoin_free_free(expanded, tmp);
 		tmp = get_env_var(&content[i], shell);
-		expanded = strjoin_free_free(expanded, tmp);
+		expanded = ft_strjoin_free_free(expanded, tmp);
 		i++;
 		while (valid_varchar(content[i]))
 			i++;
@@ -192,7 +192,7 @@ bool	needs_expanding(char *str)
 		|| check_expand(str));
 }
 
-char	**word_split(char **expanded_str, int32_t *j)
+char	**word_split(char **str, int32_t *j)
 {
 	int32_t	i;
 	int32_t	j;
