@@ -19,9 +19,6 @@ int	main(int argc, char **argv, char **envp)
 	sheldon.env = dup_envp(envp);
 	if (sheldon.env == NULL)
 		perror("Environment parsing: "); //TODO: load in standard shell values: PWD & SHELL LVL
-		ft_minishell_exit(USAGE);
-	if (dup_envp(&sheldon, envp))
-		return (ft_minishell_exit(EMALLOC));
 	sheldon.exit_code = 0;
 	while (1)
 		minishell(&sheldon);

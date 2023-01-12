@@ -31,7 +31,6 @@ void	ft_skip_whitespaces(const char **input)
 	while (ft_iswhitespace(**input))
 		(*input)++;
 }
-
 int32_t	find_next_quote(const char *command_line, char c)
 {
 	size_t	i;
@@ -41,7 +40,6 @@ int32_t	find_next_quote(const char *command_line, char c)
 		i++;
 	return (i);
 }
-
 size_t	get_token_len(const char *command_line)
 {
 	size_t	i;

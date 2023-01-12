@@ -20,7 +20,6 @@ int32_t	setup_signals(void)
 	signal(SIGQUIT, SIG_IGN);
 	return (SUCCESS);
 }
-
 void	reset_signals(void)
 {
 	signal(SIGINT, SIG_DFL);
