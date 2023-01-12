@@ -148,7 +148,7 @@ int32_t			skip_single_quotes(char *str);
 int32_t			skip_double_quotes(char *str);
 int32_t			skip_variable_name(char *str);
 int32_t			skip_whitespace(char *str);
-int32_t			find_var_start(char *str);
+int32_t			find_var_start(char *str, int32_t index);
 char			*expand_variables(char *str, t_minishell *shell);
 char			**split_words(char *str);
 t_list			*pop_node(t_list **list, t_list *pop_node);

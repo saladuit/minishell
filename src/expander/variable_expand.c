@@ -72,7 +72,7 @@ char	*expand_variables(char *str, t_minishell *shell)
 	new_str = calloc(1, 1);
 	while (str[i])
 	{
-		i += find_var_start(&str[i]);
+		i = find_var_start(str, i);
 		if (!str[i])
 			break ;
 		tmp = ft_substr(str, start, i - start);
