@@ -49,7 +49,7 @@ int32_t	expander(t_minishell *shell)
 	while (ast)
 	{
 		cmd_table = (t_command_table *)ast->content;
-		expand_cmd_table(cmd_table);
+		expand_cmd_table(cmd_table, shell);
 		ast = ast->next;
 	}
 	return (SUCCESS);
