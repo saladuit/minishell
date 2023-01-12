@@ -1,9 +1,11 @@
 #include <minishell.h>
 
-int32_t	ft_minishell_exit(t_message code, t_exitcodes exit_code)
+int32_t	ft_minishell_exit(t_message code)
 {
+	if (code == SUCCESS)
+		exit(EXIT_SUCCESS);
 	ft_putendl_fd((char *)messages_lookup(code), STDERR_FILENO);
-	exit(exit_code);
+	exit(EXIT_FAILURE);
 }
 
 const char	*messages_lookup(t_message code)
@@ -11,7 +13,9 @@ const char	*messages_lookup(t_message code)
 	const char	*message[] = {
 	[USAGE] = "Usage: ./minishell",
 	[PROMPT] = "Minishell$ ",
-	[ETTY] = "The filedes is not associated with a terminal",
+	[EMALLOC] = "Malloc failed",
+	[EREQUEST] = "Malloc failed",
+	[ETYPE] = "Invalid type",
 	};
 
 	return (message[code]);

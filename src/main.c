@@ -1,5 +1,4 @@
 #include <minishell.h>
-#include <stdlib.h>
 
 /* Start of program responsible for
  * handling the hightest form of abstractions, namely
@@ -13,12 +12,10 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argv;
 	if (argc > 1)
-		ft_minishell_exit(USAGE, EXIT_FAILURE);
-	if (!isatty(STDIN_FILENO))
-		perror("tty: ");
+		ft_minishell_exit(USAGE);
 	sheldon.env = dup_envp(envp);
 	if (sheldon.env == NULL)
-		perror("Environment parsing: "); //TODO: load in standard shell values: PWD & SHELL LVL
+		return (ft_minishell_exit(EMALLOC));
 	sheldon.exit_code = 0;
 	while (1)
 		minishell(&sheldon);

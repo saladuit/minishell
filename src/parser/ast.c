@@ -10,7 +10,7 @@ t_list	*construct_ast(t_list *tokens)
 	while (tokens)
 	{
 		if (!ft_lstadd_backnew(&ast, (void *)construct_command_table(&tokens)))
-			return (NULL);
+			ft_minishell_exit(EMALLOC);
 	}
 	return (ast);
 }

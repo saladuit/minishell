@@ -6,6 +6,6 @@ t_list	*parser(t_list *tokens)
 
 	ast = construct_ast(tokens);
 	if (!ast)
-		return (NULL);
+		ft_minishell_exit(EMALLOC);
 	return (ast);
 }

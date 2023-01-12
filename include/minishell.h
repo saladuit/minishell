@@ -2,7 +2,6 @@
 # define MINISHELL_H
 
 # define ERROR -1
-# define SUCCESS 0 
 
 # include <stdio.h>
 # include <readline/readline.h>
@@ -15,7 +14,6 @@
 # include <stdlib.h>
 # include <libft.h>
 # include <errno.h>
-# include <termios.h>
 
 /*
 E_GENERAL:
@@ -51,9 +49,12 @@ typedef enum e_exitcodes
 
 typedef enum e_message
 {
+	SUCCESS,
 	USAGE,
 	PROMPT,
-	ETTY,
+	EMALLOC,
+	EREQUEST,
+	ETYPE,
 }	t_message;
 
 typedef enum e_type
@@ -73,7 +74,6 @@ typedef struct s_minishell
 	int32_t	exit_code;
 	t_list	*ast;
 	t_list	*tokens;
-	
 
 }	t_minishell;
 
@@ -107,9 +107,9 @@ typedef struct s_builtin
 
 int32_t			minishell(t_minishell *shell);
 int32_t			init_handlers(void);
-int32_t			ft_minishell_exit(t_message code, t_exitcodes exit_code);
+int32_t			ft_minishell_exit(t_message code);
 char			**dup_envp(char **envp);
-int32_t			setup_signals(void);
+void			setup_signals(void);
 void			reset_signals(void);
 
 // Messages
