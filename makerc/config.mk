@@ -5,8 +5,12 @@ SRCS			=minishell.c \
 				 parser/ast.c \
 				 parser/command.c \
 				 parser/command_table.c \
-				 expander/new_expander.c \
+				 expander/expander.c \
 				 expander/expander_utils.c \
+				 expander/expand_arguments.c \
+				 expander/index_utils.c \
+				 expander/variable_expand.c \
+				 expander/word_splitting.c \
 				 executor/executor.c \
 				 executor/execute_utils.c \
 				 utils/message.c \
