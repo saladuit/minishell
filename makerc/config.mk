@@ -7,18 +7,20 @@ SRCS			=minishell.c \
 				 parser/command_table.c \
 				 expander/expander.c \
 				 expander/expander_utils.c \
+				 expander/expand_arguments.c \
+				 expander/index_utils.c \
+				 expander/variable_expand.c \
+				 expander/word_splitting.c \
 				 executor/executor.c \
 				 executor/execute_utils.c \
 				 utils/message.c \
 				 envp/dup_envp.c \
 				 types/is_delimiter.c \
-				 types/is_double_quote.c \
 				 types/is_double_quoted.c \
 				 types/is_expand.c \
 				 types/is_metachar.c \
 				 types/is_quote.c \
 				 types/is_redir.c \
-				 types/is_single_quote.c \
 				 types/is_single_quoted.c \
 				 builtins/echo.c \
 				 builtins/cd.c \

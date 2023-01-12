@@ -135,9 +135,19 @@ int32_t			lexer(const char *command_line, t_list **tokens);
 // Expander
 
 int32_t			expander(t_minishell *shell);
-char			*strjoin_free_free(char *expanded, char *tmp);
+char			*ft_strjoin_free_free(char *expanded, char *tmp);
 int32_t			check_expand(char *str);
+bool			needs_expanding(char *str);
 bool			valid_varchar(char c);
+void			expand_argument_list(t_list **arg_list, t_minishell *shell);
+int32_t			skip_single_quotes(char *str);
+int32_t			skip_double_quotes(char *str);
+int32_t			skip_variable_name(char *str);
+int32_t			skip_whitespace(char *str);
+int32_t			find_var_start(char *str);
+char			*expand_variables(char *str, t_minishell *shell);
+char			**split_words(char *str);
+t_list			*pop_node(t_list **list, t_list *pop_node);
 
 // Executor
 
