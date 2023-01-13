@@ -5,6 +5,9 @@ int	ft_exit(char **arguments, t_minishell *shell)
 	(void)arguments;
 	(void)shell;
 	rl_clear_history();
-	exit(ft_atoi(arguments[1]));
+	if (arguments[1])
+		exit(ft_atoi(arguments[1]));
+	else
+		exit(0);
 	return (0);
 }
