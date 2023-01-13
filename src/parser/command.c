@@ -68,8 +68,9 @@ t_command	*construct_command(t_list **tokens)
 			break ;
 		}
 		if (!is_redir(*token)
-			&& !ft_lstadd_backnew(&command->arguments, (*tokens)->content))
-			return (NULL);
+			&& !ft_lstadd_backnew(&command->arguments,
+				ft_strdup((*tokens)->content)))
+      return (NULL);
 		if (is_redir(*token)
 			&& !ft_lstadd_backnew(&command->redirs, construct_redir(tokens)))
 			return (NULL);

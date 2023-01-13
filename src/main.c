@@ -13,12 +13,11 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argv;
 	if (argc > 1)
-		ft_minishell_exit(USAGE, EXIT_FAILURE);
+    ft_minishell_exit(USAGE, EXIT_FAILURE);
+	if (dup_envp(&sheldon, envp))
+    perror("Environment parsing: ");
 	if (!isatty(STDIN_FILENO))
-		perror("tty: ");
-	sheldon.env = dup_envp(envp);
-	if (sheldon.env == NULL)
-		perror("Environment parsing: "); //TODO: load in standard shell values: PWD & SHELL LVL
+  		perror("tty: ");
 	sheldon.exit_code = 0;
 	while (1)
 		minishell(&sheldon);

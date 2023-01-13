@@ -1,23 +1,25 @@
 #include <minishell.h>
 
-char	**dup_envp(char **envp)
+int32_t	dup_envp(t_minishell *shell, char **envp)
 {
 	int32_t	i;
-	char	**env;
 
 	i = 0;
 	while (envp[i])
 		i++;
-	env = calloc((i + 1), sizeof(char *));
-	if (!env)
-		return (NULL);
+	shell->env = calloc((i + 1), sizeof(char *));
+	shell->expo = calloc((i + 1), sizeof(char *));
+	if (!shell->env || !shell->expo)
+		return (1);
 	i = 0;
 	while (envp[i])
 	{
-		env[i] = ft_strdup(envp[i]);
-		if (!env[i])
-			return (NULL);
+		shell->env[i] = ft_strdup(envp[i]);
+		shell->expo[i] = ft_strdup(envp[i]);
+		if (!shell->env[i] || !shell->expo)
+			return (1);
 		i++;
 	}
-	return (env);
+	sort_export(shell->expo);
+	return (0);
 }
