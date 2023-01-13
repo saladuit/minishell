@@ -17,7 +17,7 @@ t_redir	*construct_redir(t_list **tokens)
 
 	redir = ft_calloc(1, sizeof(t_redir));
 	if (!redir)
-		ft_minishell_exit(EMALLOC);
+		return (NULL);
 	redir->type = set_type((*tokens)->content, ft_strlen((*tokens)->content));
 	*tokens = (*tokens)->next;
 	redir->filename = (*tokens)->content;

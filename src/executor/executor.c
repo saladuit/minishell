@@ -118,7 +118,6 @@ int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
 	pid = fork();
 	if (pid != 0)
 		return (wait_for_child_processes(pid));
-	reset_signals();
 	execute_child_command(shell, arguments);
 	return (0);
 }
