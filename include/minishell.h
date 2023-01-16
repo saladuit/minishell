@@ -2,7 +2,7 @@
 # define MINISHELL_H
 
 # define ERROR -1
-# define SUCCESS 0 
+# define SUCCESS 0
 
 # include <stdio.h>
 # include <readline/readline.h>
@@ -111,7 +111,7 @@ typedef struct s_env
 
 int32_t			minishell(t_minishell *shell);
 int32_t			init_handlers(void);
-int32_t			ft_minishell_exit(t_message code);
+int32_t			ft_minishell_exit(t_message code, t_exitcodes exit_code);
 int32_t			dup_envp(t_minishell *shell, char **envp);
 void			setup_signals(void);
 

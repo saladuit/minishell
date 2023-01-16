@@ -10,7 +10,7 @@ void	sigint_handler(int sig)
 }
 
 
-int32_t	setup_signals(void)
+void	setup_signals(void)
 {
 //	struct termios tio;
 
@@ -18,7 +18,7 @@ int32_t	setup_signals(void)
 //	tcsetattr(STDIN_FILENO, TCSANOW, &tio);
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
-	return (SUCCESS);
+	// return (SUCCESS);
 }
 
 void	reset_signals(void)
