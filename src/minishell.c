@@ -16,10 +16,10 @@ int32_t	minishell(t_minishell *sheldon)
 	if (!*command_line)
 		return (SUCCESS);
 	lexer(command_line, &sheldon->tokens);
-	if (analyzer(sheldon->tokens))
-		return (EXIT_FAILURE);
 	if (!sheldon->tokens)
 		return (SUCCESS);
+	if (analyzer(sheldon->tokens))
+		return (EXIT_FAILURE);
 	sheldon->ast = parser(sheldon->tokens);
 	expander(sheldon);
 	sheldon->exit_code = executor(sheldon);
