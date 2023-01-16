@@ -16,6 +16,8 @@ int32_t	minishell(t_minishell *sheldon)
 	if (!*command_line)
 		return (SUCCESS);
 	lexer(command_line, &sheldon->tokens);
+	if (analyzer(sheldon->tokens))
+		return (EXIT_FAILURE);
 	if (!sheldon->tokens)
 		return (SUCCESS);
 	sheldon->ast = parser(sheldon->tokens);

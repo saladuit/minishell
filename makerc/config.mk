@@ -1,6 +1,8 @@
 SRCS			=minishell.c \
 				 lexer/lexer.c \
 				 lexer/lexer_utils.c \
+				 lexer/lexical_analyzer.c \
+				 lexer/analyzer_checks.c \
 				 parser/parser.c \
 				 parser/redir.c \
 				 parser/ast.c \

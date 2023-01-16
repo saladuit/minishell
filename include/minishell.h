@@ -96,8 +96,8 @@ typedef struct s_command_table
 
 typedef struct s_builtin
 {
-	const char *name;
-	int (*func)(char **arguments, t_minishell *shell); //TODO turn into linked list to be able to change the content. NOOOOOO pls no linked list
+	const char	*name;
+	int			(*func)(char **arguments, t_minishell *shell);
 }	t_builtin;
 
 typedef struct s_env
@@ -136,6 +136,12 @@ int32_t			is_tokenchar(const char *str);
 
 int32_t			lexer(const char *command_line, t_list **tokens);
 void			ft_skip_whitespaces(const char **input);
+int32_t			analyzer(t_list *tokens);
+int32_t			pipe_check(t_list *tokens);
+int32_t			input_check(t_list *tokens);
+int32_t			output_check(t_list *tokens);
+int32_t			heredoc_check(t_list *tokens);
+int32_t			append_check(t_list *tokens);
 
 // Expander
 
@@ -183,9 +189,11 @@ char			*get_cmd_path(char **envp, char *cmd);
  *
  *  The redirections have their own structure containing a filename and type.
  *
- *  The Data Structures used are defined in command_table.h & command.h respectively.
+ *  The Data Structures used are defined in
+ *  command_table.h & command.h respectively.
  *
- *  The parser provides interfaces to better communicate with this data structure.
+ *  The parser provides interfaces to better
+ *  communicate with this data structure.
  *  These are defined in the astapi.h
  *  - Iterating to the next command table.
  *  - Iterating to the next command.
@@ -209,8 +217,8 @@ t_command		*construct_command(t_list **tokens);
 
 char			**get_arguments(t_command *cmd);
 t_redir			*get_next_redir(t_command *cmd);
-t_command*		get_next_command(t_command_table *cmdt);
-t_command_table *get_next_command_table(t_list **ast);
+t_command		*get_next_command(t_command_table *cmdt);
+t_command_table	*get_next_command_table(t_list **ast);
 
 /**
  * @brief Returns a Command Table  made from the tokens provides.
