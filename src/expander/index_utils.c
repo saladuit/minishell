@@ -59,7 +59,7 @@ int32_t	skip_whitespace(char *str)
 	int32_t	i;
 
 	i = 0;
-	while (str[i] && ft_iswhitespace(str[i]))
+	while (ft_iswhitespace(str[i]))
 		i++;
 	return (i);
 }

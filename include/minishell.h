@@ -76,7 +76,6 @@ typedef struct s_minishell
 
 }	t_minishell;
 
-
 typedef struct s_redir
 {
 	char	*filename;
@@ -106,7 +105,6 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-
 // Main
 
 int32_t			minishell(t_minishell *shell);
@@ -114,7 +112,6 @@ int32_t			init_handlers(void);
 int32_t			ft_minishell_exit(t_message code, t_exitcodes exit_code);
 int32_t			dup_envp(t_minishell *shell, char **envp);
 void			setup_signals(void);
-
 void			reset_signals(void);
 
 // Messages
@@ -132,10 +129,13 @@ bool			is_double_quoted(char *str);
 bool			is_single_quote(int c);
 bool			is_single_quoted(char *str);
 bool			is_expand(int c);
+bool			is_quotechar(const char c);
+int32_t			is_tokenchar(const char *str);
 
 // Lexer
 
 int32_t			lexer(const char *command_line, t_list **tokens);
+void			ft_skip_whitespaces(const char **input);
 
 // Expander
 
@@ -252,6 +252,7 @@ int				ft_env(char **arguments, t_minishell *shell);
 int				ft_exit(char **arguments, t_minishell *shell);
 
 // Export utils
+
 void			sort_export(char **expo);
 void			export_error(char *str);
 bool			valid_var(char *str);
