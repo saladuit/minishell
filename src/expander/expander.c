@@ -1,11 +1,5 @@
 #include <minishell.h>
 
-void	expand_redirect_list(t_list *redirects, t_minishell *shell)
-{
-	(void)shell;
-	(void)redirects;
-}
-
 // Get the arguments and redirects out of the command structure so it can expand them if needed.
 void	expand_cmd(t_command *cmd, t_minishell *shell)
 {
@@ -13,7 +7,7 @@ void	expand_cmd(t_command *cmd, t_minishell *shell)
 
 	arg_list = &cmd->arguments;
 	expand_argument_list(arg_list, shell);
-	// expand_redirect_list(cmd->redirs, shell);
+	expand_redirect_list(cmd->redirs, shell);
 }
 
 // loop over the command structures inside command table structure and start expanding for each.

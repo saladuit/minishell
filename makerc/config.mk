@@ -14,6 +14,7 @@ SRCS			=minishell.c \
 				 expander/index_utils.c \
 				 expander/variable_expand.c \
 				 expander/word_splitting.c \
+				 expander/expand_redirect.c \
 				 executor/executor.c \
 				 executor/execute_utils.c \
 				 utils/message.c \

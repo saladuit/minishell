@@ -159,6 +159,8 @@ int32_t			find_var_start(char *str, int32_t index);
 char			*expand_variables(char *str, t_minishell *shell);
 char			**split_words(char *str);
 t_list			*pop_node(t_list **list, t_list *pop_node);
+void			expand_redirect_list(t_list *redirects, t_minishell *shell);
+char			*trim_quotes(char *str);
 
 // Executor
 
