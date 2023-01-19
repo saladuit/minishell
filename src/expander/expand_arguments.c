@@ -28,9 +28,9 @@ char	*trim_quotes(char *str)
 		trimmed = ft_strjoin_free_free(trimmed, tmp);
 		i++;
 		start = i;
-		trimmed = ft_strjoin_free(trimmed, &str[start]);
-		free(str);
 	}
+	trimmed = ft_strjoin_free(trimmed, &str[start]);
+	free(str);
 	return (trimmed);
 }
 
