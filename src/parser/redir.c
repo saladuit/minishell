@@ -19,7 +19,14 @@ t_redir	*construct_redir(t_list **tokens)
 	if (!redir)
 		return (NULL);
 	redir->type = set_type((*tokens)->content, ft_strlen((*tokens)->content));
+	if (redir->type == HEREDOC)
+	{
+		make_heredoc();
+	}
+	else
+	{
+		redir->filename = (*tokens)->content;
+	}
 	*tokens = (*tokens)->next;
-	redir->filename = (*tokens)->content;
 	return (redir);
 }
