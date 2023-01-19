@@ -14,7 +14,6 @@ void	expand_redirect_list(t_list *redirects, t_minishell *shell)
 		{
 			expanded_str = expand_variables(redir->filename, shell);
 			expanded_str = trim_quotes(expanded_str);
-			// free(redir->filename);
 			redir->filename = expanded_str;
 		}
 		node = node->next;
