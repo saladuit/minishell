@@ -221,6 +221,7 @@ char			**get_arguments(t_command *cmd);
 t_redir			*get_next_redir(t_command *cmd);
 t_command		*get_next_command(t_command_table *cmdt);
 t_command_table	*get_next_command_table(t_list **ast);
+char			*add_heredoc(char *phrase);
 
 /**
  * @brief Returns a Command Table  made from the tokens provides.

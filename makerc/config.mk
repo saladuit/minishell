@@ -8,6 +8,7 @@ SRCS			=minishell.c \
 				 parser/ast.c \
 				 parser/command.c \
 				 parser/command_table.c \
+				 parser/heredoc.c \
 				 expander/expander.c \
 				 expander/expander_utils.c \
 				 expander/expand_arguments.c \

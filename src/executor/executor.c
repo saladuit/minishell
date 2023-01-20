@@ -5,7 +5,7 @@ int32_t	redirect(t_redir *redir, t_type type)
 	if (!open_redir(redir->filename, type))
 	{
 		perror(ft_strjoin("Minishell: ", redir->filename));
-		return (ERROR);
+		return (errno);
 	}
 	return (SUCCESS);
 }
@@ -19,7 +19,7 @@ int32_t	setup_redirects(t_command *command)
 	redir = get_next_redir(command);
 	while (redir)
 	{
-		if (redir->type == INPUT)
+		if (redir->type == INPUT || redir->type == HEREDOC)
 			ret = redirect(redir, INPUT);
 		if (redir->type == OUTPUT)
 			ret = redirect(redir, OUTPUT);
@@ -89,10 +89,10 @@ int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
 	char	**arguments;
 	int32_t	status;
 
+	status = setup_redirects(cmd);
 	arguments = get_arguments(cmd);
-	setup_redirects(cmd);
-	if (!arguments)
-		exit(0);
+	if (!arguments || status)
+		exit(status);
 	status = execute_builtin(arguments, shell);
 	free(cmd); // TODO Fix leaks if any.
 	if (status >= 0)
@@ -108,21 +108,23 @@ int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
 	int32_t		status;
 	char		**arguments;
 
+	status = setup_redirects(cmd);
 	arguments = get_arguments(cmd);
-	setup_redirects(cmd);
-	free(cmd);
 	reset_signals();
-	if (!arguments)
-		return (0);
+	if (!arguments || status)
+	{
+		free(cmd);
+		return (status);
+	}
+	free(cmd);
 	status = execute_builtin(arguments, shell);
 	setup_signals();
 	if (status >= 0)
 		return (status);
 	pid = fork();
-	if (pid != 0)
-		return (wait_for_child_processes(pid));
-	execute_child_command(shell, arguments);
-	return (0);
+	if (pid == 0)
+		execute_child_command(shell, arguments);
+	return (wait_for_child_processes(pid));
 }
 
 int32_t	init_first_pipe(int32_t *pipe_fds)
