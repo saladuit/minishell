@@ -10,6 +10,7 @@ char	*make_heredoc_file(int32_t *fd)
 	filename = ft_strjoin("/tmp/.heredoc", num_str);
 	free(num_str);
 	*fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+	i++;
 	return (filename);
 }
 

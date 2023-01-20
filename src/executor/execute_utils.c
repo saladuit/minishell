@@ -15,9 +15,14 @@ int	is_dir(char *path)
 
 static bool	openfile(int *fd, char *path, t_type type)
 {
-	if (type == INPUT)
+	if (type == HEREDOC)
+	{
 		*fd = open(path, O_RDONLY);
-	if (type == OUTPUT)
+		unlink(path);
+	}
+	else if (type == INPUT)
+		*fd = open(path, O_RDONLY);
+	else if (type == OUTPUT)
 		*fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0664);
 	if (*fd == -1)
 		return (false);
@@ -28,7 +33,7 @@ bool	protected_dup2(int fd, t_type type)
 {
 	int	ret;
 
-	if (type == INPUT)
+	if (type == INPUT || type == HEREDOC)
 		ret = dup2(fd, STDIN_FILENO);
 	if (type == OUTPUT)
 		ret = dup2(fd, STDOUT_FILENO);

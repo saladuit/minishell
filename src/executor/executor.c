@@ -19,7 +19,9 @@ int32_t	setup_redirects(t_command *command)
 	redir = get_next_redir(command);
 	while (redir)
 	{
-		if (redir->type == INPUT || redir->type == HEREDOC)
+		if (redir->type == HEREDOC)
+			ret = redirect(redir, HEREDOC);
+		if (redir->type == INPUT)
 			ret = redirect(redir, INPUT);
 		if (redir->type == OUTPUT)
 			ret = redirect(redir, OUTPUT);

@@ -4,7 +4,7 @@ int32_t	pipe_check(t_list *tokens)
 {
 	if (!tokens->next)
 		return (1);
-	else if (!ft_strncmp(tokens->content, "|", 2))
+	else if (!ft_strncmp(tokens->next->content, "|", 2))
 		return (1);
 	return (0);
 }

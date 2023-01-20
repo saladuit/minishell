@@ -15,6 +15,7 @@ int32_t	minishell(t_minishell *sheldon)
 		exit(E_GENERAL);
 	if (!*command_line)
 		return (SUCCESS);
+	add_history(command_line);
 	lexer(command_line, &sheldon->tokens);
 	if (!sheldon->tokens)
 		return (SUCCESS);
@@ -24,7 +25,6 @@ int32_t	minishell(t_minishell *sheldon)
 	expander(sheldon);
 	sheldon->exit_code = executor(sheldon);
 	ft_lstclear(&sheldon->tokens, free);
-	add_history(command_line);
 	free(command_line);
 	return (EXIT_SUCCESS);
 }
