@@ -10,17 +10,50 @@ void	sigint_handler(int sig)
 	rl_redisplay();
 }
 
-
-void	setup_signals(void)
+// 30 is an arbitrary number that most likely is not used as a legit exit code.
+// Thus it only ever happens when interupting heredoc.
+void	execution_sig_handler(int sig)
 {
-//	struct termios tio;
+	(void)sig;
+	g_exitcode = 130;
+}
 
+void	heredoc_sig_handler(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
+	g_exitcode = 300;
+}
+
+// void	executor_signal_setup(void)
+// {
+// 	signal(SIGINT, execution_signal_handler);
+// 	signal(SIGQUIT, SIG_IGN);
+// }
+
+void	setup_signals(t_signal_handler handler)
+{
+	if (handler == SREADLINE)
+	{
+		rl_catch_signals = 0;
+		signal(SIGINT, sigint_handler);
+		signal(SIGQUIT, SIG_IGN);
+	}
+	else if (handler == SHEREDOC)
+	{
+		signal(SIGINT, heredoc_sig_handler);
+		signal(SIGQUIT, SIG_IGN);
+	}
+	else if (handler == SEXECUTOR)
+	{
+		signal(SIGINT, execution_sig_handler);
+		signal(SIGQUIT, SIG_IGN);
+	}
+}
+//	struct termios tio;
 //	tcgetattr(STDIN_FILENO, &tio);
 //	tcsetattr(STDIN_FILENO, TCSANOW, &tio);
-	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, SIG_IGN);
 	// return (SUCCESS);
-}
 
 void	reset_signals(void)
 {

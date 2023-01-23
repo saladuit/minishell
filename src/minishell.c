@@ -11,7 +11,6 @@ void	print_tokens(t_list *tokens)
 	}
 }
 
-
 /*
  * Abstract_syntax_tree gathers one or more command tables
  * It is only created when the input is valid
@@ -21,7 +20,7 @@ int32_t	minishell(t_minishell *sheldon)
 {
 	char		*command_line;
 
-	setup_signals();
+	setup_signals(SREADLINE);
 	command_line = readline(messages_lookup(PROMPT));
 	if (!command_line && printf("exit"))
 		exit(E_GENERAL);
@@ -37,9 +36,15 @@ int32_t	minishell(t_minishell *sheldon)
 		return (EXIT_FAILURE);
 	}
 	sheldon->ast = parser(sheldon->tokens);
+	if (g_exitcode == 300)
+	{
+		g_exitcode = 0;
+		return (SUCCESS);
+	}
 	ft_lstclear(&sheldon->tokens, free);
 	expander(sheldon);
-	sheldon->exit_code = executor(sheldon);
+	g_exitcode = 0;
+	g_exitcode = executor(sheldon);
 	free(command_line);
 	return (EXIT_SUCCESS);
 }

@@ -72,6 +72,8 @@ int32_t	wait_for_child_processes(pid_t pid)
 	waitpid(pid, &status, WUNTRACED);
 	while (wait(NULL) != -1 && errno != ECHILD)
 		;
+	if (g_exitcode == 130)
+		return (130);
 	return (WEXITSTATUS(status));
 }
 
@@ -79,18 +81,25 @@ void	execute_child_command(t_minishell *shell, char **arguments)
 {
 	char	*command_path;
 
+	reset_signals();
 	command_path = get_cmd_path(shell->env, arguments[0]);
 	if (access(command_path, X_OK))
-		printf("%s: %s: %s\n", "Minishell", arguments[0], "Command not found"); // TODO stderr
+	{
+		write(2, "Minishell: ", 12);
+		write(2, arguments[0], ft_strlen(arguments[0]));
+		write(2, ": command not found\n", 21);
+	}
 	execve(command_path, arguments, shell->env);
 	exit(127); // TODO make one func call
 }
+
 // Needs to always exit even if it is builtin
 int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
 {
 	char	**arguments;
 	int32_t	status;
 
+	reset_signals();
 	status = setup_redirects(cmd);
 	arguments = get_arguments(cmd);
 	if (!arguments || status)
@@ -99,7 +108,7 @@ int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
 	free(cmd); // TODO Fix leaks if any.
 	if (status >= 0)
 		exit(status);
-	reset_signals();
+	// reset_signals();
 	execute_child_command(shell, arguments);
 	return (0);
 }
@@ -112,7 +121,6 @@ int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
 
 	status = setup_redirects(cmd);
 	arguments = get_arguments(cmd);
-	reset_signals();
 	if (!arguments || status)
 	{
 		free(cmd);
@@ -120,7 +128,6 @@ int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
 	}
 	free(cmd);
 	status = execute_builtin(arguments, shell);
-	setup_signals();
 	if (status >= 0)
 		return (status);
 	pid = fork();
@@ -201,6 +208,7 @@ int32_t	executor(t_minishell *shell)
 	int32_t			std_fds[2];
 
 	status = 0;
+	setup_signals(SEXECUTOR);
 	ct = get_next_command_table(&shell->ast);
 	std_fds[STDIN_FILENO] = dup(STDIN_FILENO);
 	std_fds[STDOUT_FILENO] = dup(STDOUT_FILENO);
@@ -214,5 +222,6 @@ int32_t	executor(t_minishell *shell)
 	}
 	close(std_fds[STDIN_FILENO]);
 	close(std_fds[STDOUT_FILENO]);
+	// setup_signals();
 	return (status);
 }

@@ -6,6 +6,7 @@
  * keeping track of the status of the program
  * issuing messages when something goes wrong
 */
+int g_exitcode;
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -18,7 +19,8 @@ int	main(int argc, char **argv, char **envp)
 		perror("Environment parsing: ");
 	if (!isatty(STDIN_FILENO))
 		perror("tty: ");
-	sheldon.exit_code = 0;
+	// sheldon.exit_code = 0;
+	g_exitcode = 0;
 	while (1)
 		minishell(&sheldon);
 }

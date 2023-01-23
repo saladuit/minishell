@@ -41,32 +41,43 @@ bool	is_phrase(char *phrase, char *read_line)
 	return (false);
 }
 
+void	heredoc_loop(char *phrase, int32_t fd)
+{
+	char	*read_line;
+
+	reset_signals();
+	read_line = calloc(1, 1);
+	while (true)
+	{
+		free(read_line);
+		read_line = wait_for_line();
+		if (read_line)
+		{
+			if (is_phrase(phrase, read_line))
+				exit(0);
+			write(fd, read_line, ft_strlen(read_line));
+		}
+	}
+	exit(0);
+}
+
 //TODO add heredoc signal interuption
 char	*add_heredoc(char *phrase)
 {
-	char	*read_line;
 	char	*filename;
-	pid_t	id;
 	int32_t	fd;
+	pid_t	id;
+	int32_t	status;
 
+	setup_signals(SHEREDOC);
+	if (g_exitcode == 300)
+		return (NULL);
 	filename = make_heredoc_file(&fd);
 	id = fork();
 	if (id == -1)
 		return (NULL);
 	if (id == 0)
-	{
-		read_line = calloc(1, 1);
-		while (true)
-		{
-			free(read_line);
-			read_line = wait_for_line();
-			if (read_line)
-			{
-				if (is_phrase(phrase, read_line))
-					exit(130);
-				write(fd, read_line, ft_strlen(read_line));
-			}
-		}
-	}
-	return (waitpid(id, NULL, WUNTRACED), close(fd), filename);
+		heredoc_loop(phrase, fd);
+	waitpid(id, &status, WUNTRACED);
+	return (close(fd), filename);
 }

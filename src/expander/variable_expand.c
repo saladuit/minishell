@@ -18,7 +18,7 @@ char	*special_variable(char *var_name, t_minishell *shell)
 		}
 	}
 	else if (!ft_strncmp(var_name, "?", 1))
-		return (ft_itoa(shell->exit_code));
+		return (ft_itoa(g_exitcode));
 	if (ft_isdigit(var_name[i]))
 	{
 		i++;

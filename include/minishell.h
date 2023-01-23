@@ -17,6 +17,7 @@
 # include <errno.h>
 # include <termios.h>
 
+extern int	g_exitcode;
 /*
 E_GENERAL:
 	Miscellaneous errors, such as "divide by zero" and other
@@ -64,13 +65,19 @@ typedef enum e_type
 	HEREDOC
 }	t_type;
 
+typedef enum e_signal_handler
+{
+	SREADLINE,
+	SHEREDOC,
+	SEXECUTOR
+}	t_signal_handler;
+
 // Ministructs
 
 typedef struct s_minishell
 {
 	char	**env;
 	char	**expo;
-	int32_t	exit_code;
 	t_list	*ast;
 	t_list	*tokens;
 
@@ -111,8 +118,9 @@ int32_t			minishell(t_minishell *shell);
 int32_t			init_handlers(void);
 int32_t			ft_minishell_exit(t_message code, t_exitcodes exit_code);
 int32_t			dup_envp(t_minishell *shell, char **envp);
-void			setup_signals(void);
+void			setup_signals(t_signal_handler handler);
 void			reset_signals(void);
+// void			executor_signal_setup(void);
 
 // Messages
 
