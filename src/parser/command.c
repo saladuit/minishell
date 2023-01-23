@@ -70,7 +70,7 @@ t_command	*construct_command(t_list **tokens)
 		if (!is_redir(*token)
 			&& !ft_lstadd_backnew(&command->arguments,
 				ft_strdup((*tokens)->content)))
-      return (NULL);
+			return (NULL);
 		if (is_redir(*token)
 			&& !ft_lstadd_backnew(&command->redirs, construct_redir(tokens)))
 			return (NULL);

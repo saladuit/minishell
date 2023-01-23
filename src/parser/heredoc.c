@@ -46,21 +46,27 @@ char	*add_heredoc(char *phrase)
 {
 	char	*read_line;
 	char	*filename;
+	pid_t	id;
 	int32_t	fd;
 
 	filename = make_heredoc_file(&fd);
-	read_line = calloc(1, 1);
-	while (true)
+	id = fork();
+	if (id == -1)
+		return (NULL);
+	if (id == 0)
 	{
-		free(read_line);
-		read_line = wait_for_line();
-		if (read_line)
+		read_line = calloc(1, 1);
+		while (true)
 		{
-			if (is_phrase(phrase, read_line))
-				return (close(fd), filename);
-			write(fd, read_line, ft_strlen(read_line));
+			free(read_line);
+			read_line = wait_for_line();
+			if (read_line)
+			{
+				if (is_phrase(phrase, read_line))
+					exit(130);
+				write(fd, read_line, ft_strlen(read_line));
+			}
 		}
 	}
-	close(fd);
-	return (filename);
+	return (waitpid(id, NULL, WUNTRACED), close(fd), filename);
 }

@@ -4,6 +4,7 @@
 void	sigint_handler(int sig)
 {
 	(void)sig;
+	printf("\n");
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
@@ -39,7 +40,6 @@ void	setup_noncanonical_termios_mode(void)
 	newtio.c_cflag &= ~(CSIZE|PARENB);
 	newtio.c_cflag |= CS8;
 	tcsetattr(STDIN_FILENO, TCSANOW, &newtio);
-
 }
 //void setup_interactive_mode_signals(void)
 //{
