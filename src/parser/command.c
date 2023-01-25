@@ -8,7 +8,6 @@ void	deconstruct_redirs(void *redir)
 	rdr = (t_redir *)redir;
 	free(rdr->filename);
 	free(rdr);
-	rdr = NULL;
 }
 
 void	deconstruct_command(void *command)
@@ -19,12 +18,10 @@ void	deconstruct_command(void *command)
 	ft_lstclear(&cmd->arguments, free);
 	ft_lstclear(&cmd->redirs, deconstruct_redirs);
 	free(cmd);
-	cmd = NULL;
 }
 
 char	**get_arguments(t_command *cmd)
 {
-	t_list	*tmp;
 	char	**arguments;
 	int32_t	i;
 
@@ -37,9 +34,7 @@ char	**get_arguments(t_command *cmd)
 	while (cmd->arguments)
 	{
 		arguments[i] = cmd->arguments->content;
-		tmp = cmd->arguments;
 		cmd->arguments = cmd->arguments->next;
-		free(tmp);
 		i++;
 	}
 	return (arguments);
@@ -48,28 +43,22 @@ char	**get_arguments(t_command *cmd)
 t_redir	*get_next_redir(t_command *cmd)
 {
 	t_redir	*current;
-	t_list	*tmp;
 
 	if (!cmd->redirs)
 		return (NULL);
 	current = cmd->redirs->content;
-	tmp = cmd->redirs;
 	cmd->redirs = cmd->redirs->next;
-	free(tmp);
 	return (current);
 }
 
 t_command	*get_next_command(t_command_table *ct)
 {
 	t_command	*current;
-	t_list		*tmp;
 
 	if (!ct->commands)
 		return (NULL);
 	current = ct->commands->content;
-	tmp = ct->commands;
 	ct->commands = ct->commands->next;
-	free(tmp);
 	return (current);
 }
 
