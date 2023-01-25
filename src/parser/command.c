@@ -1,5 +1,27 @@
 #include <minishell.h>
 
+
+void	deconstruct_redirs(void *redir)
+{
+	t_redir *rdr;
+
+	rdr = (t_redir *)redir;
+	free(rdr->filename);
+	free(rdr);
+	rdr = NULL;
+}
+
+void	deconstruct_command(void *command)
+{
+	t_command *cmd;
+
+	cmd = (t_command *)command;
+	ft_lstclear(&cmd->arguments, free);
+	ft_lstclear(&cmd->redirs, deconstruct_redirs);
+	free(cmd);
+	cmd = NULL;
+}
+
 char	**get_arguments(t_command *cmd)
 {
 	t_list	*tmp;

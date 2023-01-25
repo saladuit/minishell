@@ -14,3 +14,9 @@ t_list	*construct_ast(t_list *tokens)
 	}
 	return (ast);
 }
+
+void	deconstruct_ast(t_list **ast)
+{
+	ft_lstclear(ast, deconstruct_command_table);
+	*ast = NULL;
+}

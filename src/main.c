@@ -8,8 +8,14 @@
 */
 int g_exitcode;
 
+//void leaks_check(void)
+//{
+//	system("leaks -q minishell.out");
+//}
+
 int	main(int argc, char **argv, char **envp)
 {
+//	atexit(leaks_check);
 	t_minishell	sheldon;
 
 	(void)argv;

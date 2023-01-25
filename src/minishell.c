@@ -45,6 +45,7 @@ int32_t	minishell(t_minishell *sheldon)
 	expander(sheldon);
 	g_exitcode = 0;
 	g_exitcode = executor(sheldon);
+	deconstruct_ast(&sheldon->ast);
 	free(command_line);
 	return (EXIT_SUCCESS);
 }

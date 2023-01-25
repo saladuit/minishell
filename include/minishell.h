@@ -182,83 +182,20 @@ char			**get_env_paths(char **envp);
 char			*check_env_paths(char **envp, char *cmd);
 char			*get_cmd_path(char **envp, char *cmd);
 
-/**
- *  @brief Converts tokens into an Abstract Syntax Tree.
- *  Exits program on failure.
- *
- *  An Abstract Syntax Tree is a linked list of chained command tables.
- *  Each command table is delimited by:
- *  - ;
- *  - &&
- *  - ||
- *  A command table contains a counter to keep track of the amount of commands
- *  and a linked list of commands.
- *
- *  A command consists out of arguments and redirections and
- *  a counter for the amount of arguments.
- *
- *  The redirections have their own structure containing a filename and type.
- *
- *  The Data Structures used are defined in
- *  command_table.h & command.h respectively.
- *
- *  The parser provides interfaces to better
- *  communicate with this data structure.
- *  These are defined in the astapi.h
- *  - Iterating to the next command table.
- *  - Iterating to the next command.
- *  - Getting the command arguments.
- *  - Getting the next redirection struct.
- *
- *  @param ast		-	Empty linked list
- *  @param tokens	-	The tokens to be placed incside the AST
- *
- *  @return 		- The constructed AST
- */
 t_list			*parser(t_list *tokens);
-
-/**
- * @brief Constructs a command from
- *
- * @param command	-	Commands to iterate over
- * @return 			-	NULL to indicate end of list
- */
 t_command		*construct_command(t_list **tokens);
-
 char			**get_arguments(t_command *cmd);
 t_redir			*get_next_redir(t_command *cmd);
 t_command		*get_next_command(t_command_table *cmdt);
 t_command_table	*get_next_command_table(t_list **ast);
 char			*add_heredoc(char *phrase);
-
-/**
- * @brief Returns a Command Table  made from the tokens provides.
- * Exits on failure
- *
- * @param ast		-	Abstract Syntax Tree to iterate over
- * @return 			-	Constructed Command Table
- */
 t_command_table	*construct_command_table(t_list **tokens);
-
-/*
- * @brief contructs a redirection struct out of two tokens
- * the first token will become the redirection type and the second
- * will become the filname
- *
- * @param command	-	Linked list with tokens
- * @return 			-	Redirection struct
- */
-
 t_redir			*construct_redir(t_list **tokens);
-
-/**
- * @brief Returns the current command and iterates to the next one for future use
- * Exits on failure
- *
- * @param command	-	Commands to iterate over
- * @return 			-	NULL to indicate end of list
- */
 t_list			*construct_ast(t_list *tokens);
+void			deconstruct_ast(t_list **ast);
+void			deconstruct_command_table(void *ct);
+void			deconstruct_command(void *command);
+void			deconstruct_redir(void *redir);
 
 // Builtins
 

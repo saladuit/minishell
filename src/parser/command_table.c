@@ -29,3 +29,12 @@ t_command_table	*construct_command_table(t_list **tokens)
 	}
 	return (command_table);
 }
+
+void	deconstruct_command_table(void *command_table)
+{
+	t_command_table *ct;
+
+	ct = (t_command_table *)command_table;
+	ft_lstclear(&ct->commands, deconstruct_command);
+	free(ct);
+}
