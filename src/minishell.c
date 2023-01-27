@@ -28,6 +28,7 @@ int32_t	minishell(t_minishell *sheldon)
 		return (SUCCESS);
 	add_history(command_line);
 	lexer(command_line, &sheldon->tokens);
+	print_tokens(sheldon->tokens);
 	if (!sheldon->tokens)
 		return (SUCCESS);
 	if (analyzer(sheldon->tokens))

@@ -27,6 +27,9 @@ t_redir	*construct_redir(t_list **tokens)
 			return (NULL);
 	}
 	else
-		redir->filename = (*tokens)->content;
+	{
+		redir->filename = (char *)(*tokens)->content;
+		printf("in parser: %s\n", redir->filename);
+	}
 	return (redir);
 }
