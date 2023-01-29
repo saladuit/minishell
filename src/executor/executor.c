@@ -193,19 +193,16 @@ int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *she
 	t_command	*cmd;
 	int32_t		pipe_fds[2];
 	pid_t		pid;
-	bool		first;
 
 	if (init_first_pipe(pipe_fds) == -1)
 		return (ERROR);
-	first = true;
 	cmd = get_next_command(ct);
 	while (cmd)
 	{
 		pid = fork();
 		if (pid == 0)
 		{
-			if (first)
-				close(pipe_fds[0]);
+			close(pipe_fds[0]);
 			execute_pipe_command(cmd, shell);
 		}
 		free(cmd); // Leaks content should also be freed as this is the parent
@@ -216,7 +213,6 @@ int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *she
 			prepare_next_pipe(pipe_fds, std_fds, false);
 		else
 			prepare_next_pipe(pipe_fds, std_fds, true);
-		first = false;
 	}
 	return (wait_for_child_processes(pid));
 }
