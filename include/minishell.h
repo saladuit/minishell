@@ -50,6 +50,12 @@ typedef enum e_exitcodes
 	E_EXIT_STATUS_OUT_OF_RANGE = 225
 }	t_exitcodes;
 
+typedef enum e_signalcode
+{
+	S_HEREDOC = 300,
+	S_EXEC_QUIT = 301
+}	t_signalcode;
+
 typedef enum e_message
 {
 	USAGE,

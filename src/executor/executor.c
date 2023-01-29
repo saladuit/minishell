@@ -69,11 +69,18 @@ int32_t	wait_for_child_processes(pid_t pid)
 	int32_t	status;
 
 	status = 0;
+	close(STDIN_FILENO);
+	// close(STDOUT_FILENO);
 	waitpid(pid, &status, WUNTRACED);
 	while (wait(NULL) != -1 && errno != ECHILD)
 		;
-	if (g_exitcode == 130)
-		return (130);
+	if (g_exitcode == E_CTRL_C)
+		return (E_CTRL_C);
+	if (g_exitcode == S_EXEC_QUIT)
+	{
+		printf("Quit: 3\n");
+		return (WEXITSTATUS(status));
+	}
 	return (WEXITSTATUS(status));
 }
 
@@ -140,16 +147,26 @@ int32_t	init_first_pipe(int32_t *pipe_fds)
 {
 	if (pipe(pipe_fds) == -1)
 		return (ERROR);
+	char	*debugstr;
+	debugstr = ft_itoa(pipe_fds[0]);
+	write(2, debugstr, ft_strlen(debugstr));
+	write(2, " pipe read\n", 12);
+	free(debugstr);
+	debugstr = ft_itoa(pipe_fds[1]);
+	write(2, debugstr, ft_strlen(debugstr));
+	write(2, " pipe write\n", 13);
+	free(debugstr);
 	if (dup2(pipe_fds[1], STDOUT_FILENO) == -1)
 		return (ERROR);
 	close(pipe_fds[1]);
+	// close(pipe_fds[0]);
 	return (SUCCESS);
 }
 
 int32_t	prepare_next_pipe(int32_t *pipe_fds, int32_t *std_fds, bool last)
 {
-	if (dup2(pipe_fds[0], STDIN_FILENO) == -1)
-		return (ERROR);
+	dup2(pipe_fds[0], STDIN_FILENO);
+		// return (ERROR);
 	close(pipe_fds[0]);
 	if (last)
 	{
@@ -160,6 +177,15 @@ int32_t	prepare_next_pipe(int32_t *pipe_fds, int32_t *std_fds, bool last)
 	{
 		if (pipe(pipe_fds) == -1)
 			return (ERROR);
+		char	*debugstr;
+		debugstr = ft_itoa(pipe_fds[0]);
+		write(2, debugstr, ft_strlen(debugstr));
+		write(2, " pipe read\n", 12);
+		free(debugstr);
+		debugstr = ft_itoa(pipe_fds[0]);
+		write(2, debugstr, ft_strlen(debugstr));
+		write(2, " pipe write\n", 13);
+		free(debugstr);
 		if (dup2(pipe_fds[1], STDOUT_FILENO) == -1)
 			return (ERROR);
 		close(pipe_fds[1]);
@@ -172,15 +198,21 @@ int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *she
 	t_command	*cmd;
 	int32_t		pipe_fds[2];
 	pid_t		pid;
+	bool		first;
 
 	if (init_first_pipe(pipe_fds) == -1)
 		return (ERROR);
+	first = true;
 	cmd = get_next_command(ct);
 	while (cmd)
 	{
 		pid = fork();
 		if (pid == 0)
+		{
+			if (first)
+				close(pipe_fds[0]);
 			execute_pipe_command(cmd, shell);
+		}
 		free(cmd); // Leaks content should also be freed as this is the parent
 		cmd = get_next_command(ct);
 		if (!cmd)
@@ -189,6 +221,7 @@ int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *she
 			prepare_next_pipe(pipe_fds, std_fds, false);
 		else
 			prepare_next_pipe(pipe_fds, std_fds, true);
+		first = false;
 	}
 	return (wait_for_child_processes(pid));
 }
@@ -216,9 +249,9 @@ int32_t	executor(t_minishell *shell)
 	{
 		status = execute_command_table(ct, std_fds, shell);
 		free(ct);
-		ct = get_next_command_table(&shell->ast);
 		dup2(std_fds[STDIN_FILENO], STDIN_FILENO);
 		dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO);
+		ct = get_next_command_table(&shell->ast);
 	}
 	close(std_fds[STDIN_FILENO]);
 	close(std_fds[STDOUT_FILENO]);
