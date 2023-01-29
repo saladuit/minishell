@@ -68,7 +68,7 @@ int32_t	minishell(t_minishell *sheldon)
 
 	setup_signals(SREADLINE);
 	command_line = readline(messages_lookup(PROMPT));
-	if (!command_line && printf("exit"))
+	if (!command_line && printf("\x1B[1AMinishell$ exit\n"))
 		exit(E_GENERAL);
 	if (!*command_line)
 		return (SUCCESS);
