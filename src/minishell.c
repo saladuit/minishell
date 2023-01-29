@@ -10,7 +10,7 @@ void	print_tokens(t_list *tokens)
 		tokens = tokens->next;
 	}
 }
-// remove before finishing project
+// remove before finishing project (for debugging)
 void	print_ast(t_list *ast)
 {
 	t_command_table	*table;
@@ -83,18 +83,18 @@ int32_t	minishell(t_minishell *sheldon)
 		return (EXIT_FAILURE);
 	}
 	sheldon->ast = parser(sheldon->tokens);
-	// print_ast(sheldon->ast);
+	// print_ast(sheldon->ast); // debug line
 	ft_lstclear(&sheldon->tokens, free);
 	if (g_exitcode == 300)
 	{
 		g_exitcode = 0;
 		return (SUCCESS);
 	}
-	// printf("expanding\n");
-	// print_ast(sheldon->ast);
+	// printf("expanding\n"); // debug line
+	// print_ast(sheldon->ast); // debug line
 	expander(sheldon);
 	g_exitcode = 0;
-	// printf("executor\n");
+	// printf("executor\n"); // debug line
 	g_exitcode = executor(sheldon);
 	free(command_line);
 	return (EXIT_SUCCESS);
