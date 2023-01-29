@@ -4,9 +4,9 @@ t_type	set_type(char *symbol, size_t len)
 {
 	if (!ft_strncmp("<", symbol, len))
 		return (INPUT);
-	if (!ft_strncmp("<<", symbol, len))
+	else if (!ft_strncmp("<<", symbol, len))
 		return (HEREDOC);
-	if (!ft_strncmp(">", symbol, len))
+	else if (!ft_strncmp(">", symbol, len))
 		return (OUTPUT);
 	return (APPEND);
 }

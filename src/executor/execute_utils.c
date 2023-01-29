@@ -24,6 +24,8 @@ static bool	openfile(int *fd, char *path, t_type type)
 		*fd = open(path, O_RDONLY);
 	else if (type == OUTPUT)
 		*fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+	else if (type == APPEND)
+		*fd = open(path, O_WRONLY | O_CREAT | O_APPEND, 0664);
 	if (*fd == -1)
 		return (false);
 	return (true);
@@ -35,7 +37,7 @@ bool	protected_dup2(int fd, t_type type)
 
 	if (type == INPUT || type == HEREDOC)
 		ret = dup2(fd, STDIN_FILENO);
-	if (type == OUTPUT)
+	else
 		ret = dup2(fd, STDOUT_FILENO);
 	if (ret == -1)
 		return (false);
