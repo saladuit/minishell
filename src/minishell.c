@@ -11,6 +11,18 @@ void	print_tokens(t_list *tokens)
 	}
 }
 
+void	print_ast(t_list *ast)
+{
+	t_command_table	*table;
+	t_command		*command;
+
+	while (ast)
+	{
+		table = (t_command_table *)ast->content;
+		ast = ast->next;
+	}
+}
+
 /*
  * Abstract_syntax_tree gathers one or more command tables
  * It is only created when the input is valid
