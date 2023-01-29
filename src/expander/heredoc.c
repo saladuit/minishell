@@ -79,5 +79,6 @@ char	*add_heredoc(char *phrase)
 	if (id == 0)
 		heredoc_loop(phrase, fd);
 	waitpid(id, &status, WUNTRACED);
+	free(phrase);
 	return (close(fd), filename);
 }
