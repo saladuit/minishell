@@ -7,7 +7,6 @@ void	expand_redirect_list(t_list **redirects, t_minishell *shell)
 	char	*expanded_str;
 
 	node = *redirects;
-	printf("Before expansion: %s\n", ((t_redir *)node->content)->filename);
 	while (node)
 	{
 		redir = node->content;
@@ -15,9 +14,9 @@ void	expand_redirect_list(t_list **redirects, t_minishell *shell)
 		{
 			expanded_str = expand_variables(redir->filename, shell);
 			expanded_str = trim_quotes(expanded_str);
+			free(redir->filename);
 			redir->filename = expanded_str;
 		}
-		printf("Expander: %s\n", redir->filename);
 		node = node->next;
 	}
 }
