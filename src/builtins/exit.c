@@ -2,11 +2,12 @@
 
 int	ft_exit(char **arguments, t_minishell *shell)
 {
+	int	return_code;
 	(void)arguments;
 	(void)shell;
 	rl_clear_history();
 	if (arguments[1])
-		exit(ft_atoi(arguments[1]));
+			exit((unsigned short)ft_atoi(arguments[1]));
 	else
 		exit(0);
 	return (0);
