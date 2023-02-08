@@ -3,11 +3,8 @@
 // Get the arguments and redirects out of the command structure so it can expand them if needed.
 void	expand_cmd(t_command *cmd, t_minishell *shell)
 {
-	t_list	**arg_list;
-
-	arg_list = &cmd->arguments;
-	expand_argument_list(arg_list, shell);
-	expand_redirect_list(cmd->redirs, shell);
+	expand_argument_list(&cmd->arguments, shell);
+	expand_redirect_list(&cmd->redirs, shell);
 }
 
 // loop over the command structures inside command table structure and start expanding for each.

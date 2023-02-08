@@ -50,6 +50,12 @@ typedef enum e_exitcodes
 	E_EXIT_STATUS_OUT_OF_RANGE = 225
 }	t_exitcodes;
 
+typedef enum e_signalcode
+{
+	S_HEREDOC = 300,
+	S_EXEC_QUIT = 301
+}	t_signalcode;
+
 typedef enum e_message
 {
 	USAGE,
@@ -167,7 +173,7 @@ int32_t			find_var_start(char *str, int32_t index);
 char			*expand_variables(char *str, t_minishell *shell);
 char			**split_words(char *str);
 t_list			*pop_node(t_list **list, t_list *pop_node);
-void			expand_redirect_list(t_list *redirects, t_minishell *shell);
+void			expand_redirect_list(t_list **redirects, t_minishell *shell);
 char			*trim_quotes(char *str);
 
 // Executor
