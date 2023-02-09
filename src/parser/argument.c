@@ -7,6 +7,8 @@ void			print_arguments(t_command *cmd)
 
 	arguments = get_arguments(cmd);
 	i = 0;
+	if (!arguments)
+		return ;
 	while (arguments[i])
 	{
 		printf("\t\tArgument #%d: %s\n", i + 1, arguments[i]);
