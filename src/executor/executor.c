@@ -28,7 +28,7 @@ int32_t	setup_redirects(t_command *command)
 
 t_builtin	builtin_lookup(char *cmd)
 {
-	const static t_builtin	lookup[] = {
+	static const t_builtin	lookup[] = {
 	{.name = "echo", .func = ft_echo},
 	{.name = "cd", .func = ft_cd},
 	{.name = "pwd", .func = ft_pwd},

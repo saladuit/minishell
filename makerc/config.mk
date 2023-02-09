@@ -5,6 +5,7 @@ SRCS			=minishell.c \
 				 lexer/analyzer_checks.c \
 				 parser/parser.c \
 				 parser/redir.c \
+				 parser/argument.c \
 				 parser/ast.c \
 				 parser/command.c \
 				 parser/command_table.c \
@@ -49,7 +50,7 @@ LIBFT_DIR		:=$(LIB_DIR)/libft
 READLINE_DIR	:=$(LIB_DIR)/readline
 UNIT_INCLUDE_DIR	:=$(UNIT_DIR)/$(INCLUDE_DIR)
 LIBFT_INCLUDE_DIR	:=$(LIBFT_DIR)/$(INCLUDE_DIR)
-READLINE_INCLUDE_DIR	:=$(READLINE_DIR)/$(INCLUDE_DIR)
+READLINE_INCLUDE_DIR	:=$(shell brew --prefix readline)/include
 
 
 OBJS			=$(addprefix $(BUILD_DIR)/, $(SRCS:%.c=%.o))

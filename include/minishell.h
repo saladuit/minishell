@@ -18,6 +18,7 @@
 # include <termios.h>
 
 extern int	g_exitcode;
+
 /*
 E_GENERAL:
 	Miscellaneous errors, such as "divide by zero" and other
@@ -38,6 +39,9 @@ E_CTRL_C:
 E_EXIT_STATUS_OUT_OF_RANGE:
 	exit takes only integer args in the range 0 - 255
 */
+
+// Mininums
+
 typedef enum e_exitcodes
 {
 	E_GENERAL = 1,
@@ -99,12 +103,16 @@ typedef struct s_command
 {
 	t_list	*arguments;
 	t_list	*redirs;
+	t_list	*redirs_head;
+	t_list	*arguments_head;
+	bool	redirs_end_reached;
 }	t_command;
 
 typedef struct s_command_table
 {
-	int32_t	command_count;
+	t_list	*commands_head;
 	t_list	*commands;
+	bool	end_reached;
 }	t_command_table;
 
 typedef struct s_builtin
@@ -126,7 +134,27 @@ int32_t			ft_minishell_exit(t_message code, t_exitcodes exit_code);
 int32_t			dup_envp(t_minishell *shell, char **envp);
 void			setup_signals(t_signal_handler handler);
 void			reset_signals(void);
+
 // void			executor_signal_setup(void);
+
+// Environment
+
+typedef struct Pair {
+  char		*key;
+  char		*value;
+  struct	Pair *next;
+} Pair;
+
+typedef struct Dictionary {
+  Pair 		**table;
+  size_t 	size;
+} Dictionary;
+
+void			dict_init(Dictionary *dict);
+size_t			hash(char *str);
+void			dict_set(Dictionary *dict, char *key, char *value);
+char			*dict_get(Dictionary *dict, char *key);
+void			dict_delete(Dictionary *dict, char *key);
 
 // Messages
 
@@ -188,12 +216,14 @@ char			**get_env_paths(char **envp);
 char			*check_env_paths(char **envp, char *cmd);
 char			*get_cmd_path(char **envp, char *cmd);
 
+// Parser
 t_list			*parser(t_list *tokens);
 t_command		*construct_command(t_list **tokens);
 char			**get_arguments(t_command *cmd);
 t_redir			*get_next_redir(t_command *cmd);
 t_command		*get_next_command(t_command_table *cmdt);
 t_command_table	*get_next_command_table(t_list **ast);
+char			**get_arguments(t_command *cmd);
 char			*add_heredoc(char *phrase);
 t_command_table	*construct_command_table(t_list **tokens);
 t_redir			*construct_redir(t_list **tokens);
@@ -201,7 +231,13 @@ t_list			*construct_ast(t_list *tokens);
 void			deconstruct_ast(t_list **ast);
 void			deconstruct_command_table(void *ct);
 void			deconstruct_command(void *command);
-void			deconstruct_redir(void *redir);
+void			deconstruct_redirs(void *redir);
+
+void			debug_ast(t_list *ast);
+void			print_command_tables(t_list *command_table);
+void			print_commands(t_command_table *command);
+void			print_redirs(t_command *cmd);
+void			print_arguments(t_command *cmd);
 
 // Builtins
 

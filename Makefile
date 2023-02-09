@@ -8,15 +8,19 @@ NAME			:=minishell.out
 CC				:=gcc
 RM				:=rm -rfv
 CFLAGS			=-Wall -Wextra -Werror
-CFLAGS			+=$(if $(FSAN), -g -fsanitize=address)$(if $(DEBUG), -g)
+CFLAGS			+=$(if $(DEBUG),-g -D DEBUG)
+CFLAGS			+=$(if $(FSAN),-g -D DEBUG -fsanitize=address)
+
+LIB_FLAGS 		+=-L $(shell brew --prefix readline)/lib -l readline
 
 ################################################################################
+
 all: $(NAME)
 
 $(NAME): SHELL :=/bin/bash
 
 $(NAME): $(OBJS) $(MAIN_OBJ) $(LIBFT)
-	$(CC) $(CFLAGS) -L /Users/$(USER)/.brew/opt/readline/lib -lreadline $^ $(INCLUDE_FLAGS) -o $(NAME)
+	$(CC) $(CFLAGS) $(LIB_FLAGS) $^ $(INCLUDE_FLAGS) -o $(NAME)
 	@printf "$(BLUE_FG)$(NAME)$(RESET_COLOR) created\n"
 
 $(MAIN_OBJ) $(OBJS): $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(HEADER)
@@ -25,7 +29,6 @@ $(MAIN_OBJ) $(OBJS): $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(HEADER)
 
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR)
-
 ################################################################################
 
 clean:
