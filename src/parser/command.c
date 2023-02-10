@@ -1,8 +1,8 @@
 #include <minishell.h>
 
-void deconstruct_command(void *command)
+void	deconstruct_command(void *command)
 {
-	t_command *cmd;
+	t_command	*cmd;
 
 	cmd = (t_command *)command;
 	ft_lstclear(&cmd->arguments, free);
@@ -10,13 +10,13 @@ void deconstruct_command(void *command)
 	free(cmd);
 }
 
-void print_commands(t_command_table *ct)
+void	print_commands(t_command_table *ct)
 {
-	t_command *cmd;
-	int32_t	   i;
+	t_command	*cmd;
+	int32_t		i;
 
 	cmd = get_next_command(ct);
-	i	= 0;
+	i = 0;
 	while (cmd)
 	{
 		i++;
@@ -27,9 +27,9 @@ void print_commands(t_command_table *ct)
 	}
 }
 
-t_command *get_next_command(t_command_table *ct)
+t_command	*get_next_command(t_command_table *ct)
 {
-	t_command *current;
+	t_command	*current;
 
 	if (!ct->commands)
 		return (NULL);
@@ -42,17 +42,17 @@ t_command *get_next_command(t_command_table *ct)
 	if (ct->commands->next == NULL)
 	{
 		ct->end_reached = true;
-		ct->commands	= ct->commands_head;
+		ct->commands = ct->commands_head;
 	}
 	else
 		ct->commands = ct->commands->next;
 	return (current);
 }
 
-t_command *construct_command(t_list **tokens)
+t_command	*construct_command(t_list **tokens)
 {
-	t_command *command;
-	char	  *token;
+	t_command	*command;
+	char		*token;
 
 	command = ft_calloc(1, sizeof(t_command));
 	if (!command)
@@ -63,19 +63,18 @@ t_command *construct_command(t_list **tokens)
 		if (is_delimiter(*token) && ft_strlen(token) == 1)
 		{
 			*tokens = (*tokens)->next;
-			break;
+			break ;
 		}
 		if (!is_redir(*token) &&
 			!ft_lstadd_backnew(&command->arguments,
-							   ft_strdup((*tokens)->content)))
+								ft_strdup((*tokens)->content)))
 			return (NULL);
-
 		if (is_redir(*token) &&
 			!ft_lstadd_backnew(&command->redirs, construct_redir(tokens)))
 			return (NULL);
 		*tokens = (*tokens)->next;
 	}
 	command->arguments_head = command->arguments;
-	command->redirs_head	= command->redirs;
+	command->redirs_head = command->redirs;
 	return (command);
 }
