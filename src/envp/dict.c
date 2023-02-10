@@ -2,16 +2,16 @@
 
 #define HASH_TABLE_SIZE 32
 
-void dict_init(Dictionary *dict)
+void dict_init(t_dictionary *dict)
 {
 	dict->size = 0;
-	dict->table = (Pair**)malloc(HASH_TABLE_SIZE * sizeof(Pair*));
-	memset(dict->table, 0, HASH_TABLE_SIZE * sizeof(Pair*));
+	dict->table = (t_pair **)malloc(HASH_TABLE_SIZE * sizeof(t_pair *));
+	memset(dict->table, 0, HASH_TABLE_SIZE * sizeof(t_pair *));
 }
 
-size_t hash(char *str) 
+size_t hash(char *str)
 {
-	size_t	h;
+	size_t h;
 
 	h = 0;
 	while (*str)
@@ -22,34 +22,33 @@ size_t hash(char *str)
 	return (h % HASH_TABLE_SIZE);
 }
 
-void dict_set(Dictionary *dict, char *key, char *value) 
+void dict_set(t_dictionary *dict, char *key, char *value)
 {
-	size_t index;
-	Pair *pair;
+	size_t	index;
+	t_pair *pair;
 
 	index = hash(key) % HASH_TABLE_SIZE;
 	pair = dict->table[index];
-  while (pair != NULL && strcmp(pair->key, key) != 0) 
-    pair = pair->next;
-  if (pair == NULL)
-  {
-    pair = malloc(sizeof(Pair));
-    pair->key = key;
-    pair->next = dict->table[index];
-    dict->table[index] = pair;
-    dict->size++;
-  }
-  pair->value = value;
+	while (pair != NULL && strcmp(pair->key, key) != 0) pair = pair->next;
+	if (pair == NULL)
+	{
+		pair = malloc(sizeof(t_pair));
+		pair->key = key;
+		pair->next = dict->table[index];
+		dict->table[index] = pair;
+		dict->size++;
+	}
+	pair->value = value;
 }
 
-char *dict_get(Dictionary *dict, char *key) 
+char *dict_get(t_dictionary *dict, char *key)
 {
-	size_t index;
-	Pair *pair;
+	size_t	index;
+	t_pair *pair;
 
 	index = hash(key) % HASH_TABLE_SIZE;
 	pair = dict->table[index];
-	while (pair != NULL) 
+	while (pair != NULL)
 	{
 		if (strcmp(pair->key, key) == 0)
 			return pair->value;
@@ -58,11 +57,11 @@ char *dict_get(Dictionary *dict, char *key)
 	return (NULL);
 }
 
-void dict_delete(Dictionary *dict, char *key) 
+void dict_delete(t_dictionary *dict, char *key)
 {
 	size_t	index;
-	Pair	*pair;
-	Pair	*prev;
+	t_pair *pair;
+	t_pair *prev;
 
 	index = hash(key) % HASH_TABLE_SIZE;
 	pair = dict->table[index];
@@ -71,9 +70,9 @@ void dict_delete(Dictionary *dict, char *key)
 	{
 		if (strcmp(pair->key, key) == 0)
 		{
-			if (prev == NULL) 
+			if (prev == NULL)
 				dict->table[index] = pair->next;
-			else 
+			else
 				prev->next = pair->next;
 			free(pair);
 			dict->size--;
