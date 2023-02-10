@@ -4,7 +4,7 @@
  * handling the hightest form of abstractions, namely
  * keeping track of the status of the program
  * issuing messages when something goes wrong
-*/
+ */
 int g_exitcode;
 
 //void leaks_check(void)
@@ -15,7 +15,7 @@ int g_exitcode;
 int	main(int argc, char **argv, char **envp)
 {
 //	atexit(leaks_check);
-	t_minishell	sheldon;
+	t_minishell sheldon;
 
 	(void)argv;
 	(void)envp;
