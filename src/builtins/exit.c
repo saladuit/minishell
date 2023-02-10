@@ -2,7 +2,6 @@
 
 int	ft_exit(char **arguments, t_minishell *shell)
 {
-	int	return_code;
 	(void)arguments;
 	(void)shell;
 	rl_clear_history();

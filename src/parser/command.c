@@ -1,53 +1,51 @@
 #include <minishell.h>
 
-char	**get_arguments(t_command *cmd)
+void	deconstruct_command(void *command)
 {
-	t_list	*tmp;
-	char	**arguments;
-	int32_t	i;
+	t_command *cmd;
 
-	if (!cmd->arguments)
-		return (NULL);
-	arguments = ft_calloc(ft_lstsize(cmd->arguments) + 1, sizeof(char *));
-	if (!arguments)
-		return (NULL);
-	i = 0;
-	while (cmd->arguments)
-	{
-		arguments[i] = cmd->arguments->content;
-		tmp = cmd->arguments;
-		cmd->arguments = cmd->arguments->next;
-		free(tmp);
-		i++;
-	}
-	return (arguments);
+	cmd = (t_command *)command;
+	ft_lstclear(&cmd->arguments, free);
+	ft_lstclear(&cmd->redirs, deconstruct_redirs);
+	free(cmd);
 }
 
-t_redir	*get_next_redir(t_command *cmd)
+void			print_commands(t_command_table *ct)
 {
-	t_redir	*current;
-	t_list	*tmp;
+	t_command 	*cmd;
+	int32_t 	i;
 
-	if (!cmd->redirs)
-		return (NULL);
-	current = cmd->redirs->content;
-	tmp = cmd->redirs;
-	cmd->redirs = cmd->redirs->next;
-	free(tmp);
-	return (current);
+	cmd = get_next_command(ct);
+	i = 0;
+	while (cmd)
+	{
+		i++;
+		printf("\tCommand #%d at %p\n", i, ct);
+		print_arguments(cmd);
+		print_redirs(cmd);
+		cmd = get_next_command(ct);
+	}
 }
 
 t_command	*get_next_command(t_command_table *ct)
 {
 	t_command	*current;
-	t_list		*tmp;
 
 	if (!ct->commands)
 		return (NULL);
 	current = ct->commands->content;
-	tmp = ct->commands;
-	ct->commands = ct->commands->next;
-	free(tmp);
+	if (ct->end_reached == true)
+	{
+		ct->end_reached = false;
+		return (NULL);
+	}
+	if (ct->commands->next == NULL)
+	{
+		ct->end_reached = true;
+		ct->commands = ct->commands_head;
+	}
+	else
+		ct->commands = ct->commands->next;
 	return (current);
 }
 
@@ -62,19 +60,20 @@ t_command	*construct_command(t_list **tokens)
 	while (*tokens)
 	{
 		token = (*tokens)->content;
-		if (is_delimiter(*token))
+		if (is_delimiter(*token) && ft_strlen(token) == 1)
 		{
 			*tokens = (*tokens)->next;
 			break ;
 		}
-		if (!is_redir(*token)
-			&& !ft_lstadd_backnew(&command->arguments,
+		if (!is_redir(*token) && !ft_lstadd_backnew(&command->arguments,
 				ft_strdup((*tokens)->content)))
 			return (NULL);
-		if (is_redir(*token)
-			&& !ft_lstadd_backnew(&command->redirs, construct_redir(tokens)))
+		if (is_redir(*token) && !ft_lstadd_backnew(&command->redirs, 
+					construct_redir(tokens)))
 			return (NULL);
 		*tokens = (*tokens)->next;
 	}
+	command->arguments_head = command->arguments;
+	command->redirs_head = command->redirs;
 	return (command);
 }
