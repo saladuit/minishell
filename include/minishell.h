@@ -9,10 +9,10 @@
 # include <errno.h>
 # include <fcntl.h>
 # include <libft.h>
+# include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdbool.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include <sys/types.h>
 # include <sys/wait.h>
@@ -141,24 +141,24 @@ void				reset_signals(void);
 
 // Environment
 
-typedef struct Pair
+typedef struct s_pair
 {
 	char			*key;
 	char			*value;
-	struct Pair		*next;
-}					Pair;
+	struct s_pair		*next;
+}					t_pair;
 
-typedef struct Dictionary
+typedef struct s_dictionary
 {
-	Pair			**table;
+	t_pair			**table;
 	size_t			size;
-}					Dictionary;
+}					t_dictionary;
 
-void				dict_init(Dictionary *dict);
+void				dict_init(t_dictionary *dict);
 size_t				hash(char *str);
-void				dict_set(Dictionary *dict, char *key, char *value);
-char				*dict_get(Dictionary *dict, char *key);
-void				dict_delete(Dictionary *dict, char *key);
+void				dict_set(t_dictionary *dict, char *key, char *value);
+char				*dict_get(t_dictionary *dict, char *key);
+void				dict_delete(t_dictionary *dict, char *key);
 
 // Messages
 

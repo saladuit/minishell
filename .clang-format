@@ -6,7 +6,7 @@ BasedOnStyle:  Google
 # Align
 AlignAfterOpenBracket: DontAlign
 AlignArrayOfStructures: Left
-AlignConsecutiveAssignments: Consecutive
+AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: Consecutive
 AlignConsecutiveMacros: Consecutive
 AlignEscapedNewlines: Left
