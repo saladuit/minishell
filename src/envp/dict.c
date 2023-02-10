@@ -1,12 +1,9 @@
 #include <minishell.h>
 
-#define HASH_TABLE_SIZE 32
 
 void dict_init(t_dictionary *dict)
 {
-	dict->size = 0;
-	dict->table = (t_pair **)malloc(HASH_TABLE_SIZE * sizeof(t_pair *));
-	memset(dict->table, 0, HASH_TABLE_SIZE * sizeof(t_pair *));
+	dict->table = ft_calloc(HASH_TABLE_SIZE, sizeof(t_pair *));
 }
 
 size_t hash(char *str)
