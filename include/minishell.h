@@ -1,11 +1,13 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define ERROR -1
+#define ERROR	  -1
 # define SUCCESS 0
 # define CONTINUE 1
 # define STOP 0
-
+#ifndef DEBUG
+# define DEBUG 0
+#endif
 # include <errno.h>
 # include <fcntl.h>
 # include <libft.h>

@@ -20,9 +20,8 @@ int32_t	minishell(t_minishell *sheldon)
 	if (!sheldon->tokens)
 		return (CONTINUE);
 	sheldon->ast = parser(sheldon->tokens);
-#ifdef DEBUG
-	debug_ast(sheldon->ast);
-#endif
+	if (DEBUG)
+		debug_ast(sheldon->ast);
 	//	if (g_exitcode == 300)
 	//	{
 	//		g_exitcode = 0;
