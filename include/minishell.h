@@ -167,7 +167,7 @@ void				reset_signals(void);
 // Environment
 
 // Dictionary
-//
+
 void				dict_init(t_dictionary *dict);
 size_t				hash(char *str);
 void				dict_set(t_dictionary *dict, char *key, char *value);

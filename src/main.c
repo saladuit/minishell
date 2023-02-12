@@ -1,4 +1,5 @@
 #include <minishell.h>
+#include "libft.h"
 
 /* Start of program responsible for
  * handling the hightest form of abstractions, namely
@@ -8,17 +9,19 @@
 
 static void load_envp(t_dictionary *env, char **envp)
 {
+	char **entry;
+	int i;
+
+	i = 0;
 	dict_init(env);
-	for (int i = 0; envp[i] != NULL; i++)
+	while (envp[i] != NULL)
 	{
-		char *entry = strdup(envp[i]);
-		char *key = strtok(entry, "=");
-		char *value = strtok(NULL, "=");
-		printf("entry: %s\n", entry);
-		printf("key: %s\n", key);
-		printf("value: %s\n", value);
-		dict_set(env, key, value);
+		entry = ft_split(envp[i], '=');
+		printf("key: %s\n", entry[i]);
+		printf("value: %s\n", entry[i]);
+		dict_set(env, entry[i], entry[i + 1]);
 		free(entry);
+		i++;
 	}
 }
 
