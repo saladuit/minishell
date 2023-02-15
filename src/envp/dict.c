@@ -1,4 +1,5 @@
 #include <minishell.h>
+#include "libft.h"
 
 size_t hash(char *str)
 {
@@ -67,11 +68,45 @@ void dict_delete(t_dictionary *dict, char *key)
 				dict->table[index] = pair->next;
 			else
 				prev->next = pair->next;
+			free(pair->key);
+			free(pair->value);
 			free(pair);
 			dict->size--;
 			break;
 		}
 		prev = pair;
 		pair = pair->next;
+	}
+}
+
+// void dict_print(t_dictionary *dict)
+//{
+// }
+
+void pair_clean(t_pair *pair)
+{
+	if (pair->key)
+		free(pair->key);
+	if (pair->value)
+		free(pair->value);
+	if (pair)
+		free(pair);
+}
+
+void dict_destroy(t_dictionary *dict)
+{
+	size_t i;
+	t_pair *next;
+
+	i = 0;
+	while (i < HASH_TABLE_SIZE)
+	{
+		while (dict->table[i])
+		{
+			next = dict->table[i]->next;
+			pair_clean(dict->table[i]);
+			dict->table[i] = next;
+		}
+		i++;
 	}
 }

@@ -172,6 +172,7 @@ size_t				hash(char *str);
 void				dict_set(t_dictionary *dict, char *key, char *value);
 char				*dict_get(t_dictionary *dict, char *key);
 void				dict_delete(t_dictionary *dict, char *key);
+void 				dict_destroy(t_dictionary *dict);
 
 // Messages
 

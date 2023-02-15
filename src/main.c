@@ -7,7 +7,7 @@
  * issuing messages when something goes wrong
  */
 
-void clear_envp_load(char *key, char *value, char **entry)
+void envp_clear_load(char *key, char *value, char **entry)
 {
 	if (key)
 		free(key);
@@ -16,11 +16,11 @@ void clear_envp_load(char *key, char *value, char **entry)
 	if (entry)
 		free(entry);
 }
-static void load_envp(t_dictionary *env, char **envp)
+
+// FIXME this should be moved to its own file
+static void envp_load(t_dictionary *env, char **envp)
 {
 	char **entry;
-	char  *key;
-	char  *value;
 	int i;
 
 	i = 0;
@@ -28,19 +28,12 @@ static void load_envp(t_dictionary *env, char **envp)
 	{
 		entry = ft_split(envp[i], '=');
 		if (!entry)
-			continue;
-		key = ft_strdup(entry[0]);
-		if (!entry[1])
-			value = ft_strdup("");
-		else
-			value = ft_strdup(entry[1]);
-		if (!key || !value)
 		{
-			clear_envp_load(key, value, entry);
+			i++;
 			continue;
 		}
-		dict_set(env, key, value);
-		clear_envp_load(key, NULL, NULL);
+		dict_set(env, entry[0], entry[1]);
+		envp_clear_load(NULL, NULL, entry);
 		i++;
 	}
 }
@@ -48,7 +41,7 @@ static void load_envp(t_dictionary *env, char **envp)
 static void init_sheldon(t_minishell *sheldon, char **envp)
 {
 	bzero(sheldon, sizeof(t_minishell));
-	load_envp(&sheldon->envd, envp);
+	envp_load(&sheldon->envd, envp);
 }
 
 int main(int argc, char **argv, char **envp)
@@ -56,13 +49,13 @@ int main(int argc, char **argv, char **envp)
 	t_minishell sheldon;
 
 	(void)argv;
-	(void)envp;
 	if (argc > 1)
 		ft_minishell_exit(USAGE, EXIT_FAILURE);
 	if (!isatty(STDIN_FILENO))
 		rl_outstream = stdin;
 	init_sheldon(&sheldon, envp);
 	while (minishell(&sheldon));
+	dict_destroy(&sheldon.envd);
 	rl_clear_history();
 	return (0);
 }
