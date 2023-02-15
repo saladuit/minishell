@@ -79,9 +79,23 @@ void dict_delete(t_dictionary *dict, char *key)
 	}
 }
 
-// void dict_print(t_dictionary *dict)
-//{
-// }
+void dict_print(t_dictionary *dict)
+{
+	size_t	i;
+	t_pair *next;
+
+	i = 0;
+	while (i < HASH_TABLE_SIZE)
+	{
+		while (dict->table[i])
+		{
+			next = dict->table[i]->next;
+			printf("%s=%s\n", dict->table[i]->key, dict->table[i]->value);
+			dict->table[i] = next;
+		}
+		i++;
+	}
+}
 
 void pair_clean(t_pair *pair)
 {

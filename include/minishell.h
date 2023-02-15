@@ -165,6 +165,7 @@ void				reset_signals(void);
 // void			executor_signal_setup(void);
 
 // Environment
+void	envp_load(t_dictionary *env, char **envp);
 
 // Dictionary
 
@@ -173,6 +174,7 @@ void				dict_set(t_dictionary *dict, char *key, char *value);
 char				*dict_get(t_dictionary *dict, char *key);
 void				dict_delete(t_dictionary *dict, char *key);
 void 				dict_destroy(t_dictionary *dict);
+void				dict_print(t_dictionary *dict);
 
 // Messages
 
