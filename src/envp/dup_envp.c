@@ -23,3 +23,37 @@ int32_t	dup_envp(t_minishell *shell, char **envp)
 	sort_export(shell->expo);
 	return (0);
 }
+
+// FIXME this should be moved to its own file called envp.c
+static void envp_clear(char *key, char *value, char **entry)
+{
+	if (key)
+		free(key);
+	if (value)
+		free(value);
+	if (entry)
+		free(entry);
+}
+
+// FIXME this should be moved to its own file called envp.c
+void envp_load(t_dictionary *env, char **envp)
+{
+	char **entry;
+	int	   i;
+
+	i = 0;
+	while (envp[i] != NULL)
+	{
+		entry = ft_split(envp[i], '=');
+		if (!entry)
+		{
+			i++;
+			continue;
+		}
+		dict_set(env, entry[0], entry[1]);
+		envp_clear(NULL, NULL, entry);
+		i++;
+	}
+	if (DEBUG)
+		dict_print(env);
+}
