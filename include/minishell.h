@@ -102,7 +102,7 @@ typedef struct s_pair
 
 typedef struct s_dictionary
 {
-	t_pair			**table;
+	t_pair			*table[HASH_TABLE_SIZE];
 	size_t			size;
 }					t_dictionary;
 
@@ -168,7 +168,6 @@ void				reset_signals(void);
 
 // Dictionary
 
-void				dict_init(t_dictionary *dict);
 size_t				hash(char *str);
 void				dict_set(t_dictionary *dict, char *key, char *value);
 char				*dict_get(t_dictionary *dict, char *key);

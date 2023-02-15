@@ -1,11 +1,5 @@
 #include <minishell.h>
 
-
-void dict_init(t_dictionary *dict)
-{
-	dict->table = ft_calloc(HASH_TABLE_SIZE, sizeof(t_pair *));
-}
-
 size_t hash(char *str)
 {
 	size_t h;
@@ -24,12 +18,14 @@ void dict_set(t_dictionary *dict, char *key, char *value)
 	size_t	index;
 	t_pair *pair;
 
-	index = hash(key) % HASH_TABLE_SIZE;
+	index = hash(key);
 	pair = dict->table[index];
 	while (pair != NULL && strcmp(pair->key, key) != 0) pair = pair->next;
 	if (pair == NULL)
 	{
 		pair = malloc(sizeof(t_pair));
+		if (!pair)
+			return;
 		pair->key = key;
 		pair->next = dict->table[index];
 		dict->table[index] = pair;
@@ -43,7 +39,7 @@ char *dict_get(t_dictionary *dict, char *key)
 	size_t	index;
 	t_pair *pair;
 
-	index = hash(key) % HASH_TABLE_SIZE;
+	index = hash(key);
 	pair = dict->table[index];
 	while (pair != NULL)
 	{
@@ -60,7 +56,7 @@ void dict_delete(t_dictionary *dict, char *key)
 	t_pair *pair;
 	t_pair *prev;
 
-	index = hash(key) % HASH_TABLE_SIZE;
+	index = hash(key);
 	pair = dict->table[index];
 	prev = NULL;
 	while (pair != NULL)

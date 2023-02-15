@@ -7,20 +7,40 @@
  * issuing messages when something goes wrong
  */
 
+void clear_envp_load(char *key, char *value, char **entry)
+{
+	if (key)
+		free(key);
+	if (value)
+		free(value);
+	if (entry)
+		free(entry);
+}
 static void load_envp(t_dictionary *env, char **envp)
 {
 	char **entry;
+	char  *key;
+	char  *value;
 	int i;
 
 	i = 0;
-	dict_init(env);
 	while (envp[i] != NULL)
 	{
 		entry = ft_split(envp[i], '=');
-		printf("key: %s\n", entry[i]);
-		printf("value: %s\n", entry[i]);
-		dict_set(env, entry[i], entry[i + 1]);
-		free(entry);
+		if (!entry)
+			continue;
+		key = ft_strdup(entry[0]);
+		if (!entry[1])
+			value = ft_strdup("");
+		else
+			value = ft_strdup(entry[1]);
+		if (!key || !value)
+		{
+			clear_envp_load(key, value, entry);
+			continue;
+		}
+		dict_set(env, key, value);
+		clear_envp_load(key, NULL, NULL);
 		i++;
 	}
 }
