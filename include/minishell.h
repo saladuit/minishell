@@ -1,13 +1,18 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#define ERROR	  -1
+# define ERROR	  -1
 # define SUCCESS 0
+
 # define CONTINUE 1
 # define STOP 0
+
 #ifndef DEBUG
 # define DEBUG 0
 #endif
+
+#define HASH_TABLE_SIZE 32
+
 # include <errno.h>
 # include <fcntl.h>
 # include <libft.h>
@@ -88,12 +93,30 @@ typedef enum e_signal_handler
 
 // Ministructs
 
+typedef struct s_pair
+{
+	char			*key;
+	char			*value;
+	struct s_pair		*next;
+}					t_pair;
+
+typedef struct s_dictionary
+{
+	t_pair			*table[HASH_TABLE_SIZE];
+	size_t			size;
+}					t_dictionary;
+
+extern int g_exitcode;
+
 typedef struct s_minishell
 {
 	char			**env;
+	t_dictionary	envd;
 	char			**expo;
 	t_list			*ast;
 	t_list			*tokens;
+	char			*command_line;
+	int32_t			exit_code;
 
 }					t_minishell;
 
@@ -142,25 +165,16 @@ void				reset_signals(void);
 // void			executor_signal_setup(void);
 
 // Environment
+void	envp_load(t_dictionary *env, char **envp);
 
-typedef struct s_pair
-{
-	char			*key;
-	char			*value;
-	struct s_pair		*next;
-}					t_pair;
+// Dictionary
 
-typedef struct s_dictionary
-{
-	t_pair			**table;
-	size_t			size;
-}					t_dictionary;
-
-void				dict_init(t_dictionary *dict);
 size_t				hash(char *str);
 void				dict_set(t_dictionary *dict, char *key, char *value);
 char				*dict_get(t_dictionary *dict, char *key);
 void				dict_delete(t_dictionary *dict, char *key);
+void 				dict_destroy(t_dictionary *dict);
+void				dict_print(t_dictionary *dict);
 
 // Messages
 
@@ -224,6 +238,7 @@ char				*check_env_paths(char **envp, char *cmd);
 char				*get_cmd_path(char **envp, char *cmd);
 
 // Parser
+
 t_list				*parser(t_list *tokens);
 t_command			*construct_command(t_list **tokens);
 char				**get_arguments(t_command *cmd);

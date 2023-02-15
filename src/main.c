@@ -1,33 +1,31 @@
 #include <minishell.h>
+#include <stdlib.h>
+#include "libft.h"
 
 /* Start of program responsible for
  * handling the hightest form of abstractions, namely
  * keeping track of the status of the program
  * issuing messages when something goes wrong
  */
-int g_exitcode;
 
-//void leaks_check(void)
-//{
-//	system("leaks -q minishell.out");
-//}
-
-int	main(int argc, char **argv, char **envp)
+static void init_sheldon(t_minishell *sheldon, char **envp)
 {
-//	atexit(leaks_check);
+	bzero(sheldon, sizeof(t_minishell));
+	envp_load(&sheldon->envd, envp);
+}
+
+int main(int argc, char **argv, char **envp)
+{
 	t_minishell sheldon;
 
 	(void)argv;
-	(void)envp;
 	if (argc > 1)
 		ft_minishell_exit(USAGE, EXIT_FAILURE);
-//	if (dup_envp(&sheldon, envp))
-//		perror("Environment parsing: ");
 	if (!isatty(STDIN_FILENO))
 		rl_outstream = stdin;
-	// sheldon.exit_code = 0;
-	g_exitcode = 0;
+	init_sheldon(&sheldon, envp);
 	while (minishell(&sheldon));
+	dict_destroy(&sheldon.envd);
 	rl_clear_history();
-	return (0);
+	return (EXIT_SUCCESS);
 }

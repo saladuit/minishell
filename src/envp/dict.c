@@ -1,13 +1,5 @@
 #include <minishell.h>
-
-#define HASH_TABLE_SIZE 32
-
-void dict_init(t_dictionary *dict)
-{
-	dict->size = 0;
-	dict->table = (t_pair **)malloc(HASH_TABLE_SIZE * sizeof(t_pair *));
-	memset(dict->table, 0, HASH_TABLE_SIZE * sizeof(t_pair *));
-}
+#include "libft.h"
 
 size_t hash(char *str)
 {
@@ -27,12 +19,14 @@ void dict_set(t_dictionary *dict, char *key, char *value)
 	size_t	index;
 	t_pair *pair;
 
-	index = hash(key) % HASH_TABLE_SIZE;
+	index = hash(key);
 	pair = dict->table[index];
 	while (pair != NULL && strcmp(pair->key, key) != 0) pair = pair->next;
 	if (pair == NULL)
 	{
 		pair = malloc(sizeof(t_pair));
+		if (!pair)
+			return;
 		pair->key = key;
 		pair->next = dict->table[index];
 		dict->table[index] = pair;
@@ -46,7 +40,7 @@ char *dict_get(t_dictionary *dict, char *key)
 	size_t	index;
 	t_pair *pair;
 
-	index = hash(key) % HASH_TABLE_SIZE;
+	index = hash(key);
 	pair = dict->table[index];
 	while (pair != NULL)
 	{
@@ -63,7 +57,7 @@ void dict_delete(t_dictionary *dict, char *key)
 	t_pair *pair;
 	t_pair *prev;
 
-	index = hash(key) % HASH_TABLE_SIZE;
+	index = hash(key);
 	pair = dict->table[index];
 	prev = NULL;
 	while (pair != NULL)
@@ -74,11 +68,59 @@ void dict_delete(t_dictionary *dict, char *key)
 				dict->table[index] = pair->next;
 			else
 				prev->next = pair->next;
+			free(pair->key);
+			free(pair->value);
 			free(pair);
 			dict->size--;
 			break;
 		}
 		prev = pair;
 		pair = pair->next;
+	}
+}
+
+void dict_print(t_dictionary *dict)
+{
+	size_t	i;
+	t_pair *next;
+
+	i = 0;
+	while (i < HASH_TABLE_SIZE)
+	{
+		while (dict->table[i])
+		{
+			next = dict->table[i]->next;
+			printf("%s=%s\n", dict->table[i]->key, dict->table[i]->value);
+			dict->table[i] = next;
+		}
+		i++;
+	}
+}
+
+void pair_clean(t_pair *pair)
+{
+	if (pair->key)
+		free(pair->key);
+	if (pair->value)
+		free(pair->value);
+	if (pair)
+		free(pair);
+}
+
+void dict_destroy(t_dictionary *dict)
+{
+	size_t i;
+	t_pair *next;
+
+	i = 0;
+	while (i < HASH_TABLE_SIZE)
+	{
+		while (dict->table[i])
+		{
+			next = dict->table[i]->next;
+			pair_clean(dict->table[i]);
+			dict->table[i] = next;
+		}
+		i++;
 	}
 }
