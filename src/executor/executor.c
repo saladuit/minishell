@@ -84,14 +84,14 @@ void	execute_child_command(t_minishell *shell, char **arguments)
 	char	*command_path;
 
 	reset_signals();
-	command_path = get_cmd_path(shell->env, arguments[0]);
+	command_path = get_cmd_path(&shell->envd, arguments[0]);
 	if (access(command_path, X_OK))
 	{
 		write(2, "Minishell: ", 12);
 		write(2, arguments[0], ft_strlen(arguments[0]));
 		write(2, ": command not found\n", 21);
 	}
-	execve(command_path, arguments, shell->env);
+	execve(command_path, arguments, dict_to_envp(&shell->envd));
 	exit(127); // TODO make one func call
 }
 

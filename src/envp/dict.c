@@ -1,5 +1,68 @@
 #include <minishell.h>
-#include "libft.h"
+
+void dict_destroy(t_dictionary *dict)
+{
+	size_t i;
+	t_pair *next;
+
+	i = 0;
+	while (i < HASH_TABLE_SIZE)
+	{
+		while (dict->table[i])
+		{
+			next = dict->table[i]->next;
+			pair_clean(dict->table[i]);
+			dict->table[i] = next;
+		}
+		i++;
+	}
+}
+
+char	**dict_to_envp(t_dictionary *dict)
+{
+	char	**envp;
+	size_t	i;
+	size_t	j;
+	t_pair	*next;
+
+	envp = ft_calloc(dict->size + 1, sizeof(char *));
+	if (!envp)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (i < HASH_TABLE_SIZE)
+	{
+		while (dict->table[i])
+		{
+			next = dict->table[i]->next;
+			envp[j] = pair_to_str(dict->table[i]);
+			dict->table[i] = next;
+			if (!envp[j])
+				continue ;
+			j++; //This shoulnd't increment if pair_to_str fails this will leave some uninitalised space, but it will continue to work at least
+		}
+		i++;
+	}
+	return (envp);
+}
+
+void dict_print(t_dictionary *dict)
+{
+	size_t	i;
+	t_pair *next;
+
+	i = 0;
+	while (i < HASH_TABLE_SIZE)
+	{
+		while (dict->table[i])
+		{
+			next = dict->table[i]->next;
+			printf("%s=%s\n", dict->table[i]->key, dict->table[i]->value);
+			dict->table[i] = next;
+		}
+		i++;
+	}
+}
 
 size_t hash(char *str)
 {
@@ -12,43 +75,6 @@ size_t hash(char *str)
 		str++;
 	}
 	return (h % HASH_TABLE_SIZE);
-}
-
-void dict_set(t_dictionary *dict, char *key, char *value)
-{
-	size_t	index;
-	t_pair *pair;
-
-	index = hash(key);
-	pair = dict->table[index];
-	while (pair != NULL && strcmp(pair->key, key) != 0) pair = pair->next;
-	if (pair == NULL)
-	{
-		pair = malloc(sizeof(t_pair));
-		if (!pair)
-			return;
-		pair->key = key;
-		pair->next = dict->table[index];
-		dict->table[index] = pair;
-		dict->size++;
-	}
-	pair->value = value;
-}
-
-char *dict_get(t_dictionary *dict, char *key)
-{
-	size_t	index;
-	t_pair *pair;
-
-	index = hash(key);
-	pair = dict->table[index];
-	while (pair != NULL)
-	{
-		if (strcmp(pair->key, key) == 0)
-			return pair->value;
-		pair = pair->next;
-	}
-	return (NULL);
 }
 
 void dict_delete(t_dictionary *dict, char *key)
@@ -79,48 +105,41 @@ void dict_delete(t_dictionary *dict, char *key)
 	}
 }
 
-void dict_print(t_dictionary *dict)
+char *dict_get(t_dictionary *dict, char *key)
 {
-	size_t	i;
-	t_pair *next;
+	size_t	index;
+	t_pair *pair;
 
-	i = 0;
-	while (i < HASH_TABLE_SIZE)
+	index = hash(key);
+	pair = dict->table[index];
+	while (pair != NULL)
 	{
-		while (dict->table[i])
-		{
-			next = dict->table[i]->next;
-			printf("%s=%s\n", dict->table[i]->key, dict->table[i]->value);
-			dict->table[i] = next;
-		}
-		i++;
+		if (strcmp(pair->key, key) == 0)
+			return pair->value;
+		pair = pair->next;
 	}
+	return (NULL);
 }
 
-void pair_clean(t_pair *pair)
+int32_t dict_set(t_dictionary *dict, char *key, char *value)
 {
-	if (pair->key)
-		free(pair->key);
-	if (pair->value)
-		free(pair->value);
-	if (pair)
-		free(pair);
-}
+	size_t	index;
+	t_pair *pair;
 
-void dict_destroy(t_dictionary *dict)
-{
-	size_t i;
-	t_pair *next;
-
-	i = 0;
-	while (i < HASH_TABLE_SIZE)
+	index = hash(key);
+	pair = dict->table[index];
+	while (pair != NULL && strcmp(pair->key, key) != 0)
+		pair = pair->next;
+	if (pair == NULL)
 	{
-		while (dict->table[i])
-		{
-			next = dict->table[i]->next;
-			pair_clean(dict->table[i]);
-			dict->table[i] = next;
-		}
-		i++;
+		pair = malloc(sizeof(t_pair));
+		if (!pair)
+			return (ERROR);
+		pair->key = key;
+		pair->next = dict->table[index];
+		dict->table[index] = pair;
+		dict->size++;
 	}
+	pair->value = value;
+	return (SUCCESS);
 }

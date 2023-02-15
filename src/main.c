@@ -20,7 +20,10 @@ int main(int argc, char **argv, char **envp)
 
 	(void)argv;
 	if (argc > 1)
-		ft_minishell_exit(USAGE, EXIT_FAILURE);
+	{
+		ft_minishell_message(USAGE, EXIT_FAILURE);
+		exit(1);
+	}
 	if (!isatty(STDIN_FILENO))
 		rl_outstream = stdin;
 	init_sheldon(&sheldon, envp);
