@@ -30,8 +30,8 @@ int32_t	minishell(t_minishell *sheldon)
 	//		return (SUCCESS);
 	//	}
 	//	expander(sheldon);
-	//	g_exitcode = 0;
-	//	g_exitcode = executor(sheldon);
+	g_exitcode = 0;
+	g_exitcode = executor(sheldon);
 	minishell_clean(sheldon);
 	return (CONTINUE);
 }

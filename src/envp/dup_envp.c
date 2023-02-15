@@ -48,6 +48,7 @@ void envp_load(t_dictionary *env, char **envp)
 		if (!entry)
 		{
 			i++;
+			envp_clear(entry[0], entry[1], entry);
 			continue;
 		}
 		dict_set(env, entry[0], entry[1]);
