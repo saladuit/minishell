@@ -59,23 +59,16 @@ bool	open_redir(char *path, t_type type)
 	return (true);
 }
 
-char	**get_env_paths(char **envp)
+char	**get_env_paths(t_dictionary *env)
 {
-	int		i;
-	char	**paths;
-
-	i = 0;
-	paths = 0;
-	while (envp[i])
-	{
-		if (!ft_strncmp(envp[i], "PATH=", 5))
-			paths = ft_split(&envp[i][5], ':');
-		i++;
-	}
+	char **paths;
+	paths = ft_split(dict_get(env, "PATH"), ':');
+	if (!paths)
+		return (NULL);
 	return (paths);
 }
 
-char	*check_env_paths(char **envp, char *cmd)
+char	*check_env_paths(t_dictionary *env, char *cmd)
 {
 	int		i;
 	char	*cmd_path;
@@ -84,7 +77,7 @@ char	*check_env_paths(char **envp, char *cmd)
 
 	i = 0;
 	cmd_path = NULL;
-	paths = get_env_paths(envp);
+	paths = get_env_paths(env);
 	suffix = ft_strjoin("/", cmd);
 	if (paths && suffix)
 	{
@@ -103,7 +96,7 @@ char	*check_env_paths(char **envp, char *cmd)
 	return (cmd_path);
 }
 
-char	*get_cmd_path(char **envp, char *cmd)
+char	*get_cmd_path(t_dictionary *env, char *cmd)
 {
 	char	*cmd_path;
 
@@ -111,7 +104,7 @@ char	*get_cmd_path(char **envp, char *cmd)
 		return (0);
 	if (ft_strncmp("./", cmd, 2) && ft_strncmp("/", cmd, 1))
 	{
-		cmd_path = check_env_paths(envp, cmd);
+		cmd_path = check_env_paths(env, cmd);
 		if (cmd_path)
 		{
 			if (is_dir(cmd_path))

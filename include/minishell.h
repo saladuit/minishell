@@ -110,9 +110,9 @@ extern int g_exitcode;
 
 typedef struct s_minishell
 {
-	char			**env;
-	t_dictionary	envd;
+	char 			**env;
 	char			**expo;
+	t_dictionary	envd;
 	t_list			*ast;
 	t_list			*tokens;
 	char			*command_line;
@@ -157,7 +157,7 @@ typedef struct s_env
 
 int32_t				minishell(t_minishell *shell);
 int32_t				init_handlers(void);
-int32_t				ft_minishell_exit(t_message code, t_exitcodes exit_code);
+int32_t				ft_minishell_message(t_message code, t_exitcodes exit_code);
 int32_t				dup_envp(t_minishell *shell, char **envp);
 void				setup_signals(t_signal_handler handler);
 void				reset_signals(void);
@@ -167,14 +167,19 @@ void				reset_signals(void);
 // Environment
 void	envp_load(t_dictionary *env, char **envp);
 
+// Pair
+void pair_clean(t_pair *pair);
+char	*pair_to_str(t_pair *pair);
+
 // Dictionary
 
 size_t				hash(char *str);
-void				dict_set(t_dictionary *dict, char *key, char *value);
+int32_t				dict_set(t_dictionary *dict, char *key, char *value);
 char				*dict_get(t_dictionary *dict, char *key);
 void				dict_delete(t_dictionary *dict, char *key);
 void 				dict_destroy(t_dictionary *dict);
 void				dict_print(t_dictionary *dict);
+char	**dict_to_envp(t_dictionary *dict);
 
 // Messages
 
@@ -221,8 +226,8 @@ int32_t				find_var_start(char *str, int32_t index);
 char				*expand_variables(char *str, t_minishell *shell);
 char				**split_words(char *str);
 t_list				*pop_node(t_list **list, t_list *pop_node);
-void	expand_redirect_list(t_list **redirects,
-							t_minishell *shell);
+void				expand_redirect_list(t_list **redirects,
+		t_minishell *shell);
 char				*trim_quotes(char *str);
 
 // Executor
@@ -233,9 +238,9 @@ bool				protected_dup2(int fd, t_type type);
 bool				open_redir(char *path, t_type type);
 char				*get_redir_file(t_command *command, t_type type);
 int					is_dir(char *path);
-char				**get_env_paths(char **envp);
-char				*check_env_paths(char **envp, char *cmd);
-char				*get_cmd_path(char **envp, char *cmd);
+char				**get_env_paths(t_dictionary *dict);
+char				*check_env_paths(t_dictionary *dict, char *cmd);
+char				*get_cmd_path(t_dictionary *dict, char *cmd);
 
 // Parser
 

@@ -21,8 +21,9 @@ SRCS			=minishell.c \
 				 executor/execute_utils.c \
 				 utils/message.c \
 				 utils/signal.c \
-				 envp/dup_envp.c \
+				 envp/envp.c \
 				 envp/dict.c \
+				 envp/pair.c \
 				 types/is_delimiter.c \
 				 types/is_double_quoted.c \
 				 types/is_expand.c \
