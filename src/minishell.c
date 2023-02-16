@@ -2,11 +2,15 @@
 
 int	 g_exitcode;
 
-static void minishell_clean(t_minishell *sheldon)
+static int32_t minishell_clean(t_minishell *sheldon)
 {
-	ft_lstclear(&sheldon->tokens, free);
-	deconstruct_ast(&sheldon->ast);
-	free(sheldon->command_line);
+	if (sheldon->tokens)
+		ft_lstclear(&sheldon->tokens, free);
+	if (sheldon->ast)
+		deconstruct_ast(&sheldon->ast);
+	if (sheldon->command_line)
+		free(sheldon->command_line);
+	return (CONTINUE);
 }
 
 int32_t	minishell(t_minishell *sheldon)
@@ -18,10 +22,11 @@ int32_t	minishell(t_minishell *sheldon)
 	if (!*sheldon->command_line)
 		return (CONTINUE);
 	add_history(sheldon->command_line);
-	lexer(sheldon->command_line, &sheldon->tokens);
-	if (!sheldon->tokens)
-		return (CONTINUE);
+	if (lexer(sheldon->command_line, &sheldon->tokens) == ERROR)
+		return (minishell_clean(sheldon));
 	sheldon->ast = parser(sheldon->tokens);
+	if (!sheldon->ast)
+		return (minishell_clean(sheldon));
 	if (DEBUG)
 		debug_ast(sheldon->ast);
 	//	if (g_exitcode == 300)
@@ -30,8 +35,6 @@ int32_t	minishell(t_minishell *sheldon)
 	//		return (SUCCESS);
 	//	}
 	//	expander(sheldon);
-	g_exitcode = 0;
 	g_exitcode = executor(sheldon);
-	minishell_clean(sheldon);
-	return (CONTINUE);
+	return (minishell_clean(sheldon));
 }
