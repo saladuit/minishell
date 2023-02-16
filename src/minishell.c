@@ -10,17 +10,21 @@ static int32_t minishell_clean(t_minishell *sheldon)
 		deconstruct_ast(&sheldon->ast);
 	if (sheldon->command_line)
 		free(sheldon->command_line);
-	return (CONTINUE);
+	return (STOP); //FIXME should be continue
 }
 
 int32_t	minishell(t_minishell *sheldon)
 {
 	//setup_signals(SREADLINE);
-	sheldon->command_line = readline(messages_lookup(PROMPT));
+//	sheldon->command_line = readline(messages_lookup(PROMPT)); //FIXME is only for use of ft_mallocator
+	sheldon->command_line = ft_strdup("ls | grep e | ls > redir");
 	if (!sheldon->command_line && printf("\x1B[1AMinishell$ exit\n"))
 		return (STOP);
 	if (!*sheldon->command_line)
+	{
+		free(sheldon->command_line);
 		return (CONTINUE);
+	}
 	add_history(sheldon->command_line);
 	if (lexer(sheldon->command_line, &sheldon->tokens) == ERROR)
 		return (minishell_clean(sheldon));
@@ -36,5 +40,6 @@ int32_t	minishell(t_minishell *sheldon)
 	//	}
 	//	expander(sheldon);
 	g_exitcode = executor(sheldon);
-	return (minishell_clean(sheldon));
+	minishell_clean(sheldon);
+	return (STOP); //FIXME should be continue
 }

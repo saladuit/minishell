@@ -56,9 +56,8 @@ bonus: all
 re_malloc_test: fclean
 	@$(MAKE) malloc_test
 
-malloc_test: $(OBJS) $(MAIN_OBJ) $(LIBFT)
-	@$(MAKE) DEBUG=1
-	$(CC) $(CFLAGS) $^ -fsanitize=undefined -rdynamic -o $@ $(INCLUDE_FLAGS) -L../ft_mallocator -lmallocator
+malloc_test: debug 
+	$(CC) $(CFLAGS) $(OBJS) $(MAIN_OBJ) $(LIBFT) -fsanitize=undefined -rdynamic -o $@ $(INCLUDE_FLAGS) $(LIB_FLAGS) -L. -lmallocator
 
 valgrind: debug ## Launch valgrind
 	valgrind --leak-check=full ./$(NAME)

@@ -2,6 +2,7 @@
 minishell
 mini_test
 build
+ft_mallocator
 
 # Prerequisites
 *.d

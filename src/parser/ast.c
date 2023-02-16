@@ -16,6 +16,7 @@ void	debug_ast(t_list *ast)
 
 t_list	*construct_ast(t_list *tokens)
 {
+	t_command_table *command_table;
 	t_list	*ast;
 
 	if (tokens == NULL)
@@ -23,7 +24,8 @@ t_list	*construct_ast(t_list *tokens)
 	ast = NULL;
 	while (tokens)
 	{
-		if (!ft_lstadd_backnew(&ast, (void *)construct_command_table(&tokens)))
+		command_table = construct_command_table(&tokens);
+		if (!command_table || !ft_lstadd_backnew(&ast, command_table))
 			return (NULL);
 	}
 	return (ast);
