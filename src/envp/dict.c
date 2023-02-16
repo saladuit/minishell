@@ -49,16 +49,16 @@ char	**dict_to_envp(t_dictionary *dict)
 void dict_print(t_dictionary *dict)
 {
 	size_t	i;
-	t_pair *next;
+	t_pair *pair;
 
 	i = 0;
 	while (i < HASH_TABLE_SIZE)
 	{
-		while (dict->table[i])
+		pair = dict->table[i];
+		while (pair)
 		{
-			next = dict->table[i]->next;
-			printf("%s=%s\n", dict->table[i]->key, dict->table[i]->value);
-			dict->table[i] = next;
+			printf("%s=%s\n", pair->key, pair->value);
+			pair = pair->next;
 		}
 		i++;
 	}
@@ -130,6 +130,8 @@ int32_t dict_set(t_dictionary *dict, char *key, char *value)
 	pair = dict->table[index];
 	while (pair != NULL && strcmp(pair->key, key) != 0)
 		pair = pair->next;
+	if (pair && pair->value)
+		free(pair->value);
 	if (pair == NULL)
 	{
 		pair = malloc(sizeof(t_pair));
