@@ -49,6 +49,7 @@ char	*make_token(const char **command_line)
 int32_t	lexer(const char *command_line, t_list **tokens)
 {
 	t_list	*node;
+	char	*token;
 
 	*tokens = NULL;
 	while (*command_line)
@@ -56,9 +57,15 @@ int32_t	lexer(const char *command_line, t_list **tokens)
 		ft_skip_whitespaces(&command_line);
 		if (*command_line)
 		{
-			node = ft_lstnew(make_token(&command_line));
-			if (!node)
+			token = make_token(&command_line);
+			if (!token)
 				return (ERROR);
+			node = ft_lstnew(token);
+			if (!node)
+			{
+				free(token);
+				return (ERROR);
+			}
 			ft_lstadd_back(tokens, node);
 		}
 	}

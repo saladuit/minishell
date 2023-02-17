@@ -39,14 +39,15 @@ t_command_table *get_next_command_table(t_list **ast)
 t_command_table *construct_command_table(t_list **tokens)
 {
 	t_command_table *command_table;
+	t_command *command;
 
 	command_table = ft_calloc(1, sizeof(t_command_table));
 	if (!command_table)
 		return (NULL);
 	while (*tokens)
 	{
-		if (!ft_lstadd_backnew(&command_table->commands,
-							   construct_command(tokens)))
+		command = construct_command(tokens);
+		if (!command || !ft_lstadd_backnew(&command_table->commands, command))
 			return (NULL);
 	}
 	command_table->commands_head = command_table->commands;

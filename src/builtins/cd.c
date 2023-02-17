@@ -1,23 +1,4 @@
 #include <minishell.h>
-#include <unistd.h>
-#include "libft.h"
-
-//void	change_pwd(char *var, char *cwd, t_minishell *shell)
-//{
-//	char	*str;
-//
-//	str = ft_strjoin(var, cwd);
-//	free(cwd);
-//	if (in_env(str, shell->env))
-//		export_replacevar(shell->env, str);
-//	else
-//		shell->env = export_addvar(shell->env, str);
-//	if (in_env(str, shell->expo))
-//		export_replacevar(shell->expo, str);
-//	else
-//		shell->expo = export_addvar(shell->expo, str);
-//	free(str);
-//}
 
 int	ft_cd(char **arguments, t_minishell *shell)
 {

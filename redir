@@ -1,0 +1,13 @@
+>
+Makefile
+README.md
+build
+compile_commands.json
+include
+libs
+makerc
+mini.vim
+minishell.out
+minishell.out.dSYM
+redir
+src
