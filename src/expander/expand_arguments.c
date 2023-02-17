@@ -89,7 +89,6 @@ int32_t	expand_argument(t_list *arg_node, char *content, t_minishell *shell)
 
 /*
 Loops through the arguments and expands nodes that need expanding.
-if expanded nodes return empty, "pop" that node from the list.
 */
 void	expand_argument_list(t_list **arg_list, t_minishell *shell)
 {
@@ -103,8 +102,6 @@ void	expand_argument_list(t_list **arg_list, t_minishell *shell)
 		if (needs_expanding((char *)node->content))
 		{
 			added_nodes = expand_argument(node, (char *)node->content, shell);
-			if (added_nodes == 0)
-				node = pop_node(arg_list, node);
 		}
 		if (added_nodes)
 		{
