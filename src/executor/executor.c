@@ -150,15 +150,6 @@ int32_t	init_first_pipe(int32_t *pipe_fds)
 {
 	if (pipe(pipe_fds) == -1)
 		return (ERROR);
-	char	*debugstr;
-	debugstr = ft_itoa(pipe_fds[0]);
-	write(2, debugstr, ft_strlen(debugstr));
-	write(2, " pipe read\n", 12);
-	free(debugstr);
-	debugstr = ft_itoa(pipe_fds[1]);
-	write(2, debugstr, ft_strlen(debugstr));
-	write(2, " pipe write\n", 13);
-	free(debugstr);
 	if (dup2(pipe_fds[1], STDOUT_FILENO) == -1)
 		return (ERROR);
 	close(pipe_fds[1]);
@@ -180,15 +171,6 @@ int32_t	prepare_next_pipe(int32_t *pipe_fds, int32_t *std_fds, bool last)
 	{
 		if (pipe(pipe_fds) == -1)
 			return (ERROR);
-		char	*debugstr;
-		debugstr = ft_itoa(pipe_fds[0]);
-		write(2, debugstr, ft_strlen(debugstr));
-		write(2, " pipe read\n", 12);
-		free(debugstr);
-		debugstr = ft_itoa(pipe_fds[0]);
-		write(2, debugstr, ft_strlen(debugstr));
-		write(2, " pipe write\n", 13);
-		free(debugstr);
 		if (dup2(pipe_fds[1], STDOUT_FILENO) == -1)
 			return (ERROR);
 		close(pipe_fds[1]);
