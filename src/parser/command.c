@@ -5,6 +5,8 @@ void	deconstruct_command(void *command)
 	t_command	*cmd;
 
 	cmd = (t_command *)command;
+	if (!cmd)
+		return ;
 	ft_lstclear(&cmd->arguments, free);
 	ft_lstclear(&cmd->redirs, deconstruct_redirs);
 	free(cmd);
@@ -52,6 +54,8 @@ t_command	*get_next_command(t_command_table *ct)
 t_command	*construct_command(t_list **tokens)
 {
 	t_command	*command;
+	t_redir		*redir;
+	char		*argument;
 	char		*token;
 
 	command = ft_calloc(1, sizeof(t_command));
@@ -65,13 +69,27 @@ t_command	*construct_command(t_list **tokens)
 			*tokens = (*tokens)->next;
 			break ;
 		}
-		if (!is_redir(*token) &&
-			!ft_lstadd_backnew(&command->arguments,
-								ft_strdup((*tokens)->content)))
+		if (is_redir(*token))
+		{
+			redir = construct_redir(tokens);
+			if (!redir || !ft_lstadd_backnew(&command->redirs, redir))
+			{
+				deconstruct_redirs(redir);
+				deconstruct_command(command);
+				return (NULL);
+			}
+		}
+		else
+		{
+			argument = ft_strdup((*tokens)->content);
+			if (!argument || !ft_lstadd_backnew(&command->arguments, argument))
+			{
+				if (argument)
+					free(argument);
+				deconstruct_command(command);
+			}
 			return (NULL);
-		if (is_redir(*token) &&
-			!ft_lstadd_backnew(&command->redirs, construct_redir(tokens)))
-			return (NULL);
+		}
 		*tokens = (*tokens)->next;
 	}
 	command->arguments_head = command->arguments;

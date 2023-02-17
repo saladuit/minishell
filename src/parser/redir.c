@@ -4,6 +4,8 @@ void	deconstruct_redirs(void *redir)
 {
 	t_redir *rdr;
 
+	if (!redir)
+		return ;
 	rdr = (t_redir *)redir;
 	free(rdr->filename);
 	free(rdr);

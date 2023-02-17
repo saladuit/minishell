@@ -4,6 +4,8 @@ void deconstruct_command_table(void *command_table)
 {
 	t_command_table *ct;
 
+	if (!command_table)
+		return ;
 	ct = (t_command_table *)command_table;
 	ft_lstclear(&ct->commands, deconstruct_command);
 	free(ct);
@@ -48,7 +50,11 @@ t_command_table *construct_command_table(t_list **tokens)
 	{
 		command = construct_command(tokens);
 		if (!command || !ft_lstadd_backnew(&command_table->commands, command))
+		{
+			deconstruct_command_table(command_table);
+			deconstruct_command(command);
 			return (NULL);
+		}
 	}
 	command_table->commands_head = command_table->commands;
 	return (command_table);
