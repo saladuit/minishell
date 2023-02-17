@@ -1,12 +1,13 @@
->
 Makefile
 README.md
+addresses.tmp
 build
 compile_commands.json
+ft_mallocator
 include
 libs
 makerc
-mini.vim
+malloc_test
 minishell.out
 minishell.out.dSYM
 redir
