@@ -1,6 +1,4 @@
-#include "libft.h"
 #include <minishell.h>
-#include <stdlib.h>
 
 /* Start of program responsible for
  * handling the hightest form of abstractions, namely

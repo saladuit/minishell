@@ -1,8 +1,8 @@
 #include <minishell.h>
 
-int g_exitcode;
+int				g_exitcode;
 
-static int32_t minishell_clean(t_minishell *sheldon)
+static int32_t	minishell_clean(t_minishell *sheldon)
 {
 	if (sheldon->tokens)
 		ft_lstclear(&sheldon->tokens, free);
