@@ -1,62 +1,53 @@
 #include <minishell.h>
 
-void	deconstruct_command(void *command)
+void deconstruct_command(void *command)
 {
-	t_command	*cmd;
+	t_command *cmd;
 
 	cmd = (t_command *)command;
 	if (!cmd)
-		return ;
+		return;
 	ft_lstclear(&cmd->arguments, free);
 	ft_lstclear(&cmd->redirs, deconstruct_redirs);
 	free(cmd);
 }
 
-void	print_commands(t_command_table *ct)
+void print_commands(t_command_table *ct)
 {
-	t_command	*cmd;
-	int32_t		i;
+	t_command *cmd;
+	int32_t	   i;
 
-	cmd = get_next_command(ct);
 	i = 0;
-	while (cmd)
+	while (get_next_command(ct, &cmd))
 	{
 		i++;
 		ft_printf("\tCommand #%d at %p\n", i, ct);
 		print_arguments(cmd);
 		print_redirs(cmd);
-		cmd = get_next_command(ct);
 	}
 }
 
-t_command	*get_next_command(t_command_table *ct)
+bool get_next_command(t_command_table *ct, t_command **command)
 {
-	t_command	*current;
-
 	if (!ct->commands)
 		return (NULL);
-	current = ct->commands->content;
-	if (ct->end_reached == true)
-	{
-		ct->end_reached = false;
-		return (NULL);
-	}
+	*command = ct->commands->content;
 	if (ct->commands->next == NULL)
 	{
-		ct->end_reached = true;
 		ct->commands = ct->commands_head;
+		return (false);
 	}
 	else
 		ct->commands = ct->commands->next;
-	return (current);
+	return (true);
 }
 
-t_command	*construct_command(t_list **tokens)
+t_command *construct_command(t_list **tokens)
 {
-	t_command	*command;
-	t_redir		*redir;
-	char		*argument;
-	char		*token;
+	t_command *command;
+	t_redir	  *redir;
+	char	  *argument;
+	char	  *token;
 
 	command = ft_calloc(1, sizeof(t_command));
 	if (!command)

@@ -176,16 +176,15 @@ int32_t prepare_next_pipe(int32_t *pipe_fds, int32_t *std_fds, bool last)
 	return (SUCCESS);
 }
 
-int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *shell)
+int32_t execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *shell)
 {
-	t_command	*cmd;
-	int32_t		pipe_fds[2];
-	pid_t		pid;
+	t_command *cmd;
+	int32_t	   pipe_fds[2];
+	pid_t	   pid;
 
 	if (init_first_pipe(pipe_fds) == -1)
 		return (ERROR);
-	cmd = get_next_command(ct);
-	while (cmd)
+	while (get_next_command(ct, &cmd))
 	{
 		pid = fork();
 		if (pid == 0)
@@ -194,9 +193,8 @@ int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *she
 			execute_pipe_command(cmd, shell);
 		}
 		free(cmd); // Leaks content should also be freed as this is the parent
-		cmd = get_next_command(ct);
 		if (!cmd)
-			break ;
+			break;
 		if (ct->commands)
 			prepare_next_pipe(pipe_fds, std_fds, false);
 		else
@@ -205,32 +203,35 @@ int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *she
 	return (wait_for_child_processes(pid));
 }
 
-int32_t	execute_command_table(t_command_table *ct,
-	int32_t *std_fds, t_minishell *shell)
+int32_t execute_command_table(
+	t_command_table *ct, int32_t *std_fds, t_minishell *shell)
 {
+	t_command *cmd;
+
 	if (ct->commands->next == NULL)
-		return (execute_simple_command(get_next_command(ct), shell));
+	{
+		get_next_command(ct, &cmd);
+		return (execute_simple_command(cmd, shell));
+	}
 	return (execute_pipeline(ct, std_fds, shell));
 }
 
-int32_t	executor(t_minishell *shell)
+int32_t executor(t_minishell *shell)
 {
-	t_command_table	*ct;
-	int32_t			status;
-	int32_t			std_fds[2];
+	t_command_table *ct;
+	int32_t			 status;
+	int32_t			 std_fds[2];
 
 	status = 0;
 	setup_signals(SEXECUTOR);
-	ct = get_next_command_table(&shell->ast);
 	std_fds[STDIN_FILENO] = dup(STDIN_FILENO);
 	std_fds[STDOUT_FILENO] = dup(STDOUT_FILENO);
-	while (ct)
+	while (get_next_command_table(&shell->ast, &ct))
 	{
 		status = execute_command_table(ct, std_fds, shell);
 		free(ct);
 		dup2(std_fds[STDIN_FILENO], STDIN_FILENO);
 		dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO);
-		ct = get_next_command_table(&shell->ast);
 	}
 	close(std_fds[STDIN_FILENO]);
 	close(std_fds[STDOUT_FILENO]);

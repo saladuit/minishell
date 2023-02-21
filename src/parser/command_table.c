@@ -14,34 +14,29 @@ void deconstruct_command_table(void *command_table)
 void print_command_tables(t_list *ast)
 {
 	t_command_table *ct;
-	int32_t          i;
+	int32_t			 i;
 
-	ct = get_next_command_table(&ast);
-	i  = 0;
-	while (ct)
+	i = 0;
+	while (get_next_command_table(&ast, &ct))
 	{
 		i++;
 		printf("Command_table #%d at %p\n", i, ct);
 		print_commands(ct);
-		ct = get_next_command_table(&ast);
 	}
 }
-
-t_command_table *get_next_command_table(t_list **ast)
+// There should actually also be a datastructure for the ast that keeps track of the head of the ct
+bool get_next_command_table(t_list **ast, t_command_table **ct)
 {
-	t_command_table *current;
-
 	if (!*ast)
 		return (NULL);
-	current = (*ast)->content;
-	*ast    = (*ast)->next;
-	return (current);
+	*ct = (*ast)->content;
+	return (false);
 }
 
 t_command_table *construct_command_table(t_list **tokens)
 {
 	t_command_table *command_table;
-	t_command *command;
+	t_command		*command;
 
 	command_table = ft_calloc(1, sizeof(t_command_table));
 	if (!command_table)
