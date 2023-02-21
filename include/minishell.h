@@ -1,17 +1,17 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define ERROR	  -1
+# define ERROR -1
 # define SUCCESS 0
 
 # define CONTINUE 1
 # define STOP 0
 
-#ifndef DEBUG
-# define DEBUG 0
-#endif
+# ifndef DEBUG
+#  define DEBUG 0
+# endif
 
-#define HASH_TABLE_SIZE 32
+# define HASH_TABLE_SIZE 32
 
 # include <errno.h>
 # include <fcntl.h>
@@ -97,7 +97,7 @@ typedef struct s_pair
 {
 	char			*key;
 	char			*value;
-	struct s_pair		*next;
+	struct s_pair	*next;
 }					t_pair;
 
 typedef struct s_dictionary
@@ -106,11 +106,11 @@ typedef struct s_dictionary
 	size_t			size;
 }					t_dictionary;
 
-extern int g_exitcode;
+extern int			g_exitcode;
 
 typedef struct s_minishell
 {
-	char 			**env;
+	char			**env;
 	char			**expo;
 	t_dictionary	envd;
 	t_list			*ast;
@@ -132,14 +132,12 @@ typedef struct s_command
 	t_list			*redirs;
 	t_list			*redirs_head;
 	t_list			*arguments_head;
-	bool			redirs_end_reached;
 }					t_command;
 
 typedef struct s_command_table
 {
 	t_list			*commands_head;
 	t_list			*commands;
-	bool			end_reached;
 }					t_command_table;
 
 typedef struct s_builtin
@@ -165,11 +163,11 @@ void				reset_signals(void);
 // void			executor_signal_setup(void);
 
 // Environment
-void	envp_load(t_dictionary *env, char **envp);
+void				envp_load(t_dictionary *env, char **envp);
 
 // Pair
-void pair_clean(t_pair *pair);
-char	*pair_to_str(t_pair *pair);
+void				pair_clean(t_pair *pair);
+char				*pair_to_str(t_pair *pair);
 
 // Dictionary
 
@@ -177,9 +175,9 @@ size_t				hash(char *str);
 int32_t				dict_set(t_dictionary *dict, char *key, char *value);
 char				*dict_get(t_dictionary *dict, char *key);
 void				dict_delete(t_dictionary *dict, char *key);
-void 				dict_destroy(t_dictionary *dict);
+void				dict_destroy(t_dictionary *dict);
 void				dict_print(t_dictionary *dict);
-char	**dict_to_envp(t_dictionary *dict);
+char				**dict_to_envp(t_dictionary *dict);
 
 // Messages
 
@@ -227,7 +225,7 @@ char				*expand_variables(char *str, t_minishell *shell);
 char				**split_words(char *str);
 t_list				*pop_node(t_list **list, t_list *pop_node);
 void				expand_redirect_list(t_list **redirects,
-		t_minishell *shell);
+						t_minishell *shell);
 char				*trim_quotes(char *str);
 
 // Executor
@@ -247,9 +245,10 @@ char				*get_cmd_path(t_dictionary *dict, char *cmd);
 t_list				*parser(t_list *tokens);
 t_command			*construct_command(t_list **tokens);
 char				**get_arguments(t_command *cmd);
-t_redir				*get_next_redir(t_command *cmd);
-t_command			*get_next_command(t_command_table *cmdt);
-t_command_table		*get_next_command_table(t_list **ast);
+bool				get_next_redir(t_command *cmd, t_redir **redir);
+bool				get_next_command(t_command_table *cmd, t_command **command);
+bool				get_next_command_table(t_list **ast,
+						t_command_table **command_table);
 char				**get_arguments(t_command *cmd);
 char				*add_heredoc(char *phrase);
 t_command_table		*construct_command_table(t_list **tokens);

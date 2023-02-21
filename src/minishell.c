@@ -1,6 +1,6 @@
 #include <minishell.h>
 
-int	 g_exitcode;
+int g_exitcode;
 
 static int32_t minishell_clean(t_minishell *sheldon)
 {
@@ -10,13 +10,14 @@ static int32_t minishell_clean(t_minishell *sheldon)
 		deconstruct_ast(&sheldon->ast);
 	if (sheldon->command_line)
 		free(sheldon->command_line);
-	return (STOP); //FIXME should be continue
+	return (STOP); // FIXME should be continue
 }
 
-int32_t	minishell(t_minishell *sheldon)
+int32_t minishell(t_minishell *sheldon)
 {
-	//setup_signals(SREADLINE);
-//	sheldon->command_line = readline(messages_lookup(PROMPT)); //FIXME is only for use of ft_mallocator
+	// setup_signals(SREADLINE);
+	//	sheldon->command_line = readline(messages_lookup(PROMPT));
+	// FIXME is only for use of ft_mallocator
 	sheldon->command_line = ft_strdup("ls | grep e | ls > redir");
 	if (!sheldon->command_line && printf("\x1B[1AMinishell$ exit\n"))
 		return (STOP);
@@ -41,5 +42,5 @@ int32_t	minishell(t_minishell *sheldon)
 	//	expander(sheldon);
 	g_exitcode = executor(sheldon);
 	minishell_clean(sheldon);
-	return (STOP); //FIXME should be continue
+	return (STOP); // FIXME should be continue
 }

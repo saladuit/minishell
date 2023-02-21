@@ -3,7 +3,7 @@ minishell
 mini_test
 build
 ft_mallocator
-
+.compile_commands
 # Prerequisites
 *.d
 push_swap

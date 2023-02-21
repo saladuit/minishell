@@ -26,7 +26,11 @@ t_list	*construct_ast(t_list *tokens)
 	{
 		command_table = construct_command_table(&tokens);
 		if (!command_table || !ft_lstadd_backnew(&ast, command_table))
+		{
+			deconstruct_command_table(command_table);
+			deconstruct_ast(&ast);
 			return (NULL);
+		}
 	}
 	return (ast);
 }
