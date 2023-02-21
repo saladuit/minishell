@@ -2,9 +2,9 @@
 
 void envp_load(t_dictionary *env, char **envp)
 {
-	char	*key;
-	char	*value;
-	int	   i;
+	char *key;
+	char *value;
+	int	  i;
 
 	i = 0;
 	while (envp[i] != NULL)

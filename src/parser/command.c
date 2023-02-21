@@ -67,7 +67,7 @@ t_command	*construct_command(t_list **tokens)
 		if (is_delimiter(*token) && ft_strlen(token) == 1)
 		{
 			*tokens = (*tokens)->next;
-			break ;
+			break;
 		}
 		if (is_redir(*token))
 		{

@@ -5,7 +5,7 @@ void deconstruct_command_table(void *command_table)
 	t_command_table *ct;
 
 	if (!command_table)
-		return ;
+		return;
 	ct = (t_command_table *)command_table;
 	ft_lstclear(&ct->commands, deconstruct_command);
 	free(ct);

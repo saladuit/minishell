@@ -1,11 +1,11 @@
 #include <minishell.h>
 
-void	deconstruct_redirs(void *redir)
+void deconstruct_redirs(void *redir)
 {
 	t_redir *rdr;
 
 	if (!redir)
-		return ;
+		return;
 	rdr = (t_redir *)redir;
 	free(rdr->filename);
 	free(rdr);
@@ -71,9 +71,9 @@ static t_type	set_type(char *symbol, size_t len)
 	return (APPEND);
 }
 
-t_redir	*construct_redir(t_list **tokens)
+t_redir *construct_redir(t_list **tokens)
 {
-	t_redir	*redir;
+	t_redir *redir;
 
 	redir = ft_calloc(1, sizeof(t_redir));
 	if (!redir)
