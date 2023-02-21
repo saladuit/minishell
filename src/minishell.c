@@ -10,15 +10,16 @@ static int32_t	minishell_clean(t_minishell *sheldon)
 		deconstruct_ast(&sheldon->ast);
 	if (sheldon->command_line)
 		free(sheldon->command_line);
-	return (STOP); // FIXME should be continue
+	return (CONTINUE);
 }
 
-int32_t minishell(t_minishell *sheldon)
+int32_t	minishell(t_minishell *sheldon)
 {
 	// setup_signals(SREADLINE);
 	//	sheldon->command_line = readline(messages_lookup(PROMPT));
 	// FIXME is only for use of ft_mallocator
-	sheldon->command_line = ft_strdup("ls | grep e | ls > redir");
+	sheldon->command_line = ft_strdup("< Makefile grep e | ls > redir | set "
+										"HALLO=world | env ");
 	if (!sheldon->command_line && printf("\x1B[1AMinishell$ exit\n"))
 		return (STOP);
 	if (!*sheldon->command_line)
@@ -32,15 +33,7 @@ int32_t minishell(t_minishell *sheldon)
 	sheldon->ast = parser(sheldon->tokens);
 	if (!sheldon->ast)
 		return (minishell_clean(sheldon));
-	if (DEBUG)
-		debug_ast(sheldon->ast);
-	//	if (g_exitcode == 300)
-	//	{
-	//		g_exitcode = 0;
-	//		return (SUCCESS);
-	//	}
 	//	expander(sheldon);
 	g_exitcode = executor(sheldon);
-	minishell_clean(sheldon);
-	return (STOP); // FIXME should be continue
+	return (minishell_clean(sheldon));
 }

@@ -15,7 +15,9 @@ static void	init_sheldon(t_minishell *sheldon, char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	sheldon;
+	int32_t		i;
 
+	i = 0;
 	(void)argv;
 	if (argc > 1)
 	{
@@ -25,8 +27,8 @@ int	main(int argc, char **argv, char **envp)
 	if (!isatty(STDIN_FILENO))
 		rl_outstream = stdin;
 	init_sheldon(&sheldon, envp);
-	while (minishell(&sheldon))
-		;
+	while (i != 1 && minishell(&sheldon))
+		i++;
 	dict_destroy(&sheldon.envd);
 	rl_clear_history();
 	return (EXIT_SUCCESS);
