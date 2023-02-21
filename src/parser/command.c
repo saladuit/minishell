@@ -78,8 +78,8 @@ t_command *construct_command(t_list **tokens)
 				if (argument)
 					free(argument);
 				deconstruct_command(command);
+				return (NULL);
 			}
-			return (NULL);
 		}
 		*tokens = (*tokens)->next;
 	}
