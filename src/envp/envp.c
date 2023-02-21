@@ -12,16 +12,14 @@ void envp_load(t_dictionary *env, char **envp)
 		key = ft_strdup(envp[i]);
 		if (key == NULL)
 		{
-			ft_putstr_fd("export: error: out of memory\n", STDERR_FILENO);
-			dict_destroy(env);
-//			exit(1); //FIXME
+			ft_putstr_fd("Env: error: out of memory\n", STDERR_FILENO);
 			i++;
-			continue ;
+			break;
 		}
 		value = ft_strchr(key, '=');
-		if (value == NULL) 
+		if (value == NULL)
 			value = ft_strdup("");
-		else 
+		else
 		{
 			*value = '\0';
 			value = ft_strdup(++value);
@@ -29,17 +27,15 @@ void envp_load(t_dictionary *env, char **envp)
 		if (!value)
 		{
 			free(key);
-			dict_destroy(env);
-//			exit(1); //FIXME
-			i++;
-			continue;
+			ft_putstr_fd("Env: error: out of memory\n", STDERR_FILENO);
+			break;
 		}
 		if (dict_set(env, key, value) == ERROR)
 		{
 			free(value);
 			free(key);
-			dict_destroy(env);
-//			exit(1); //FIXME
+			ft_putstr_fd("Env: error: out of memory\n", STDERR_FILENO);
+			break;
 		}
 		i++;
 	}
