@@ -152,7 +152,6 @@ typedef struct s_env
 
 int32_t				minishell(t_minishell *shell);
 int32_t				init_handlers(void);
-int32_t				handle_mini_errors(t_exitstatus status);
 int32_t				dup_envp(t_minishell *shell, char **envp);
 void				setup_signals(t_signal_handler handler);
 void				reset_signals(void);
@@ -180,7 +179,7 @@ char				**dict_to_envp(t_dictionary *dict);
 
 const char			*messages_lookup(t_exitstatus code);
 int32_t				handle_mini_errors(t_exitstatus status);
-void				handle_system_call_error(const char* function_name);
+int32_t				handle_system_call_error(const char* function_name);
 
 // Minitypes
 

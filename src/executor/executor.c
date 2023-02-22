@@ -3,10 +3,7 @@
 int32_t redirect(t_redir *redir, t_type type)
 {
 	if (!open_redir(redir->filename, type))
-	{
-		perror(ft_strjoin("Minishell: ", redir->filename));
-		return (errno);
-	}
+		return (handle_system_call_error("redirect"));
 	return (SUCCESS);
 }
 

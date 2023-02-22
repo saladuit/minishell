@@ -47,10 +47,11 @@ const char	*messages_lookup(t_exitstatus status)
 	return (message[status]);
 }
 
-void handle_system_call_error(const char* function_name)
+int32_t handle_system_call_error(const char* function_name)
 {
 	ft_putstr_fd((char *)function_name, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
 	ft_putstr_fd(strerror(errno), STDERR_FILENO);
 	ft_putstr_fd("\n", STDERR_FILENO);
+	return (E_GENERAL);
 }
