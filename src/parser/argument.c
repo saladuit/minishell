@@ -15,7 +15,6 @@ void			print_arguments(t_command *cmd)
 		i++;
 	}
 	free(arguments);
-
 }
 
 char	**get_arguments(t_command *cmd)

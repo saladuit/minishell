@@ -17,12 +17,9 @@ void print_command_tables(t_list *ast)
 	int32_t			 i;
 
 	i = 0;
-	while (get_next_command_table(&ast, &ct))
-	{
-		i++;
-		printf("Command_table #%d at %p\n", i, ct);
-		print_commands(ct);
-	}
+	get_next_command_table(&ast, &ct);
+	printf("Command_table #%d at %p\n", i, ct);
+	print_commands(ct);
 }
 // There should actually also be a datastructure for the ast that keeps track of the head of the ct
 bool get_next_command_table(t_list **ast, t_command_table **ct)
