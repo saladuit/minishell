@@ -14,10 +14,12 @@ int32_t setup_redirects(t_command *command)
 {
 	t_redir *redir;
 	int32_t	 ret;
+	int32_t		i;
 
-	ret = SUCCESS;
-	while (get_next_redir(command, &redir))
+	i = 0;
+	while (i++ < command->n_redirs)
 	{
+		get_next_redir(command, &redir);
 		ret = redirect(redir, redir->type);
 	}
 	return (ret);
@@ -182,11 +184,14 @@ int32_t execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *she
 	t_command *cmd;
 	int32_t	   pipe_fds[2];
 	pid_t	   pid;
+	int32_t		i;
 
 	if (init_first_pipe(pipe_fds) == -1)
 		return (ERROR);
-	while (get_next_command(ct, &cmd))
+	i = 0;
+	while (i++ < ct->n_commands)
 	{
+		get_next_command(ct, &cmd);
 		pid = fork();
 		if (pid == 0)
 		{

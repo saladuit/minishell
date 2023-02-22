@@ -129,15 +129,18 @@ typedef struct s_redir
 typedef struct s_command
 {
 	t_list			*arguments;
+	t_list			*arguments_head;
+	int32_t			n_arguments;
 	t_list			*redirs;
 	t_list			*redirs_head;
-	t_list			*arguments_head;
+	int32_t			n_redirs;
 }					t_command;
 
 typedef struct s_command_table
 {
 	t_list			*commands_head;
 	t_list			*commands;
+	int32_t			n_commands;
 }					t_command_table;
 
 typedef struct s_builtin
@@ -245,8 +248,8 @@ char				*get_cmd_path(t_dictionary *dict, char *cmd);
 t_list				*parser(t_list *tokens);
 t_command			*construct_command(t_list **tokens);
 char				**get_arguments(t_command *cmd);
-bool				get_next_redir(t_command *cmd, t_redir **redir);
-bool				get_next_command(t_command_table *cmd, t_command **command);
+void				get_next_redir(t_command *cmd, t_redir **redir);
+void				get_next_command(t_command_table *cmd, t_command **command);
 void	get_one_command_table(t_list **ast, t_command_table **command_table);
 char				**get_arguments(t_command *cmd);
 char				*add_heredoc(char *phrase);

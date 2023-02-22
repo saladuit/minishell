@@ -4,6 +4,18 @@
 
 // Delimiters ";", "|", "&".
 
+void	print_tokens(t_list *tokens)
+{
+	t_list	*tmp;
+
+	tmp = tokens;
+	while (tmp)
+	{
+		printf("[%s]\n", (char *)tmp->content);
+		tmp = tmp->next;
+	}
+}
+
 int32_t	find_next_quote(const char *command_line, char c)
 {
 	size_t	i;

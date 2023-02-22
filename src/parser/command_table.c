@@ -16,7 +16,7 @@ void print_command_tables(t_list *ast)
 	t_command_table *ct;
 	int32_t			 i;
 
-	i = 0;
+	i = 1;
 	get_one_command_table(&ast, &ct);
 	printf("Command_table #%d at %p\n", i, ct);
 	print_commands(ct);
@@ -46,6 +46,7 @@ t_command_table *construct_command_table(t_list **tokens)
 			deconstruct_command(command);
 			return (NULL);
 		}
+		command_table->n_commands++;
 	}
 	command_table->commands_head = command_table->commands;
 	return (command_table);

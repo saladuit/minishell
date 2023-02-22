@@ -24,7 +24,7 @@ char	**get_arguments(t_command *cmd)
 
 	if (!cmd->arguments)
 		return (NULL);
-	arguments = ft_calloc(ft_lstsize(cmd->arguments) + 1, sizeof(char *));
+	arguments = ft_calloc(cmd->n_arguments + 1, sizeof(char *));
 	if (!arguments)
 		return (NULL);
 	i = 0;

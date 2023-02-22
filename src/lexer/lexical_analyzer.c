@@ -24,17 +24,6 @@ void	print_syntax_error(t_list *tokens)
 			(char *)tokens->content);
 }
 
-// void	print_tokens(t_list *tokens)
-// {
-// 	t_list	*tmp;
-
-// 	tmp = tokens;
-// 	while (tmp)
-// 	{
-// 		printf("[%s]\n", tmp->content);
-// 		tmp = tmp->next;
-// 	}
-// }
 
 int32_t	analyzer(t_list *tokens)
 {
