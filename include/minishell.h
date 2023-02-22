@@ -247,8 +247,7 @@ t_command			*construct_command(t_list **tokens);
 char				**get_arguments(t_command *cmd);
 bool				get_next_redir(t_command *cmd, t_redir **redir);
 bool				get_next_command(t_command_table *cmd, t_command **command);
-bool	get_next_command_table(t_list **ast,
-							t_command_table **command_table);
+void	get_one_command_table(t_list **ast, t_command_table **command_table);
 char				**get_arguments(t_command *cmd);
 char				*add_heredoc(char *phrase);
 t_command_table		*construct_command_table(t_list **tokens);
