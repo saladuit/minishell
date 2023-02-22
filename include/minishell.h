@@ -12,7 +12,7 @@
 # endif
 
 # define HASH_TABLE_SIZE 32
-
+# define PROMPT "Sheldon$ "
 # include <errno.h>
 # include <fcntl.h>
 # include <libft.h>
