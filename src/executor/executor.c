@@ -216,7 +216,7 @@ int32_t executor(t_minishell *shell)
 	int32_t			 std_fds[2];
 
 	status = 0;
-	setup_signals(SEXECUTOR);
+//	setup_signals(SEXECUTOR);
 	std_fds[STDIN_FILENO] = dup(STDIN_FILENO);
 	std_fds[STDOUT_FILENO] = dup(STDOUT_FILENO);
 	get_one_command_table(&shell->ast, &ct);
