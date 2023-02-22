@@ -51,8 +51,9 @@ E_EXIT_STATUS_OUT_OF_RANGE:
 
 // Mininums
 
-typedef enum e_exitcodes
+typedef enum e_exitstatus
 {
+	E_USAGE = 0,
 	E_GENERAL = 1,
 	E_BUILTIN = 2,
 	E_EXEC = 126,
@@ -60,21 +61,14 @@ typedef enum e_exitcodes
 	E_EXIT_INVALID_ARG = 128,
 	E_FATAL_SIGNAL = 128,
 	E_CTRL_C = 130,
-	E_EXIT_STATUS_OUT_OF_RANGE = 225
-}					t_exitcodes;
+	E_UNKNOWN = 225
+}					t_exitstatus;
 
 typedef enum e_signalcode
 {
 	S_HEREDOC = 300,
 	S_EXEC_QUIT = 301
 }					t_signalcode;
-
-typedef enum e_message
-{
-	USAGE,
-	PROMPT,
-	ETTY,
-}					t_message;
 
 typedef enum e_type
 {
@@ -158,7 +152,7 @@ typedef struct s_env
 
 int32_t				minishell(t_minishell *shell);
 int32_t				init_handlers(void);
-int32_t				ft_minishell_message(t_message code, t_exitcodes exit_code);
+int32_t				handle_mini_errors(t_exitstatus status);
 int32_t				dup_envp(t_minishell *shell, char **envp);
 void				setup_signals(t_signal_handler handler);
 void				reset_signals(void);
@@ -184,7 +178,9 @@ char				**dict_to_envp(t_dictionary *dict);
 
 // Messages
 
-const char			*messages_lookup(t_message code);
+const char			*messages_lookup(t_exitstatus code);
+int32_t				handle_mini_errors(t_exitstatus status);
+void				handle_system_call_error(const char* function_name);
 
 // Minitypes
 

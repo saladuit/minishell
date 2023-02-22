@@ -19,8 +19,8 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	if (argc > 1)
 	{
-		ft_minishell_message(USAGE, EXIT_FAILURE);
-		exit(1);
+		ft_putendl_fd((char *)messages_lookup(E_USAGE), STDERR_FILENO);
+		exit(E_USAGE);
 	}
 	if (!isatty(STDIN_FILENO))
 		rl_outstream = stdin;
