@@ -189,7 +189,7 @@ int32_t execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *she
 	int32_t		i;
 
 	if (init_first_pipe(pipe_fds) == -1)
-		return (ERROR);
+		return (E_GENERAL);
 	i = 0;
 	while (i++ < ct->n_commands)
 	{
@@ -202,7 +202,7 @@ int32_t execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *she
 		}
 		if (!cmd)
 			break;
-		if (ct->commands)
+		if (i == ct->n_commands)
 			prepare_next_pipe(pipe_fds, std_fds, false);
 		else
 			prepare_next_pipe(pipe_fds, std_fds, true);
@@ -229,14 +229,13 @@ int32_t executor(t_minishell *shell)
 	int32_t			 status;
 	int32_t			 std_fds[2];
 
-	status = 0;
 //	setup_signals(SEXECUTOR);
 	std_fds[STDIN_FILENO] = dup(STDIN_FILENO);
 	std_fds[STDOUT_FILENO] = dup(STDOUT_FILENO);
 	get_one_command_table(&shell->ast, &ct);
-		status = execute_command_table(ct, std_fds, shell);
-		dup2(std_fds[STDIN_FILENO], STDIN_FILENO);
-		dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO);
+	status = execute_command_table(ct, std_fds, shell);
+	dup2(std_fds[STDIN_FILENO], STDIN_FILENO);
+	dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO);
 	close(std_fds[STDIN_FILENO]);
 	close(std_fds[STDOUT_FILENO]);
 	// setup_signals();
