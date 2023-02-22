@@ -108,12 +108,14 @@ int32_t execute_pipe_command(t_command *cmd, t_minishell *shell)
 
 	reset_signals();
 	status = setup_redirects(cmd);
+	if (status)
+		return (status);
 	arguments = get_arguments(cmd);
-	if (!arguments || status)
-		exit(status);
+	if (!arguments)
+		return (1);
 	status = execute_builtin(arguments, shell);
 	if (status >= 0)
-		exit(status);
+		return (status);
 	// reset_signals();
 	execute_child_command(shell, arguments);
 	return (0);
