@@ -124,17 +124,24 @@ int32_t execute_simple_command(t_command *cmd, t_minishell *shell)
 	char  **arguments;
 
 	status = setup_redirects(cmd);
-	arguments = get_arguments(cmd);
-	if (!arguments || status)
-	{
+	if (status)
 		return (status);
+	arguments = get_arguments(cmd);
+	if (!arguments)
+	{
+		free(arguments);
+		return (1);
 	}
 	status = execute_builtin(arguments, shell);
 	if (status >= 0)
+	{
+		free(arguments);
 		return (status);
+	}
 	pid = fork();
 	if (pid == 0)
 		execute_child_command(shell, arguments);
+	free(arguments);
 	return (wait_for_child_processes(pid));
 }
 
