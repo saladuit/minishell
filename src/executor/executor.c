@@ -53,7 +53,6 @@ int32_t execute_builtin(char **arguments, t_minishell *shell)
 	if (builtin_function.name == NULL)
 		return (-1);
 	ret = builtin_function.func(arguments, shell);
-	ft_matrixfree(&arguments);
 	return (ret);
 }
 
@@ -85,7 +84,6 @@ void execute_child_command(t_minishell *shell, char **arguments)
 	command_path = get_cmd_path(&shell->envd, arguments[0]);
 	if (!command_path)
 	{
-		ft_matrixfree(&arguments);
 		return;
 	}
 	if (access(command_path, X_OK))
@@ -94,7 +92,6 @@ void execute_child_command(t_minishell *shell, char **arguments)
 		write(2, arguments[0], ft_strlen(arguments[0]));
 		write(2, ": command not found\n", 21);
 		free(command_path);
-		ft_matrixfree(&arguments);
 		return;
 	}
 	execve(command_path, arguments, dict_to_envp(&shell->envd));
@@ -113,7 +110,6 @@ int32_t execute_pipe_command(t_command *cmd, t_minishell *shell)
 	if (!arguments || status)
 		exit(status);
 	status = execute_builtin(arguments, shell);
-	free(cmd); // TODO Fix leaks if any.
 	if (status >= 0)
 		exit(status);
 	// reset_signals();
@@ -131,10 +127,8 @@ int32_t execute_simple_command(t_command *cmd, t_minishell *shell)
 	arguments = get_arguments(cmd);
 	if (!arguments || status)
 	{
-		free(cmd);
 		return (status);
 	}
-	free(cmd);
 	status = execute_builtin(arguments, shell);
 	if (status >= 0)
 		return (status);
@@ -192,7 +186,6 @@ int32_t execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *she
 			close(pipe_fds[0]);
 			execute_pipe_command(cmd, shell);
 		}
-		free(cmd); // Leaks content should also be freed as this is the parent
 		if (!cmd)
 			break;
 		if (ct->commands)
@@ -226,13 +219,10 @@ int32_t executor(t_minishell *shell)
 	setup_signals(SEXECUTOR);
 	std_fds[STDIN_FILENO] = dup(STDIN_FILENO);
 	std_fds[STDOUT_FILENO] = dup(STDOUT_FILENO);
-	while (get_next_command_table(&shell->ast, &ct))
-	{
+	get_one_command_table(&shell->ast, &ct);
 		status = execute_command_table(ct, std_fds, shell);
-		free(ct);
 		dup2(std_fds[STDIN_FILENO], STDIN_FILENO);
 		dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO);
-	}
 	close(std_fds[STDIN_FILENO]);
 	close(std_fds[STDOUT_FILENO]);
 	// setup_signals();
