@@ -18,7 +18,7 @@ int32_t	minishell(t_minishell *sheldon)
 	// setup_signals(SREADLINE);
 	sheldon->command_line = readline(PROMPT);
 //	sheldon->command_line = ft_strdup("cat Makefile < cat.out");
-	if (!sheldon->command_line && printf("\x1B[1AMinishell$ exit\n"))
+	if (!sheldon->command_line && printf("\x1B[1A"PROMPT"exit\n"))
 		return (STOP);
 	if (!*sheldon->command_line)
 	{
