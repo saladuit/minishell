@@ -67,6 +67,7 @@ t_list	*lexer(const char *command_line, t_exitstatus *exit_status)
 	t_list	*tokens;
 	char	*token;
 
+	tokens = NULL;
 	while (*command_line)
 	{
 		ft_skip_whitespaces(&command_line);
