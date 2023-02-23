@@ -41,5 +41,7 @@ t_list	*parser(t_list *tokens)
 	ast = construct_ast(tokens);
 	if (!ast)
 		return (NULL);
+	if (DEBUG)
+		debug_ast(ast);
 	return (ast);
 }

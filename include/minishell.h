@@ -12,7 +12,7 @@
 # endif
 
 # define HASH_TABLE_SIZE 32
-
+# define PROMPT "Sheldon$ "
 # include <errno.h>
 # include <fcntl.h>
 # include <libft.h>
@@ -51,8 +51,9 @@ E_EXIT_STATUS_OUT_OF_RANGE:
 
 // Mininums
 
-typedef enum e_exitcodes
+typedef enum e_exitstatus
 {
+	E_USAGE = 0,
 	E_GENERAL = 1,
 	E_BUILTIN = 2,
 	E_EXEC = 126,
@@ -60,21 +61,14 @@ typedef enum e_exitcodes
 	E_EXIT_INVALID_ARG = 128,
 	E_FATAL_SIGNAL = 128,
 	E_CTRL_C = 130,
-	E_EXIT_STATUS_OUT_OF_RANGE = 225
-}					t_exitcodes;
+	E_UNKNOWN = 225
+}					t_exitstatus;
 
 typedef enum e_signalcode
 {
 	S_HEREDOC = 300,
 	S_EXEC_QUIT = 301
 }					t_signalcode;
-
-typedef enum e_message
-{
-	USAGE,
-	PROMPT,
-	ETTY,
-}					t_message;
 
 typedef enum e_type
 {
@@ -116,7 +110,7 @@ typedef struct s_minishell
 	t_list			*ast;
 	t_list			*tokens;
 	char			*command_line;
-	int32_t			exit_code;
+	t_exitstatus	exit_status;
 
 }					t_minishell;
 
@@ -129,15 +123,18 @@ typedef struct s_redir
 typedef struct s_command
 {
 	t_list			*arguments;
+	t_list			*arguments_head;
+	int32_t			n_arguments;
 	t_list			*redirs;
 	t_list			*redirs_head;
-	t_list			*arguments_head;
+	int32_t			n_redirs;
 }					t_command;
 
 typedef struct s_command_table
 {
 	t_list			*commands_head;
 	t_list			*commands;
+	int32_t			n_commands;
 }					t_command_table;
 
 typedef struct s_builtin
@@ -155,7 +152,6 @@ typedef struct s_env
 
 int32_t				minishell(t_minishell *shell);
 int32_t				init_handlers(void);
-int32_t				ft_minishell_message(t_message code, t_exitcodes exit_code);
 int32_t				dup_envp(t_minishell *shell, char **envp);
 void				setup_signals(t_signal_handler handler);
 void				reset_signals(void);
@@ -163,7 +159,7 @@ void				reset_signals(void);
 // void			executor_signal_setup(void);
 
 // Environment
-void				envp_load(t_dictionary *env, char **envp);
+int32_t				envp_load(t_dictionary *env, char **envp);
 
 // Pair
 void				pair_clean(t_pair *pair);
@@ -181,7 +177,9 @@ char				**dict_to_envp(t_dictionary *dict);
 
 // Messages
 
-const char			*messages_lookup(t_message code);
+const char			*messages_lookup(t_exitstatus code);
+int32_t				handle_mini_errors(t_exitstatus status);
+int32_t				handle_system_call_error(const char* function_name);
 
 // Minitypes
 
@@ -199,7 +197,7 @@ int32_t				is_tokenchar(const char *str);
 
 // Lexer
 
-int32_t				lexer(const char *command_line, t_list **tokens);
+t_list	*lexer(const char *command_line, t_exitstatus *exit_status);
 void				ft_skip_whitespaces(const char **input);
 int32_t				analyzer(t_list *tokens);
 int32_t				pipe_check(t_list *tokens);
@@ -224,8 +222,8 @@ int32_t				find_var_start(char *str, int32_t index);
 char				*expand_variables(char *str, t_minishell *shell);
 char				**split_words(char *str);
 t_list				*pop_node(t_list **list, t_list *pop_node);
-void				expand_redirect_list(t_list **redirects,
-						t_minishell *shell);
+void	expand_redirect_list(t_list **redirects,
+							t_minishell *shell);
 char				*trim_quotes(char *str);
 
 // Executor
@@ -245,10 +243,9 @@ char				*get_cmd_path(t_dictionary *dict, char *cmd);
 t_list				*parser(t_list *tokens);
 t_command			*construct_command(t_list **tokens);
 char				**get_arguments(t_command *cmd);
-bool				get_next_redir(t_command *cmd, t_redir **redir);
-bool				get_next_command(t_command_table *cmd, t_command **command);
-bool				get_next_command_table(t_list **ast,
-						t_command_table **command_table);
+void				get_next_redir(t_command *cmd, t_redir **redir);
+void				get_next_command(t_command_table *cmd, t_command **command);
+void	get_one_command_table(t_list **ast, t_command_table **command_table);
 char				**get_arguments(t_command *cmd);
 char				*add_heredoc(char *phrase);
 t_command_table		*construct_command_table(t_list **tokens);

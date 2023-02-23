@@ -4,6 +4,18 @@
 
 // Delimiters ";", "|", "&".
 
+void	print_tokens(t_list *tokens)
+{
+	t_list	*tmp;
+
+	tmp = tokens;
+	while (tmp)
+	{
+		printf("[%s]\n", (char *)tmp->content);
+		tmp = tmp->next;
+	}
+}
+
 int32_t	find_next_quote(const char *command_line, char c)
 {
 	size_t	i;
@@ -41,17 +53,21 @@ char	*make_token(const char **command_line)
 	token_len = get_token_len(*command_line);
 	symbol = ft_substr(*command_line, 0, token_len);
 	if (!symbol)
+	{
+		handle_system_call_error("make_token");
 		return (NULL);
+	}
 	*command_line += token_len;
 	return (symbol);
 }
 
-int32_t	lexer(const char *command_line, t_list **tokens)
+t_list	*lexer(const char *command_line, t_exitstatus *exit_status)
 {
 	t_list	*node;
+	t_list	*tokens;
 	char	*token;
 
-	*tokens = NULL;
+	tokens = NULL;
 	while (*command_line)
 	{
 		ft_skip_whitespaces(&command_line);
@@ -59,15 +75,21 @@ int32_t	lexer(const char *command_line, t_list **tokens)
 		{
 			token = make_token(&command_line);
 			if (!token)
-				return (ERROR);
+			{
+				handle_system_call_error("lexer");
+				*exit_status = E_GENERAL;
+				return (NULL);
+			}
 			node = ft_lstnew(token);
 			if (!node)
 			{
+				handle_system_call_error("lexer");
 				free(token);
-				return (ERROR);
+				*exit_status = E_GENERAL;
+				return (NULL);
 			}
-			ft_lstadd_back(tokens, node);
+			ft_lstadd_back(&tokens, node);
 		}
 	}
-	return (SUCCESS);
+	return (tokens);
 }

@@ -3,10 +3,7 @@
 int32_t redirect(t_redir *redir, t_type type)
 {
 	if (!open_redir(redir->filename, type))
-	{
-		perror(ft_strjoin("Minishell: ", redir->filename));
-		return (errno);
-	}
+		return (handle_system_call_error("redirect"));
 	return (SUCCESS);
 }
 
@@ -14,10 +11,13 @@ int32_t setup_redirects(t_command *command)
 {
 	t_redir *redir;
 	int32_t	 ret;
+	int32_t		i;
 
-	ret = SUCCESS;
-	while (get_next_redir(command, &redir))
+	i = 0;
+	ret = 0;
+	while (i++ < command->n_redirs)
 	{
+		get_next_redir(command, &redir);
 		ret = redirect(redir, redir->type);
 	}
 	return (ret);
@@ -53,7 +53,6 @@ int32_t execute_builtin(char **arguments, t_minishell *shell)
 	if (builtin_function.name == NULL)
 		return (-1);
 	ret = builtin_function.func(arguments, shell);
-	ft_matrixfree(&arguments);
 	return (ret);
 }
 
@@ -85,7 +84,6 @@ void execute_child_command(t_minishell *shell, char **arguments)
 	command_path = get_cmd_path(&shell->envd, arguments[0]);
 	if (!command_path)
 	{
-		ft_matrixfree(&arguments);
 		return;
 	}
 	if (access(command_path, X_OK))
@@ -94,7 +92,6 @@ void execute_child_command(t_minishell *shell, char **arguments)
 		write(2, arguments[0], ft_strlen(arguments[0]));
 		write(2, ": command not found\n", 21);
 		free(command_path);
-		ft_matrixfree(&arguments);
 		return;
 	}
 	execve(command_path, arguments, dict_to_envp(&shell->envd));
@@ -109,13 +106,14 @@ int32_t execute_pipe_command(t_command *cmd, t_minishell *shell)
 
 	reset_signals();
 	status = setup_redirects(cmd);
+	if (status)
+		return (status);
 	arguments = get_arguments(cmd);
-	if (!arguments || status)
-		exit(status);
+	if (!arguments)
+		return (1);
 	status = execute_builtin(arguments, shell);
-	free(cmd); // TODO Fix leaks if any.
 	if (status >= 0)
-		exit(status);
+		return (status);
 	// reset_signals();
 	execute_child_command(shell, arguments);
 	return (0);
@@ -128,19 +126,24 @@ int32_t execute_simple_command(t_command *cmd, t_minishell *shell)
 	char  **arguments;
 
 	status = setup_redirects(cmd);
-	arguments = get_arguments(cmd);
-	if (!arguments || status)
-	{
-		free(cmd);
+	if (status)
 		return (status);
+	arguments = get_arguments(cmd);
+	if (!arguments)
+	{
+		free(arguments);
+		return (1);
 	}
-	free(cmd);
 	status = execute_builtin(arguments, shell);
 	if (status >= 0)
+	{
+		free(arguments);
 		return (status);
+	}
 	pid = fork();
 	if (pid == 0)
 		execute_child_command(shell, arguments);
+	free(arguments);
 	return (wait_for_child_processes(pid));
 }
 
@@ -181,21 +184,23 @@ int32_t execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *she
 	t_command *cmd;
 	int32_t	   pipe_fds[2];
 	pid_t	   pid;
+	int32_t		i;
 
 	if (init_first_pipe(pipe_fds) == -1)
-		return (ERROR);
-	while (get_next_command(ct, &cmd))
+		return (E_GENERAL);
+	i = 0;
+	while (i++ < ct->n_commands)
 	{
+		get_next_command(ct, &cmd);
 		pid = fork();
 		if (pid == 0)
 		{
 			close(pipe_fds[0]);
 			execute_pipe_command(cmd, shell);
 		}
-		free(cmd); // Leaks content should also be freed as this is the parent
 		if (!cmd)
 			break;
-		if (ct->commands)
+		if (i == ct->n_commands)
 			prepare_next_pipe(pipe_fds, std_fds, false);
 		else
 			prepare_next_pipe(pipe_fds, std_fds, true);
@@ -222,17 +227,13 @@ int32_t executor(t_minishell *shell)
 	int32_t			 status;
 	int32_t			 std_fds[2];
 
-	status = 0;
-	setup_signals(SEXECUTOR);
+//	setup_signals(SEXECUTOR);
 	std_fds[STDIN_FILENO] = dup(STDIN_FILENO);
 	std_fds[STDOUT_FILENO] = dup(STDOUT_FILENO);
-	while (get_next_command_table(&shell->ast, &ct))
-	{
-		status = execute_command_table(ct, std_fds, shell);
-		free(ct);
-		dup2(std_fds[STDIN_FILENO], STDIN_FILENO);
-		dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO);
-	}
+	get_one_command_table(&shell->ast, &ct);
+	status = execute_command_table(ct, std_fds, shell);
+	dup2(std_fds[STDIN_FILENO], STDIN_FILENO);
+	dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO);
 	close(std_fds[STDIN_FILENO]);
 	close(std_fds[STDOUT_FILENO]);
 	// setup_signals();

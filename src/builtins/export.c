@@ -26,7 +26,7 @@ int	ft_export(char **arguments, t_minishell *shell)
 		if (key == NULL)
 		{
 			ft_putstr_fd("export: error: out of memory\n", STDERR_FILENO);
-			shell->exit_code = E_BUILTIN;
+			shell->exit_status = E_BUILTIN;
 			i++;
 			break ;
 		}
@@ -42,7 +42,7 @@ int	ft_export(char **arguments, t_minishell *shell)
 		{
 			ft_putstr_fd("export: error: out of memory\n", STDERR_FILENO);
 			export_clear(key, value);
-			shell->exit_code = E_BUILTIN;
+			shell->exit_status = E_BUILTIN;
 			i++;
 			break ;
 		}

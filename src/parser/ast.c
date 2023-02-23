@@ -11,7 +11,6 @@ void	debug_ast(t_list *ast)
 {
 	ft_putendl_fd("", 1);
 	print_command_tables(ast);
-	ft_putendl_fd("", 1);
 }
 
 t_list	*construct_ast(t_list *tokens)

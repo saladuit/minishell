@@ -24,12 +24,13 @@ static const char *get_redir_type_name(t_type type)
 
 void print_redirs(t_command *cmd)
 {
-	t_redir *redir;
-	int32_t	 i;
+	t_redir	*redir;
+	int32_t	i;
 
 	i = 0;
-	while (get_next_redir(cmd, &redir))
+	while (i < cmd->n_redirs)
 	{
+		get_next_redir(cmd, &redir);
 		i++;
 		printf("\t\tRedir #%d: %s with type %s\n",
 			i,
@@ -38,19 +39,19 @@ void print_redirs(t_command *cmd)
 	}
 }
 
-bool get_next_redir(t_command *cmd, t_redir **redir)
+void get_next_redir(t_command *cmd, t_redir **redir)
 {
 	if (!cmd->redirs)
-		return (NULL);
+		return ;
 	*redir = cmd->redirs->content;
 	if (cmd->redirs->next == NULL)
 	{
 		cmd->redirs = cmd->redirs_head;
-		return (false);
+		return ;
 	}
 	else
 		cmd->redirs = cmd->redirs->next;
-	return (true);
+	return ;
 }
 
 static t_type set_type(char *symbol, size_t len)

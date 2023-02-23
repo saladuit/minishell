@@ -69,7 +69,7 @@ char	*add_heredoc(char *phrase)
 	pid_t	id;
 	int32_t	status;
 
-	setup_signals(SHEREDOC);
+// setup_signals(SHEREDOC);
 	if (g_exitcode == 300)
 		return (NULL);
 	filename = make_heredoc_file(&fd);

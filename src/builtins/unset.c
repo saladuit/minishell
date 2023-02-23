@@ -75,7 +75,7 @@ int	ft_unset(char **arguments, t_minishell *shell)
     if (arguments[i++] == NULL)
 	{
         ft_putstr_fd("unset: error: no variable name provided\n", STDERR_FILENO);
-		shell->exit_code = E_BUILTIN;
+		shell->exit_status = E_BUILTIN;
         return (E_BUILTIN);
     }
 	while (arguments[i])

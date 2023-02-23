@@ -1,6 +1,4 @@
-#include "libft.h"
 #include <minishell.h>
-#include <stdlib.h>
 
 /* Start of program responsible for
  * handling the hightest form of abstractions, namely
@@ -8,10 +6,14 @@
  * issuing messages when something goes wrong
  */
 
-static void	init_sheldon(t_minishell *sheldon, char **envp)
+static int32_t	init_sheldon(t_minishell *sheldon, char **envp)
 {
-	bzero(sheldon, sizeof(t_minishell));
-	envp_load(&sheldon->envd, envp);
+	int32_t	exit_status;
+	ft_bzero(sheldon, sizeof(t_minishell));
+	exit_status = envp_load(&sheldon->envd, envp);
+	if (DEBUG)
+		dict_print(&sheldon->envd);
+	return (exit_status);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -21,12 +23,15 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	if (argc > 1)
 	{
-		ft_minishell_message(USAGE, EXIT_FAILURE);
-		exit(1);
+		ft_putendl_fd((char *)messages_lookup(E_USAGE), STDERR_FILENO);
+		exit(E_USAGE);
 	}
+	sheldon.exit_status = init_sheldon(&sheldon, envp);
 	if (!isatty(STDIN_FILENO))
+	{
+		sheldon.exit_status = handle_system_call_error("isatty");
 		rl_outstream = stdin;
-	init_sheldon(&sheldon, envp);
+	}
 	while (minishell(&sheldon))
 		;
 	dict_destroy(&sheldon.envd);
