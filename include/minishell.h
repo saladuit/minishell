@@ -110,7 +110,7 @@ typedef struct s_minishell
 	t_list			*ast;
 	t_list			*tokens;
 	char			*command_line;
-	int32_t			exit_code;
+	t_exitstatus	exit_status;
 
 }					t_minishell;
 
