@@ -159,7 +159,7 @@ void				reset_signals(void);
 // void			executor_signal_setup(void);
 
 // Environment
-void				envp_load(t_dictionary *env, char **envp);
+int32_t				envp_load(t_dictionary *env, char **envp);
 
 // Pair
 void				pair_clean(t_pair *pair);
