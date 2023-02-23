@@ -197,7 +197,7 @@ int32_t				is_tokenchar(const char *str);
 
 // Lexer
 
-int32_t				lexer(const char *command_line, t_list **tokens);
+t_list	*lexer(const char *command_line, t_exitstatus *exit_status);
 void				ft_skip_whitespaces(const char **input);
 int32_t				analyzer(t_list *tokens);
 int32_t				pipe_check(t_list *tokens);

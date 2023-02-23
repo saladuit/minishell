@@ -26,12 +26,13 @@ int32_t	minishell(t_minishell *sheldon)
 		return (CONTINUE);
 	}
 	add_history(sheldon->command_line);
-	if (lexer(sheldon->command_line, &sheldon->tokens) == ERROR)
+	sheldon->tokens = lexer(sheldon->command_line, &sheldon->exit_status);
+	if (!sheldon->tokens)
 		return (minishell_clean(sheldon));
 	sheldon->ast = parser(sheldon->tokens);
 	if (!sheldon->ast)
 		return (minishell_clean(sheldon));
 	//	expander(sheldon);
-	g_exitcode = executor(sheldon);
+	sheldon->exit_status = executor(sheldon);
 	return (minishell_clean(sheldon));
 }
