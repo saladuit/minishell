@@ -14,6 +14,7 @@ int32_t setup_redirects(t_command *command)
 	int32_t		i;
 
 	i = 0;
+	ret = 0;
 	while (i++ < command->n_redirs)
 	{
 		get_next_redir(command, &redir);
