@@ -32,7 +32,7 @@ int32_t	minishell(t_minishell *sheldon)
 	sheldon->ast = parser(sheldon->tokens);
 	if (!sheldon->ast)
 		return (minishell_clean(sheldon));
-	//	expander(sheldon);
+	expander(sheldon);
 	sheldon->exit_status = executor(sheldon);
 	return (minishell_clean(sheldon));
 }
