@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+        include:
+          - os: macos-latest
+            coverage: "gcovr --xml-pretty --output=coverage.xml"
+          - os: ubuntu-latest
+            coverage: "gcovr --xml-pretty --output=coverage.xml"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y build-essential lcov
+
+      - name: Build project
+        run: make
+
+      - name: Run tests and generate coverage report
+        run: make test && eval ${{ matrix.coverage }}
+
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v1
+        with:
+          path: coverage.xml
