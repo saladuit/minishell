@@ -1,16 +1,21 @@
-# Project specific
-dockerd-logfile
-minishell
-mini_test
-build
+# Sala Crap
 ft_mallocator
-.compile_commands
+compile_commands.json
+.cache
+*.html
+coverage-report
+*.info
+build
+
+# Duco Crap
+.vscode/*
+.vscode
+unit_test/.normignore
+*.normignore
+
 # Prerequisites
 *.d
-push_swap
-unit-test
-*.gcda
-*.gcno
+
 # Object files
 *.o
 *.ko
@@ -60,24 +65,3 @@ unit-test
 # Kernel Module Compile Results
 *.mod*
 *.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
-.cache
-.compile_commands.json
-
-# Duco Crap
-.vscode/*
-.vscode
-unit_test/.normignore
-*.normignore
-
-# Coc.nvim
-node_modules
-.cache
-
-# nvim
-*.json
-.ccls
