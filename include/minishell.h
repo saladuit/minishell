@@ -208,6 +208,7 @@ int32_t				append_check(t_list *tokens);
 
 // Expander
 
+void expand_tokens(t_list **arg, t_exitstatus *status);
 int32_t				expander(t_minishell *shell);
 char				*ft_strjoin_free_free(char *expanded, char *tmp);
 int32_t				check_expand(char *str);
