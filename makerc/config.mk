@@ -59,7 +59,7 @@ endif
 CFLAGS			=-Wall -Wextra -Werror
 
 ifdef DEBUG
-	CFLAGS			+=-g -D DEBUG=1
+	CFLAGS			+=-g3 -D DEBUG=1
 endif
 
 ifdef FSAN

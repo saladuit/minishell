@@ -15,6 +15,10 @@ else
 LDFLAGS 		=-L $(shell brew --prefix readline)/lib -lreadline
 endif
 
+ifdef TEST
+LDFLAGS +=  -L --coverage
+endif
+
 ################################################################################
 
 all: $(NAME)
@@ -32,7 +36,7 @@ $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR)
 ################################################################################
 
-clean:
+clean: covclean
 	@$(RM) $(OBJS) $(MAIN_OBJ)
 	@$(MAKE) clean -C $(LIBFT_DIR)
 	@$(MAKE) clean -C $(UNIT_DIR)
@@ -40,10 +44,12 @@ clean:
 fclean: clean
 	@$(RM) $(NAME)
 	@$(MAKE) fclean -C $(LIBFT_DIR)
-	@$(MAKE) fclean -C $(UNIT_DIR)
+	@$(MAKE) clean -C $(UNIT_DIR)
 
 re: fclean
 	@$(MAKE)
+
+bonus: all
 
 debug:
 	@$(MAKE) DEBUG=1
@@ -57,23 +63,18 @@ fsan:
 resan: fclean
 	@$(MAKE) fsan
 
-bonus: all
-
 test:
 	@$(MAKE) DEBUG=1 COV=1
 	@$(MAKE) DEBUG=1 COV=1 -C $(UNIT_DIR)
-	@./$(UNIT_TEST) -j0
+	@./$(UNIT_TEST)
 
 ftest:
 	@$(MAKE) DEBUG=1 FSAN=1 COV=1
 	@$(MAKE) DEBUG=1 FSAN=1 COV=1 -C $(UNIT_DIR)
 	@./$(UNIT_TEST)
 
-coverage:
-	@cd build && gcov `find . -type f -name "*.o"`
-	@cd build && lcov -q -d . -c --output-file coverage.info
-	@cd build && genhtml -q coverage.info -o coverage-report 
-	w3m build/coverage-report/index.html
+analyse:
+	w3m build/coverage_report/index.html
 
 test_re: fclean
 	@$(MAKE) test
@@ -81,12 +82,24 @@ test_re: fclean
 ftest_re: fclean
 	@$(MAKE) ftest
 
+covclean:
+	find build -name "*.gc*" -type f -delete
+	rm -rf build/coverage*
+
+coverage:
+	@cd build && gcov `find . -type f -name "*.o"`
+	@cd build && lcov -q -d . -c --output-file coverage.info
+	@cd build && genhtml -q coverage.info -o coverage_report
+
 malloc_test: debug 
 	$(CC) $(CFLAGS) $(OBJS) $(MAIN_OBJ) $(LIBFT) -fsanitize=undefined -rdynamic -o $@ $(INCLUDE_FLAGS) $(LDFLAGS) -L. -lmallocator
 
 valgrind: debug ## Launch valgrind
 	valgrind --leak-check=full ./$(NAME)
 
-.PHONY: all clean fclean re debug rebug valgrind malloc_test fsan resan test test_fsan test_re test_resan
+.PHONY: all clean fclean re bonus
+.PHONY: debug rebug fsan resan
+.PHONY: valgrind malloc_test
+.PHONY: test ftest test_re ftest_re covclean coverage analyse covclean
 
 ################################################################################
