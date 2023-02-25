@@ -1,3 +1,4 @@
+MAIN 			:=main.c
 SRCS			=minishell.c \
 				 lexer/lexer.c \
 				 lexer/lexer_utils.c \
@@ -41,8 +42,6 @@ SRCS			=minishell.c \
 				 builtins/env.c \
 				 builtins/exit.c
 
-MAIN 			:=main.c
-
 SRC_DIR			:=src
 INCLUDE_DIR		:=include
 BUILD_DIR		:=build
@@ -52,8 +51,24 @@ LIBFT_DIR		:=$(LIB_DIR)/libft
 READLINE_DIR	:=$(LIB_DIR)/readline
 UNIT_INCLUDE_DIR	:=$(UNIT_DIR)/$(INCLUDE_DIR)
 LIBFT_INCLUDE_DIR	:=$(LIBFT_DIR)/$(INCLUDE_DIR)
-READLINE_INCLUDE_DIR	:=$(shell brew --prefix readline)/include
 
+ifneq ($(shell uname -s), Linux)
+READLINE_INCLUDE_DIR	:=$(shell brew --prefix readline)/include
+endif
+
+CFLAGS			=-Wall -Wextra -Werror
+
+ifdef DEBUG
+	CFLAGS			+=-g -D DEBUG=1
+endif
+
+ifdef FSAN
+		CFLAGS			+=-fsanitize=address
+endif
+
+ifdef COV
+	CFLAGS			+=--coverage
+endif
 
 OBJS			=$(addprefix $(BUILD_DIR)/, $(SRCS:%.c=%.o))
 MAIN_OBJ		=$(addprefix $(BUILD_DIR)/, $(MAIN:%.c=%.o))

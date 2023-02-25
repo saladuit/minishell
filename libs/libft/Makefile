@@ -106,7 +106,7 @@ PERCENT		=	$(INSET)$(CYAN)$(shell echo \
 ifeq ($(TESTFLAGS), 1)
 CFLAGS	= -Wall -Wextra -Werror -fsanitize=address -g
 else
-CFLAGS	= -Wall -Wextra -Werror$(if $(FSAN), -g -fsanitize=address)$(if $(DEBUG), -g)
+CFLAGS  =-Wall -Wextra -Werror$(if $(DEBUG), -g -D DEBUG=1)$(if $(FSAN), -g -D DEBUG=1 -fsanitize=address)
 endif
 
 NAME	= libft.a
@@ -137,16 +137,16 @@ obj/%.o: src/%.c
 $(NAME): $(OBJS)
 	@printf "$(INSET)"
 	@ar rcs $(NAME) $(OBJS)
-	@printf "$(ORANGE)Created archive.\n$(RESET)"
+#	@printf "$(ORANGE)Created archive.\n$(RESET)"
 
 bonus: all
 
 clean: heading
 	@rm -rf obj
-	@printf "$(RED)- $(BLUE)Removed object files\n$(RESET)"
+#	@printf "$(RED)- $(BLUE)Removed object files\n$(RESET)"
 
 fclean: clean
 	@rm -f libft.a
-	@printf "$(RED)- $(BLUE)Removed archive file\n$(RESET)"
+#	@printf "$(RED)- $(BLUE)Removed archive file\n$(RESET)"
 
 re: fclean comp
