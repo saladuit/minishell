@@ -24,7 +24,11 @@ jobs:
 
       - name: Install dependencies
         if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get update && sudo apt-get install -y build-essential lcov readline
+        run: |
+          sudo apt-get update && sudo apt-get install -y build-essential lcov libreadline-dev
+          git clone --depth 1 --branch v3.3.0 https://github.com/Snaipe/Criterion.git /tmp/criterion
+          cd /tmp/criterion && mkdir build && cd build
+          cmake .. && make && sudo make install
 
       - name: Build project
         run: make
