@@ -46,9 +46,7 @@ t_list *expand_single_quote_node(char *arg, size_t *i)
     expansion = ft_substr(arg, 1, len);
     if (!expansion)
         return (NULL);
-    (*i)++;
-    while (arg[*i] && !is_single_quote(arg[*i]))
-        (*i)++;
+    (*i) += len + 2;
     node = ft_lstnew(expansion);
     return (node);
 }
