@@ -1,5 +1,4 @@
 #include <minishell.h>
-#include "libft.h"
 
 void    skip_until_quote_or_dollar(char *arg, size_t *i)
 {
@@ -88,6 +87,8 @@ char *expand_token(char *arg, t_exitstatus *status)
     {
         if (is_dollar(arg[i]))
             node = expand_dollar_node(arg, &i, status);
+        else if (is_single_quote(arg[i]))
+            node = expand_single_quote_node(arg, &i);
         else
             node = copy_until_quote_or_dollar(arg, &i);
         if (node == NULL)
@@ -111,9 +112,9 @@ bool are_quotes_closed(const char *str)
     in_double_quote = false;
     while (*str != '\0')
     {
-        if (*str == '\'') 
+        if (is_single_quote(*str)) 
             in_single_quote = !in_single_quote;
-        else if (*str == '\"') 
+        else if (is_double_quote(*str)) 
             in_double_quote = !in_double_quote;
         str++;
     }
