@@ -59,12 +59,12 @@ fsan:
 resan: fclean
 	@$(MAKE) fsan
 
-test:
+test: covclean
 	@$(MAKE) DEBUG=1 COV=1
 	@$(MAKE) DEBUG=1 COV=1 -C $(UNIT_DIR)
 	@./$(UNIT_TEST) --timeout 4
 
-ftest:
+ftest: covclean
 	@$(MAKE) DEBUG=1 FSAN=1 COV=1
 	@$(MAKE) DEBUG=1 FSAN=1 COV=1 -C $(UNIT_DIR)
 	@./$(UNIT_TEST) --timeout 4
