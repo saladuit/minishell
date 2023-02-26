@@ -27,6 +27,7 @@ SRCS			=minishell.c \
 				 envp/pair.c \
 				 types/is_delimiter.c \
 				 types/is_double_quoted.c \
+				 types/is_dollar.c \
 				 types/is_expand.c \
 				 types/is_metachar.c \
 				 types/is_quote.c \
