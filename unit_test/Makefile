@@ -4,7 +4,7 @@ include ../makerc/unit.mk
 
 NAME			:= ../$(UNIT_TEST)
 
-LDFLAGS		=-lcriterion -lreadline -L --coverage
+LDFLAGS		=-lcriterion -lreadline
 
 all: $(NAME)
 $(NAME): SHELL := /bin/bash
