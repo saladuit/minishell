@@ -41,12 +41,22 @@ t_list *copy_until_quote_or_dollar(char *arg, size_t *i)
 char *expand_dollar(char *arg, t_exitstatus *status)
 {
     char *expansion;
+    char *sub;
+    char *p;
 
     if (*(++arg) == '\0')
         return (ft_strdup("$"));
     if (*arg == '?')
         return (ft_itoa(*status));
-    expansion = getenv(arg);
+    p = ft_strchr(arg, '$');
+    if (p)
+    {
+        sub = ft_substr(arg, 0, p - arg);
+        expansion = getenv(sub);
+        free(sub);
+    }
+    else
+        expansion = getenv(arg);
     if (expansion == NULL) 
         return (ft_strdup(""));
     return (ft_strdup(expansion));
