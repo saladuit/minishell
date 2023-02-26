@@ -58,11 +58,15 @@ t_list *expand_double_quote_node(char *arg, size_t *i, t_exitstatus *status)
 {
     t_list *node;
     char *expansion;
+    char *buf;
 
     if (*i >= 1)
         return (NULL);
     (*i)++;
-    expansion = expand_token(arg + *i, status);
+    buf = ft_strchr(arg + 1, '\"');
+    *buf = '\0';
+    (*i) = buf - arg + 1;
+    expansion = expand_token(arg + 1, status);
     if (!expansion)
         return (NULL);
     node = ft_lstnew(expansion);
@@ -116,11 +120,7 @@ char *expand_token(char *arg, t_exitstatus *status)
         else if (is_single_quote(arg[i]))
             node = expand_single_quote_node(arg, &i);
         else if (is_double_quote(arg[i]))
-        {
             node = expand_double_quote_node(arg, &i, status);
-            ft_lstadd_back(&stack, node);
-            break;
-        }
         else
             node = copy_until_quote_or_dollar(arg, &i);
         if (node == NULL)

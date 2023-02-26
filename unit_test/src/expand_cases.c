@@ -192,17 +192,20 @@ Test(expand_token, envvar_single_quotes)
 
  Test(expand_token, double_qoute_no_envvar, .timeout=1)
  {
-     assert_expand_token("\"HELLO\"", "HELLO", NULL);
+     char input[] = "\"HELLO\"";
+     assert_expand_token(input, "HELLO", NULL);
  }
 
  Test(expand_token, double_qoute_envvar, .timeout=1)
  {
-     assert_expand_token("\"$HELLO\"", "Hello", NULL);
+     char input[] = "\"$HELLO\"";
+     assert_expand_token(input, "Hello", NULL);
  }
 
  Test(expand_token, double_qoute_two_envvar, .timeout=1)
  {
-     assert_expand_token("\"$HELLO$WORLD\"", "HelloWorld", NULL);
+     char input[] = "\"$HELLO$WORLD\"";
+     assert_expand_token(input, "HelloWorld", NULL);
  }
 
  // Test(expand_token, envvar_with_spaces)
