@@ -4,7 +4,12 @@ include ../makerc/unit.mk
 
 NAME			:= ../$(UNIT_TEST)
 
+
+ifneq ($(shell uname -s), Linux)
+LDFLAGS	=$(shell brew --prefix readline)/lib -lcriterion -lreadline
+else
 LDFLAGS		=-lcriterion -lreadline
+endif
 
 all: $(NAME)
 $(NAME): SHELL := /bin/bash
