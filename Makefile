@@ -90,7 +90,7 @@ coverage:
 malloc_test: debug 
 	$(CC) $(CFLAGS) $(OBJS) $(MAIN_OBJ) $(LIBFT) -fsanitize=undefined -rdynamic -o $@ $(INCLUDE_FLAGS) $(LDFLAGS) -L. -lmallocator
 
-valgrind: debug ## Launch valgrind
+valgrind: debug
 	valgrind --leak-check=full ./$(NAME)
 
 .PHONY: all clean fclean re bonus
