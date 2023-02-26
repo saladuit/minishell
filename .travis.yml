@@ -1,0 +1,19 @@
+os:
+  - osx
+
+language: c
+
+install:
+  - brew update && brew install criterion readline lcov gcovr
+
+jobs:
+  include:
+    - stage: build
+      script:
+        - make debug
+   - stage: Unit tests
+     script:
+       - make test
+   - stage: Lexer tests
+     script:
+       - make coverage
