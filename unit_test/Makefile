@@ -4,7 +4,7 @@ include ../makerc/unit.mk
 
 NAME			:= ../$(UNIT_TEST)
 
-LDFLAGS		=-lcriterion -lreadline
+LDFLAGS		=-lreadline
 
 all: $(NAME)
 $(NAME): SHELL := /bin/bash
@@ -14,7 +14,7 @@ $(NAME): $(UNIT_OBJS) $(PRODUCTION_OBJS)
 
 $(UNIT_OBJS): ../$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(UNIT_INCLUDE_FLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(LDFLAGS) $(UNIT_INCLUDE_FLAGS) -c $< -o $@
 
 clean:
 	$(RM) $(UNIT_OBJS)
