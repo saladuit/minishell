@@ -70,6 +70,7 @@ ftest: covclean
 	@./$(UNIT_TEST)
 
 analyse:
+	@cd build && genhtml -q coverage.info -o coverage_report
 	w3m build/coverage_report/index.html
 
 test_re: fclean
@@ -85,7 +86,6 @@ covclean:
 coverage:
 	@cd build && gcov -b `find . -type f -name "*.o"`
 	@cd build && lcov -q -d . -c --output-file coverage.info
-	@cd build && genhtml -q coverage.info -o coverage_report
 
 malloc_test: debug 
 	$(CC) $(CFLAGS) $(OBJS) $(MAIN_OBJ) $(LIBFT) -fsanitize=undefined -rdynamic -o $@ $(INCLUDE_FLAGS) $(LDFLAGS) -L. -lmallocator
