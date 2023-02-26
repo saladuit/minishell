@@ -83,7 +83,7 @@ covclean:
 	rm -rf build/coverage*
 
 coverage:
-	@cd build && gcov `find . -type f -name "*.o"`
+	@cd build && gcov -b `find . -type f -name "*.o"`
 	@cd build && lcov -q -d . -c --output-file coverage.info
 	@cd build && genhtml -q coverage.info -o coverage_report
 
