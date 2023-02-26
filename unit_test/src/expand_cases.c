@@ -259,47 +259,47 @@ void assert_are_quotes_closed(char *input, bool expected)
 
 Test(quotes_closed, empty_string)
 {
-    test_are_quotes_closed("", true);
+    assert_are_quotes_closed("", true);
 }
 
 Test(quotes_closed, no_quotes)
 {
-    test_are_quotes_closed("this has no quotes", true);
+    assert_are_quotes_closed("this has no quotes", true);
 }
 
 Test(quotes_are_closed, single_quotes)
 {
-    test_are_quotes_closed("this 'has' single 'quotes'", true);
+    assert_are_quotes_closed("this 'has' single 'quotes'", true);
 }
 
 Test(quotes_are_closed, double_quotes)
 {
-    test_are_quotes_closed("this \"has\" double \"quotes\"", true);
+    assert_are_quotes_closed("this \"has\" double \"quotes\"", true);
 }
 
 Test(quotes_are_closed, unmatched_single_quotes)
 {
-    test_are_quotes_closed("this 'has unmatched single quotes", false);
+    assert_are_quotes_closed("this 'has unmatched single quotes", false);
 }
 
 Test(quotes_are_closed, unmatched_double_quotes)
 {
-    test_are_quotes_closed("this \"has unmatched double quotes", false);
+    assert_are_quotes_closed("this \"has unmatched double quotes", false);
 }
 
 Test(quotes_are_closed, mixed_quotes)
 {
-    test_are_quotes_closed("this 'has \"both\" types' of quotes", true);
+    assert_are_quotes_closed("this 'has \"both\" types' of quotes", true);
 }
 
 Test(quotes_are_closed, escaped_quotes)
 {
-    test_are_quotes_closed("this has escaped \\\"double\\\" quotes and \\'single\\' quotes", true);
+    assert_are_quotes_closed("this has escaped \\\"double\\\" quotes and \\'single\\' quotes", true);
 }
 
 Test(quotes_are_closed, multiple_lines)
 {
-    test_are_quotes_closed("this has quotes\non multiple\nlines", true);
+    assert_are_quotes_closed("this has quotes\non multiple\nlines", true);
 }
 
 /*******************************************************************************/
