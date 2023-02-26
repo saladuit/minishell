@@ -16,7 +16,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          brew update && brew install criterion readline lcov
+          brew update && brew install criterion readline lcov gcovr
 
       - name: Build project
         run: make
