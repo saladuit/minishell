@@ -15,10 +15,6 @@ else
 LDFLAGS 		=-L $(shell brew --prefix readline)/lib -lreadline
 endif
 
-ifdef TEST
-LDFLAGS +=  -L --coverage
-endif
-
 ################################################################################
 
 all: $(NAME)
