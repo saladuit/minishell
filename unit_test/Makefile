@@ -5,10 +5,10 @@ include ../makerc/unit.mk
 NAME			:= ../$(UNIT_TEST)
 
 
-ifneq ($(shell uname -s), Linux)
-LDFLAGS	=-L $(shell brew --prefix readline)/lib -lcriterion -lreadline
+ifeq ($(shell uname -s), Linux)
+	LDFLAGS		=-lcriterion -lreadline
 else
-LDFLAGS		=-lcriterion -lreadline
+	LDFLAGS	=-L $(shell brew --prefix readline)/lib -lcriterion -lreadline
 endif
 
 all: $(NAME)
