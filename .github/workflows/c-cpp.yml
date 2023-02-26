@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - 🔧Expander
   pull_request:
 
 jobs:
