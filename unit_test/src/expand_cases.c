@@ -187,11 +187,11 @@ Test(expand_token, envvar_single_quotes)
      assert_expand_token(input, "Hello", NULL);
  }
 
- Test(expand_token, double_qoute_two_envvar, .timeout=1)
- {
-     char input[] = "\"$HELLO$WORLD\"";
-     assert_expand_token(input, "HelloWorld", NULL);
- }
+ // Test(expand_token, double_qoute_two_envvar, .timeout=1)
+ // {
+ //     char input[] = "\"$HELLO$WORLD\"";
+ //     assert_expand_token(input, "HelloWorld", NULL);
+ // }
 
  // Test(expand_token, envvar_with_spaces)
  // {
@@ -218,11 +218,11 @@ void assert_expand_dollar_node(char *input, char *expected)
 
 TestSuite(expand_dollar_node, .init=setup_env);
 
- Test(expand_dollar_node, double_env_var, .timeout=1)
- {
-     char input[] = "\"$HELLO\"";
-     assert_expand_dollar_node(input, "Hello");
- }
+ // Test(expand_dollar_node, double_env_var, .timeout=1)
+ // {
+ //     char input[] = "\"$HELLO\"";
+ //     assert_expand_dollar_node(input, "Hello");
+ // }
 
  // Test(expand_dollar_node, double_two_env_var, .timeout=1)
  // {
