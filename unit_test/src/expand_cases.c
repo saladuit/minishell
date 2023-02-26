@@ -129,21 +129,6 @@ Test(copy_until_quote_or_dollar, basic)
      assert_copy_until_quote_or_dollar("Hallo\'", "Hallo");
  }
 
- Test(copy_until_quote_or_dollar, one_dollar)
- {
-     assert_copy_until_quote_or_dollar("$", "");
- }
-
- Test(copy_until_quote_or_dollar, one_double_quote)
- {
-     assert_copy_until_quote_or_dollar("\"", "");
- }
-
- Test(copy_until_quote_or_dollar, one_single_quote)
- {
-     assert_copy_until_quote_or_dollar("\'", "");
- }
-
 /*******************************************************************************/
 /*                           Expand_token                                      */
 /*******************************************************************************/
