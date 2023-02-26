@@ -165,32 +165,31 @@ char *expand_token(char *arg, t_exitstatus *status);
      assert_expand_token("Hello", "Hello", NULL);
  }
 
- // Test(expand_token, basic_env)
- // {
- //     assert_expand_token("$HELLO", "Hello", NULL);
- // }
+  Test(expand_token, basic_env)
+  {
+      assert_expand_token("$HELLO", "Hello", NULL);
+  }
 
-// Test(expand_token, exit_status)
-// {
-//     assert_expand_token("$?", "0", &zero);
-// }
+ Test(expand_token, exit_status)
+ {
+     assert_expand_token("$?", "0", &zero);
+ }
 
-// Test(expand_token, exit_status_max)
-// {
-//     assert_expand_token("$?", "0", &max);
-// }
-//
-//
-// Test(expand_token, no_envvar)
-// {
-//     assert_expand_token("$UNSET", "", NULL);
-// }
-//
-// Test(expand_token, envvar_single_quotes)
-// {
-//     assert_expand_token("'$VAR'", "$VAR", NULL);
-// }
-//
+Test(expand_token, exit_status_max)
+{
+    assert_expand_token("$?", "255", &max);
+}
+
+Test(expand_token, no_envvar)
+{
+    assert_expand_token("$UNSET", "", NULL);
+}
+
+Test(expand_token, envvar_single_quotes)
+{
+    assert_expand_token("'$VAR'", "$VAR", NULL);
+}
+
 // Test(expand_token, envvar_double_qutoes)
 // {
 //     assert_expand_token("\"$DQUOTE\"", "Hello World", NULL);
