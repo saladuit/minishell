@@ -27,8 +27,5 @@
 # include <criterion/stats.h>
 # include <criterion/types.h>
 # include <minishell.h>
-# include <readline/history.h>
-# include <readline/readline.h>
-
 
 #endif
