@@ -28,21 +28,5 @@
 # include <criterion/types.h>
 # include <minishell.h>
 
-void	redirect_all_std(void);
-void	assert_empty_stdout();
-void	assert_error_stdout();
-
-char *expand_dollar(char *arg, t_exitstatus *status);
-char *expand_token(char *arg, t_exitstatus *status);
-bool are_quotes_closed(const char *str);
-//void	minishell_test(const char *envp[], const size_t count, int32_t expected);
-//
-//void	tokenizer_test(const char input[], const char **expect, const int32_t ret);
-//void	lexer_test(const char input[], const char **expect, const int32_t ret);
-//
-//void	get_command_test(const char input[], char *expect[]);
-//
-//void	execute_test(const char *path, char **args, char **envp, const int32_t ret);
-//void	get_redir_test(const char input[], const char *expect[]);
 
 #endif

@@ -68,17 +68,17 @@ char *expand_token(char *arg, t_exitstatus *status)
     while (arg[i])
     {
         node = copy_until_quote_or_dollar(arg, &i);
-        if (stack == NULL)
+        if (node == NULL)
         {
-            ft_lstclear(&node, free);
+            ft_lstclear(&stack, free);
             return (NULL);
         }
         ft_lstadd_back(&stack, node);
     }
-    new_arg = combine_expanded_strings(node);
+    new_arg = combine_expanded_strings(stack);
+    ft_lstclear(&stack, free);
     return (new_arg);
 }
-
 
 bool are_quotes_closed(const char *str)
 {
@@ -99,7 +99,7 @@ bool are_quotes_closed(const char *str)
     return (!in_single_quote && !in_double_quote);
 }
 
-// Go through all of the tokenes
+//this will be moved to parser
 void expand_tokens(t_list **arg, t_exitstatus *status)
 {
     t_list *curr;
