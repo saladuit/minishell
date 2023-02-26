@@ -6,13 +6,6 @@ void    skip_until_quote_or_dollar(char *arg, size_t *i)
         (*i)++;
 }
 
-char *expand_single_quote(char *arg)
-{
-    size_t len = ft_strlen(arg) - 2;
-    char *expanded = ft_substr(arg, 1, len);
-    return expanded;
-}
-
 char *combine_expanded_strings(t_list *stack)
 {
     char *result;
@@ -39,6 +32,23 @@ t_list *copy_until_quote_or_dollar(char *arg, size_t *i)
     expansion = ft_substr(arg, 0, *i);
     if (!expansion)
         return (NULL);
+    node = ft_lstnew(expansion);
+    return (node);
+}
+
+t_list *expand_single_quote_node(char *arg, size_t *i)
+{
+    t_list *node;
+    char *expansion;
+    size_t len;
+
+    len = ft_strlen(arg) - 2;
+    expansion = ft_substr(arg, 1, len);
+    if (!expansion)
+        return (NULL);
+    (*i)++;
+    while (arg[*i] && !is_single_quote(arg[*i]))
+        (*i)++;
     node = ft_lstnew(expansion);
     return (node);
 }
