@@ -1,48 +1,121 @@
 #include <minishell.h>
+#include "libft.h"
 
-// Get the arguments and redirects out of the command structure so it can expand them if needed.
-void	expand_cmd(t_command *cmd, t_minishell *shell)
+// Return the error code or the environment variable
+char *expand_dollar(char *arg, t_exitstatus *status)
 {
-	expand_argument_list(&cmd->arguments, shell);
-	expand_redirect_list(&cmd->redirs, shell);
+    char *env_value;
+
+    if (*(arg++ + 1) == '\0')
+        return (ft_strdup("$"));
+    if (*arg == '?')
+        return (ft_itoa(*status));
+    env_value = getenv(arg);
+    if (env_value == NULL) 
+        return (ft_strdup(""));
+    return (ft_strdup(env_value));
 }
 
-// loop over the command structures inside command table structure and start expanding for each.
-void	expand_cmd_table(t_command_table *cmd_table, t_minishell *shell)
+char *expand_single_quote(char *arg)
 {
-	t_command	*cmd;
-	t_list		*iter;
-
-	iter = cmd_table->commands;
-	while (iter)
-	{
-		cmd = (t_command *)iter->content;
-		expand_cmd(cmd, shell);
-		iter = iter->next;
-	}
+    size_t len = ft_strlen(arg) - 2;
+    char *expanded = ft_substr(arg, 1, len);
+    return expanded;
 }
 
-/* The expander needs to expand $variable name and $? depending on the quoting.
-	check if it is quoted.
-	then check if it is double quoted.
-	if it is double quoted expand if needed.
-	single quotes do not have to be expanded.
-	remove quotes.
-
-	No quotes? and it is a $variable?
-	Expand it into multiple arguments
-*/
-int32_t	expander(t_minishell *shell)
+char *combine_expanded_strings(t_list *stack)
 {
-	t_command_table	*cmd_table;
-	t_list			*ast;
+    char *result;
+    char *tmp;
 
-	ast = shell->ast;
-	while (ast)
-	{
-		cmd_table = (t_command_table *)ast->content;
-		expand_cmd_table(cmd_table, shell);
-		ast = ast->next;
-	}
-	return (SUCCESS);
+    tmp = NULL;
+    result = ft_calloc(1, 1);
+    while (stack)
+    {
+        tmp = ft_strjoin(result, stack->content);
+        free(result);
+        result = tmp;
+        stack = stack->next;
+    }
+    return (result);
+}
+
+t_list *copy_until_quote_or_dollar(char *arg, size_t *i)
+{
+    char *expansion;
+    t_list *node;
+
+    while (arg[*i] && arg[*i] != '$' && !is_quote(arg[*i]))
+        (*i)++;
+    expansion = ft_substr(arg, 0, *i);
+    if (!expansion)
+        return (NULL);
+    node = ft_lstnew(expansion);
+    return (node);
+}
+
+char *expand_token(char *arg, t_exitstatus *status)
+{
+    t_list *stack;
+    t_list *node;
+    char *new_arg;
+    size_t i;
+
+    (void)status;
+    i = 0;
+    stack = NULL;
+    node = NULL;
+    while (arg[i])
+    {
+        node = copy_until_quote_or_dollar(arg, &i);
+        if (stack == NULL)
+        {
+            ft_lstclear(&node, free);
+            return (NULL);
+        }
+        ft_lstadd_back(&stack, node);
+    }
+    new_arg = combine_expanded_strings(node);
+    return (new_arg);
+}
+
+
+bool are_quotes_closed(const char *str)
+{
+    bool in_single_quote;
+    bool in_double_quote;
+    
+    in_single_quote = false;
+    in_double_quote = false;
+    while (*str != '\0')
+    {
+        if (*str == '\'') 
+            in_single_quote = !in_single_quote;
+        else if (*str == '\"') 
+            in_double_quote = !in_double_quote;
+        str++;
+    }
+    
+    return (!in_single_quote && !in_double_quote);
+}
+
+// Go through all of the tokenes
+void expand_tokens(t_list **arg, t_exitstatus *status)
+{
+    t_list *curr;
+    char *arg_str;
+    char *arg_expanded;
+
+    curr = *arg;
+    while (curr)
+    {
+        arg_str = (char *)curr->content;
+        if (are_quotes_closed(arg_str))
+        {
+            arg_expanded = expand_token(arg_str, status);
+            free(arg_str);
+            curr->content = arg_expanded;
+        }
+        curr = curr->next;
+    }
 }

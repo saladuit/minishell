@@ -33,7 +33,8 @@ void	assert_empty_stdout();
 void	assert_error_stdout();
 
 char *expand_dollar(char *arg, t_exitstatus *status);
-char *expand_arg_quote(char *arg, int in_single_quote, t_exitstatus *status);
+char *expand_token(char *arg, t_exitstatus *status);
+bool are_quotes_closed(const char *str);
 //void	minishell_test(const char *envp[], const size_t count, int32_t expected);
 //
 //void	tokenizer_test(const char input[], const char **expect, const int32_t ret);
