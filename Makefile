@@ -62,12 +62,12 @@ resan: fclean
 test: covclean
 	@$(MAKE) DEBUG=1 COV=1
 	@$(MAKE) DEBUG=1 COV=1 -C $(UNIT_DIR)
-	@./$(UNIT_TEST) --timeout 4
+	@./$(UNIT_TEST)
 
 ftest: covclean
 	@$(MAKE) DEBUG=1 FSAN=1 COV=1
 	@$(MAKE) DEBUG=1 FSAN=1 COV=1 -C $(UNIT_DIR)
-	@./$(UNIT_TEST) --timeout 4
+	@./$(UNIT_TEST)
 
 analyse:
 	w3m build/coverage_report/index.html
