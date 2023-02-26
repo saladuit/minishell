@@ -67,6 +67,7 @@ t_list *expand_dollar_node(char *arg, size_t *i, t_exitstatus *status)
     expansion = expand_dollar(arg,status);
     if (!expansion)
         return (NULL);
+    (*i)++;
     skip_until_quote_or_dollar(arg, i);
     node = ft_lstnew(expansion);
     return (node);
