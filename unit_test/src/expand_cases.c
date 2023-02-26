@@ -165,10 +165,10 @@ char *expand_token(char *arg, t_exitstatus *status);
      assert_expand_token("Hello", "Hello", NULL);
  }
 
-//Test(expand_token, basic_env)
-//{
-//    assert_expand_token("$HELLO", "Hello", NULL);
-//}
+ // Test(expand_token, basic_env)
+ // {
+ //     assert_expand_token("$HELLO", "Hello", NULL);
+ // }
 
 // Test(expand_token, exit_status)
 // {

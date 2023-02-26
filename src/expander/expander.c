@@ -1,19 +1,10 @@
 #include <minishell.h>
 #include "libft.h"
 
-// Return the error code or the environment variable
-char *expand_dollar(char *arg, t_exitstatus *status)
+void    skip_until_quote_or_dollar(char *arg, size_t *i)
 {
-    char *env_value;
-
-    if (*(arg++ + 1) == '\0')
-        return (ft_strdup("$"));
-    if (*arg == '?')
-        return (ft_itoa(*status));
-    env_value = getenv(arg);
-    if (env_value == NULL) 
-        return (ft_strdup(""));
-    return (ft_strdup(env_value));
+    while (arg[*i] && !is_dollar(arg[*i]) && !is_quote(arg[*i]))
+        (*i)++;
 }
 
 char *expand_single_quote(char *arg)
@@ -45,11 +36,38 @@ t_list *copy_until_quote_or_dollar(char *arg, size_t *i)
     char *expansion;
     t_list *node;
 
-    while (arg[*i] && arg[*i] != '$' && !is_quote(arg[*i]))
-        (*i)++;
+    skip_until_quote_or_dollar(arg, i);
     expansion = ft_substr(arg, 0, *i);
     if (!expansion)
         return (NULL);
+    node = ft_lstnew(expansion);
+    return (node);
+}
+
+// Return the error code or the environment variable
+char *expand_dollar(char *arg, t_exitstatus *status)
+{
+    char *expansion;
+
+    if (*(++arg) == '\0')
+        return (ft_strdup("$"));
+    if (*arg == '?')
+        return (ft_itoa(*status));
+    expansion = getenv(arg);
+    if (expansion == NULL) 
+        return (ft_strdup(""));
+    return (ft_strdup(expansion));
+}
+
+t_list *expand_dollar_node(char *arg, size_t *i, t_exitstatus *status)
+{
+    t_list *node;
+    char *expansion;
+
+    expansion = expand_dollar(arg,status);
+    if (!expansion)
+        return (NULL);
+    skip_until_quote_or_dollar(arg, i);
     node = ft_lstnew(expansion);
     return (node);
 }
@@ -67,7 +85,10 @@ char *expand_token(char *arg, t_exitstatus *status)
     node = NULL;
     while (arg[i])
     {
-        node = copy_until_quote_or_dollar(arg, &i);
+        if (is_dollar(arg[i]))
+            node = expand_dollar_node(arg, &i, status);
+        else
+            node = copy_until_quote_or_dollar(arg, &i);
         if (node == NULL)
         {
             ft_lstclear(&stack, free);

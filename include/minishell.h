@@ -184,6 +184,7 @@ int32_t				handle_system_call_error(const char* function_name);
 // Minitypes
 
 bool				is_delimiter(int c);
+bool 				is_dollar(int c);
 bool				is_redir(int c);
 bool				is_metachar(int c);
 bool				is_quote(int c);
