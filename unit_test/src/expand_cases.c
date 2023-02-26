@@ -103,6 +103,7 @@ void assert_copy_until_quote_or_dollar(char *input, char *expected)
     t_list *output;
     size_t i;
 
+    i = 0;
     output = copy_until_quote_or_dollar(input, &i);
     cr_expect_str_eq(output->content, expected);
     free(output->content);
@@ -111,22 +112,26 @@ void assert_copy_until_quote_or_dollar(char *input, char *expected)
 
 Test(copy_until_quote_or_dollar, basic)
 {
-    assert_copy_until_quote_or_dollar("Hallo", "Hallo");
+    char input[] = "Hallo";
+    assert_copy_until_quote_or_dollar(input, "Hallo");
 }
 
- Test(copy_until_quote_or_dollar, dollar)
- {
-     assert_copy_until_quote_or_dollar("Hallo$", "Hallo");
- }
+Test(copy_until_quote_or_dollar, dollar)
+{
+    char input[] = "Hallo$";
+    assert_copy_until_quote_or_dollar(input, "Hallo");
+}
 
- Test(copy_until_quote_or_dollar, double_quote)
- {
-     assert_copy_until_quote_or_dollar("Hallo\"", "Hallo");
- }
+Test(copy_until_quote_or_dollar, double_quote)
+{
+    char input[] = "Hallo\"";
+    assert_copy_until_quote_or_dollar(input, "Hallo");
+}
 
- Test(copy_until_quote_or_dollar, single_quote)
- {
-     assert_copy_until_quote_or_dollar("Hallo\'", "Hallo");
+Test(copy_until_quote_or_dollar, single_quote)
+{
+    char input[] = "Hallo\'";
+    assert_copy_until_quote_or_dollar(input, "Hallo");
  }
 
 /*******************************************************************************/
