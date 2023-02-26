@@ -3,6 +3,14 @@
 t_exitstatus zero = 0;
 t_exitstatus max = 255;
 
+ void setup_env(void)
+ {
+     setenv("HELLO", "Hello", 1);
+     setenv("WORLD", "World", 1);
+     unsetenv("UNSET");
+     setenv("SPACE", "Spa ce", 1);
+ }
+
 /*******************************************************************************/
 /*                           Expand_Dollar                                     */
 /*******************************************************************************/
@@ -15,13 +23,8 @@ void assert_expand_dollar(char *input, char *expected, t_exitstatus *status)
     cr_expect_str_eq(result, expected);
     free(result);
 }
-void setup_expand_dollar(void)
-{
-     setenv("HELLO", "Hello", 1);
-     unsetenv("NULL");
-}
 
-TestSuite(expand_dollar, .init=setup_expand_dollar);
+TestSuite(expand_dollar, .init=setup_env);
 
 Test(expand_dollar, single_dollar)
 {
@@ -43,10 +46,14 @@ Test(expand_dollar, single_dollar)
      assert_expand_dollar("$HELLO", "Hello", NULL);
  }
 
+ Test(expand_dollar, double_var)
+ {
+     assert_expand_dollar("$HELLO$HELLO", "Hello", NULL);
+ }
+
  Test(expand_dollar, null)
  {
-     unsetenv("NULL");
-     assert_expand_dollar("$NULL", "", NULL);
+     assert_expand_dollar("$UNSET", "", NULL);
  }
 
 /*******************************************************************************/
@@ -143,15 +150,8 @@ Test(copy_until_quote_or_dollar, basic)
 
 char *expand_token(char *arg, t_exitstatus *status);
 
- void setup_expand_token(void)
- {
-     setenv("HELLO", "Hello", 1);
-     setenv("WORLD", "World", 1);
-     unsetenv("UNSET");
-     setenv("SPACE", "Spa ce", 1);
- }
 
- TestSuite(expand_token, .init=setup_expand_token);
+ TestSuite(expand_token, .init=setup_env);
 
  void assert_expand_token(char *input, char *expected, t_exitstatus *status)
  {
@@ -286,18 +286,8 @@ Test(quotes_are_closed, multiple_lines)
 //   cr_expect_str_eq(result, expected_output);
 //   ft_lstclear(&arg_list, cr_free);
 // }
-// void setup_expand_tokens(void)
-// {
-//     setenv("VAR", "value", 1);
-//     setenv("ONE", "ONE", 1);
-//     setenv("TWO", "TWO", 1);
-//     setenv("QSINGLE", "noshow", 1);
-//     setenv("QDOUBLE", "qduoble", 1);
-//     unsetenv("UNDEFINED");
-//     setenv("SPECIEAL_CHAR", "special_char", 1);
-// }
 //
-// TestSuite(expand_tokens, .init=setup_expand_tokens);
+// TestSuite(expand_tokens, .init=setup_env);
 //
 // Test(expand_tokens, empty_input)
 // {
