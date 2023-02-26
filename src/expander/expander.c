@@ -36,20 +36,6 @@ t_list *copy_until_quote_or_dollar(char *arg, size_t *i)
     return (node);
 }
 
-t_list *expand_single_quote_node(char *arg, size_t *i)
-{
-    t_list *node;
-    char *expansion;
-    size_t len;
-
-    len = ft_strlen(arg) - 2;
-    expansion = ft_substr(arg, 1, len);
-    if (!expansion)
-        return (NULL);
-    (*i) += len + 2;
-    node = ft_lstnew(expansion);
-    return (node);
-}
 
 // Return the error code or the environment variable
 char *expand_dollar(char *arg, t_exitstatus *status)
@@ -64,6 +50,38 @@ char *expand_dollar(char *arg, t_exitstatus *status)
     if (expansion == NULL) 
         return (ft_strdup(""));
     return (ft_strdup(expansion));
+}
+
+char *expand_token(char *arg, t_exitstatus *status);
+
+t_list *expand_double_quote_node(char *arg, size_t *i, t_exitstatus *status)
+{
+    t_list *node;
+    char *expansion;
+
+    if (*i >= 1)
+        return (NULL);
+    (*i)++;
+    expansion = expand_token(arg + *i, status);
+    if (!expansion)
+        return (NULL);
+    node = ft_lstnew(expansion);
+    return (node);
+}
+
+t_list *expand_single_quote_node(char *arg, size_t *i)
+{
+    t_list *node;
+    char *expansion;
+    size_t len;
+
+    len = ft_strlen(arg) - 2;
+    expansion = ft_substr(arg, 1, len);
+    if (!expansion)
+        return (NULL);
+    (*i) += len + 2;
+    node = ft_lstnew(expansion);
+    return (node);
 }
 
 t_list *expand_dollar_node(char *arg, size_t *i, t_exitstatus *status)
@@ -97,6 +115,12 @@ char *expand_token(char *arg, t_exitstatus *status)
             node = expand_dollar_node(arg, &i, status);
         else if (is_single_quote(arg[i]))
             node = expand_single_quote_node(arg, &i);
+        else if (is_double_quote(arg[i]))
+        {
+            node = expand_double_quote_node(arg, &i, status);
+            ft_lstadd_back(&stack, node);
+            break;
+        }
         else
             node = copy_until_quote_or_dollar(arg, &i);
         if (node == NULL)

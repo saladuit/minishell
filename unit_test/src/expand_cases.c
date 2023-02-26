@@ -146,7 +146,7 @@ char *expand_token(char *arg, t_exitstatus *status);
  void setup_expand_token(void)
  {
      setenv("HELLO", "Hello", 1);
-     setenv("DQUOTE", "Hello", 1);
+     setenv("WORLD", "World", 1);
      unsetenv("UNSET");
      setenv("SPACE", "Spa ce", 1);
  }
@@ -190,15 +190,25 @@ Test(expand_token, envvar_single_quotes)
     assert_expand_token("'$VAR'", "$VAR", NULL);
 }
 
-// Test(expand_token, envvar_double_qutoes)
-// {
-//     assert_expand_token("\"$DQUOTE\"", "Hello World", NULL);
-// }
-//
-// Test(expand_token, envvar_with_spaces)
-// {
-//     assert_expand_token("echo $SPACE", "echo Spa ce", NULL);
-// }
+ Test(expand_token, double_qoute_no_envvar, .timeout=1)
+ {
+     assert_expand_token("\"HELLO\"", "HELLO", NULL);
+ }
+
+ Test(expand_token, double_qoute_envvar, .timeout=1)
+ {
+     assert_expand_token("\"$HELLO\"", "Hello", NULL);
+ }
+
+ Test(expand_token, double_qoute_two_envvar, .timeout=1)
+ {
+     assert_expand_token("\"$HELLO$WORLD\"", "HelloWorld", NULL);
+ }
+
+ // Test(expand_token, envvar_with_spaces)
+ // {
+ //     assert_expand_token("echo $SPACE", "echo Spa ce", NULL);
+ // }
 
 /*******************************************************************************/
 /*                           Are_quotes_closed                                 */
