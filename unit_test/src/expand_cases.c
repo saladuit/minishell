@@ -214,12 +214,44 @@ Test(expand_token, envvar_single_quotes)
  // }
 
 /*******************************************************************************/
+/*                           Expand_dollar_node                                */
+/*******************************************************************************/
+t_list *expand_dollar_node(char *arg, size_t *i, t_exitstatus *status);
+
+void assert_expand_dollar_node(char *input, char *expected)
+{
+    t_list *node;
+    size_t i;
+
+    i = 0;
+    node = expand_dollar_node(input, &i, &zero);
+    cr_expect_str_eq(node->content, expected);
+    cr_assert(node->next == NULL);
+    free(node->content);
+    free(node);
+}
+
+TestSuite(expand_dollar_node, .init=setup_env);
+
+ Test(expand_dollar_node, double_env_var, .timeout=1)
+ {
+     char input[] = "\"$HELLO\"";
+     assert_expand_dollar_node(input, "Hello");
+ }
+
+ // Test(expand_dollar_node, double_two_env_var, .timeout=1)
+ // {
+ //     char input[] = "\"$HELLO$WORLD\"";
+ //     assert_expand_dollar_node(input, (char *[]){"Hello"});
+ // }
+
+/*******************************************************************************/
 /*                           Are_quotes_closed                                 */
 /*******************************************************************************/
 
 bool are_quotes_closed(const char *str);
 
-void test_are_quotes_closed(char *input, bool expected)
+void assert_are_quotes_closed(char *input, bool expected)
 {
     bool result = are_quotes_closed(input);
     cr_assert(result == expected);
