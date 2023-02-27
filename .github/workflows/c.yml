@@ -24,4 +24,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Find lcov
-        run: find / -name "lcov.info" -type f || true
+        run: |
+          if [ ${{ fail() }} == true ]; then
+          find / -name "lcov.info" -type f
+          fi
