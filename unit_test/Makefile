@@ -13,7 +13,7 @@ endif
 
 ifeq ($(shell uname),Linux)
 	ifeq ($(shell lsb_release -is),Ubuntu)
-	UBUNTU = -I /usr/include/
+	UBUNTU = -I /usr/local/include/
 endif
 endif
 
