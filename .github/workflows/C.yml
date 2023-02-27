@@ -3,26 +3,26 @@ name: Unit-test
 on: ["push", "pull_request"]
 
 jobs:
-  build:
+    build:
 
-    runs-on: ubuntu-latest
+        runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Install dependencies
-      run: apt-get update
-      run: apt-get install libreadline-dev
-      run: apt-get -y install lcov
-      run: apt-get -y install libcriterion-dev
-    - name: install norminette
-      run: python3 -m pip install norminette
-    - name: Build project
-      run: make
-    - name: Run tests and generate coverage report
-      run: make test_re
-      run: make coverage
-      run: make analyze
-    - name: Coveralls
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        steps:
+        - uses: actions/checkout@v2
+        - name: Install dependencies
+          run: apt-get update
+          run: apt-get install libreadline-dev
+          run: apt-get -y install lcov
+          run: apt-get -y install libcriterion-dev
+        - name: install norminette
+          run: python3 -m pip install norminette
+        - name: Build project
+          run: make
+        - name: Run tests and generate coverage report
+          run: make test_re
+          run: make coverage
+          run: make analyze
+        - name: Coveralls
+          uses: coverallsapp/github-action@master
+          with:
+              github-token: ${{ secrets.GITHUB_TOKEN }}
