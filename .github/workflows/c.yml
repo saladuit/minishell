@@ -19,5 +19,5 @@ jobs:
         run: make
       - name: Run tests
         run: make test_re
-      - name: Make Coverage report
-        run: coveralls
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v1

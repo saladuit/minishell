@@ -84,9 +84,6 @@ covclean:
 	find build -name "*.gc*" -type f -delete
 	rm -rf build/coverage*
 
-gcov:
-	@gcov $(OBJS)
-
 coverage:
 	@cd build && gcov -b `find . -type f -name "*.o"`
 	@cd build && lcov -q -d . -c --output-file coverage.info
