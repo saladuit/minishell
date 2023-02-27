@@ -1,32 +1,30 @@
-name: CI
-
-on:
-  push:
-    branches:
-      - 🔧Expander
-  pull_request:
-
-jobs:
-  build:
-    runs-on: macos-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install dependencies
-        run: |
-          brew update && brew install criterion readline lcov
-
-      - name: Build project
-        run: make
-
-      - name: Run tests and generate coverage report
-        run: make test_re && gcovr --xml-pretty --output=coverage.xml
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-          with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Upload coverage report
-        uses: codecov/codecov-action@v1
-        with:
-          path: coverage.xml
+name: Unit-test 
+  
+ on: 
+   push:  
+   pull_request:
+  
+ jobs: 
+   build: 
+  
+     runs-on: ubuntu-latest 
+  
+     steps: 
+     - uses: actions/checkout@v2
+     - name: Install dependencies
+       run: apt-get update
+       run: apt-get install libreadline-dev
+       run: apt-get -y install lcov
+       run: apt-get -y install libcriterion-dev
+     - name: install norminette 
+       run: python3 -m pip install norminette 
+     - name: Build project
+       run: make
+     - name: Run tests and generate coverage report
+       run: make test_re
+       run: make coverage
+       run: make analyze
+     - name: Coveralls
+       uses: coverallsapp/github-action@master
+         with:
+           github-token: ${{ secrets.GITHUB_TOKEN }}
