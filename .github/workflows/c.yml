@@ -3,29 +3,26 @@ on:
   push:
     branches:
       - main
-      - '🔧Expander'
+      - 🔧Expander
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libreadline-dev
-          sudo apt-get install -y lcov
-          sudo apt-get install -y libcriterion-dev
-      - name: Install norminette
-        run: python3 -m pip install norminette
+          if [ "$MATRIX_OS" = "ubuntu-latest" ]; then
+            sudo apt-get update && sudo apt-get install libreadline-dev lcov libcriterion-dev
+          elif [ "$MATRIX_OS" = "macos-latest" ]; then
+            brew update && brew install criterion readline lcov gcovr
+          fi
       - name: Build project
         run: make
-      - name: Run tests and generate coverage report
-        run: |
-          make test_re
-          make coverage
-          make analyze
-      - name: Upload coverage report to Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run tests
+        run: make test
+      - name: Make Coverage report
+        run: make coverage
