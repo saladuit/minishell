@@ -21,4 +21,5 @@ jobs:
         run: make test_re
       - name: Make Coverage report
         run: |
+          make gcov
           coveralls --exclude lib --exclude tests --gcov-options '\-lp'
