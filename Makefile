@@ -22,7 +22,7 @@ all: $(NAME)
 $(NAME): SHELL :=/bin/bash
 
 $(NAME): $(OBJS) $(MAIN_OBJ) $(LIBFT)
-	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(INCLUDE_FLAGS) -o $(NAME)
+	$(CC) $(CFLAGS) $^ $(LDFLAGS) $(INCLUDE_FLAGS) -o $(NAME)
 
 $(MAIN_OBJ) $(OBJS): $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(HEADER)
 	@mkdir -p $(dir $@)
