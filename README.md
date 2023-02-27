@@ -1,4 +1,5 @@
 # minishell
+[![Coverage Status](https://coveralls.io/repos/github/saladuit/minishell/badge.svg?branch=main)](https://coveralls.io/github/saladuit/minishell?branch=main)
 This project is about creating a simple shell. Yes, our own little bash. We will learn a lot about processes and file descriptors.
 
 ## Description
