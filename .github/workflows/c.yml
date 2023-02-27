@@ -5,7 +5,7 @@ on:
       - main
       - 🔧Expander
 jobs:
-  build:
+  linux:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -26,3 +26,15 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: build/coverage.info
+  macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          brew update && brew install criterion readline lcov gcovr
+      - name: Build project
+        run: make
+      - name: Run tests
+        run: make test
