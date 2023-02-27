@@ -14,11 +14,12 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install libreadline-dev lcov libcriterion-dev
-      - name: locate criterion
-        run: whereis criterion
+          sudo pip install cpp-coveralls
       - name: Build project
         run: make
       - name: Run tests
         run: make test
       - name: Make Coverage report
-        run: make coverage
+        run: |
+          make gcov
+          coveralls --exclude lib --exclude tests --gcov-options '\-lp'

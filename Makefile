@@ -14,11 +14,7 @@ LDFLAGS 		=-lreadline
 else
 LDFLAGS 		=-L $(shell brew --prefix readline)/lib -lreadline
 endif
-ifeq ($(shell uname),Linux)
-	ifeq ($(shell lsb_release -is),Ubuntu)
-	UBUNTU = -I /usr/include/
-endif
-endif
+
 ################################################################################
 
 all: $(NAME)
@@ -34,6 +30,7 @@ $(MAIN_OBJ) $(OBJS): $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(HEADER)
 
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR)
+
 ################################################################################
 
 clean: covclean
@@ -86,6 +83,9 @@ ftest_re: fclean
 covclean:
 	find build -name "*.gc*" -type f -delete
 	rm -rf build/coverage*
+
+gcov:
+	@gcov $(OBJS)
 
 coverage:
 	@cd build && gcov -b `find . -type f -name "*.o"`
