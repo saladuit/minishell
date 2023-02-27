@@ -1,17 +1,17 @@
 #include <minishell.h>
 
-int32_t redirect(t_redir *redir, t_type type)
+int32_t	redirect(t_redir *redir, t_type type)
 {
 	if (!open_redir(redir->filename, type))
 		return (handle_system_call_error("redirect"));
 	return (SUCCESS);
 }
 
-int32_t setup_redirects(t_command *command)
+int32_t	setup_redirects(t_command *command)
 {
-	t_redir *redir;
-	int32_t	 ret;
-	int32_t		i;
+	t_redir	*redir;
+	int32_t	ret;
+	int32_t	i;
 
 	i = 0;
 	ret = 0;
@@ -23,19 +23,19 @@ int32_t setup_redirects(t_command *command)
 	return (ret);
 }
 
-t_builtin builtin_lookup(char *cmd)
+t_builtin	builtin_lookup(char *cmd)
 {
-	static const t_builtin lookup[] = {
-		{.name = "echo",	 .func = ft_echo	},
-		{.name = "cd",	   .func = ft_cd	},
-		{.name = "pwd",	.func = ft_pwd	  },
-		{.name = "export", .func = ft_export},
-		{.name = "unset",  .func = ft_unset },
-		{.name = "env",	.func = ft_env	  },
-		{.name = "exit",	 .func = ft_exit	},
-		{NULL,			   NULL			   }
+	static const t_builtin	lookup[] = {
+	{.name = "echo",	.func = ft_echo},
+	{.name = "cd",		.func = ft_cd},
+	{.name = "pwd",		.func = ft_pwd},
+	{.name = "export",	.func = ft_export},
+	{.name = "unset",	.func = ft_unset},
+	{.name = "env",		.func = ft_env},
+	{.name = "exit",	.func = ft_exit},
+	{NULL, NULL}
 	};
-	int32_t i;
+	int32_t					i;
 
 	i = 0;
 	while (lookup[i].name != NULL &&
@@ -44,10 +44,10 @@ t_builtin builtin_lookup(char *cmd)
 	return (lookup[i]);
 }
 
-int32_t execute_builtin(char **arguments, t_minishell *shell)
+int32_t	execute_builtin(char **arguments, t_minishell *shell)
 {
-	t_builtin builtin_function;
-	int32_t	  ret;
+	t_builtin	builtin_function;
+	int32_t		ret;
 
 	builtin_function = builtin_lookup(arguments[0]);
 	if (builtin_function.name == NULL)
@@ -56,9 +56,9 @@ int32_t execute_builtin(char **arguments, t_minishell *shell)
 	return (ret);
 }
 
-int32_t wait_for_child_processes(pid_t pid)
+int32_t	wait_for_child_processes(pid_t pid)
 {
-	int32_t status;
+	int32_t	status;
 
 	status = 0;
 	close(STDIN_FILENO);
@@ -76,15 +76,15 @@ int32_t wait_for_child_processes(pid_t pid)
 	return (WEXITSTATUS(status));
 }
 
-void execute_child_command(t_minishell *shell, char **arguments)
+void	execute_child_command(t_minishell *shell, char **arguments)
 {
-	char *command_path;
+	char	*command_path;
 
 	reset_signals();
 	command_path = get_cmd_path(&shell->envd, arguments[0]);
 	if (!command_path)
 	{
-		return;
+		return ;
 	}
 	if (access(command_path, X_OK))
 	{
@@ -92,7 +92,7 @@ void execute_child_command(t_minishell *shell, char **arguments)
 		write(2, arguments[0], ft_strlen(arguments[0]));
 		write(2, ": command not found\n", 21);
 		free(command_path);
-		return;
+		return ;
 	}
 	execve(command_path, arguments, dict_to_envp(&shell->envd));
 	exit(127); // TODO make one func call
@@ -119,11 +119,11 @@ int32_t execute_pipe_command(t_command *cmd, t_minishell *shell)
 	return (0);
 }
 
-int32_t execute_simple_command(t_command *cmd, t_minishell *shell)
+int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
 {
 	pid_t	pid;
-	int32_t status;
-	char  **arguments;
+	int32_t	status;
+	char	**arguments;
 
 	status = setup_redirects(cmd);
 	if (status)
@@ -147,7 +147,7 @@ int32_t execute_simple_command(t_command *cmd, t_minishell *shell)
 	return (wait_for_child_processes(pid));
 }
 
-int32_t init_first_pipe(int32_t *pipe_fds)
+int32_t	init_first_pipe(int32_t *pipe_fds)
 {
 	if (pipe(pipe_fds) == -1)
 		return (ERROR);
@@ -158,7 +158,7 @@ int32_t init_first_pipe(int32_t *pipe_fds)
 	return (SUCCESS);
 }
 
-int32_t prepare_next_pipe(int32_t *pipe_fds, int32_t *std_fds, bool last)
+int32_t	prepare_next_pipe(int32_t *pipe_fds, int32_t *std_fds, bool last)
 {
 	dup2(pipe_fds[0], STDIN_FILENO);
 	// return (ERROR);
@@ -179,11 +179,11 @@ int32_t prepare_next_pipe(int32_t *pipe_fds, int32_t *std_fds, bool last)
 	return (SUCCESS);
 }
 
-int32_t execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *shell)
+int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *shell)
 {
-	t_command *cmd;
-	int32_t	   pipe_fds[2];
-	pid_t	   pid;
+	t_command	*cmd;
+	int32_t		pipe_fds[2];
+	pid_t		pid;
 	int32_t		i;
 
 	if (init_first_pipe(pipe_fds) == -1)
@@ -199,7 +199,7 @@ int32_t execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *she
 			execute_pipe_command(cmd, shell);
 		}
 		if (!cmd)
-			break;
+			break ;
 		if (i == ct->n_commands)
 			prepare_next_pipe(pipe_fds, std_fds, false);
 		else
@@ -208,7 +208,7 @@ int32_t execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *she
 	return (wait_for_child_processes(pid));
 }
 
-int32_t execute_command_table(
+int32_t	execute_command_table(
 	t_command_table *ct, int32_t *std_fds, t_minishell *shell)
 {
 	t_command *cmd;
@@ -221,11 +221,11 @@ int32_t execute_command_table(
 	return (execute_pipeline(ct, std_fds, shell));
 }
 
-int32_t executor(t_minishell *shell)
+int32_t	executor(t_minishell *shell)
 {
-	t_command_table *ct;
-	int32_t			 status;
-	int32_t			 std_fds[2];
+	t_command_table	*ct;
+	int32_t			status;
+	int32_t			std_fds[2];
 
 //	setup_signals(SEXECUTOR);
 	std_fds[STDIN_FILENO] = dup(STDIN_FILENO);
