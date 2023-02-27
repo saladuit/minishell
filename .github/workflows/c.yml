@@ -16,7 +16,8 @@ jobs:
       - name: Install dependencies
         run: |
           if [ "$MATRIX_OS" = "ubuntu-latest" ]; then
-            sudo apt-get update && sudo apt-get install libreadline-dev lcov libcriterion-dev
+            sudo apt-get update
+            sudo apt-get install libreadline-dev lcov libcriterion-dev
           elif [ "$MATRIX_OS" = "macos-latest" ]; then
             brew update && brew install criterion readline lcov gcovr
           fi
