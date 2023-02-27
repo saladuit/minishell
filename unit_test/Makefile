@@ -11,12 +11,6 @@ else
 	LDFLAGS	=-L $(shell brew --prefix readline)/lib -lcriterion -lreadline
 endif
 
-# ifeq ($(shell uname),Linux)
-# 	ifeq ($(shell lsb_release -is),Ubuntu)
-# 	UBUNTU = -I /usr/local/include/
-# endif
-# endif
-
 all: $(NAME)
 $(NAME): SHELL := /bin/bash
 
@@ -25,7 +19,7 @@ $(NAME): $(UNIT_OBJS) $(PRODUCTION_OBJS)
 
 $(UNIT_OBJS): ../$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< $(UNIT_INCLUDE_FLAGS) $(UBUNTU) -lcriterion -o $@
+	$(CC) $(CFLAGS) -c $< $(UNIT_INCLUDE_FLAGS) -o $@
 
 clean:
 	$(RM) $(UNIT_OBJS)
