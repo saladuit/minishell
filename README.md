@@ -1,5 +1,5 @@
 # minishell
-[![Coverage Status](https://coveralls.io/repos/github/saladuit/minishell/badge.svg)](https://coveralls.io/github/saladuit/minishell) [![unit](https://github.com/saladuit/minishell/actions/workflows/c.yml/badge.svg)](https://github.com/saladuit/minishell/actions/workflows/c.yml)
+[![Coverage Status](https://coveralls.io/repos/github/saladuit/minishell/badge.svg)](https://coveralls.io/github/saladuit/minishell) [![unit](https://github.com/saladuit/minishell/actions/workflows/c.yml/badge.svg?branch=main)](https://github.com/saladuit/minishell/actions/workflows/c.yml)
 
 This project is about creating a simple shell. Yes, our own little bash. We will learn a lot about processes and file descriptors.
 
