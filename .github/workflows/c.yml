@@ -1,9 +1,21 @@
 name: unit
+env:
+  MY_PATHS: |
+    - include/**
+    - libs/**
+    - makerc/**
+    - src/**
+    - unit_test/**
+    - Makefile
 on:
   push:
+    paths:
+      - ${{ env.MY_PATHS }}
     branches:
       - main
-      - 🔧Expander
+  pull_request:
+    paths:
+      - ${{ env.MY_PATHS }}
 jobs:
   linux:
     runs-on: ubuntu-latest
