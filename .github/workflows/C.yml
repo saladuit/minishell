@@ -1,23 +1,21 @@
-name: Unit-test 
+name: Unit-test
   
-on: 
-   push:  
+on:
+   push:
    pull_request:
-  
-jobs: 
-   build: 
-  
-     runs-on: ubuntu-latest 
-  
-     steps: 
+
+jobs:
+   build:
+     runs-on: ubuntu-latest
+     steps:
      - uses: actions/checkout@v2
      - name: Install dependencies
        run: apt-get update
        run: apt-get install libreadline-dev
        run: apt-get -y install lcov
        run: apt-get -y install libcriterion-dev
-     - name: install norminette 
-       run: python3 -m pip install norminette 
+     - name: install norminette
+       run: python3 -m pip install norminette
      - name: Build project
        run: make
      - name: Run tests and generate coverage report
