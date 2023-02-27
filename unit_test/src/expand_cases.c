@@ -247,7 +247,7 @@ Test(quotes_closed, no_quotes)
 
 Test(quotes_are_closed, single_quotes)
 {
-    assert_are_quotes_closed("this 'has' single 'quotes'", true);
+    assert_are_quotes_closed("this \'has\' single \'quotes\'", true);
 }
 
 Test(quotes_are_closed, double_quotes)
@@ -257,7 +257,7 @@ Test(quotes_are_closed, double_quotes)
 
 Test(quotes_are_closed, unmatched_single_quotes)
 {
-    assert_are_quotes_closed("this 'has unmatched single quotes", false);
+    assert_are_quotes_closed("this \'has unmatched single quotes", false);
 }
 
 Test(quotes_are_closed, unmatched_double_quotes)
@@ -267,12 +267,12 @@ Test(quotes_are_closed, unmatched_double_quotes)
 
 Test(quotes_are_closed, mixed_quotes)
 {
-    assert_are_quotes_closed("this 'has \"both\" types' of quotes", true);
+    assert_are_quotes_closed("this \'has \"both\" types\' of quotes", true);
 }
 
 Test(quotes_are_closed, escaped_quotes)
 {
-    assert_are_quotes_closed("this has escaped \\\"double\\\" quotes and \\'single\\' quotes", true);
+    assert_are_quotes_closed("this has escaped \"double\" quotes and \'\'single\' quotes", true);
 }
 
 Test(quotes_are_closed, multiple_lines)
@@ -280,6 +280,10 @@ Test(quotes_are_closed, multiple_lines)
     assert_are_quotes_closed("this has quotes\non multiple\nlines", true);
 }
 
+Test(quotes_are_closed, double_qutoes_with_single)
+{
+    assert_are_quotes_closed("\'$SHLVL\"\'", true);
+}
 /*******************************************************************************/
 /*                           Expand_token                                      */
 /*******************************************************************************/
@@ -309,34 +313,69 @@ Test(expand_token, exit_status_max)
     assert_expand_token("$?", "255", &max);
 }
 
-Test(expand_token, basic_arg)
+Test(expand_token, empty)
+{
+    assert_expand_token("", "", NULL);
+}
+
+Test(expand_token, string)
 {
     assert_expand_token("Hello", "Hello", NULL);
 }
 
-Test(expand_token, single_envvar)
+Test(expand_token, envar_dollar)
 {
-    assert_expand_token("$HELLO", "Hello", NULL);
+    assert_expand_token("$", "$", NULL);
 }
 
-Test(expand_token, no_envvar)
+Test(expand_token, envar_double_dollar)
+{
+    assert_expand_token("$$", "$$", NULL);
+}
+
+Test(expand_token, envar_dollar_with_space_and_letter)
+{
+    assert_expand_token("$ a", "$ a", NULL);
+}
+
+Test(expand_token, envvar_not_set)
 {
     assert_expand_token("$UNSET", "", NULL);
 }
 
+Test(expand_token, envvar_single)
+{
+    assert_expand_token("$HELLO", "Hello", NULL);
+}
+
+Test(expand_token, envvar_double)
+{
+    assert_expand_token("$HELLO $?", "Hello 255", &max);
+}
+
+Test(expand_token, envvar_var_combo_1)
+{
+    assert_expand_token("$HELLO", "Hello", NULL);
+}
+
+Test(expand_token, envvar_var_combo_2)
+{
+    assert_expand_token("$HELLO", "Hello", NULL);
+}
+
 Test(expand_token, envvar_single_quotes)
 {
-    assert_expand_token("'$VAR'", "$VAR", NULL);
+    assert_expand_token("\'$VAR\'", "$VAR", NULL);
 }
 
 Test(expand_token, envvar_single_quotes_1)
 {
-    assert_expand_token("'$VAR\"'", "$VAR\"", NULL);
+    assert_expand_token("\'$VAR\"\'", "$VAR\"", NULL);
 }
 
 Test(expand_token, envvar_single_quotes_2)
 {
-    assert_expand_token("'$VAR$'", "$VAR$", NULL);
+    assert_expand_token("\'$VAR$\'", "$VAR$", NULL);
 }
 
 Test(expand_token, double_qoute_no_envvar, .timeout=1)
@@ -355,6 +394,26 @@ Test(expand_token, double_qoute_two_envvar, .timeout=1)
 }
 
 Test(expand_token, envvar_with_spaces)
+{
+    assert_expand_token("echo $SPACE", "echo Spa ce", NULL);
+}
+//TODO Want to add paramterized tests to keep some sort of track of all of this
+Test(expand_token, various_1)
+{
+    assert_expand_token("\"$? \'$?\' $?\"", "3 \'3\' 0", &zero);
+}
+
+Test(expand_token, various_2)
+{
+    assert_expand_token("$?\'$S?\"\'\"$?\"", "3$SHLVL\"3", &zero);
+}
+
+Test(expand_token, various_3)
+{
+    assert_expand_token("\"$SHLVL\'$SHLVL\'\"$SHLVL\"\"", "3\'3\'3", &zero);
+}
+
+Test(expand_token, various_4)
 {
     assert_expand_token("echo $SPACE", "echo Spa ce", NULL);
 }
