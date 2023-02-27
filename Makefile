@@ -14,7 +14,11 @@ LDFLAGS 		=-lreadline
 else
 LDFLAGS 		=-L $(shell brew --prefix readline)/lib -lreadline
 endif
-
+ifeq ($(shell uname),Linux)
+	ifeq ($(shell lsb_release -is),Ubuntu)
+	UBUNTU = -I /usr/include/
+endif
+endif
 ################################################################################
 
 all: $(NAME)
