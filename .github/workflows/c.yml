@@ -21,6 +21,8 @@ jobs:
           elif [ "$MATRIX_OS" = "macos-latest" ]; then
             brew update && brew install criterion readline lcov gcovr
           fi
+      - name: locate criterion
+        run: whereis criterion
       - name: Build project
         run: make
       - name: Run tests
