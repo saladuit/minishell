@@ -1,6 +1,6 @@
 name: Unit-test
 
-on: 
+on:
     push
 
 jobs:
