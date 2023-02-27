@@ -1,0 +1,31 @@
+name: unit
+on:
+  push:
+    branches:
+      - main
+      - '🔧Expander'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libreadline-dev
+          sudo apt-get install -y lcov
+          sudo apt-get install -y libcriterion-dev
+      - name: Install norminette
+        run: python3 -m pip install norminette
+      - name: Build project
+        run: make
+      - name: Run tests and generate coverage report
+        run: |
+          make test_re
+          make coverage
+          make analyze
+      - name: Upload coverage report to Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
