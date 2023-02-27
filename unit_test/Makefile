@@ -25,7 +25,7 @@ $(NAME): $(UNIT_OBJS) $(PRODUCTION_OBJS)
 
 $(UNIT_OBJS): ../$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< $(UNIT_INCLUDE_FLAGS) -lcriterion -o $@
+	$(CC) $(CFLAGS) -c $< $(UNIT_INCLUDE_FLAGS) $(UBUNTU) -lcriterion -o $@
 
 clean:
 	$(RM) $(UNIT_OBJS)
