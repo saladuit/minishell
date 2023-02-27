@@ -6,6 +6,9 @@ language: c
 install:
   - brew update && brew install criterion readline lcov gcovr
 
+- name: Upload coverage reports to Codecov
+  uses: codecov/codecov-action@v3
+
 jobs:
   include:
     - stage: build
