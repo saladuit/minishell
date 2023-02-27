@@ -288,11 +288,25 @@ char *expand_token(char *arg, t_exitstatus *status);
 
 TestSuite(expand_token, .init=setup_env);
 
-void assert_expand_token(char *input, char *expected, t_exitstatus *status)
+void assert_expand_token(char *in, char *expected, t_exitstatus *status)
 {
+    char *input;
+    input = ft_strdup(in);
     char *output = expand_token(input, status);
     cr_expect_str_eq(output, expected);
     free(output);
+    free(input);
+}
+
+
+Test(expand_token, exit_status)
+{
+    assert_expand_token("$?", "0", &zero);
+}
+
+Test(expand_token, exit_status_max)
+{
+    assert_expand_token("$?", "255", &max);
 }
 
 Test(expand_token, basic_arg)
@@ -303,16 +317,6 @@ Test(expand_token, basic_arg)
 Test(expand_token, single_envvar)
 {
     assert_expand_token("$HELLO", "Hello", NULL);
-}
-
-Test(expand_token, exit_status)
-{
-    assert_expand_token("$?", "0", &zero);
-}
-
-Test(expand_token, exit_status_max)
-{
-    assert_expand_token("$?", "255", &max);
 }
 
 Test(expand_token, no_envvar)
@@ -337,20 +341,17 @@ Test(expand_token, envvar_single_quotes_2)
 
 Test(expand_token, double_qoute_no_envvar, .timeout=1)
 {
-    char input[] = "\"HELLO\"";
-    assert_expand_token(input, "HELLO", NULL);
+    assert_expand_token("\"HELLO\"", "HELLO", NULL);
 }
 
 Test(expand_token, double_qoute_envvar, .timeout=1)
 {
-    char input[] = "\"$HELLO\"";
-    assert_expand_token(input, "Hello", NULL);
+    assert_expand_token("\"$HELLO\"", "Hello", NULL);
 }
 
 Test(expand_token, double_qoute_two_envvar, .timeout=1)
 {
-    char input[] = "\"$HELLO$WORLD\"";
-    assert_expand_token(input, "HelloWorld", NULL);
+    assert_expand_token("\"$HELLO$WORLD\"", "HelloWorld", NULL);
 }
 
 Test(expand_token, envvar_with_spaces)
