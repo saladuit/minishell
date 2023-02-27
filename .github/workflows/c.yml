@@ -23,8 +23,4 @@ jobs:
         uses: coverallsapp/github-action@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Find lcov
-        run: |
-          if [ ${{ fail() }} == true ]; then
-          find / -name "lcov.info" -type f
-          fi
+          base-path: /home/runner/work/minishell/minishell
