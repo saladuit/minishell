@@ -18,5 +18,6 @@ jobs:
      script:
        - make test
    - stage: Lexer tests
-     script:
-       - make coverage
+      after_script:
+         - make coverage
+      - bash <(curl -s https://codecov.io/bash)      - make coverage
