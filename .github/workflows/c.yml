@@ -6,21 +6,14 @@ on:
       - 🔧Expander
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Install dependencies
         run: |
-          if [ "$MATRIX_OS" = "ubuntu-latest" ]; then
-            sudo apt-get update
-            sudo apt-get install libreadline-dev lcov libcriterion-dev
-          elif [ "$MATRIX_OS" = "macos-latest" ]; then
-            brew update && brew install criterion readline lcov gcovr
-          fi
+          sudo apt-get update
+          sudo apt-get install libreadline-dev lcov libcriterion-dev
       - name: locate criterion
         run: whereis criterion
       - name: Build project
