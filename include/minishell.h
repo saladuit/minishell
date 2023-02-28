@@ -14,19 +14,18 @@
 # define HASH_TABLE_SIZE 32
 # define PROMPT "Sheldon$ "
 
+# include <stdio.h>
 # include <errno.h>
 # include <fcntl.h>
 # include <libft.h>
+# include <readline/history.h>
+# include <readline/readline.h>
 # include <stdbool.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
-
-# include <readline/history.h>
-# include <readline/readline.h>
 
 extern int			g_exitcode;
 
@@ -226,8 +225,8 @@ int32_t				find_var_start(char *str, int32_t index);
 char				*expand_variables(char *str, t_minishell *shell);
 char				**split_words(char *str);
 t_list				*pop_node(t_list **list, t_list *pop_node);
-void				expand_redirect_list(t_list **redirects,
-						t_minishell *shell);
+void	expand_redirect_list(t_list **redirects,
+							t_minishell *shell);
 char				*trim_quotes(char *str);
 
 // Executor
@@ -249,8 +248,8 @@ t_command			*construct_command(t_list **tokens);
 char				**get_arguments(t_command *cmd);
 void				get_next_redir(t_command *cmd, t_redir **redir);
 void				get_next_command(t_command_table *cmd, t_command **command);
-void				get_one_command_table(t_list **ast,
-						t_command_table **command_table);
+void	get_one_command_table(t_list **ast,
+							t_command_table **command_table);
 char				**get_arguments(t_command *cmd);
 char				*add_heredoc(char *phrase);
 t_command_table		*construct_command_table(t_list **tokens);
