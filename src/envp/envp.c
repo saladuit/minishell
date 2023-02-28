@@ -27,7 +27,7 @@ int32_t envp_load(t_dictionary *env, char **envp)
 	int	  i;
 
 	i = 0;
-	while (envp[i] != NULL)
+	while (envp[i])
 	{
 		key = ft_strdup(envp[i++]);
 		if (key == NULL)
