@@ -1,6 +1,6 @@
 #include <minishell.h>
 
-int ft_pwd(char **arguments, t_minishell *shell)
+int	ft_pwd(char **arguments, t_minishell *shell)
 {
 	char	*buf;
 

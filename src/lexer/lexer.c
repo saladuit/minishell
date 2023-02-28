@@ -1,4 +1,5 @@
-# include <minishell.h>
+#include <minishell.h>
+
 // Meta characters: SPACE, TAB, NEWLINE, ;, (, ), <, >, |, &.
 // Types of tokens: words, keywords, I/O redirectors, and semicolons.
 
@@ -33,7 +34,7 @@ size_t	get_token_len(const char *command_line)
 	i = 0;
 	if (is_tokenchar(&command_line[i]))
 		return (is_tokenchar(&command_line[i]));
-	while (command_line[i] && !ft_iswhitespace(command_line[i]) && \
+	while (command_line[i] && !ft_iswhitespace(command_line[i]) &&
 			!is_tokenchar(&command_line[i]))
 	{
 		if (is_quotechar(command_line[i]))

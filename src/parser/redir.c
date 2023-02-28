@@ -1,17 +1,17 @@
 #include <minishell.h>
 
-void deconstruct_redirs(void *redir)
+void	deconstruct_redirs(void *redir)
 {
-	t_redir *rdr;
+	t_redir	*rdr;
 
 	if (!redir)
-		return;
+		return ;
 	rdr = (t_redir *)redir;
 	free(rdr->filename);
 	free(rdr);
 }
 
-static const char *get_redir_type_name(t_type type)
+static const char	*get_redir_type_name(t_type type)
 {
 	static const char *names[] = {
 		[INPUT] = "INPUT",
@@ -22,7 +22,7 @@ static const char *get_redir_type_name(t_type type)
 	return (names[type]);
 }
 
-void print_redirs(t_command *cmd)
+void	print_redirs(t_command *cmd)
 {
 	t_redir	*redir;
 	int32_t	i;
@@ -33,13 +33,13 @@ void print_redirs(t_command *cmd)
 		get_next_redir(cmd, &redir);
 		i++;
 		printf("\t\tRedir #%d: %s with type %s\n",
-			i,
-			redir->filename,
-			get_redir_type_name(redir->type));
+				i,
+				redir->filename,
+				get_redir_type_name(redir->type));
 	}
 }
 
-void get_next_redir(t_command *cmd, t_redir **redir)
+void	get_next_redir(t_command *cmd, t_redir **redir)
 {
 	if (!cmd->redirs)
 		return ;
@@ -54,7 +54,7 @@ void get_next_redir(t_command *cmd, t_redir **redir)
 	return ;
 }
 
-static t_type set_type(char *symbol, size_t len)
+static t_type	set_type(char *symbol, size_t len)
 {
 	if (!ft_strncmp("<", symbol, len))
 		return (INPUT);
@@ -65,9 +65,9 @@ static t_type set_type(char *symbol, size_t len)
 	return (APPEND);
 }
 
-t_redir *construct_redir(t_list **tokens)
+t_redir	*construct_redir(t_list **tokens)
 {
-	t_redir *redir;
+	t_redir	*redir;
 
 	redir = ft_calloc(1, sizeof(t_redir));
 	if (!redir)

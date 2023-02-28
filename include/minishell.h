@@ -16,10 +16,10 @@
 # include <errno.h>
 # include <fcntl.h>
 # include <libft.h>
-# include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdbool.h>
+# include <stdio.h>
 # include <stdlib.h>
 # include <sys/types.h>
 # include <sys/wait.h>
@@ -150,7 +150,7 @@ typedef struct s_env
 
 // Main
 
-int32_t				minishell(t_minishell *shell);
+int32_t				minishell(char **envp);
 int32_t				init_handlers(void);
 int32_t				dup_envp(t_minishell *shell, char **envp);
 void				setup_signals(t_signal_handler handler);
@@ -179,12 +179,12 @@ char				**dict_to_envp(t_dictionary *dict);
 
 const char			*messages_lookup(t_exitstatus code);
 int32_t				handle_mini_errors(t_exitstatus status);
-int32_t				handle_system_call_error(const char* function_name);
+int32_t				handle_system_call_error(const char *function_name);
 
 // Minitypes
 
 bool				is_delimiter(int c);
-bool 				is_dollar(int c);
+bool				is_dollar(int c);
 bool				is_redir(int c);
 bool				is_metachar(int c);
 bool				is_quote(int c);
@@ -198,7 +198,7 @@ int32_t				is_tokenchar(const char *str);
 
 // Lexer
 
-t_list	*lexer(const char *command_line, t_exitstatus *exit_status);
+t_list				*lexer(const char *command_line, t_exitstatus *exit_status);
 void				ft_skip_whitespaces(const char **input);
 int32_t				analyzer(t_list *tokens);
 int32_t				pipe_check(t_list *tokens);
@@ -209,7 +209,7 @@ int32_t				append_check(t_list *tokens);
 
 // Expander
 
-void expand_tokens(t_list **arg, t_exitstatus *status);
+void				expand_tokens(t_list **arg, t_exitstatus *status);
 int32_t				expander(t_minishell *shell);
 char				*ft_strjoin_free_free(char *expanded, char *tmp);
 int32_t				check_expand(char *str);
@@ -247,7 +247,8 @@ t_command			*construct_command(t_list **tokens);
 char				**get_arguments(t_command *cmd);
 void				get_next_redir(t_command *cmd, t_redir **redir);
 void				get_next_command(t_command_table *cmd, t_command **command);
-void	get_one_command_table(t_list **ast, t_command_table **command_table);
+void	get_one_command_table(t_list **ast,
+							t_command_table **command_table);
 char				**get_arguments(t_command *cmd);
 char				*add_heredoc(char *phrase);
 t_command_table		*construct_command_table(t_list **tokens);

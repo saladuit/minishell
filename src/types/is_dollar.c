@@ -1,6 +1,6 @@
 #include <minishell.h>
 
-bool    is_dollar(int c)
+bool	is_dollar(int c)
 {
-    return (c == '$');
+	return (c == '$');
 }

@@ -1,6 +1,6 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include <minishell.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 int	ft_env(char **arguments, t_minishell *shell)
 {

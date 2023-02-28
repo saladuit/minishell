@@ -1,20 +1,20 @@
 #include <minishell.h>
 
-void deconstruct_command_table(void *command_table)
+void	deconstruct_command_table(void *command_table)
 {
-	t_command_table *ct;
+	t_command_table	*ct;
 
 	if (!command_table)
-		return;
+		return ;
 	ct = (t_command_table *)command_table;
 	ft_lstclear(&ct->commands, deconstruct_command);
 	free(ct);
 }
 
-void print_command_tables(t_list *ast)
+void	print_command_tables(t_list *ast)
 {
-	t_command_table *ct;
-	int32_t			 i;
+	t_command_table	*ct;
+	int32_t			i;
 
 	i = 1;
 	get_one_command_table(&ast, &ct);
@@ -22,16 +22,16 @@ void print_command_tables(t_list *ast)
 	print_commands(ct);
 }
 // There should actually also be a datastructure for the ast that keeps track of the head of the ct
-void get_one_command_table(t_list **ast, t_command_table **ct)
+void	get_one_command_table(t_list **ast, t_command_table **ct)
 {
 	if (!*ast)
 		return ;
 	*ct = (*ast)->content;
 }
 
-t_command_table *construct_command_table(t_list **tokens)
+t_command_table	*construct_command_table(t_list **tokens)
 {
-	t_command_table *command_table;
+	t_command_table	*command_table;
 	t_command		*command;
 
 	command_table = ft_calloc(1, sizeof(t_command_table));

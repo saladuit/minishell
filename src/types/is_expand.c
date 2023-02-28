@@ -1,4 +1,4 @@
-# include <stdbool.h>
+#include <stdbool.h>
 
 bool	is_expand(int c)
 {

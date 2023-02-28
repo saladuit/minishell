@@ -1,8 +1,8 @@
 #include <minishell.h>
 
-static char *envp_load_value(char *key)
+static char	*envp_load_value(char *key)
 {
-	char *value;
+	char	*value;
 
 	value = ft_strchr(key, '=');
 	if (value == NULL)
@@ -20,11 +20,11 @@ static char *envp_load_value(char *key)
 	return (value);
 }
 
-int32_t envp_load(t_dictionary *env, char **envp)
+int32_t	envp_load(t_dictionary *env, char **envp)
 {
-	char *key;
-	char *value;
-	int	  i;
+	char	*key;
+	char	*value;
+	int		i;
 
 	i = 0;
 	while (envp[i])

@@ -48,8 +48,8 @@ static char	*get_word(char *str)
 	return (word);
 }
 
-// Split words / sections based on whitespace. quoted words / sections do not get split.
-char	**split_words(char *str)
+// Split words / sections based on whitespace. quoted words
+/ sections do not get split.char * *split_words(char *str)
 {
 	int32_t	i;
 	int32_t	j;

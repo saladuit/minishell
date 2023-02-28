@@ -1,9 +1,9 @@
 #include <minishell.h>
 
-void dict_destroy(t_dictionary *dict)
+void	dict_destroy(t_dictionary *dict)
 {
-	size_t i;
-	t_pair *next;
+	size_t	i;
+	t_pair	*next;
 
 	i = 0;
 	while (i < HASH_TABLE_SIZE)
@@ -39,17 +39,19 @@ char	**dict_to_envp(t_dictionary *dict)
 			dict->table[i] = next;
 			if (!envp[j])
 				continue ;
-			j++; //This shoulnd't increment if pair_to_str fails this will leave some uninitalised space, but it will continue to work at least
+			j++;
+			//This shoulnd't increment if pair_to_str fails this will leave some uninitalised space,
+			but it will continue to work at least
 		}
 		i++;
 	}
 	return (envp);
 }
 
-void dict_print(t_dictionary *dict)
+void	dict_print(t_dictionary *dict)
 {
 	size_t	i;
-	t_pair *pair;
+	t_pair	*pair;
 
 	i = 0;
 	while (i < HASH_TABLE_SIZE)
@@ -64,9 +66,9 @@ void dict_print(t_dictionary *dict)
 	}
 }
 
-size_t hash(char *str)
+size_t	hash(char *str)
 {
-	size_t h;
+	size_t	h;
 
 	h = 0;
 	while (*str)
@@ -77,11 +79,11 @@ size_t hash(char *str)
 	return (h % HASH_TABLE_SIZE);
 }
 
-void dict_delete(t_dictionary *dict, char *key)
+void	dict_delete(t_dictionary *dict, char *key)
 {
 	size_t	index;
-	t_pair *pair;
-	t_pair *prev;
+	t_pair	*pair;
+	t_pair	*prev;
 
 	index = hash(key);
 	pair = dict->table[index];
@@ -98,33 +100,33 @@ void dict_delete(t_dictionary *dict, char *key)
 			free(pair->value);
 			free(pair);
 			dict->size--;
-			break;
+			break ;
 		}
 		prev = pair;
 		pair = pair->next;
 	}
 }
 
-char *dict_get(t_dictionary *dict, char *key)
+char	*dict_get(t_dictionary *dict, char *key)
 {
 	size_t	index;
-	t_pair *pair;
+	t_pair	*pair;
 
 	index = hash(key);
 	pair = dict->table[index];
 	while (pair != NULL)
 	{
 		if (strcmp(pair->key, key) == 0)
-			return pair->value;
+			return (pair->value);
 		pair = pair->next;
 	}
 	return (NULL);
 }
 
-int32_t dict_set(t_dictionary *dict, char *key, char *value)
+int32_t	dict_set(t_dictionary *dict, char *key, char *value)
 {
 	size_t	index;
-	t_pair *pair;
+	t_pair	*pair;
 
 	index = hash(key);
 	pair = dict->table[index];

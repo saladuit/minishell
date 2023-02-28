@@ -3,8 +3,7 @@
 // checks if a string needs expanding.
 bool	needs_expanding(char *str)
 {
-	return (is_double_quoted(str)
-		|| is_single_quoted(str)
+	return (is_double_quoted(str) || is_single_quoted(str)
 		|| check_expand(str));
 }
 

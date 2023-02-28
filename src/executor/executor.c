@@ -25,21 +25,20 @@ int32_t	setup_redirects(t_command *command)
 
 t_builtin	builtin_lookup(char *cmd)
 {
-	static const t_builtin	lookup[] = {
-	{.name = "echo",	.func = ft_echo},
-	{.name = "cd",		.func = ft_cd},
-	{.name = "pwd",		.func = ft_pwd},
-	{.name = "export",	.func = ft_export},
-	{.name = "unset",	.func = ft_unset},
-	{.name = "env",		.func = ft_env},
-	{.name = "exit",	.func = ft_exit},
-	{NULL, NULL}
-	};
-	int32_t					i;
+	int32_t	i;
 
+	static const t_builtin lookup[] = {
+		{.name = "echo", .func = ft_echo},
+		{.name = "cd", .func = ft_cd},
+		{.name = "pwd", .func = ft_pwd},
+		{.name = "export", .func = ft_export},
+		{.name = "unset", .func = ft_unset},
+		{.name = "env", .func = ft_env},
+		{.name = "exit", .func = ft_exit},
+		{NULL, NULL}};
 	i = 0;
 	while (lookup[i].name != NULL &&
-		ft_strncmp(lookup[i].name, cmd, ft_strlen(cmd) + 1))
+			ft_strncmp(lookup[i].name, cmd, ft_strlen(cmd) + 1))
 		i++;
 	return (lookup[i]);
 }
@@ -99,10 +98,10 @@ void	execute_child_command(t_minishell *shell, char **arguments)
 }
 
 // Needs to always exit even if it is builtin
-int32_t execute_pipe_command(t_command *cmd, t_minishell *shell)
+int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
 {
-	char  **arguments;
-	int32_t status;
+	char	**arguments;
+	int32_t	status;
 
 	reset_signals();
 	status = setup_redirects(cmd);
@@ -179,7 +178,8 @@ int32_t	prepare_next_pipe(int32_t *pipe_fds, int32_t *std_fds, bool last)
 	return (SUCCESS);
 }
 
-int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *shell)
+int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds,
+		t_minishell *shell)
 {
 	t_command	*cmd;
 	int32_t		pipe_fds[2];
@@ -208,10 +208,10 @@ int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds, t_minishell *she
 	return (wait_for_child_processes(pid));
 }
 
-int32_t	execute_command_table(
+int32_t		execute_command_table(
 	t_command_table *ct, int32_t *std_fds, t_minishell *shell)
 {
-	t_command *cmd;
+	t_command	*cmd;
 
 	if (ct->commands->next == NULL)
 	{
@@ -227,7 +227,7 @@ int32_t	executor(t_minishell *shell)
 	int32_t			status;
 	int32_t			std_fds[2];
 
-//	setup_signals(SEXECUTOR);
+	//	setup_signals(SEXECUTOR);
 	std_fds[STDIN_FILENO] = dup(STDIN_FILENO);
 	std_fds[STDOUT_FILENO] = dup(STDOUT_FILENO);
 	get_one_command_table(&shell->ast, &ct);

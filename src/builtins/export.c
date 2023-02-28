@@ -10,12 +10,12 @@ static void	export_clear(char *key, char *value)
 
 int	ft_export(char **arguments, t_minishell *shell)
 {
-	char *key;
-	char *value;
-	int i;
+	char	*key;
+	char	*value;
+	int		i;
 
 	i = 0;
-	if (arguments[i++] == NULL) 
+	if (arguments[i++] == NULL)
 	{
 		dict_print(&shell->envd);
 		return (SUCCESS);
@@ -31,9 +31,9 @@ int	ft_export(char **arguments, t_minishell *shell)
 			break ;
 		}
 		value = ft_strchr(key, '=');
-		if (value == NULL) 
+		if (value == NULL)
 			value = ft_strdup("");
-		else 
+		else
 		{
 			*value = '\0';
 			value = ft_strdup(++value);
