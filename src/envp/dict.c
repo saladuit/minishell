@@ -41,7 +41,7 @@ char	**dict_to_envp(t_dictionary *dict)
 				continue ;
 			j++;
 			//This shoulnd't increment if pair_to_str fails this will leave some uninitalised space,
-			but it will continue to work at least
+			//but it will continue to work at least
 		}
 		i++;
 	}
