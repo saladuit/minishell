@@ -55,7 +55,7 @@ rebug: fclean
 	@$(MAKE) debug
 
 fsan:
-	@$(MAKE) FSAN=1
+	@$(MAKE) FSAN=1 DEBUG=1
 
 resan: fclean
 	@$(MAKE) fsan
