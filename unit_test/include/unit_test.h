@@ -15,6 +15,7 @@
 #ifndef UNIT_TEST_H
 # define UNIT_TEST_H
 # include <criterion/criterion.h>
+# include <criterion/redirect.h>
 # include <criterion/new/assert.h>
 # include <criterion/new/memory.h>
 # include <criterion/new/stream.h>
