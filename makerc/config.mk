@@ -1,5 +1,5 @@
 MAIN 			:=main.c
-SRCS			=minishell.c \
+SRCS			=minishell/minishell.c \
 				 lexer/lexer.c \
 				 lexer/lexer_utils.c \
 				 lexer/lexical_analyzer.c \
@@ -11,12 +11,6 @@ SRCS			=minishell.c \
 				 parser/command.c \
 				 parser/command_table.c \
 				 expander/expander.c \
-				 expander/expander_utils.c \
-				 expander/expand_arguments.c \
-				 expander/index_utils.c \
-				 expander/variable_expand.c \
-				 expander/word_splitting.c \
-				 expander/expand_redirect.c \
 				 expander/heredoc.c \
 				 executor/executor.c \
 				 executor/execute_utils.c \

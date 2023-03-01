@@ -85,8 +85,18 @@ covclean:
 	rm -rf build/coverage*
 
 coverage:
-	@cd build && gcov -b `find . -type f -name "*.o"`
-	@cd build && lcov -q -d . -c --output-file coverage.info
+	@gcov -b -o build/builtins src/builtins/*
+	@gcov -b -o build/envp src/envp/*
+	@gcov -b -o build/executor src/executor/*
+	@gcov -b -o build/expander src/expander/*
+	@gcov -b -o build/lexer src/lexer/*
+	@gcov -b -o build/minishell src/minishell/*
+	@gcov -b -o build/parser src/parser/*
+	@gcov -b -o build/types src/types/*
+	@gcov -b -o build/unit_test unit_test/src/*
+	@gcov -b -o build/utils src/utils/*
+	@lcov -q -d . -c --output-file build/coverage.info
+	rm *.gc*
 
 malloc_test: debug 
 	$(CC) $(CFLAGS) $(OBJS) $(MAIN_OBJ) $(LIBFT) -fsanitize=undefined -rdynamic -o $@ $(INCLUDE_FLAGS) $(LDFLAGS) -L. -lmallocator

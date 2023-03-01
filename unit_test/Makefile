@@ -17,7 +17,7 @@ $(NAME): SHELL := /bin/bash
 $(NAME): $(UNIT_OBJS) $(PRODUCTION_OBJS)
 	$(CC) $(CFLAGS) $^ $(LDFLAGS) $(UNIT_INCLUDE_FLAGS) ../$(LIBFT) -o $(NAME)
 
-$(UNIT_OBJS): ../$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+$(UNIT_OBJS): ../$(BUILD_DIR)/unit_test/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< $(UNIT_INCLUDE_FLAGS) -o $@
 
