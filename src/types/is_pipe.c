@@ -1,6 +1,6 @@
 #include <stdbool.h>
 
-bool	is_delimiter(int c)
+bool	is_pipe(int c)
 {
 	return (c == '|');
 }
