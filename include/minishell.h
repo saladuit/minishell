@@ -184,16 +184,12 @@ int32_t				handle_system_call_error(const char *function_name);
 
 // Minitypes
 
-bool				is_delimiter(int c);
+bool				is_pipe(int c);
 bool				is_dollar(int c);
 bool				is_redir(int c);
-bool				is_metachar(int c);
 bool				is_quote(int c);
 bool				is_double_quote(int c);
-bool				is_double_quoted(char *str);
 bool				is_single_quote(int c);
-bool				is_single_quoted(char *str);
-bool				is_expand(int c);
 bool				is_quotechar(const char c);
 int32_t				is_tokenchar(const char *str);
 

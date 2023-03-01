@@ -22,9 +22,9 @@ SRCS			=minishell/minishell.c \
 				 types/is_pipe.c \
 				 types/is_double_quote.c \
 				 types/is_dollar.c \
-				 types/is_expand.c \
 				 types/is_redir.c \
 				 types/is_single_quote.c \
+				 types/is_quote.c \
 				 builtins/echo.c \
 				 builtins/cd.c \
 				 builtins/pwd.c \

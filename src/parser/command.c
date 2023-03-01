@@ -56,7 +56,7 @@ t_command	*construct_command(t_list **tokens)
 	while (*tokens)
 	{
 		token = (*tokens)->content;
-		if (is_delimiter(*token) && ft_strlen(token) == 1)
+		if (is_pipe(*token) && ft_strlen(token) == 1)
 		{
 			*tokens = (*tokens)->next;
 			break ;
