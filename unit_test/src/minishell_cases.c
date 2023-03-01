@@ -11,11 +11,11 @@
 //     char *ptr = cr_malloc(strlen(str) + 1);
 //     if (ptr)
 //         strcpy(ptr, str);
-//     return ptr;
+//     return (ptr);
 // }
 // int32_t	minishell_loop(t_minishell *sheldon);
 //
-// Test(minishell_loop, test_ls_exit) 
+// Test(minishell_loop, test_ls_exit)
 // {
 //     t_minishell sheldon;
 //
