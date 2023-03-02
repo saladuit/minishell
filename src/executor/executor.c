@@ -102,7 +102,6 @@ int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
 	char	**arguments;
 	int32_t	status;
 
-	reset_signals();
 	status = setup_redirects(cmd);
 	if (status)
 		return (status);
@@ -229,7 +228,6 @@ int32_t	executor(t_minishell *shell)
 	int32_t			status;
 	int32_t			std_fds[2];
 
-	//	setup_signals(SEXECUTOR);
 	std_fds[STDIN_FILENO] = dup(STDIN_FILENO);
 	std_fds[STDOUT_FILENO] = dup(STDOUT_FILENO);
 	get_one_command_table(&shell->ast, &ct);
@@ -238,6 +236,5 @@ int32_t	executor(t_minishell *shell)
 	dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO);
 	close(std_fds[STDIN_FILENO]);
 	close(std_fds[STDOUT_FILENO]);
-	// setup_signals();
 	return (status);
 }
