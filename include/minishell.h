@@ -11,6 +11,10 @@
 #  define DEBUG 0
 # endif
 
+# ifndef TEST
+#  define TEST 0
+# endif
+
 # define HASH_TABLE_SIZE 32
 # define PROMPT "Sheldon$ "
 

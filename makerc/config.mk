@@ -52,7 +52,11 @@ endif
 CFLAGS			=-Wall -Wextra -Werror
 
 ifdef DEBUG
-	CFLAGS			+=-g -D DEBUG=1
+	CFLAGS			+=-g
+endif
+
+ifndef COV
+	CFLAGS			+=-D DEBUG=1
 endif
 
 ifdef FSAN
@@ -61,6 +65,10 @@ endif
 
 ifdef COV
 	CFLAGS			+=--coverage
+endif
+
+ifdef FILTER
+	F			=--filter $(FILTER)
 endif
 
 OBJS			=$(addprefix $(BUILD_DIR)/, $(SRCS:%.c=%.o))

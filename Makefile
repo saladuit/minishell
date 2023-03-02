@@ -63,12 +63,12 @@ resan: fclean
 test: covclean
 	@$(MAKE) DEBUG=1 COV=1
 	@$(MAKE) DEBUG=1 COV=1 -C $(UNIT_DIR)
-	@./$(UNIT_TEST)
+	@./$(UNIT_TEST) $(F)
 
 ftest: covclean
 	@$(MAKE) DEBUG=1 FSAN=1 COV=1
 	@$(MAKE) DEBUG=1 FSAN=1 COV=1 -C $(UNIT_DIR)
-	@./$(UNIT_TEST)
+	@./$(UNIT_TEST) $(F)
 
 analyse:
 	@cd build && genhtml -q coverage.info -o coverage_report
