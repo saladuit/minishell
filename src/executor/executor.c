@@ -79,22 +79,21 @@ void	execute_child_command(t_minishell *shell, char **arguments)
 {
 	char	*command_path;
 
-	reset_signals();
 	command_path = get_cmd_path(&shell->envd, arguments[0]);
 	if (!command_path)
 	{
-		return ;
+		handle_system_call_error("malloc");
+		_exit(127);
 	}
 	if (access(command_path, X_OK))
 	{
-		write(2, "Minishell: ", 12);
-		write(2, arguments[0], ft_strlen(arguments[0]));
-		write(2, ": command not found\n", 21);
 		free(command_path);
-		return ;
+		handle_system_call_error("access");
+		_exit(127);
 	}
 	execve(command_path, arguments, dict_to_envp(&shell->envd));
-	exit(127); // TODO make one func call
+	handle_system_call_error("execve");
+	_exit(127);
 }
 
 // Needs to always exit even if it is builtin
@@ -113,9 +112,9 @@ int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
 	status = execute_builtin(arguments, shell);
 	if (status >= 0)
 		return (status);
-	// reset_signals();
 	execute_child_command(shell, arguments);
-	return (0);
+	_exit(127);
+	return (status);
 }
 
 int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
@@ -141,7 +140,10 @@ int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
 	}
 	pid = fork();
 	if (pid == 0)
+	{
 		execute_child_command(shell, arguments);
+		_exit(127);
+	}
 	free(arguments);
 	return (wait_for_child_processes(pid));
 }
