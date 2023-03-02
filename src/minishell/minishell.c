@@ -16,7 +16,7 @@ static int32_t	minishell_clean(t_minishell *sheldon)
 int32_t	minishell_loop(t_minishell *sheldon)
 {
 	sheldon->command_line = readline(PROMPT);
-	if (!sheldon->command_line && printf("\x1B[1A" PROMPT "exit\n"))
+	if (!sheldon->command_line)
 		return (STOP);
 	if (!*sheldon->command_line)
 	{
