@@ -40,7 +40,7 @@ void assert_minishell(char *command_line, char *case_name)
     FILE *f_stdin = cr_get_redirected_stdin();
 
     txt_file_path = calloc(strlen(case_name) + 27, sizeof(char));
-    sprintf(txt_file_path, "unit_test/test_files/%s.txt", case_name);
+    sprintf(txt_file_path, "build/%s.txt", case_name);
 
     system_call = calloc(strlen(txt_file_path) + strlen(command_line) + 15, sizeof(char));
     sprintf(system_call, "bash -c \'%s\' >| %s", command_line, txt_file_path);
