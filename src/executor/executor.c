@@ -1,3 +1,4 @@
+#include <asm-generic/errno-base.h>
 #include <minishell.h>
 
 int32_t	redirect(t_redir *redir, t_type type)
