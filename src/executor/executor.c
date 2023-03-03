@@ -84,17 +84,17 @@ void	execute_child_command(t_minishell *shell, char **arguments)
 	if (!command_path)
 	{
 		handle_system_call_error("malloc");
-		_exit(127);
+		_exit(E_COMMAND_NOT_FOUND);
 	}
 	if (access(command_path, X_OK))
 	{
 		free(command_path);
 		handle_system_call_error("access");
-		_exit(127);
+		_exit(E_COMMAND_NOT_FOUND);
 	}
 	execve(command_path, arguments, dict_to_envp(&shell->envd));
 	handle_system_call_error("execve");
-	_exit(127);
+	_exit(E_COMMAND_NOT_FOUND);
 }
 
 // Needs to always exit even if it is builtin
@@ -105,15 +105,15 @@ int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
 
 	status = setup_redirects(cmd);
 	if (status)
-		return (status);
+		_exit(status);
 	arguments = get_arguments(cmd);
 	if (!arguments)
-		return (1);
+		_exit(E_COMMAND_NOT_FOUND);
 	status = execute_builtin(arguments, shell);
 	if (status >= 0)
-		return (status);
+		_exit(E_COMMAND_NOT_FOUND);
 	execute_child_command(shell, arguments);
-	_exit(127);
+	_exit(E_COMMAND_NOT_FOUND);
 	return (status);
 }
 
