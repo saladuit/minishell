@@ -74,10 +74,8 @@ void assert_minishell(char *command_line, char *case_name)
 /*                              General                                        */
 /*******************************************************************************/
 
-MINISHELL_TEST(execution_empty_string, "\'\'");
-// MINISHELL_TEST(execution_pipeline_command_not_found, "echo hi > foo | asd\ncat foo\n");
-// MINISHELL_TEST(execution_garbage, "/usr/bin/foo");
-// MINISHELL_TEST(execution_basic, "ls .\nl\"s\" .\nl\'s\' .\nexport s=\" s\"\nl$s .\nexport s=\"s\"\nl$s .\nlsX .");
+MINISHELL_TEST(execution_invalid_path, "/made/up/path");
+MINISHELL_TEST(execution_basic, "ls .\nl\"s\" .\nl\'s\' .\nexport s=\" s\"\nl$s .\nexport s=\"s\"\nl$s .\nlsX .");
 // MINISHELL_TEST(execution_leading_whitespace, "a");
 // MINISHELL_TEST(execution_space_in_string, "\' \'");
 // MINISHELL_TEST(execution_ls, "ls");
@@ -114,11 +112,14 @@ MINISHELL_TEST(execution_empty_string, "\'\'");
 // MINISHELL_TEST(pipes_grep_ls, "ls / | grep bin");
 // MINISHELL_TEST(pipes_eagain_resource_temporarily_unavailable, "pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd | pwd");
 // MINISHELL_TEST(pipes_ls_cat, "ls | cat");
+// MINISHELL_TEST(execution_pipeline_command_not_found, "echo hi > foo | asd\ncat foo\n");
 
 /*******************************************************************************/
 /*                                  Expansion                                 */
 /*******************************************************************************/
 
+MINISHELL_TEST(execution_empty_single_quotes, "\'\'");
+MINISHELL_TEST(execution_empty_double_quotes, "\"\"");
 MINISHELL_TEST(expansion_15, "echo 1$USER-");
 MINISHELL_TEST(expansion_9, "echo $11");
 MINISHELL_TEST(expansion_13, "echo $xa");
@@ -352,25 +353,56 @@ MINISHELL_TEST(pwd_arg, "pwd arg");
 /*                                  export                                     */
 /*******************************************************************************/
 
-MINISHELL_TEST(export_overwrite_with_no_value, "export a=\"x\"\necho $a\nexport a=\necho $a");
-MINISHELL_TEST(export_exports_are_unquoted, "export a=\">\"\n$a b");
-MINISHELL_TEST(export_export_multiple_same, "export a=b a=b\nexport | sort");
-MINISHELL_TEST(export_multiple_equals, "export FOO=a=b\nexport | grep FOO");
-MINISHELL_TEST(export_number_as_second_character, "export a1=foo");
-MINISHELL_TEST(export_basic, "export foo=\"bar\"\necho $foo");
-MINISHELL_TEST(export_valid_and_not_valid_identifier, "export 1 a=b 2\nexport | sort");
-MINISHELL_TEST(export_export_multiple, "export a=b x=y\nexport | sort");
-MINISHELL_TEST(export_single_character, "export a=foo");
-MINISHELL_TEST(export_copying, "export a=foo\nexport b=$a\necho $b\n\nexport a=bar\necho $a\necho $b");
+// NUL
+MINISHELL_TEST(export_NULL, "export 0=NUL");
+MINISHELL_TEST(export_NULL_1, "export \0=NULL");
+MINISHELL_TEST(export_NULL_2, "export \\\0=NULL");
+MINISHELL_TEST(export_NULL_3, "export NUL\\\0=NULL");
+MINISHELL_TEST(export_NULL_4, "export \\\0NUL=NULL");
+MINISHELL_TEST(export_NULL_single_quote_1, "export '0'=NUL");
+MINISHELL_TEST(export_NULL_single_quote_2, "export '\0'=NULL");
+MINISHELL_TEST(export_NULL_single_quote_3, "export '\\\0'=NULL");
+MINISHELL_TEST(export_NULL_single_quote_4, "export 'NUL\\\0'=NULL");
+MINISHELL_TEST(export_NULL_single_quote_5, "export '\\\0NUL'=NULL");
+MINISHELL_TEST(export_NULL_double_qoute_1, "export \"0\"=NUL");
+MINISHELL_TEST(export_NULL_double_qoute_2, "export \"\0\"=NULL");
+MINISHELL_TEST(export_NULL_double_qoute_3, "export \"\\\0\"=NULL");
+MINISHELL_TEST(export_NULL_double_qoute_4, "export \"NUL\\\0\"=NULL");
+MINISHELL_TEST(export_NULL_double_qoute_5, "export \"\\\0NUL\"=NULL");
+
+//Basic
+MINISHELL_TEST(export, "export");
+MINISHELL_TEST(export_single_character, "export A=single\necho $A");
+MINISHELL_TEST(export_envvar, "export BASIC=basic\necho $BASIC");
+MINISHELL_TEST(export_envvar_single_quoted, "export BASIC=\'basic\'\necho $BASIC");
+MINISHELL_TEST(export_envvar_double_quoted, "export BASIC=\"basic\"\necho $BASIC");
+MINISHELL_TEST(export_number_as_second_character, "export _ALL_1=all_1");
+
+//Multiple
+MINISHELL_TEST(export_multiple, "export MULTI=one\necho $MULTI\nMULTI=two\necho $MULTI");
+MINISHELL_TEST(export_multiple_different, "export MULTI=one\necho $MULTI\nMULTI=two\necho $MULTI");
+MINISHELL_TEST(export_multiple_same_value, "export MULTI=same MULTI=same\n");
+
+//No_value
+MINISHELL_TEST(export_no_value, "export NO_VALUE\necho $NO_VALUE");
+MINISHELL_TEST(export_no_value_equals_sign, "export NO_VALUE=\necho $NO_VALUE");
+MINISHELL_TEST(export_no_value_overwrite_without_value, "export NO_VALUE=\nexport NO_VALUE=\necho $NO_VALUE");
+MINISHELL_TEST(export_no_value_overwrite_with_value, "export NO_VALUE=\nexport NO_VALUE=\necho $NO_VALUE");
 MINISHELL_TEST(export_overwrite_with_no_equals, "export a=\"x\"\necho $a\nexport a\necho $a");
+
+//invalid
+MINISHELL_TEST(export_invalid_char, "export _@=foo");
+MINISHELL_TEST(export_invalid_number_boundary_min, "export 0=zero");
+MINISHELL_TEST(export_invalid_number_boundary_max, "export 9=nine");
+MINISHELL_TEST(export_valid_and_not_valid_identifier, "export 1_INVALID=invalid VALID=valid\necho $1_INVALID $VALID");
+
+MINISHELL_TEST(export_multiple_equals, "export FOO=a=b\nexport | grep FOO");
+MINISHELL_TEST(export_export_multiple, "export a=b x=y\nexport | sort");
 MINISHELL_TEST(export_with_value, "export FOO=BAR\nexport | grep FOO");
-MINISHELL_TEST(export_export_sorted, "export | sort");
-MINISHELL_TEST(export_no_equals, "export FOO\nexport | grep FOO");
-MINISHELL_TEST(export_no_value, "export FOO=\nexport | grep FOO");
+
+MINISHELL_TEST(export_exports_are_unquoted, "export a=\">\"\n$a b");
+MINISHELL_TEST(export_copying, "export a=foo\nexport b=$a\necho $b\n\nexport a=bar\necho $a\necho $b");
 MINISHELL_TEST(export_overwrite, "export a=\"x\"\necho $a\nexport a=\"y\"\necho $a");
-MINISHELL_TEST(export_set_export, "export foo=\"bar\"");
-MINISHELL_TEST(export_invalid_1, "export _@=foo");
-MINISHELL_TEST(export_invalid_2, "export 1=foo");
 
 /*******************************************************************************/
 /*                                  unset                                      */
