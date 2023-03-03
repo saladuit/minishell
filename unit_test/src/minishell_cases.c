@@ -79,7 +79,7 @@ void assert_minishell(char *command_line, char *case_name)
 /*******************************************************************************/
 
 MINISHELL_TEST(execution_empty_string, "\'\'");
-MINISHELL_TEST(execution_ls_expansion_2, "ls $whitespace_center$whitespace_center\n");
+MINISHELL_TEST(execution_ls_expansion_2, "ls $whitespace_center$whitespace_center");
 // MINISHELL_TEST(execution_pipeline_command_not_found, "echo hi > foo | asd\ncat foo\n");
 // MINISHELL_TEST(execution_no_PATH, "unset PATH\ncat");
 // MINISHELL_TEST(execution_env_expansion_splitting_space_separator, "export a=\" \"\necho foo$a\"bar\"");
@@ -104,33 +104,6 @@ MINISHELL_TEST(execution_ls_expansion_2, "ls $whitespace_center$whitespace_cente
 // MINISHELL_TEST(execution_command_not_found_and_no_such_file_or_directory, "asd\n/asd\ncat foo");
 
 
-/*******************************************************************************/
-/*                                   echo                                      */
-/*******************************************************************************/
-
-// MINISHELL_TEST(echo, "echo");
-// MINISHELL_TEST(echo_basic, "echo a");
-// MINISHELL_TEST(echo_double, "echo a b");
-// MINISHELL_TEST(echo_n_option_several, "echo -n -n a -n -n");
-// MINISHELL_TEST(echo_n_option_nn, "echo -nn a -nn");
-// MINISHELL_TEST(echo_n_option_nan, "echo -nan a -nan");
-// MINISHELL_TEST(echo_n_option_na, "echo -na a -na");
-// MINISHELL_TEST(echo_n_option_ana, "echo -ana a -ana");
-// MINISHELL_TEST(echo_n_option_an, "echo -an a -an");
-// MINISHELL_TEST(echo_n_option_first, "echo -n a\necho -n a b");
-// MINISHELL_TEST(echo_n_option_last, "echo a -n\necho a b -n");
-// MINISHELL_TEST(echo_expansion, "echo $whitespace_center");
-//
-//
-// /*******************************************************************************/
-// /*                                  pwd                                       */
-// /*******************************************************************************/
-//
-// MINISHELL_TEST(pwd, "pwd");
-// MINISHELL_TEST(pwd_old, "env | grep OLDPWD\nexport | grep OLDPWD\n\ncd .\nenv | grep OLDPWD\nexport | grep OLDPWD");
-// MINISHELL_TEST(pwd_removed_dir, "mkdir test\ncd test\nrmdir /tmp/test\npwd");
-// MINISHELL_TEST(pwd_hoi, "pwd hoi");
-//
 //
 // /*******************************************************************************/
 // /*                               exit_status                                   */
@@ -175,29 +148,6 @@ MINISHELL_TEST(execution_ls_expansion_2, "ls $whitespace_center$whitespace_cente
 // // MINISHELL_TEST(ls, "$minishell_path\nls");
 //
 //
-// /*******************************************************************************/
-// /*                                  export                                     */
-// /*******************************************************************************/
-//
-// MINISHELL_TEST(export_overwrite_with_no_value, "export a=\"x\"\necho $a\nexport a=\necho $a");
-// MINISHELL_TEST(export_exports_are_unquoted, "export a=\">\"\n$a b");
-// MINISHELL_TEST(export_export_multiple_same, "export a=b a=b\nexport | sort");
-// MINISHELL_TEST(export_multiple_equals, "export FOO=a=b\nexport | grep FOO");
-// MINISHELL_TEST(export_number_as_second_character, "export a1=foo");
-// MINISHELL_TEST(export_basic, "export foo=\"bar\"\necho $foo");
-// MINISHELL_TEST(export_valid_and_not_valid_identifier, "export 1 a=b 2\nexport | sort");
-// MINISHELL_TEST(export_export_multiple, "export a=b x=y\nexport | sort");
-// MINISHELL_TEST(export_single_character, "export a=foo");
-// MINISHELL_TEST(export_copying, "export a=foo\nexport b=$a\necho $b\n\nexport a=bar\necho $a\necho $b");
-// MINISHELL_TEST(export_overwrite_with_no_equals, "export a=\"x\"\necho $a\nexport a\necho $a");
-// MINISHELL_TEST(export_with_value, "export FOO=BAR\nexport | grep FOO");
-// MINISHELL_TEST(export_export_sorted, "export | sort");
-// MINISHELL_TEST(export_no_equals, "export FOO\nexport | grep FOO");
-// MINISHELL_TEST(export_no_value, "export FOO=\nexport | grep FOO");
-// MINISHELL_TEST(export_overwrite, "export a=\"x\"\necho $a\nexport a=\"y\"\necho $a");
-// MINISHELL_TEST(export_set_export, "export foo=\"bar\"");
-// MINISHELL_TEST(export_invalid_1, "export _@=foo");
-// MINISHELL_TEST(export_invalid_2, "export 1=foo");
 //
 // /*******************************************************************************/
 // /*                                  pipes                                      */
@@ -210,19 +160,6 @@ MINISHELL_TEST(execution_ls_expansion_2, "ls $whitespace_center$whitespace_cente
 // MINISHELL_TEST(pipes_ls_cat, "ls | cat");
 //
 //
-// /*******************************************************************************/
-// /*                                  env                                       */
-// /*******************************************************************************/
-//
-// MINISHELL_TEST(env_redirection_in_env, "export a=\">\"\necho x $a y");
-// MINISHELL_TEST(env_echo_var, "echo $no_whitespace");
-// MINISHELL_TEST(env_env_sorted, "env | sort");
-// MINISHELL_TEST(env_no_such_file_or_directory, "$USER");
-// MINISHELL_TEST(env_with_value, "export FOO=BAR\nenv | grep FOO");
-// MINISHELL_TEST(env_no_equals, "export FOO\nenv | grep FOO");
-// MINISHELL_TEST(env_no_value, "export FOO=\nenv | grep FOO");
-// MINISHELL_TEST(env_env_in_env, "export a=\'$empty\'\n$a");
-// MINISHELL_TEST(env_dollar, "echo $");
 //
 //
 // /*******************************************************************************/
@@ -401,96 +338,155 @@ MINISHELL_TEST(execution_ls_expansion_2, "ls $whitespace_center$whitespace_cente
 // MINISHELL_TEST(heredocs_no_such_file_or_directory_builtin, "<< eof echo < bar\na\neof");
 //
 //
-// /*******************************************************************************/
-// /*                               files                                      */
-// /*******************************************************************************/
-//
-// MINISHELL_TEST(files_append_create, "echo a >> foo\necho b >> foo\ncat foo");
-// MINISHELL_TEST(files_append, "echo a > foo\necho b >> foo\ncat foo");
-// MINISHELL_TEST(files_recreate, "echo a > foo\necho b > foo\ncat foo");
-// MINISHELL_TEST(files_create, "echo a > foo\ncat foo");
-//
-//
-// /*******************************************************************************/
-// /*                                  rmdir                                      */
-// /*******************************************************************************/
-//
-// MINISHELL_TEST(rmdir_invalid_argument, "rmdir .");
-//
-//
-// /*******************************************************************************/
-// /*                              syntax_errors                                  */
-// /*******************************************************************************/
-//
+/*******************************************************************************/
+/*                               files                                         */
+/*******************************************************************************/
+
+MINISHELL_TEST(files_create, "echo a > build/echo_create.txt\ncat build/echo_create.txt");
+MINISHELL_TEST(files_fail, "echo a > build/echo_fail.txt\necho b > build/echo_fail.txt\nrm build/echo_fail.txt");
+MINISHELL_TEST(files_append, "echo a > build/echo_append.txt\necho b >> build/echo_append.txt\ncat build/echo_append.txt\nrm build/echo_append.txt");
+MINISHELL_TEST(files_append_create, "echo a >> build/echo_append_create.txt\necho b >> build/echo_append_create.txt\ncat build/echo_append_create.txt\nrm build/echo_append_create.txt");
+
+
+
+/*******************************************************************************/
+/*                                  mkdir & rmdir                              */
+/*******************************************************************************/
+
+MINISHELL_TEST(mkdir_rmdir, "mkdir build/test\nrmdir build/test");
+MINISHELL_TEST(mkdir_file_exists, "rmdir build/test\nmkdir build/test\nmkdir build/test\nrmdir build/test");
+MINISHELL_TEST(rmdir_invalid_argument, "rmdir .");
+
+/*******************************************************************************/
+/*                              Syntax_erros                                   */
+/*******************************************************************************/
+
+MINISHELL_TEST(syntax_triple_forward_redirect, "ls <<<");
+MINISHELL_TEST(syntax_unmatched_double_quote, "\"");
+MINISHELL_TEST(syntax_redirection_kiss, "ls><abc");
+MINISHELL_TEST(syntax_echo, "echo \'a");
+MINISHELL_TEST(syntax_unmatched_word_double_quote, "<< \"EOF cat\n$?\nEOF");
+MINISHELL_TEST(syntax_export_equals_redirection, "export a=>");
+MINISHELL_TEST(syntax_no_such_file_or_directory_syntax_error, "/a |");
+MINISHELL_TEST(syntax_redirection, ">");
+MINISHELL_TEST(syntax_unmatched_word_single_quote, "<< \'EOF cat\n$?\nEOF");
+MINISHELL_TEST(syntax_unmatched_single_quote, "\'");
+
+MINISHELL_TEST(syntax_pipe_only, "|");
+MINISHELL_TEST(syntax_pipe_double, "||");
+MINISHELL_TEST(syntax_double_pipe, "pwd ||");
+MINISHELL_TEST(syntax_export_equals_pipe, "export a=|");
+// MINISHELL_TEST(syntax_redirection_no_file_and_pipe, "echo a > |\n");
+
+MINISHELL_TEST(syntax_pipe_before, "| ls");
+MINISHELL_TEST(syntax_pipe_before_double, "| | ls");
+MINISHELL_TEST(syntax_pipe_before_input, "< | ls");
+MINISHELL_TEST(syntax_pipe_before_heredoc, "<< | ls");
+// MINISHELL_TEST(syntax_pipe_before_ouput, "> | ls\n rm \|\n"); //FIXME same this | symbol cannot be removed
+// MINISHELL_TEST(syntax_pipe_before_append, ">> | ls\n"); //FIXME same
+MINISHELL_TEST(syntax_pipe_before_single_quotes, "\'\' | ls");
+MINISHELL_TEST(syntax_pipe_before_double_quotes, "\"\" | ls");
+
+
+MINISHELL_TEST(syntax_pipe_after, "ls |");
+MINISHELL_TEST(syntax_pipe_after_double, "ls | |"); 
+MINISHELL_TEST(syntax_pipe_after_input, "ls | <");
+MINISHELL_TEST(syntax_pipe_after_heredoc, "ls | <<");
+// MINISHELL_TEST(syntax_pipe_after_output, "ls | >");//FIXME same
+// MINISHELL_TEST(syntax_pipe_after_append, "ls | >>");//FIXME same
+MINISHELL_TEST(syntax_pipe_after_single_quotes, "ls | \'\'");
+MINISHELL_TEST(syntax_pipe_after_double_quotes, "ls | \"\"");
+
+/*******************************************************************************/
+/*                                   Builtins                                  */
+/*******************************************************************************/
+
+/*******************************************************************************/
+/*                                   echo                                      */
+/*******************************************************************************/
+
+MINISHELL_TEST(echo, "echo");
+MINISHELL_TEST(echo_basic, "echo a");
+MINISHELL_TEST(echo_double, "echo a b");
+MINISHELL_TEST(echo_n_option_several, "echo -n -n a -n -n");
+MINISHELL_TEST(echo_n_option_nn, "echo -nn a -nn");
+MINISHELL_TEST(echo_n_option_nan, "echo -nan a -nan");
+MINISHELL_TEST(echo_n_option_na, "echo -na a -na");
+MINISHELL_TEST(echo_n_option_ana, "echo -ana a -ana");
+MINISHELL_TEST(echo_n_option_an, "echo -an a -an");
+MINISHELL_TEST(echo_n_option_first, "echo -n a\necho -n a b");
+MINISHELL_TEST(echo_n_option_last, "echo a -n\necho a b -n");
+MINISHELL_TEST(echo_expansion, "echo $whitespace_center");
+
+/*******************************************************************************/
+/*                                  cd                                         */
+/*******************************************************************************/
+
+// PASSING
+MINISHELL_TEST(cd_twice, "cd / | cd /\npwd");
+// FAILING
+MINISHELL_TEST(cd_no_args, "cd\npwd");
+MINISHELL_TEST(cd_dir_up, "pwd\ncd ..\npwd");
+MINISHELL_TEST(cd_no_args_pwd, "cd\npwd");
+MINISHELL_TEST(cd_pipeline_twice, "cd $HOME\ncd / | cd /\npwd");
+MINISHELL_TEST(cd_no_home, "unset HOME\ncd /\ncd asd\npwd");
+MINISHELL_TEST(cd_slash, "cd /\npwd");
+MINISHELL_TEST(cd_pipeline_last, "cd $HOME\npwd | cd /\npwd");
+MINISHELL_TEST(cd_first_pipeline, "cd $HOME\ncd / | pwd\npwd");
+MINISHELL_TEST(cd_nonexistent, "cd /\ncd nonexistent\npwd");
+
+/*******************************************************************************/
+/*                                  pwd                                       */
+/*******************************************************************************/
+
+MINISHELL_TEST(pwd, "pwd");
+MINISHELL_TEST(pwd_arg, "pwd arg");
+// MINISHELL_TEST(pwd_old, "env | grep OLDPWD\nexport | grep OLDPWD\n\ncd .\nenv | grep OLDPWD\nexport | grep OLDPWD");
+// MINISHELL_TEST(pwd_removed_dir, "mkdir test\ncd test\nrmdir /tmp/test\npwd");
+
+/*******************************************************************************/
+/*                                  export                                     */
+/*******************************************************************************/
+
+// MINISHELL_TEST(export_overwrite_with_no_value, "export a=\"x\"\necho $a\nexport a=\necho $a");
+// MINISHELL_TEST(export_exports_are_unquoted, "export a=\">\"\n$a b");
+// MINISHELL_TEST(export_export_multiple_same, "export a=b a=b\nexport | sort");
+// MINISHELL_TEST(export_multiple_equals, "export FOO=a=b\nexport | grep FOO");
+// MINISHELL_TEST(export_number_as_second_character, "export a1=foo");
+// MINISHELL_TEST(export_basic, "export foo=\"bar\"\necho $foo");
+// MINISHELL_TEST(export_valid_and_not_valid_identifier, "export 1 a=b 2\nexport | sort");
+// MINISHELL_TEST(export_export_multiple, "export a=b x=y\nexport | sort");
+// MINISHELL_TEST(export_single_character, "export a=foo");
+// MINISHELL_TEST(export_copying, "export a=foo\nexport b=$a\necho $b\n\nexport a=bar\necho $a\necho $b");
+// MINISHELL_TEST(export_overwrite_with_no_equals, "export a=\"x\"\necho $a\nexport a\necho $a");
+// MINISHELL_TEST(export_with_value, "export FOO=BAR\nexport | grep FOO");
+// MINISHELL_TEST(export_export_sorted, "export | sort");
+// MINISHELL_TEST(export_no_equals, "export FOO\nexport | grep FOO");
+// MINISHELL_TEST(export_no_value, "export FOO=\nexport | grep FOO");
+// MINISHELL_TEST(export_overwrite, "export a=\"x\"\necho $a\nexport a=\"y\"\necho $a");
+// MINISHELL_TEST(export_set_export, "export foo=\"bar\"");
+// MINISHELL_TEST(export_invalid_1, "export _@=foo");
+// MINISHELL_TEST(export_invalid_2, "export 1=foo");
 
 /*******************************************************************************/
 /*                                  unset                                      */
 /*******************************************************************************/
 
 // PASSING
-MINISHELL_TEST(unset_cd_home, "unset HOME\ncd\npwd\n");
+MINISHELL_TEST(unset_cd_home, "unset HOME\ncd\npwd");
 // FAILING
-MINISHELL_TEST(unset_multiple, "unset USER HOME\nenv | sort\n");
+MINISHELL_TEST(unset_multiple, "unset USER HOME\nenv | sort");
 
 /*******************************************************************************/
-/*                                  cd                                       */
+/*                                  env                                       */
 /*******************************************************************************/
 
-// PASSING
-MINISHELL_TEST(cd_twice, "cd / | cd /\npwd\n");
-// FAILING
-MINISHELL_TEST(cd_no_args, "cd\npwd\n");
-MINISHELL_TEST(cd_dir_up, "pwd\ncd ..\npwd\n");
-MINISHELL_TEST(cd_no_args_pwd, "cd\npwd\n");
-MINISHELL_TEST(cd_pipeline_twice, "cd $HOME\ncd / | cd /\npwd\n");
-MINISHELL_TEST(cd_no_home, "unset HOME\ncd /\ncd asd\npwd\n");
-MINISHELL_TEST(cd_slash, "cd /\npwd\n");
-MINISHELL_TEST(cd_pipeline_last, "cd $HOME\npwd | cd /\npwd\n");
-MINISHELL_TEST(cd_first_pipeline, "cd $HOME\ncd / | pwd\npwd\n");
-MINISHELL_TEST(cd_nonexistent, "cd /\ncd nonexistent\npwd\n");
-
-/*******************************************************************************/
-/*                                  mkdir                                      */
-/*******************************************************************************/
-
-MINISHELL_TEST(mkdir_rmdir, "mkdir build/test\nrmdir build/test\n");
-MINISHELL_TEST(mkdir_file_exists, "rmdir build/test\nmkdir build/test\nmkdir build/test\nrmdir build/test\n");
-
-/*******************************************************************************/
-/*                              Syntax_erros                                  */
-/*******************************************************************************/
-
-MINISHELL_TEST(syntax_triple_forward_redirect, "ls <<<\n");
-MINISHELL_TEST(syntax_unmatched_double_quote, "\"\n");
-MINISHELL_TEST(syntax_redirection_kiss, "ls><abc\n");
-MINISHELL_TEST(syntax_echo, "echo \'a\n");
-MINISHELL_TEST(syntax_unmatched_word_double_quote, "<< \"EOF cat\n$?\nEOF\n");
-MINISHELL_TEST(syntax_export_equals_redirection, "export a=>\n");
-MINISHELL_TEST(syntax_no_such_file_or_directory_syntax_error, "/a |\n");
-MINISHELL_TEST(syntax_redirection, ">\n");
-MINISHELL_TEST(syntax_unmatched_word_single_quote, "<< \'EOF cat\n$?\nEOF\n");
-MINISHELL_TEST(syntax_unmatched_single_quote, "\'\n");
-
-MINISHELL_TEST(syntax_pipe_only, "|\n");
-MINISHELL_TEST(syntax_pipe_only, "||\n");
-MINISHELL_TEST(syntax_double_pipe, "pwd ||\n");
-MINISHELL_TEST(syntax_export_equals_pipe, "export a=|\n");
-MINISHELL_TEST(syntax_redirection_no_file_and_pipe, "echo a > |\n");
-
-MINISHELL_TEST(syntax_pipe_before, "| ls\n");
-MINISHELL_TEST(syntax_pipe_before_double, "| | ls\n");
-MINISHELL_TEST(syntax_pipe_before_input, "< | ls\n");
-MINISHELL_TEST(syntax_pipe_before_ouput, "> | ls\n");
-MINISHELL_TEST(syntax_pipe_before_heredoc, "<< | ls\n");
-MINISHELL_TEST(syntax_pipe_before_append, ">> | ls\n");
-MINISHELL_TEST(syntax_pipe_before_single_quotes, "\'\' | ls\n");
-MINISHELL_TEST(syntax_pipe_before_double_quotes, "\"\" | ls\n");
-
-MINISHELL_TEST(syntax_pipe_after, "ls |\n");
-MINISHELL_TEST(syntax_pipe_after_double, "ls | |\n");
-MINISHELL_TEST(syntax_pipe_after_input, "ls | <\n");
-MINISHELL_TEST(syntax_pipe_after_output, "ls | >\n");
-MINISHELL_TEST(syntax_pipe_after_heredoc, "ls | <<\n");
-MINISHELL_TEST(syntax_pipe_after_append, "ls | >>\n");
-MINISHELL_TEST(syntax_pipe_after_single_quotes, "ls | \'\'\n");
-MINISHELL_TEST(syntax_pipe_after_double_quotes, "ls | \"\"\n");
+MINISHELL_TEST(env_redirection_in_env, "export a=\">\"\necho x $a y");
+MINISHELL_TEST(env_echo_var, "echo $no_whitespace");
+MINISHELL_TEST(env_env_sorted, "env | sort");
+MINISHELL_TEST(env_no_such_file_or_directory, "$USER");
+MINISHELL_TEST(env_with_value, "export FOO=BAR\nenv | grep FOO");
+MINISHELL_TEST(env_no_equals, "export FOO\nenv | grep FOO");
+MINISHELL_TEST(env_no_value, "export FOO=\nenv | grep FOO");
+MINISHELL_TEST(env_env_in_env, "export a=\'$empty\'\n$a");
+MINISHELL_TEST(env_dollar, "echo $");
