@@ -45,8 +45,8 @@ void assert_minishell(char *command_line, char *case_name)
     system_call = calloc(strlen(txt_file_path) + strlen(command_line) + 15, sizeof(char));
     sprintf(system_call, "bash -c \'%s\' >| %s", command_line, txt_file_path);
 
-    minishell_command = calloc(strlen(command_line)+ 4, sizeof(char));
-    sprintf(minishell_command, "%sEOF", command_line);
+    minishell_command = calloc(strlen(command_line)+ 5, sizeof(char));
+    sprintf(minishell_command, "%s\nEOF", command_line);
 
     struct cr_stream actual = {
         .cookie = cr_get_redirected_stdout(),
