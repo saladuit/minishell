@@ -37,9 +37,9 @@ git clone https://github.com/saladuit/minishell.git
 - `make ftest FILTER='minishell/export*'`: test the whole sytem and only the export cases
 - `make ftest FILTER='lexer/*'`: test a module and run all cases
 ### Re-compilation
-- `make ftest_re`: Same as make ftest but also removes all object files and executables
-- `make test_re`: Same as make test but also removes all object files and executables
 - `make re`: Same as make fclean and make
+- `make test_re`: Same as make test but also removes all object files and executables
+- `make ftest_re`: Same as make ftest but also removes all object files and executables
 ### Coverage
 - `make coverage`: Runs gcov on all source files and generates a coverage report
 - `make analyse`: Generates a coverage report and opens it up
