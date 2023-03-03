@@ -3,7 +3,21 @@
 
 ## Description
 
-This project is about creating a simple shell. Yes, our own little bash. We will learn a lot about processes and file descriptors.
+This project is about creating a simple shell. 
+Yes, our own little bash. We will learn a lot about processes and file descriptors.
+
+## Features
+- A custom shell interpreter similar to bash and zsh, called minishell
+- Support for  built-in shell commands echo, cd, pwd, export, unset, env and exit
+- Full support for PATH resolution and the execve system call to run external commands
+- Advanced command line editing using the readline library, including support for history
+- Advanced error handling and reporting, with informative error messages and exit codes
+- Support for input/output redirection and pipes
+- Environment variable expansion and substitution using the $ symbol
+- Advanced signal handling, including support for Ctrl+C and Ctrl+\ signals
+- Comprehensive unit tests and system tests to ensure robustness and correctness
+- Advanced debugging tools, including support for valgrind and fsanitize for memory leak detection and error reporting
+- Convenient and intuitive Makefile commands for easy compilation, testing, and debugging of the project
 
 ## Contributing
 1. Clone the repo
