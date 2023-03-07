@@ -8,6 +8,7 @@ env:
     - unit_test/**
     - Makefile
 on:
+  workflow_dispatch:
   push:
     paths:
       - ${{ env.MY_PATHS }}
