@@ -1,5 +1,5 @@
 # minishell
-[![Coverage Status](https://coveralls.io/repos/github/saladuit/minishell/badge.svg)](https://coveralls.io/github/saladuit/minishell) [![unit](https://github.com/saladuit/minishell/actions/workflows/c.yml/badge.svg)](https://github.com/saladuit/minishell/actions/workflows/c.yml)
+[![Coverage Status](https://coveralls.io/repos/github/saladuit/minishell/badge.svg?branch=main)](https://coveralls.io/github/saladuit/minishell?branch=main) [![unit](https://github.com/saladuit/minishell/actions/workflows/c.yml/badge.svg)](https://github.com/saladuit/minishell/actions/workflows/c.yml)
 
 ## Description
 
