@@ -1,22 +1,24 @@
 name: unit
-env:
-  MY_PATHS: |
-    - include/**
-    - libs/**
-    - makerc/**
-    - src/**
-    - unit_test/**
-    - Makefile
 on:
   workflow_dispatch:
   push:
     paths:
-      - ${{ env.MY_PATHS }}
+      - include/**
+      - libs/**
+      - makerc/**
+      - src/**
+      - unit_test/**
+      - Makefile
     branches:
       - main
   pull_request:
     paths:
-      - ${{ env.MY_PATHS }}
+      - include/**
+      - libs/**
+      - makerc/**
+      - src/**
+      - unit_test/**
+      - Makefile
 jobs:
   linux:
     runs-on: ubuntu-latest
