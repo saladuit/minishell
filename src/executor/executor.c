@@ -1,4 +1,3 @@
-#include <asm-generic/errno-base.h>
 #include <minishell.h>
 
 int32_t	redirect(t_redir *redir, t_type type)
@@ -27,20 +26,7 @@ int32_t	setup_redirects(t_command *command)
 t_builtin	builtin_lookup(char *cmd)
 {
 	int32_t	i;
-	int32_t	i;
 
-<<<<<<< Updated upstream
-=======
-	static const t_builtin lookup[] = {
-		{.name = "echo", .func = ft_echo},
-		{.name = "cd", .func = ft_cd},
-		{.name = "pwd", .func = ft_pwd},
-		{.name = "export", .func = ft_export},
-		{.name = "unset", .func = ft_unset},
-		{.name = "env", .func = ft_env},
-		{.name = "exit", .func = ft_exit},
-		{NULL, NULL}};
->>>>>>> Stashed changes
 	static const t_builtin lookup[] = {
 		{.name = "echo", .func = ft_echo},
 		{.name = "cd", .func = ft_cd},
