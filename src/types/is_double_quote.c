@@ -1,6 +1,6 @@
 #include <minishell.h>
 
-bool  is_double_quote(int c)
+bool	is_double_quote(int c)
 {
-  return (c == '\"');
+	return (c == '\"');
 }

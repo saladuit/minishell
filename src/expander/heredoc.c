@@ -4,8 +4,9 @@ char	*make_heredoc_file(int32_t *fd)
 {
 	char			*filename;
 	char			*num_str;
-	static int32_t	i = 0;
+	static int32_t	i;
 
+	i = 0;
 	num_str = ft_itoa(i);
 	filename = ft_strjoin("/tmp/.heredoc", num_str);
 	free(num_str);
@@ -32,9 +33,8 @@ bool	is_phrase(char *phrase, char *read_line)
 	i = 0;
 	while (read_line[i])
 	{
-		if (i == ft_strlen(phrase)
-			&& !ft_strncmp(phrase, read_line, ft_strlen(phrase) - 1)
-			&& read_line[i] == '\n')
+		if (i == ft_strlen(phrase) && !ft_strncmp(phrase, read_line,
+				ft_strlen(phrase) - 1) && read_line[i] == '\n')
 			return (true);
 		i++;
 	}
@@ -69,7 +69,7 @@ char	*add_heredoc(char *phrase)
 	pid_t	id;
 	int32_t	status;
 
-// setup_signals(SHEREDOC);
+	// setup_signals(SHEREDOC);
 	if (g_exitcode == 300)
 		return (NULL);
 	filename = make_heredoc_file(&fd);

@@ -61,7 +61,8 @@ bool	open_redir(char *path, t_type type)
 
 char	**get_env_paths(t_dictionary *env)
 {
-	char **paths;
+	char	**paths;
+
 	paths = ft_split(dict_get(env, "PATH"), ':');
 	if (!paths)
 		return (NULL);

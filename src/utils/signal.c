@@ -60,7 +60,7 @@ void	setup_signals(t_signal_handler handler)
 //	struct termios tio;
 //	tcgetattr(STDIN_FILENO, &tio);
 //	tcsetattr(STDIN_FILENO, TCSANOW, &tio);
-	// return (SUCCESS);
+// return (SUCCESS);
 
 void	reset_signals(void)
 {
@@ -70,14 +70,14 @@ void	reset_signals(void)
 
 void	setup_noncanonical_termios_mode(void)
 {
-	struct termios oldtio;
-	struct termios newtio;
+	struct termios	oldtio;
+	struct termios	newtio;
 
 	tcgetattr(STDIN_FILENO, &oldtio);
-	newtio.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON);
+	newtio.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
 	newtio.c_oflag &= ~OPOST;
-	newtio.c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
-	newtio.c_cflag &= ~(CSIZE|PARENB);
+	newtio.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+	newtio.c_cflag &= ~(CSIZE | PARENB);
 	newtio.c_cflag |= CS8;
 	tcsetattr(STDIN_FILENO, TCSANOW, &newtio);
 }

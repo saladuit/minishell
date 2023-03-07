@@ -1,8 +1,8 @@
 UNIT_TEST			=test.out
-UNIT_SRCS			=expand_cases.c#lexer_cases.c #tokenizer_test.c redirect_all_std.c minishell_test.c \
-#					 parser_cases.c parser_test.c execute_test.c executor_cases.c
+UNIT_SRCS			=builtin_cases.c expand_cases.c env_cases.c lexer_cases.c minishell_cases.c \
+							 parser_cases.c types_cases.c
 
-UNIT_OBJS			=$(addprefix ../$(BUILD_DIR)/, $(UNIT_SRCS:%.c=%.o))
+UNIT_OBJS			=$(addprefix ../$(BUILD_DIR)/unit_test/, $(UNIT_SRCS:%.c=%.o))
 PRODUCTION_OBJS		=$(addprefix ../, $(OBJS))
 
 UNIT_HEADERS		=include/unit_test.h

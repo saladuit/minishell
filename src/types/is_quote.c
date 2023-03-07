@@ -2,5 +2,5 @@
 
 bool	is_quote(int c)
 {
-	return (c == '\'' || c == '\"');
+	return (is_double_quote(c) || is_single_quote(c));
 }

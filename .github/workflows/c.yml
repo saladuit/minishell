@@ -1,15 +1,28 @@
 name: unit
+env:
+  MY_PATHS: |
+    - include/**
+    - libs/**
+    - makerc/**
+    - src/**
+    - unit_test/**
+    - Makefile
 on:
+  workflow_dispatch:
   push:
+    paths:
+      - ${{ env.MY_PATHS }}
     branches:
       - main
-      - 🔧Expander
+  pull_request:
+    paths:
+      - ${{ env.MY_PATHS }}
 jobs:
-  build:
+  linux:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Install dependencies
         run: |
           sudo apt-get update
@@ -17,12 +30,26 @@ jobs:
           sudo pip install cpp-coveralls
       - name: Build project
         run: make
+      - name: Run fsanitizer
+        run: make ftest_re
       - name: Run tests
         run: make test_re
-      - name: Run tests
+      - name: Generate coverage
         run: make coverage
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: build/coverage.info
+  macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          brew update && brew install criterion readline lcov gcovr
+      - name: Build project
+        run: make
+      - name: Run tests
+        run: make test_re

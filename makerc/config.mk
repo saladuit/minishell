@@ -1,5 +1,5 @@
 MAIN 			:=main.c
-SRCS			=minishell.c \
+SRCS			=minishell/minishell.c \
 				 lexer/lexer.c \
 				 lexer/lexer_utils.c \
 				 lexer/lexical_analyzer.c \
@@ -11,12 +11,6 @@ SRCS			=minishell.c \
 				 parser/command.c \
 				 parser/command_table.c \
 				 expander/expander.c \
-				 expander/expander_utils.c \
-				 expander/expand_arguments.c \
-				 expander/index_utils.c \
-				 expander/variable_expand.c \
-				 expander/word_splitting.c \
-				 expander/expand_redirect.c \
 				 expander/heredoc.c \
 				 executor/executor.c \
 				 executor/execute_utils.c \
@@ -25,16 +19,12 @@ SRCS			=minishell.c \
 				 envp/envp.c \
 				 envp/dict.c \
 				 envp/pair.c \
-				 types/is_delimiter.c \
-				 types/is_double_quoted.c \
+				 types/is_pipe.c \
 				 types/is_double_quote.c \
 				 types/is_dollar.c \
-				 types/is_expand.c \
-				 types/is_metachar.c \
-				 types/is_quote.c \
 				 types/is_redir.c \
-				 types/is_single_quoted.c \
 				 types/is_single_quote.c \
+				 types/is_quote.c \
 				 builtins/echo.c \
 				 builtins/cd.c \
 				 builtins/pwd.c \
@@ -62,7 +52,11 @@ endif
 CFLAGS			=-Wall -Wextra -Werror
 
 ifdef DEBUG
-	CFLAGS			+=-g -D DEBUG=1
+	CFLAGS			+=-g
+endif
+
+ifndef COV
+	CFLAGS			+=-D DEBUG=1
 endif
 
 ifdef FSAN
@@ -71,6 +65,10 @@ endif
 
 ifdef COV
 	CFLAGS			+=--coverage
+endif
+
+ifdef FILTER
+	F			=--filter $(FILTER)
 endif
 
 OBJS			=$(addprefix $(BUILD_DIR)/, $(SRCS:%.c=%.o))

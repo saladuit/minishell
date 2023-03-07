@@ -1,6 +1,6 @@
 #include <minishell.h>
 
-void pair_clean(t_pair *pair)
+void	pair_clean(t_pair *pair)
 {
 	if (pair->key)
 		free(pair->key);

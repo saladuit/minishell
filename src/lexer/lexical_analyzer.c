@@ -21,16 +21,15 @@ void	print_syntax_error(t_list *tokens)
 		printf("Minishell: syntax error near unexpected token `newline\'\n");
 	else
 		printf("Minishell: syntax error near unexpected token `%s\'\n",
-			(char *)tokens->content);
+				(char *)tokens->content);
 }
-
 
 int32_t	analyzer(t_list *tokens)
 {
 	// print_tokens(tokens);
 	if (!ft_strncmp(tokens->content, "|", 2))
 		return (printf("Minishell: syntax error near unexpected token `|\'\n"),
-			1);
+				1);
 	while (tokens)
 	{
 		if (is_tokenchar(tokens->content))

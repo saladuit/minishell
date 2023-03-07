@@ -1,6 +1,6 @@
 #include <minishell.h>
 
-void			print_arguments(t_command *cmd)
+void	print_arguments(t_command *cmd)
 {
 	char	**arguments;
 	int32_t	i;

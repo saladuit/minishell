@@ -15,8 +15,8 @@ void	debug_ast(t_list *ast)
 
 t_list	*construct_ast(t_list *tokens)
 {
-	t_command_table *command_table;
-	t_list	*ast;
+	t_command_table	*command_table;
+	t_list			*ast;
 
 	if (tokens == NULL)
 		return (NULL);

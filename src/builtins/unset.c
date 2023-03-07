@@ -1,6 +1,6 @@
+#include "libft.h"
 #include <minishell.h>
 #include <unistd.h>
-#include "libft.h"
 
 // static int	in_env(char *var_name, char **env)
 // {
@@ -33,12 +33,10 @@ static int	in_args(char **argv, char *env_line)
 	while (suffix && argv[i])
 	{
 		var = ft_strjoin(argv[i], suffix);
-		if (var
-			&& !ft_strncmp(var, env_line, ft_strlen(var)))
+		if (var && !ft_strncmp(var, env_line, ft_strlen(var)))
 			return (free(suffix), 1);
 		free(var);
-		if (argv[i]
-			&& !ft_strncmp(argv[i], env_line, ft_strlen(argv[i]) + 1))
+		if (argv[i] && !ft_strncmp(argv[i], env_line, ft_strlen(argv[i]) + 1))
 			return (free(suffix), 1);
 		i++;
 	}
@@ -69,19 +67,20 @@ void	unset_copy(char **argv, char **new_env, char **old_env)
 
 int	ft_unset(char **arguments, t_minishell *shell)
 {
-	int i;
+	int	i;
 
 	i = 0;
-    if (arguments[i++] == NULL)
+	if (arguments[i++] == NULL)
 	{
-        ft_putstr_fd("unset: error: no variable name provided\n", STDERR_FILENO);
+		ft_putstr_fd("unset: error: no variable name provided\n",
+						STDERR_FILENO);
 		shell->exit_status = E_BUILTIN;
-        return (E_BUILTIN);
-    }
+		return (E_BUILTIN);
+	}
 	while (arguments[i])
 	{
-        dict_delete(&shell->envd, arguments[i]);
+		dict_delete(&shell->envd, arguments[i]);
 		i++;
-    }
+	}
 	return (0);
 }
