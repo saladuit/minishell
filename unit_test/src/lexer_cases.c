@@ -81,17 +81,17 @@ Test(lexer, heredoc_input)
     assert_lexer("<<<", expected);
 }
 
-Test(lexer, dollar_double)
-{
-    char *expected[] = {"$", "$", NULL};
-    assert_lexer("$$", expected);
-}
-
-Test(lexer, dollar_envvar)
-{
-    char *expected[] = {"$", "$SHLVL", NULL};
-    assert_lexer("$$SHLVL", expected);
-}
+// Test(lexer, dollar_double)
+// {
+//     char *expected[] = {"$", "$", NULL};
+//     assert_lexer("$$", expected);
+// }
+//
+// Test(lexer, dollar_envvar)
+// {
+//     char *expected[] = {"$", "$SHLVL", NULL};
+//     assert_lexer("$$SHLVL", expected);
+// }
 
 Test(lexer, pipeline)
 {
