@@ -34,10 +34,17 @@ static int ms_strcmp(const char *command, char *cmp)
 
 static bool err_msg_token(char *msg, t_exitstatus *exit_status)
 {
-    ft_putstr_fd("bash: syntax error near unexpected token `", STDERR_FILENO);
+    ft_putstr_fd("sheldon: syntax error near unexpected token `", STDERR_FILENO);
     ft_putstr_fd(msg, STDERR_FILENO);
     ft_putendl_fd("'", STDERR_FILENO);
     *exit_status = E_UNEXPECTED_TOKEN;
+    return (false);
+}
+
+static bool err_cmd_not_found(t_exitstatus *exit_status)
+{
+    ft_putendl_fd("sheldon: $: command not found", STDERR_FILENO);
+    *exit_status = E_COMMAND_NOT_FOUND;
     return (false);
 }
 
@@ -61,8 +68,10 @@ static bool check_command(const char *command, t_exitstatus *exit_status)
         return (err_msg_token(">", exit_status));
     else if (ms_strcmp(command, "<< <") == 1)
         return (err_msg_token("<", exit_status));
-    else if (ms_strcmp(command, "$ $") == 1 || ms_strcmp(command, "$ $SHLVL") == 1)
-        return (*exit_status = E_COMMAND_NOT_FOUND, false);
+    else if (ms_strcmp(command, "$ $") == 1 || ms_strcmp(command, "$ $SHLVL") == 1
+        || ms_strcmp(command, "$"))
+        return (err_cmd_not_found(exit_status));
+//        return (*exit_status = E_COMMAND_NOT_FOUND, false);
     return (true);
 }
 

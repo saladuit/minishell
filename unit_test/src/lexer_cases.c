@@ -34,11 +34,12 @@ Test(lexer, one_ls)
     assert_lexer_one("ls", expected);
 }
 
-Test(lexer, one_dollar)
-{
-    char *expected[] = {"$", NULL};
-    assert_lexer_one("$", expected);
-}
+// THIS ONE DOESN'T MAKE SENSE
+//Test(lexer, one_dollar)
+//{
+//    char *expected[] = {"$", NULL};
+//    assert_lexer_one("$", expected);
+//}
 
 /*******************************************************************************/
 /*                           Lexer_two                                         */
@@ -61,6 +62,12 @@ Test(lexer, two_ls_l)
     assert_lexer_two("ls -l", expected);
 }
 
+Test(lexer, echo_dollar)
+{
+    char *expected[] = {"echo", "$", NULL};
+    assert_lexer_two("echo $", expected);
+}
+
 /*******************************************************************************/
 /*                           null_Lexer                                        */
 /*******************************************************************************/
@@ -71,10 +78,7 @@ void assert_lexer_null(char *command_line, char *message)
 {
     t_list *tokens;
 
-
-    (void)message;
     tokens = lexer(command_line, &zero);
-
     fflush(stderr);
     cr_expect(tokens==NULL);
     ft_lstclear(&tokens, free);
@@ -83,54 +87,58 @@ void assert_lexer_null(char *command_line, char *message)
 
 Test(lexer, null_pipe)
 {
-
-    assert_lexer_null("|", "bash: syntax error near unexpected token `|'\n");
+    assert_lexer_null("|", "sheldon: syntax error near unexpected token `|'\n");
 }
 
-//Test(lexer, null_input)
-//{
-//    assert_lexer_null("<", "bash: syntax error near unexpected token `|'\n");
-//}
-//
-//Test(lexer, null_ouput)
-//{
-//    assert_lexer_null(">", "bash: syntax error near unexpected token `|'");
-//}
+Test(lexer, null_input)
+{
+    assert_lexer_null("<", "sheldon: syntax error near unexpected token `newline'\n");
+}
 
-//Test(lexer, null_append)
-//{
-//    assert_lexer_null(">>", "bash: syntax error near unexpected token `|'");
-//}
-//
-//Test(lexer, null_heredoc)
-//{
-//    assert_lexer_null("<<", "bash: syntax error near unexpected token `|'");
-//}
-//
-//Test(lexer, null_pipe_double)
-//{
-//    assert_lexer_null("||", "minishell: syntax error near unexpected token `||'");
-//}
-//
-//Test(lexer, null_append_ouput)
-//{
-//    assert_lexer_null(">>>", "bash: syntax error near unexpected token `|'");
-//}
-//
-//Test(lexer, null_heredoc_input)
-//{
-//    assert_lexer_null("<<<", "bash: syntax error near unexpected token `|'");
-//}
-//
-// Test(lexer, null_dollar_double)
-// {
-//     assert_lexer_null("$ $", "bash: syntax error near unexpected token `|'");
-// }
-//
-// Test(lexer, null_dollar_envvar)
-// {
-//     assert_lexer_null("$ $SHLVL", "bash: syntax error near unexpected token `|'");
-// }
+Test(lexer, null_ouput)
+{
+    assert_lexer_null(">", "sheldon: syntax error near unexpected token `newline'\n");
+}
+
+Test(lexer, null_append)
+{
+    assert_lexer_null(">>", "sheldon: syntax error near unexpected token `newline'\n");
+}
+
+Test(lexer, null_heredoc)
+{
+    assert_lexer_null("<<", "sheldon: syntax error near unexpected token `newline'\n");
+}
+
+Test(lexer, null_pipe_double)
+{
+    assert_lexer_null("||", "sheldon: syntax error near unexpected token `||'\n");
+}
+
+Test(lexer, null_append_ouput)
+{
+    assert_lexer_null(">> >", "sheldon: syntax error near unexpected token `>'\n");
+}
+
+Test(lexer, null_heredoc_input)
+{
+    assert_lexer_null("<< <", "sheldon: syntax error near unexpected token `<'\n");
+}
+
+Test(lexer, null_one_dollar_input)
+{
+   assert_lexer_null("$", "sheldon: $: command not found\n");
+}
+
+Test(lexer, null_dollar_double)
+{
+    assert_lexer_null("$ $", "sheldon: $: command not found\n");
+}
+
+Test(lexer, null_dollar_envvar)
+{
+    assert_lexer_null("$ $SHLVL", "sheldon: $: command not found\n");
+}
 
 //Test(lexer, null_command)
 //{
