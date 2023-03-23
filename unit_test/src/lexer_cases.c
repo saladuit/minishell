@@ -11,7 +11,7 @@ void redirect_all_std(void)
     cr_redirect_stdout();
     cr_redirect_stderr();
 }
-
+TestSuite(lexer, .init=redirect_all_std);
 t_list	*lexer(const char *command_line, t_exitstatus *exit_status);
 
 /*******************************************************************************/
@@ -28,10 +28,16 @@ void assert_lexer_one(char *command_line, char **expected)
     ft_lstclear(&tokens, free);
 }
 
-Test(lexer_one, ls)
+Test(lexer, one_ls)
 {
     char *expected[] = {"ls", NULL};
     assert_lexer_one("ls", expected);
+}
+
+Test(lexer, one_dollar)
+{
+    char *expected[] = {"$", NULL};
+    assert_lexer_one("$", expected);
 }
 
 /*******************************************************************************/
@@ -49,7 +55,7 @@ void assert_lexer_two(char *command_line, char **expected)
     ft_lstclear(&tokens, free);
 }
 
-Test(lexer_two, ls_l)
+Test(lexer, two_ls_l)
 {
     char *expected[] = {"ls", "-l", NULL};
     assert_lexer_two("ls -l", expected);
@@ -59,7 +65,7 @@ Test(lexer_two, ls_l)
 /*                           null_Lexer                                        */
 /*******************************************************************************/
 
-TestSuite(lexer, .init=redirect_all_std);
+
 
 void assert_lexer_null(char *command_line, char *message)
 {
@@ -83,7 +89,7 @@ Test(lexer, null_pipe)
 
 //Test(lexer, null_input)
 //{
-//    assert_lexer_null("<", "bash: syntax error near unexpected token `|'");
+//    assert_lexer_null("<", "bash: syntax error near unexpected token `|'\n");
 //}
 //
 //Test(lexer, null_ouput)
