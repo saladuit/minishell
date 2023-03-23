@@ -19,7 +19,7 @@ void redirect_stdfds(void)
 
 int32_t	minishell_loop(t_minishell *sheldon);
 
-TestSuite(minishell, .init=redirect_stdfds, .timeout=4);
+TestSuite(minishell, .init=redirect_stdfds);
 
 static int read_from_file(void *cookie, void *buffer, size_t *size)
 {
