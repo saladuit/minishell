@@ -41,6 +41,7 @@ const char	*messages_lookup(t_exitstatus status)
 		[E_EXIT_INVALID_ARG] = "numeric argument required",
 		[E_CTRL_C] = "Script terminated by Control-C",
 		[E_UNKNOWN] = "Unknown error code",
+        [E_UNEXPECTED_TOKEN] = "Minishell: bash: syntax error near unexpected token",
 	};
 	return (message[status]);
 }

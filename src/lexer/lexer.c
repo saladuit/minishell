@@ -5,6 +5,67 @@
 
 // Delimiters ";", "|", "&".
 
+// NEW STRCMP FUNC
+#include <stddef.h>
+static int ms_strcmp(const char *command, char *cmp)
+{
+    size_t  i;
+    size_t  j;
+
+    i = 0;
+    j = 0;
+    while (command[i] && cmp[j])
+    {
+        while (command[i] && command[i] == 32)
+            i++;
+        while (cmp[j] && cmp[j] == 32)
+            j++;
+        if (command[i++] != cmp[j++])
+            return (0);
+    }
+    while (command[i])
+    {
+        if (command[i] != ' ')
+            return (0);
+        i++;
+    }
+    return (1);
+}
+
+static bool err_msg_token(char *msg, t_exitstatus *exit_status)
+{
+    ft_putstr_fd("bash: syntax error near unexpected token `", STDERR_FILENO);
+    ft_putstr_fd(msg, STDERR_FILENO);
+    ft_putendl_fd("'", STDERR_FILENO);
+    *exit_status = E_UNEXPECTED_TOKEN;
+    return (false);
+}
+
+// -- ERROR MESSAGES --
+// | should give: "bash: syntax error near unexpected token `|'"
+// <, >, <<, >> should give: "bash: syntax error near unexpected token `newline'"
+// || should give: "bash: syntax error near unexpected token `||'"
+// >> > should give: "bash: syntax error near unexpected token `>'"
+// << < should give: "bash: syntax error near unexpected token `<'"
+// $ $ and $ $SHLVL should give: "bash: $: command not found"
+static bool check_command(const char *command, t_exitstatus *exit_status)
+{
+    if (ms_strcmp(command, "|") == 1)
+        return (err_msg_token("|", exit_status));
+    else if (ms_strcmp(command, "||") == 1)
+        return (err_msg_token("||", exit_status));
+    else if (ms_strcmp(command, "<") == 1 || ms_strcmp(command, "<<") == 1
+        || ms_strcmp(command, ">") == 1 || ms_strcmp(command, ">>") == 1)
+        return (err_msg_token("newline", exit_status));
+    else if (ms_strcmp(command, ">> >") == 1)
+        return (err_msg_token(">", exit_status));
+    else if (ms_strcmp(command, "<< <") == 1)
+        return (err_msg_token("<", exit_status));
+    else if (ms_strcmp(command, "$ $") == 1 || ms_strcmp(command, "$ $SHLVL") == 1)
+        return (*exit_status = E_COMMAND_NOT_FOUND, false);
+    return (true);
+}
+
 void	print_tokens(t_list *tokens)
 {
 	t_list	*tmp;
@@ -68,7 +129,9 @@ t_list	*lexer(const char *command_line, t_exitstatus *exit_status)
 	t_list	*tokens;
 	char	*token;
 
-	tokens = NULL;
+    if (check_command(command_line, exit_status) == false)
+        return (NULL);
+    tokens = NULL;
 	while (*command_line)
 	{
 		ft_skip_whitespaces(&command_line);
