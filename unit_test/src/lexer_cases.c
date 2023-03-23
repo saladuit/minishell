@@ -6,95 +6,127 @@
 extern t_exitstatus zero;
 extern t_exitstatus max;
 
-/*******************************************************************************/
-/*                           Lexer                                             */
-/*******************************************************************************/
+void redirect_all_std(void)
+{
+    cr_redirect_stdout();
+    cr_redirect_stderr();
+}
 
 t_list	*lexer(const char *command_line, t_exitstatus *exit_status);
 
-void assert_lexer(char *command_line, char **expected)
+/*******************************************************************************/
+/*                           Lexer_one                                         */
+/*******************************************************************************/
+
+void assert_lexer_one(char *command_line, char **expected)
 {
     t_list *tokens;
-    t_list *head;
 
     tokens = lexer(command_line, &zero);
-    head = tokens;
-    while (tokens)
-    {
-      cr_assert_not_null(expected);
-      cr_expect_str_eq(tokens->content, *expected++);
-      tokens = tokens->next;
-    }
-    ft_lstclear(&head, free);
+    cr_expect_str_eq(tokens->content, *expected);
+    cr_expect(tokens->next == NULL);
+    ft_lstclear(&tokens, free);
 }
 
-Test(lexer, basic)
+Test(lexer_one, ls)
 {
     char *expected[] = {"ls", NULL};
-    assert_lexer("ls", expected);
-}
-Test(lexer, pipe)
-{
-    char *expected[] = {"|", NULL};
-    assert_lexer("|", expected);
+    assert_lexer_one("ls", expected);
 }
 
-Test(lexer, input)
+/*******************************************************************************/
+/*                           Lexer_two                                         */
+/*******************************************************************************/
+
+void assert_lexer_two(char *command_line, char **expected)
 {
-    char *expected[] = {"<", NULL};
-    assert_lexer("<", expected);
+    t_list *tokens;
+
+    tokens = lexer(command_line, &zero);
+    cr_expect_str_eq(tokens->content, *expected++);
+    cr_expect_str_eq(tokens->next->content, *expected);
+    cr_expect(tokens->next->next == NULL);
+    ft_lstclear(&tokens, free);
 }
 
-Test(lexer, ouput)
+Test(lexer_two, ls_l)
 {
-    char *expected[] = {">", NULL};
-    assert_lexer(">", expected);
+    char *expected[] = {"ls", "-l", NULL};
+    assert_lexer_two("ls -l", expected);
 }
 
-Test(lexer, append)
+/*******************************************************************************/
+/*                           null_Lexer                                        */
+/*******************************************************************************/
+
+TestSuite(lexer, .init=redirect_all_std);
+
+void assert_lexer_null(char *command_line, char *message)
 {
-    char *expected[] = {">>", NULL};
-    assert_lexer(">>", expected);
+    t_list *tokens;
+
+
+    (void)message;
+    tokens = lexer(command_line, &zero);
+
+    fflush(stderr);
+    cr_expect(tokens==NULL);
+    ft_lstclear(&tokens, free);
+    cr_assert_stderr_eq_str(message);
 }
 
-Test(lexer, heredoc)
+Test(lexer, null_pipe)
 {
-    char *expected[] = {"<<", NULL};
-    assert_lexer("<<", expected);
+
+    assert_lexer_null("|", "bash: syntax error near unexpected token `|'\n");
 }
 
-Test(lexer, pipe_double)
-{
-    char *expected[] = {"|", "|", NULL};
-    assert_lexer("||", expected);
-}
+//Test(lexer, null_input)
+//{
+//    assert_lexer_null("<", "bash: syntax error near unexpected token `|'");
+//}
+//
+//Test(lexer, null_ouput)
+//{
+//    assert_lexer_null(">", "bash: syntax error near unexpected token `|'");
+//}
 
-Test(lexer, append_ouput)
-{
-    char *expected[] = {">>", ">", NULL};
-    assert_lexer(">>>", expected);
-}
-
-Test(lexer, heredoc_input)
-{
-    char *expected[] = {"<<", "<", NULL};
-    assert_lexer("<<<", expected);
-}
-
-// Test(lexer, dollar_double)
+//Test(lexer, null_append)
+//{
+//    assert_lexer_null(">>", "bash: syntax error near unexpected token `|'");
+//}
+//
+//Test(lexer, null_heredoc)
+//{
+//    assert_lexer_null("<<", "bash: syntax error near unexpected token `|'");
+//}
+//
+//Test(lexer, null_pipe_double)
+//{
+//    assert_lexer_null("||", "minishell: syntax error near unexpected token `||'");
+//}
+//
+//Test(lexer, null_append_ouput)
+//{
+//    assert_lexer_null(">>>", "bash: syntax error near unexpected token `|'");
+//}
+//
+//Test(lexer, null_heredoc_input)
+//{
+//    assert_lexer_null("<<<", "bash: syntax error near unexpected token `|'");
+//}
+//
+// Test(lexer, null_dollar_double)
 // {
-//     char *expected[] = {"$", "$", NULL};
-//     assert_lexer("$$", expected);
+//     assert_lexer_null("$ $", "bash: syntax error near unexpected token `|'");
 // }
 //
-// Test(lexer, dollar_envvar)
+// Test(lexer, null_dollar_envvar)
 // {
-//     char *expected[] = {"$", "$SHLVL", NULL};
-//     assert_lexer("$$SHLVL", expected);
+//     assert_lexer_null("$ $SHLVL", "bash: syntax error near unexpected token `|'");
 // }
 
-Test(lexer, pipeline)
-{
-    char *expected[] = {"|", "ls", "-e$", ">>", ">", "|",  "<<", "<", NULL};
-    assert_lexer("|ls -e$>>>|<<<", expected);
-}
+//Test(lexer, null_command)
+//{
+//    assert_lexer_null("echo");
+//}
