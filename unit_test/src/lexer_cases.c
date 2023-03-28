@@ -190,6 +190,11 @@ Test(lexer, null_quote_count_is_odd_four)
 	assert_lexer_null("echo hello\"", "sheldon: odd number of first used quote\n");
 }
 
+Test(lexer, null_exclamation_mark)
+{
+	assert_lexer_null("!", "sheldon: syntax error near unexpected token `newline'\n");
+}
+
 //Test(lexer, null_command)
 //{
 //    assert_lexer_null("echo");
