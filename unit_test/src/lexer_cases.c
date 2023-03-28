@@ -68,6 +68,36 @@ Test(lexer, echo_dollar)
     assert_lexer_two("echo $", expected);
 }
 
+Test(lexer, echo_hello)
+{
+	char *expected[] = {"echo", "hello", NULL};
+	assert_lexer_two("echo hello", expected);
+}
+
+Test(lexer, echo_hello_with_quotes_one)
+{
+	char *expected[] = {"echo", "'he\"llo'", NULL};
+	assert_lexer_two("echo 'he\"llo'", expected);
+}
+
+Test(lexer, echo_hello_with_quotes_two)
+{
+	char *expected[] = {"echo", "'hello'", NULL};
+	assert_lexer_two("echo 'hello'", expected);
+}
+
+Test(lexer, echo_hello_with_quotes_three)
+{
+	char *expected[] = {"echo", "\"hel\'lo\"", NULL};
+	assert_lexer_two("echo \"hel\'lo\"", expected);
+}
+
+//Test(lexer, echo_hello_in_quotes)
+//{
+//	char *expected[] = {"echo", "hello", NULL};
+//	assert_lexer_two("echo 'hel'lo'", expected);
+//}
+
 /*******************************************************************************/
 /*                           null_Lexer                                        */
 /*******************************************************************************/
@@ -138,6 +168,26 @@ Test(lexer, null_dollar_double)
 Test(lexer, null_dollar_envvar)
 {
     assert_lexer_null("$ $SHLVL", "sheldon: $: command not found\n");
+}
+
+Test(lexer, null_quote_count_is_odd_one)
+{
+	assert_lexer_null("echo \'hel\'\'lo\'\'", "sheldon: odd number of first used quote\n");
+}
+
+Test(lexer, null_quote_count_is_odd_two)
+{
+	assert_lexer_null("echo \'hello", "sheldon: odd number of first used quote\n");
+}
+
+Test(lexer, null_quote_count_is_odd_three)
+{
+	assert_lexer_null("echo \"hel\"lo\"", "sheldon: odd number of first used quote\n");
+}
+
+Test(lexer, null_quote_count_is_odd_four)
+{
+	assert_lexer_null("echo hello\"", "sheldon: odd number of first used quote\n");
 }
 
 //Test(lexer, null_command)
