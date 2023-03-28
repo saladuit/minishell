@@ -68,6 +68,34 @@ void	print_tokens(t_list *tokens)
 	}
 }
 
+// returns true if the count of quotes (' or ") is even
+// applied on the first found quote in the string
+bool	quotes_even_or_odd(const char *str)
+{
+	size_t	count;
+	size_t	i;
+	int 	quote;
+	char 	c;
+
+	i = 0;
+	count = 0;
+	quote = 0;
+	while (str[i])
+	{
+		if (is_quote(str[i]) && !quote)
+		{
+			c = str[i];
+			quote = 1;
+		}
+		if (str[i] == c && quote)
+			count++;
+		i++;
+	}
+	if (count % 2 == 0)
+		return (true);
+	return (false);
+}
+
 int32_t	find_next_quote(const char *command_line, char c)
 {
 	size_t	i;
