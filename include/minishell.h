@@ -182,6 +182,11 @@ char				**dict_to_envp(t_dictionary *dict);
 const char			*messages_lookup(t_exitstatus code);
 int32_t				handle_mini_errors(t_exitstatus status);
 int32_t				handle_system_call_error(const char *function_name);
+bool				err_cmd_not_found(t_exitstatus *exit_status);
+bool				err_msg_token(char *msg, t_exitstatus *exit_status);
+void				err_msg_quotes_odd(t_exitstatus *exit_status);
+
+
 
 // Minitypes
 

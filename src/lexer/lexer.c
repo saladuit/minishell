@@ -32,28 +32,6 @@ static int ms_strcmp(const char *command, char *cmp)
     return (1);
 }
 
-static void	err_msg_quotes_odd(t_exitstatus *exit_status)
-{
-	ft_putendl_fd("sheldon: odd number of first used quote", STDERR_FILENO);
-	*exit_status = E_GENERAL;
-}
-
-static bool err_msg_token(char *msg, t_exitstatus *exit_status)
-{
-    ft_putstr_fd("sheldon: syntax error near unexpected token `", STDERR_FILENO);
-    ft_putstr_fd(msg, STDERR_FILENO);
-    ft_putendl_fd("'", STDERR_FILENO);
-    *exit_status = E_UNEXPECTED_TOKEN;
-    return (false);
-}
-
-static bool err_cmd_not_found(t_exitstatus *exit_status)
-{
-    ft_putendl_fd("sheldon: $: command not found", STDERR_FILENO);
-    *exit_status = E_COMMAND_NOT_FOUND;
-    return (false);
-}
-
 // -- ERROR MESSAGES --
 // | should give: "bash: syntax error near unexpected token `|'"
 // <, >, <<, >> should give: "bash: syntax error near unexpected token `newline'"
@@ -68,16 +46,13 @@ static bool check_command(const char *command, t_exitstatus *exit_status)
     else if (ms_strcmp(command, "||") == 1)
         return (err_msg_token("||", exit_status));
     else if (ms_strcmp(command, "<") == 1 || ms_strcmp(command, "<<") == 1
-        || ms_strcmp(command, ">") == 1 || ms_strcmp(command, ">>") == 1)
+        || ms_strcmp(command, ">") == 1 || ms_strcmp(command, ">>") == 1
+		|| ms_strcmp(command, "!"))
         return (err_msg_token("newline", exit_status));
     else if (ms_strcmp(command, ">> >") == 1)
         return (err_msg_token(">", exit_status));
     else if (ms_strcmp(command, "<< <") == 1)
         return (err_msg_token("<", exit_status));
-    else if (ms_strcmp(command, "$ $") == 1 || ms_strcmp(command, "$ $SHLVL") == 1
-        || ms_strcmp(command, "$"))
-        return (err_cmd_not_found(exit_status));
-//        return (*exit_status = E_COMMAND_NOT_FOUND, false);
     return (true);
 }
 
