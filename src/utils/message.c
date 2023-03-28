@@ -10,6 +10,28 @@ static void	handle_signal(int32_t signal_num)
 	exit(signal_num + E_FATAL_SIGNAL);
 }
 
+void	err_msg_quotes_odd(t_exitstatus *exit_status)
+{
+	ft_putendl_fd("sheldon: odd number of first used quote", STDERR_FILENO);
+	*exit_status = E_GENERAL;
+}
+
+bool err_msg_token(char *msg, t_exitstatus *exit_status)
+{
+	ft_putstr_fd("sheldon: syntax error near unexpected token `", STDERR_FILENO);
+	ft_putstr_fd(msg, STDERR_FILENO);
+	ft_putendl_fd("'", STDERR_FILENO);
+	*exit_status = E_UNEXPECTED_TOKEN;
+	return (false);
+}
+
+bool err_cmd_not_found(t_exitstatus *exit_status)
+{
+	ft_putendl_fd("sheldon: $: command not found", STDERR_FILENO);
+	*exit_status = E_COMMAND_NOT_FOUND;
+	return (false);
+}
+
 int32_t	handle_mini_errors(t_exitstatus status)
 {
 	int32_t	exit_status;
