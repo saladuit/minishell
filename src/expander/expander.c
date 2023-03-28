@@ -111,52 +111,6 @@ t_list	*expand_dollar_node(char *arg, size_t *i, t_exitstatus *status)
 	return (node);
 }
 
-bool	are_quotes_closed(const char *str)
-{
-	bool	in_single_quote;
-	bool	in_double_quote;
-
-	in_single_quote = false;
-	in_double_quote = false;
-	while (*str != '\0')
-	{
-		if (is_single_quote(*str))
-			in_single_quote = !in_single_quote;
-		else if (is_double_quote(*str))
-			in_double_quote = !in_double_quote;
-		str++;
-	}
-	return (!in_single_quote && !in_double_quote);
-}
-
-// returns true if the count of quotes (' or ") is even
-// applied on the first found quote in the string
-bool	quotes_even_or_odd(const char *str)
-{
-	size_t	count;
-	size_t	i;
-	int 	quote;
-	char 	c;
-
-	i = 0;
-	count = 0;
-	quote = 0;
-	while (str[i])
-	{
-		if (is_quote(str[i]) && !quote)
-		{
-			c = str[i];
-			quote = 1;
-		}
-		if (str[i] == c && quote)
-			count++;
-		i++;
-	}
-	if (count % 2 == 0)
-		return (true);
-	return (false);
-}
-
 char	*expand_token(char *arg, t_exitstatus *status)
 {
 	t_list	*stack;
@@ -167,8 +121,6 @@ char	*expand_token(char *arg, t_exitstatus *status)
 	i = 0;
 	stack = NULL;
 	node = NULL;
-	if (!are_quotes_closed(arg))
-		return (arg);
 	while (arg[i])
 	{
 		if (is_dollar(arg[i]))
