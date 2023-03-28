@@ -74,6 +74,12 @@ Test(lexer, echo_hello)
 	assert_lexer_two("echo hello", expected);
 }
 
+Test(lexer, dollar_dollar)
+{
+	char *expected[] = {"$", "$", NULL};
+	assert_lexer_two("$ $", expected);
+}
+
 Test(lexer, echo_hello_with_quotes_one)
 {
 	char *expected[] = {"echo", "'he\"llo'", NULL};
@@ -102,7 +108,7 @@ Test(lexer, echo_hello_with_quotes_three)
 /*                           null_Lexer                                        */
 /*******************************************************************************/
 
-
+// possible test case -- multiple commands: "ls -l ; pwd | grep foo"
 
 void assert_lexer_null(char *command_line, char *message)
 {
@@ -153,21 +159,6 @@ Test(lexer, null_append_ouput)
 Test(lexer, null_heredoc_input)
 {
     assert_lexer_null("<< <", "sheldon: syntax error near unexpected token `<'\n");
-}
-
-Test(lexer, null_one_dollar_input)
-{
-   assert_lexer_null("$", "sheldon: $: command not found\n");
-}
-
-Test(lexer, null_dollar_double)
-{
-    assert_lexer_null("$ $", "sheldon: $: command not found\n");
-}
-
-Test(lexer, null_dollar_envvar)
-{
-    assert_lexer_null("$ $SHLVL", "sheldon: $: command not found\n");
 }
 
 Test(lexer, null_quote_count_is_odd_one)

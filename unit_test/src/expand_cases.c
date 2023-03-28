@@ -324,15 +324,15 @@ Test(expand_token, string)
     assert_expand_token("Hello", "Hello", NULL);
 }
 
-Test(expand_token, envar_dollar)
+Test(expand_token, envvar_dollar)
 {
     assert_expand_token("$", "$", NULL);
 }
 
-// Test(expand_token, envar_double_dollar)
-// {
-//     assert_expand_token("$$", "$$", NULL);
-// }
+ Test(expand_token, envvar_double_dollar)
+ {
+     assert_expand_token("$$", "$$", NULL);
+ }
 
 // Test(expand_token, envar_dollar_with_space_and_letter)
 // {
