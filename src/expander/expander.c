@@ -129,6 +129,34 @@ bool	are_quotes_closed(const char *str)
 	return (!in_single_quote && !in_double_quote);
 }
 
+// returns true if the count of quotes (' or ") is even
+// applied on the first found quote in the string
+bool	quotes_even_or_odd(const char *str)
+{
+	size_t	count;
+	size_t	i;
+	int 	quote;
+	char 	c;
+
+	i = 0;
+	count = 0;
+	quote = 0;
+	while (str[i])
+	{
+		if (is_quote(str[i]) && !quote)
+		{
+			c = str[i];
+			quote = 1;
+		}
+		if (str[i] == c && quote)
+			count++;
+		i++;
+	}
+	if (count % 2 == 0)
+		return (true);
+	return (false);
+}
+
 char	*expand_token(char *arg, t_exitstatus *status)
 {
 	t_list	*stack;

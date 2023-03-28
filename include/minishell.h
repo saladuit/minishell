@@ -204,6 +204,7 @@ int32_t				input_check(t_list *tokens);
 int32_t				output_check(t_list *tokens);
 int32_t				heredoc_check(t_list *tokens);
 int32_t				append_check(t_list *tokens);
+bool				quotes_even_or_odd(const char *str); // NEW (by Lucien)
 
 // Expander
 

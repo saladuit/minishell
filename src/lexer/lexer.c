@@ -32,6 +32,12 @@ static int ms_strcmp(const char *command, char *cmp)
     return (1);
 }
 
+static void	err_msg_quotes_odd(t_exitstatus *exit_status)
+{
+	ft_putendl_fd("sheldon: odd number of first used quote", STDERR_FILENO);
+	*exit_status = E_GENERAL;
+}
+
 static bool err_msg_token(char *msg, t_exitstatus *exit_status)
 {
     ft_putstr_fd("sheldon: syntax error near unexpected token `", STDERR_FILENO);
@@ -144,6 +150,8 @@ t_list	*lexer(const char *command_line, t_exitstatus *exit_status)
 	while (*command_line)
 	{
 		ft_skip_whitespaces(&command_line);
+		if (quotes_even_or_odd(command_line) == false)
+			return (err_msg_quotes_odd(exit_status), NULL);
 		if (*command_line)
 		{
 			token = make_token(&command_line);
