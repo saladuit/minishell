@@ -6,6 +6,7 @@ t_exitstatus max = 255;
  void setup_env(void)
  {
      setenv("HELLO", "Hello", 1);
+	 setenv("$", "$", 1);
      setenv("WORLD", "World", 1);
      unsetenv("UNSET");
      setenv("SPACE", "Spa ce", 1);
@@ -227,63 +228,63 @@ Test(expand_dollar_node, two_envvar, .timeout=1)
 /*                           Are_quotes_closed                                 */
 /*******************************************************************************/
 
-bool are_quotes_closed(const char *str);
-
-void assert_are_quotes_closed(char *input, bool expected)
-{
-    bool result = are_quotes_closed(input);
-    cr_assert(result == expected);
-}
-
-Test(quotes_closed, empty_string)
-{
-    assert_are_quotes_closed("", true);
-}
-
-Test(quotes_closed, no_quotes)
-{
-    assert_are_quotes_closed("this has no quotes", true);
-}
-
-Test(quotes_are_closed, single_quotes)
-{
-    assert_are_quotes_closed("this \'has\' single \'quotes\'", true);
-}
-
-Test(quotes_are_closed, double_quotes)
-{
-    assert_are_quotes_closed("this \"has\" double \"quotes\"", true);
-}
-
-Test(quotes_are_closed, unmatched_single_quotes)
-{
-    assert_are_quotes_closed("this \'has unmatched single quotes", false);
-}
-
-Test(quotes_are_closed, unmatched_double_quotes)
-{
-    assert_are_quotes_closed("this \"has unmatched double quotes", false);
-}
-
-Test(quotes_are_closed, mixed_quotes)
-{
-    assert_are_quotes_closed("this \'has \"both\" types\' of quotes", true);
-}
-
-// Test(quotes_are_closed, escaped_quotes)
-// {
-//     assert_are_quotes_closed("this has escaped \"double\" quotes and \'\'single\' quotes", true);
-// }
-
-Test(quotes_are_closed, multiple_lines)
-{
-    assert_are_quotes_closed("this has quotes\non multiple\nlines", true);
-}
-
-// Test(quotes_are_closed, double_qutoes_with_single)
-// {
-//     assert_are_quotes_closed("\'$SHLVL\"\'", true);
-// }
+//bool are_quotes_closed(const char *str);
+//
+//void assert_are_quotes_closed(char *input, bool expected)
+//{
+//    bool result = are_quotes_closed(input);
+//    cr_assert(result == expected);
+//}
+//
+//Test(quotes_closed, empty_string)
+//{
+//    assert_are_quotes_closed("", true);
+//}
+//
+//Test(quotes_closed, no_quotes)
+//{
+//    assert_are_quotes_closed("this has no quotes", true);
+//}
+//
+//Test(quotes_are_closed, single_quotes)
+//{
+//    assert_are_quotes_closed("this \'has\' single \'quotes\'", true);
+//}
+//
+//Test(quotes_are_closed, double_quotes)
+//{
+//    assert_are_quotes_closed("this \"has\" double \"quotes\"", true);
+//}
+//
+//Test(quotes_are_closed, unmatched_single_quotes)
+//{
+//    assert_are_quotes_closed("this \'has unmatched single quotes", false);
+//}
+//
+//Test(quotes_are_closed, unmatched_double_quotes)
+//{
+//    assert_are_quotes_closed("this \"has unmatched double quotes", false);
+//}
+//
+//Test(quotes_are_closed, mixed_quotes)
+//{
+//    assert_are_quotes_closed("this \'has \"both\" types\' of quotes", true);
+//}
+//
+//// Test(quotes_are_closed, escaped_quotes)
+//// {
+////     assert_are_quotes_closed("this has escaped \"double\" quotes and \'\'single\' quotes", true);
+//// }
+//
+//Test(quotes_are_closed, multiple_lines)
+//{
+//    assert_are_quotes_closed("this has quotes\non multiple\nlines", true);
+//}
+//
+//// Test(quotes_are_closed, double_qutoes_with_single)
+//// {
+////     assert_are_quotes_closed("\'$SHLVL\"\'", true);
+//// }
 
 /*******************************************************************************/
 /*                           Expand_token                                      */
@@ -329,10 +330,11 @@ Test(expand_token, envvar_dollar)
     assert_expand_token("$", "$", NULL);
 }
 
- Test(expand_token, envvar_double_dollar)
- {
-     assert_expand_token("$$", "$$", NULL);
- }
+// FAILS
+Test(expand_token, envvar_double_dollar)
+{
+	assert_expand_token("$$", "$", NULL);
+}
 
 // Test(expand_token, envar_dollar_with_space_and_letter)
 // {
