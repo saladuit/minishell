@@ -51,11 +51,11 @@ char	*expand_dollar(char *arg, t_exitstatus *status)
 	if (p)
 	{
 		sub = ft_substr(arg, 0, p - arg);
-		expansion = getenv(sub);
+		expansion = dict_get(dict, sub);
 		free(sub);
 	}
 	else
-		expansion = getenv(arg);
+		expansion = dict_get(dict, arg);
 	if (expansion == NULL)
 		return (ft_strdup(""));
 	return (ft_strdup(expansion));
