@@ -106,8 +106,6 @@ extern int			g_exitcode;
 
 typedef struct s_minishell
 {
-	char			**env;
-	char			**expo;
 	t_dictionary	envd;
 	t_list			*ast;
 	t_list			*tokens;
