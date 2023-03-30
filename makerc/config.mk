@@ -16,9 +16,9 @@ SRCS			=minishell/minishell.c \
 				 executor/execute_utils.c \
 				 utils/message.c \
 				 utils/signal.c \
-				 envp/envp.c \
-				 envp/dict.c \
-				 envp/pair.c \
+				 env/env.c \
+				 env/dict.c \
+				 env/pair.c \
 				 types/is_pipe.c \
 				 types/is_double_quote.c \
 				 types/is_dollar.c \
