@@ -32,8 +32,6 @@
 # include <termios.h>
 # include <unistd.h>
 
-extern int			g_exitcode;
-
 /*
 E_GENERAL:
 	Miscellaneous errors, such as "divide by zero" and other
