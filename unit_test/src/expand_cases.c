@@ -2,15 +2,16 @@
 
 t_exitstatus zero = 0;
 t_exitstatus max = 255;
+extern char	**environ;
 
- void setup_env(void)
- {
-     setenv("HELLO", "Hello", 1);
-	 setenv("$", "$", 1);
-     setenv("WORLD", "World", 1);
-     unsetenv("UNSET");
-     setenv("SPACE", "Spa ce", 1);
- }
+void setup_env(void)
+{
+    setenv("HELLO", "Hello", 1);
+	setenv("$", "$", 1);
+    setenv("WORLD", "World", 1);
+    unsetenv("UNSET");
+    setenv("SPACE", "Spa ce", 1);
+}
 
 /*******************************************************************************/
 /*                           Combine_expanded_strings                          */
@@ -234,16 +235,17 @@ TestSuite(expand_token, .init=setup_env);
 
 void assert_expand_token(char *in, char *expected, t_exitstatus *status)
 {
-//	t_dictionary env[HASH_TABLE_SIZE];
+	t_dictionary env[HASH_TABLE_SIZE];
 
-//	envp_load(env, input);
+	bzero(env, sizeof(env));
+	envp_load(env, environ);
     char *input;
     input = ft_strdup(in);
-    char *output = expand_token(input, status, NULL);
+    char *output = expand_token(input, status, env);
     cr_expect_str_eq(output, expected);
     free(output);
     free(input);
-//	dict_destroy(env);
+	dict_destroy(env);
 }
 
 
