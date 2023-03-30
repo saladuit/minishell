@@ -171,6 +171,16 @@ Test(lexer, null_append_output_two)
 	assert_lexer_null(">> <", "sheldon: syntax error near unexpected token `<'\n");
 }
 
+Test(lexer, null_append_output_nospace)
+{
+	assert_lexer_null(">><", "sheldon: syntax error near unexpected token `<'\n");
+}
+
+Test(lexer, pre_space_null_append_output_nospace)
+{
+	assert_lexer_null(" >><", "sheldon: syntax error near unexpected token `<'\n");
+}
+
 Test(lexer, null_quote_count_is_odd_one)
 {
 	assert_lexer_null("echo \'hel\'\'lo\'\'", "sheldon: odd number of first used quote\n");
