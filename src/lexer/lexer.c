@@ -49,9 +49,9 @@ static bool check_command(const char *command, t_exitstatus *exit_status)
         || ms_strcmp(command, ">") == 1 || ms_strcmp(command, ">>") == 1
 		|| ms_strcmp(command, "!"))
         return (err_msg_token("newline", exit_status));
-    else if (ms_strcmp(command, ">> >") == 1)
+    else if (ms_strcmp(command, ">> >") == 1 || ms_strcmp(command, "<< >") == 1)
         return (err_msg_token(">", exit_status));
-    else if (ms_strcmp(command, "<< <") == 1)
+    else if (ms_strcmp(command, "<< <") == 1 || ms_strcmp(command, ">> <") == 1)
         return (err_msg_token("<", exit_status));
     return (true);
 }

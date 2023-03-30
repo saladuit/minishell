@@ -151,7 +151,7 @@ Test(lexer, null_pipe_double)
     assert_lexer_null("||", "sheldon: syntax error near unexpected token `||'\n");
 }
 
-Test(lexer, null_append_ouput)
+Test(lexer, null_append_output)
 {
     assert_lexer_null(">> >", "sheldon: syntax error near unexpected token `>'\n");
 }
@@ -159,6 +159,16 @@ Test(lexer, null_append_ouput)
 Test(lexer, null_heredoc_input)
 {
     assert_lexer_null("<< <", "sheldon: syntax error near unexpected token `<'\n");
+}
+
+Test(lexer, null_heredoc_input_two)
+{
+	assert_lexer_null("<< >", "sheldon: syntax error near unexpected token `>'\n");
+}
+
+Test(lexer, null_append_output_two)
+{
+	assert_lexer_null(">> <", "sheldon: syntax error near unexpected token `<'\n");
 }
 
 Test(lexer, null_quote_count_is_odd_one)
