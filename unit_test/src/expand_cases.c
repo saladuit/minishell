@@ -27,6 +27,7 @@ void assert_expand_token(char *in, char *expected, t_exitstatus *status)
 
 	bzero(env, sizeof(env));
 	envp_load(env, environ);
+//	dict_print(env);
     char *input;
     input = ft_strdup(in);
     char *output = expand_token(input, status, env);

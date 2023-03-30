@@ -18,7 +18,8 @@ SRCS	=	$(SRC_ARRAY) $(SRC_ASCII) $(SRC_CONVERT) $(SRC_GNL)\
 			$(SRC_LST) $(SRC_MEM) $(SRC_MESSAGE) $(SRC_MISC) $(SRC_PRINTF)\
 			$(SRC_PUT) $(SRC_STR)
 
-SRC_ARRAY	=	array/ft_matrixlen.c \
+SRC_ARRAY	=	array/ft_array_print.c \
+				array/ft_matrixlen.c \
 				array/ft_joinmatrix.c \
 				array/ft_matrixclear.c
 
