@@ -62,7 +62,8 @@ typedef enum e_exitstatus
 	E_EXIT_INVALID_ARG = 128,
 	E_FATAL_SIGNAL = 128,
 	E_CTRL_C = 130,
-	E_UNKNOWN = 225
+	E_UNKNOWN = 225,
+    E_UNEXPECTED_TOKEN = 258,
 }					t_exitstatus;
 
 typedef enum e_signalcode
@@ -179,6 +180,11 @@ char				**dict_to_envp(t_dictionary *dict);
 const char			*messages_lookup(t_exitstatus code);
 int32_t				handle_mini_errors(t_exitstatus status);
 int32_t				handle_system_call_error(const char *function_name);
+bool				err_cmd_not_found(t_exitstatus *exit_status);
+bool				err_msg_token(char *msg, t_exitstatus *exit_status);
+void				err_msg_quotes_odd(t_exitstatus *exit_status);
+
+
 
 // Minitypes
 
@@ -201,6 +207,7 @@ int32_t				input_check(t_list *tokens);
 int32_t				output_check(t_list *tokens);
 int32_t				heredoc_check(t_list *tokens);
 int32_t				append_check(t_list *tokens);
+bool				quotes_even_or_odd(const char *str); // NEW (by Lucien)
 
 // Expander
 

@@ -5,6 +5,57 @@
 
 // Delimiters ";", "|", "&".
 
+// NEW STRCMP FUNC
+#include <stddef.h>
+static int ms_strcmp(const char *command, char *cmp)
+{
+    size_t  i;
+    size_t  j;
+
+    i = 0;
+    j = 0;
+    while (command[i] && cmp[j])
+    {
+        while (command[i] && command[i] == 32)
+            i++;
+        while (cmp[j] && cmp[j] == 32)
+            j++;
+        if (command[i++] != cmp[j++])
+            return (0);
+    }
+    while (command[i])
+    {
+        if (command[i] != ' ')
+            return (0);
+        i++;
+    }
+    return (1);
+}
+
+// -- ERROR MESSAGES --
+// | should give: "bash: syntax error near unexpected token `|'"
+// <, >, <<, >> should give: "bash: syntax error near unexpected token `newline'"
+// || should give: "bash: syntax error near unexpected token `||'"
+// >> > should give: "bash: syntax error near unexpected token `>'"
+// << < should give: "bash: syntax error near unexpected token `<'"
+// $ $ and $ $SHLVL should give: "bash: $: command not found"
+static bool check_command(const char *command, t_exitstatus *exit_status)
+{
+    if (ms_strcmp(command, "|") == 1)
+        return (err_msg_token("|", exit_status));
+    else if (ms_strcmp(command, "||") == 1)
+        return (err_msg_token("||", exit_status));
+    else if (ms_strcmp(command, "<") == 1 || ms_strcmp(command, "<<") == 1
+        || ms_strcmp(command, ">") == 1 || ms_strcmp(command, ">>") == 1
+		|| ms_strcmp(command, "!"))
+        return (err_msg_token("newline", exit_status));
+    else if (ms_strcmp(command, ">> >") == 1 || ms_strcmp(command, "<< >") == 1)
+        return (err_msg_token(">", exit_status));
+    else if (ms_strcmp(command, "<< <") == 1 || ms_strcmp(command, ">> <") == 1)
+        return (err_msg_token("<", exit_status));
+    return (true);
+}
+
 void	print_tokens(t_list *tokens)
 {
 	t_list	*tmp;
@@ -15,6 +66,34 @@ void	print_tokens(t_list *tokens)
 		printf("[%s]\n", (char *)tmp->content);
 		tmp = tmp->next;
 	}
+}
+
+// returns true if the count of quotes (' or ") is even
+// applied on the first found quote in the string
+bool	quotes_even_or_odd(const char *str)
+{
+	size_t	count;
+	size_t	i;
+	int 	quote;
+	char 	c;
+
+	i = 0;
+	count = 0;
+	quote = 0;
+	while (str[i])
+	{
+		if (is_quote(str[i]) && !quote)
+		{
+			c = str[i];
+			quote = 1;
+		}
+		if (str[i] == c && quote)
+			count++;
+		i++;
+	}
+	if (count % 2 == 0)
+		return (true);
+	return (false);
 }
 
 int32_t	find_next_quote(const char *command_line, char c)
@@ -68,10 +147,14 @@ t_list	*lexer(const char *command_line, t_exitstatus *exit_status)
 	t_list	*tokens;
 	char	*token;
 
-	tokens = NULL;
+    if (check_command(command_line, exit_status) == false)
+        return (NULL);
+    tokens = NULL;
 	while (*command_line)
 	{
 		ft_skip_whitespaces(&command_line);
+		if (quotes_even_or_odd(command_line) == false)
+			return (err_msg_quotes_odd(exit_status), NULL);
 		if (*command_line)
 		{
 			token = make_token(&command_line);

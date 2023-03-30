@@ -6,95 +6,197 @@
 extern t_exitstatus zero;
 extern t_exitstatus max;
 
-/*******************************************************************************/
-/*                           Lexer                                             */
-/*******************************************************************************/
-
+void redirect_all_std(void)
+{
+    cr_redirect_stdout();
+    cr_redirect_stderr();
+}
+TestSuite(lexer, .init=redirect_all_std);
 t_list	*lexer(const char *command_line, t_exitstatus *exit_status);
 
-void assert_lexer(char *command_line, char **expected)
+/*******************************************************************************/
+/*                           Lexer_one                                         */
+/*******************************************************************************/
+
+void assert_lexer_one(char *command_line, char **expected)
 {
     t_list *tokens;
-    t_list *head;
 
     tokens = lexer(command_line, &zero);
-    head = tokens;
-    while (tokens)
-    {
-      cr_assert_not_null(expected);
-      cr_expect_str_eq(tokens->content, *expected++);
-      tokens = tokens->next;
-    }
-    ft_lstclear(&head, free);
+    cr_expect_str_eq(tokens->content, *expected);
+    cr_expect(tokens->next == NULL);
+    ft_lstclear(&tokens, free);
 }
 
-Test(lexer, basic)
+Test(lexer, one_ls)
 {
     char *expected[] = {"ls", NULL};
-    assert_lexer("ls", expected);
-}
-Test(lexer, pipe)
-{
-    char *expected[] = {"|", NULL};
-    assert_lexer("|", expected);
+    assert_lexer_one("ls", expected);
 }
 
-Test(lexer, input)
+// THIS ONE DOESN'T MAKE SENSE
+//Test(lexer, one_dollar)
+//{
+//    char *expected[] = {"$", NULL};
+//    assert_lexer_one("$", expected);
+//}
+
+/*******************************************************************************/
+/*                           Lexer_two                                         */
+/*******************************************************************************/
+
+void assert_lexer_two(char *command_line, char **expected)
 {
-    char *expected[] = {"<", NULL};
-    assert_lexer("<", expected);
+    t_list *tokens;
+
+    tokens = lexer(command_line, &zero);
+    cr_expect_str_eq(tokens->content, *expected++);
+    cr_expect_str_eq(tokens->next->content, *expected);
+    cr_expect(tokens->next->next == NULL);
+    ft_lstclear(&tokens, free);
 }
 
-Test(lexer, ouput)
+Test(lexer, two_ls_l)
 {
-    char *expected[] = {">", NULL};
-    assert_lexer(">", expected);
+    char *expected[] = {"ls", "-l", NULL};
+    assert_lexer_two("ls -l", expected);
 }
 
-Test(lexer, append)
+Test(lexer, echo_dollar)
 {
-    char *expected[] = {">>", NULL};
-    assert_lexer(">>", expected);
+    char *expected[] = {"echo", "$", NULL};
+    assert_lexer_two("echo $", expected);
 }
 
-Test(lexer, heredoc)
+Test(lexer, echo_hello)
 {
-    char *expected[] = {"<<", NULL};
-    assert_lexer("<<", expected);
+	char *expected[] = {"echo", "hello", NULL};
+	assert_lexer_two("echo hello", expected);
 }
 
-Test(lexer, pipe_double)
+Test(lexer, dollar_dollar)
 {
-    char *expected[] = {"|", "|", NULL};
-    assert_lexer("||", expected);
+	char *expected[] = {"$", "$", NULL};
+	assert_lexer_two("$ $", expected);
 }
 
-Test(lexer, append_ouput)
+Test(lexer, echo_hello_with_quotes_one)
 {
-    char *expected[] = {">>", ">", NULL};
-    assert_lexer(">>>", expected);
+	char *expected[] = {"echo", "'he\"llo'", NULL};
+	assert_lexer_two("echo 'he\"llo'", expected);
 }
 
-Test(lexer, heredoc_input)
+Test(lexer, echo_hello_with_quotes_two)
 {
-    char *expected[] = {"<<", "<", NULL};
-    assert_lexer("<<<", expected);
+	char *expected[] = {"echo", "'hello'", NULL};
+	assert_lexer_two("echo 'hello'", expected);
 }
 
-// Test(lexer, dollar_double)
-// {
-//     char *expected[] = {"$", "$", NULL};
-//     assert_lexer("$$", expected);
-// }
-//
-// Test(lexer, dollar_envvar)
-// {
-//     char *expected[] = {"$", "$SHLVL", NULL};
-//     assert_lexer("$$SHLVL", expected);
-// }
-
-Test(lexer, pipeline)
+Test(lexer, echo_hello_with_quotes_three)
 {
-    char *expected[] = {"|", "ls", "-e$", ">>", ">", "|",  "<<", "<", NULL};
-    assert_lexer("|ls -e$>>>|<<<", expected);
+	char *expected[] = {"echo", "\"hel\'lo\"", NULL};
+	assert_lexer_two("echo \"hel\'lo\"", expected);
 }
+
+//Test(lexer, echo_hello_in_quotes)
+//{
+//	char *expected[] = {"echo", "hello", NULL};
+//	assert_lexer_two("echo 'hel'lo'", expected);
+//}
+
+/*******************************************************************************/
+/*                           null_Lexer                                        */
+/*******************************************************************************/
+
+// possible test case -- multiple commands: "ls -l ; pwd | grep foo"
+
+void assert_lexer_null(char *command_line, char *message)
+{
+    t_list *tokens;
+
+    tokens = lexer(command_line, &zero);
+    fflush(stderr);
+    cr_expect(tokens==NULL);
+    ft_lstclear(&tokens, free);
+    cr_assert_stderr_eq_str(message);
+}
+
+Test(lexer, null_pipe)
+{
+    assert_lexer_null("|", "sheldon: syntax error near unexpected token `|'\n");
+}
+
+Test(lexer, null_input)
+{
+    assert_lexer_null("<", "sheldon: syntax error near unexpected token `newline'\n");
+}
+
+Test(lexer, null_ouput)
+{
+    assert_lexer_null(">", "sheldon: syntax error near unexpected token `newline'\n");
+}
+
+Test(lexer, null_append)
+{
+    assert_lexer_null(">>", "sheldon: syntax error near unexpected token `newline'\n");
+}
+
+Test(lexer, null_heredoc)
+{
+    assert_lexer_null("<<", "sheldon: syntax error near unexpected token `newline'\n");
+}
+
+Test(lexer, null_pipe_double)
+{
+    assert_lexer_null("||", "sheldon: syntax error near unexpected token `||'\n");
+}
+
+Test(lexer, null_append_output)
+{
+    assert_lexer_null(">> >", "sheldon: syntax error near unexpected token `>'\n");
+}
+
+Test(lexer, null_heredoc_input)
+{
+    assert_lexer_null("<< <", "sheldon: syntax error near unexpected token `<'\n");
+}
+
+Test(lexer, null_heredoc_input_two)
+{
+	assert_lexer_null("<< >", "sheldon: syntax error near unexpected token `>'\n");
+}
+
+Test(lexer, null_append_output_two)
+{
+	assert_lexer_null(">> <", "sheldon: syntax error near unexpected token `<'\n");
+}
+
+Test(lexer, null_quote_count_is_odd_one)
+{
+	assert_lexer_null("echo \'hel\'\'lo\'\'", "sheldon: odd number of first used quote\n");
+}
+
+Test(lexer, null_quote_count_is_odd_two)
+{
+	assert_lexer_null("echo \'hello", "sheldon: odd number of first used quote\n");
+}
+
+Test(lexer, null_quote_count_is_odd_three)
+{
+	assert_lexer_null("echo \"hel\"lo\"", "sheldon: odd number of first used quote\n");
+}
+
+Test(lexer, null_quote_count_is_odd_four)
+{
+	assert_lexer_null("echo hello\"", "sheldon: odd number of first used quote\n");
+}
+
+Test(lexer, null_exclamation_mark)
+{
+	assert_lexer_null("!", "sheldon: syntax error near unexpected token `newline'\n");
+}
+
+//Test(lexer, null_command)
+//{
+//    assert_lexer_null("echo");
+//}
