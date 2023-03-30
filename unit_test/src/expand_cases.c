@@ -94,11 +94,11 @@ Test(copy_until_quote_or_dollar, single_quote)
 /*                           Expand_Dollar                                     */
 /*******************************************************************************/
 
-char *expand_dollar(char *arg, t_exitstatus *status);
+char *expand_dollar(char *arg, t_exitstatus *status, t_dictionary *envd);
 
 void assert_expand_dollar(char *input, char *expected, t_exitstatus *status)
 {
-    char *result = expand_dollar(input, status);
+    char *result = expand_dollar(input, status, NULL);
     cr_expect_str_eq(result, expected);
     free(result);
 }
@@ -189,7 +189,7 @@ void assert_expand_single_quote_node(char *input, char *expected)
 /*                           Expand_dollar_node                                */
 /*******************************************************************************/
 
-t_list *expand_dollar_node(char *arg, size_t *i, t_exitstatus *status);
+t_list *expand_dollar_node(char *arg, size_t *i, t_exitstatus *status, t_dictionary *envd);
 
 void assert_expand_dollar_node(char *input, char *expected)
 {
@@ -197,7 +197,7 @@ void assert_expand_dollar_node(char *input, char *expected)
     size_t i;
 
     i = 0;
-    node = expand_dollar_node(input, &i, &zero);
+    node = expand_dollar_node(input, &i, &zero, NULL);
     cr_expect_str_eq(node->content, expected);
     cr_assert(node->next == NULL);
     free(node->content);
@@ -290,18 +290,22 @@ Test(expand_dollar_node, two_envvar, .timeout=1)
 /*                           Expand_token                                      */
 /*******************************************************************************/
 
-char *expand_token(char *arg, t_exitstatus *status);
+char *expand_token(char *arg, t_exitstatus *status, t_dictionary *envd);
 
 TestSuite(expand_token, .init=setup_env);
 
 void assert_expand_token(char *in, char *expected, t_exitstatus *status)
 {
+//	t_dictionary env[HASH_TABLE_SIZE];
+
+//	envp_load(env, input);
     char *input;
     input = ft_strdup(in);
-    char *output = expand_token(input, status);
+    char *output = expand_token(input, status, NULL);
     cr_expect_str_eq(output, expected);
     free(output);
     free(input);
+//	dict_destroy(env);
 }
 
 
@@ -381,12 +385,12 @@ Test(expand_token, envvar_single_quotes_2)
     assert_expand_token("\'$VAR$\'", "$VAR$", NULL);
 }
 
-Test(expand_token, double_qoute_no_envvar, .timeout=1)
+Test(expand_token, double_quote_no_envvar, .timeout=1)
 {
     assert_expand_token("\"HELLO\"", "HELLO", NULL);
 }
 
-Test(expand_token, double_qoute_envvar, .timeout=1)
+Test(expand_token, double_quote_envvar, .timeout=1)
 {
     assert_expand_token("\"$HELLO\"", "Hello", NULL);
 }

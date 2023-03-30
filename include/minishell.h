@@ -213,6 +213,10 @@ bool				quotes_even_or_odd(const char *str); // NEW (by Lucien)
 
 // Expander
 
+char				*expand_dollar(char *arg, t_exitstatus *status, t_dictionary *envd);
+t_list				*expand_dollar_node(char *arg, size_t *i, t_exitstatus *status, t_dictionary *envd);
+char				*expand_token(char *arg, t_exitstatus *status, t_dictionary *envd);
+
 void				expand_tokens(t_list **arg, t_exitstatus *status);
 int32_t				expander(t_minishell *shell);
 char				*ft_strjoin_free_free(char *expanded, char *tmp);
@@ -228,8 +232,7 @@ int32_t				find_var_start(char *str, int32_t index);
 char				*expand_variables(char *str, t_minishell *shell);
 char				**split_words(char *str);
 t_list				*pop_node(t_list **list, t_list *pop_node);
-void	expand_redirect_list(t_list **redirects,
-							t_minishell *shell);
+void				expand_redirect_list(t_list **redirects, t_minishell *shell);
 char				*trim_quotes(char *str);
 
 // Executor
