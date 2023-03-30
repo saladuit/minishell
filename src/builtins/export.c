@@ -17,7 +17,7 @@ int	ft_export(char **arguments, t_minishell *shell)
 	i = 0;
 	if (arguments[i++] == NULL)
 	{
-		dict_print(&shell->envd);
+		dict_print(&shell->env);
 		return (SUCCESS);
 	}
 	while (arguments[i] != NULL)
@@ -26,7 +26,7 @@ int	ft_export(char **arguments, t_minishell *shell)
 		if (key == NULL)
 		{
 			ft_putstr_fd("export: error: out of memory\n", STDERR_FILENO);
-			shell->exit_status = E_BUILTIN;
+			shell->status = E_BUILTIN;
 			i++;
 			break ;
 		}
@@ -38,11 +38,11 @@ int	ft_export(char **arguments, t_minishell *shell)
 			*value = '\0';
 			value = ft_strdup(++value);
 		}
-		if (!value || dict_set(&shell->envd, key, value) == ERROR)
+		if (!value || dict_set(&shell->env, key, value) == ERROR)
 		{
 			ft_putstr_fd("export: error: out of memory\n", STDERR_FILENO);
 			export_clear(key, value);
-			shell->exit_status = E_BUILTIN;
+			shell->status = E_BUILTIN;
 			i++;
 			break ;
 		}

@@ -4,7 +4,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	if (argc > 1)
 	{
-		write(STDERR_FILENO, (char *)messages_lookup(E_USAGE), 7);
+		write(STDERR_FILENO, (char *)message_lookup(E_USAGE), 7);
 		if (argv[0])
 			ft_putendl_fd(*argv, STDERR_FILENO);
 		else

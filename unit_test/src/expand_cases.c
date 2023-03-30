@@ -1,7 +1,7 @@
 #include <unit_test.h>
 
-t_exitstatus zero = 0;
-t_exitstatus max = 255;
+t_status zero = 0;
+t_status max = 255;
 
  void setup_env(void)
  {
@@ -93,9 +93,9 @@ Test(copy_until_quote_or_dollar, single_quote)
 /*                           Expand_Dollar                                     */
 /*******************************************************************************/
 
-char *expand_dollar(char *arg, t_exitstatus *status);
+char *expand_dollar(char *arg, t_status *status);
 
-void assert_expand_dollar(char *input, char *expected, t_exitstatus *status)
+void assert_expand_dollar(char *input, char *expected, t_status *status)
 {
     char *result = expand_dollar(input, status);
     cr_expect_str_eq(result, expected);
@@ -138,7 +138,7 @@ Test(expand_dollar, single_dollar)
 /*                           Expand_double_quote_node                          */
 /*******************************************************************************/
 
-t_list *expand_double_quote_node(char *arg, size_t *i, t_exitstatus *status);
+t_list *expand_double_quote_node(char *arg, size_t *i, t_status *status);
 
 void assert_double_quote_node(char *input, char *expected)
 {
@@ -188,7 +188,7 @@ void assert_expand_single_quote_node(char *input, char *expected)
 /*                           Expand_dollar_node                                */
 /*******************************************************************************/
 
-t_list *expand_dollar_node(char *arg, size_t *i, t_exitstatus *status);
+t_list *expand_dollar_node(char *arg, size_t *i, t_status *status);
 
 void assert_expand_dollar_node(char *input, char *expected)
 {
@@ -227,11 +227,11 @@ Test(expand_dollar_node, two_envvar)
 /*                           Expand_token                                      */
 /*******************************************************************************/
 
-char *expand_token(char *arg, t_exitstatus *status);
+char *expand_token(char *arg, t_status *status);
 
 TestSuite(expand_token, .init=setup_env);
 
-void assert_expand_token(char *in, char *expected, t_exitstatus *status)
+void assert_expand_token(char *in, char *expected, t_status *status)
 {
     char *input;
     input = ft_strdup(in);

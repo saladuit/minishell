@@ -29,8 +29,6 @@ SRCS			=minishell/minishell.c \
 				 builtins/cd.c \
 				 builtins/pwd.c \
 				 builtins/export.c \
-				 builtins/export_utils.c \
-				 builtins/export_utils2.c \
 				 builtins/unset.c \
 				 builtins/env.c \
 				 builtins/exit.c
