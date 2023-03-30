@@ -1,7 +1,7 @@
 #include <unit_test.h>
 
 /*******************************************************************************/
-/*                           Envp_laod                                         */
+/*                           Envp_load                                         */
 /*******************************************************************************/
 
 int32_t envp_load(t_dictionary *env, char **envp);
@@ -10,6 +10,7 @@ void assert_envp_load(char **input,char *key, char *expected)
 {
   t_dictionary env[HASH_TABLE_SIZE];
 
+  bzero(env, sizeof(env));
   envp_load(env, input);
   cr_expect_str_eq(dict_get(env, key), expected);
   dict_destroy(env);
