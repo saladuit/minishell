@@ -104,6 +104,37 @@ Test(expand_token, envvar_single_quotes)
     assert_expand_token("\'$VAR\'", "$VAR", NULL);
 }
 
+Test(expand_token, echo_shell_shell)
+{
+	assert_expand_token("$SHELL$SHELL", "/bin/zsh/bin/zsh", NULL);
+}
+
+// NEXT 3 FAILING
+Test(expand_token, echo_shell_shell_ja)
+{
+	assert_expand_token("$SHELL$SHELLja", "/bin/zsh/bin/zshja", NULL);
+}
+
+Test(expand_token, echo_shell_shell_double_dollar)
+{
+	assert_expand_token("$SHELL$SHELL$$$$", "/bin/zsh/bin/zsh$$", NULL);
+}
+
+Test(expand_token, echo_shell_shell_quotes)
+{
+	assert_expand_token("$SHELL$SHELL\'\'", "/bin/zsh/bin/zsh", NULL);
+}
+
+Test(expand_token, echo_hallo_in_quotes)
+{
+	assert_expand_token("\"hallo\"", "hallo", NULL);
+}
+
+//Test(expand_token, echo_shell_shell_quatro_dollar)
+//{
+//	assert_expand_token("$SHELL$SHELL''", "/bin/zsh/bin/zsh37793779", NULL);
+//}
+
 // Test(expand_token, envvar_single_quotes_1)
 // {
 //     assert_expand_token("\'$VAR\"\'", "$VAR\"", NULL);
