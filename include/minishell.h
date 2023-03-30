@@ -12,12 +12,17 @@
 # endif
 
 # define HASH_TABLE_SIZE 32
+
+# define SHELDON "Sheldon"
+# define E_SHELDON "sheldon: "
 # define PROMPT "Sheldon$ "
 
-# include <stdio.h>
+# define NOT_FOUND 1
+
 # include <errno.h>
 # include <fcntl.h>
 # include <libft.h>
+# include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdbool.h>
