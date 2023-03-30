@@ -1,7 +1,6 @@
 MAIN 			:=main.c
 SRCS			=minishell/minishell.c \
 				 lexer/lexer.c \
-				 lexer/lexer_utils.c \
 				 lexer/lexical_analyzer.c \
 				 lexer/analyzer_checks.c \
 				 parser/parser.c \
@@ -16,6 +15,7 @@ SRCS			=minishell/minishell.c \
 				 executor/execute_utils.c \
 				 utils/message.c \
 				 utils/signal.c \
+				 utils/skip_whitespaces.c \
 				 env/env.c \
 				 env/dict.c \
 				 env/pair.c \
@@ -25,6 +25,8 @@ SRCS			=minishell/minishell.c \
 				 types/is_redir.c \
 				 types/is_single_quote.c \
 				 types/is_quote.c \
+				 types/is_tokenchar.c \
+				 types/is_quotechar.c \
 				 builtins/echo.c \
 				 builtins/cd.c \
 				 builtins/pwd.c \
