@@ -18,6 +18,7 @@
 
 // ############### Array ###############
 
+void			ft_array_print(char **list);
 /**
  * @brief Takes a NULL terminated 2d array and returns
  * the amount of arrays in it.

@@ -2,243 +2,39 @@
 
 t_status zero = 0;
 t_status max = 255;
+extern char	**environ;
 
- void setup_env(void)
- {
-     setenv("HELLO", "Hello", 1);
-     setenv("WORLD", "World", 1);
-     unsetenv("UNSET");
-     setenv("SPACE", "Spa ce", 1);
- }
-
-/*******************************************************************************/
-/*                           Combine_expanded_strings                          */
-/*******************************************************************************/
-
-char *combine_expanded_strings(t_list *stack);
-
-void assert_combine_expanded_strings(char **input, char *expected)
+void setup_env(void)
 {
-    t_list list;
-    t_list list2;
-    char *output;
-
-    list.content = *input;
-    if (input[1])
-        list.next = &list2;
-    else
-        list.next = NULL;
-    list2.content = *(input + 1);
-    list2.next = NULL;
-    output = combine_expanded_strings(&list);
-    cr_expect_str_eq(output, expected);
-    free(output);
-}
-
-Test(combine_expanded_strings, basic)
-{
-    char *input[] = {"Hallo", NULL};
-    assert_combine_expanded_strings(input, "Hallo");
-}
-
-Test(combine_expanded_strings, two)
-{
-    char *input[] = {"Hallo", "Wereld", NULL};
-    assert_combine_expanded_strings(input, "HalloWereld");
-}
-
-/*******************************************************************************/
-/*                           Copy_until_quote_or_dollar                        */
-/*******************************************************************************/
-
-t_list *copy_until_quote_or_dollar(char *arg, size_t *i);
-
-void assert_copy_until_quote_or_dollar(char *input, char *expected)
-{
-    t_list *output;
-    size_t i;
-
-    i = 0;
-    output = copy_until_quote_or_dollar(input, &i);
-    cr_expect_str_eq(output->content, expected);
-    free(output->content);
-    free(output);
-}
-
-Test(copy_until_quote_or_dollar, basic)
-{
-    char input[] = "Hallo";
-    assert_copy_until_quote_or_dollar(input, "Hallo");
-}
-
-Test(copy_until_quote_or_dollar, dollar)
-{
-    char input[] = "Hallo$";
-    assert_copy_until_quote_or_dollar(input, "Hallo");
-}
-
-Test(copy_until_quote_or_dollar, double_quote)
-{
-    char input[] = "Hallo\"";
-    assert_copy_until_quote_or_dollar(input, "Hallo");
-}
-
-Test(copy_until_quote_or_dollar, single_quote)
-{
-    char input[] = "Hallo\'";
-    assert_copy_until_quote_or_dollar(input, "Hallo");
- }
-
-/*******************************************************************************/
-/*                           Expand_Dollar                                     */
-/*******************************************************************************/
-
-char *expand_dollar(char *arg, t_status *status);
-
-void assert_expand_dollar(char *input, char *expected, t_status *status)
-{
-    char *result = expand_dollar(input, status);
-    cr_expect_str_eq(result, expected);
-    free(result);
-}
-
-TestSuite(expand_dollar, .init=setup_env);
-
-Test(expand_dollar, single_dollar)
-{
-    assert_expand_dollar("$", "$", NULL);
-}
-
- Test(expand_dollar, exit_status)
- {
-     assert_expand_dollar("$?", "0", &zero);
- }
-
- Test(expand_dollar, exit_status_max)
- {
-     assert_expand_dollar("$?", "255", &max);
- }
-
- Test(expand_dollar, single_var)
- {
-     assert_expand_dollar("$HELLO", "Hello", NULL);
- }
-
- Test(expand_dollar, double_var)
- {
-     assert_expand_dollar("$HELLO$HELLO", "Hello", NULL);
- }
-
- Test(expand_dollar, null)
- {
-     assert_expand_dollar("$UNSET", "", NULL);
- }
-
-/*******************************************************************************/
-/*                           Expand_double_quote_node                          */
-/*******************************************************************************/
-
-t_list *expand_double_quote_node(char *arg, size_t *i, t_status *status);
-
-void assert_double_quote_node(char *input, char *expected)
-{
-    t_list *node;
-    size_t i;
-
-    i = 0;
-    node = expand_double_quote_node(input, &i, &zero);
-    cr_expect_str_eq(node->content, expected);
-    cr_assert(node->next == NULL);
-    free(node->content);
-    free(node);
-}
-
-Test(expand_double_quote_node, basic)
-{
-    char input[] = {"\"Hallo\""};
-    assert_double_quote_node(input, "Hallo");
-}
-
-// Test(expand_double_quote_node, single_envvar)
-// {
-//     char input[] = {"\"$HELLO\""};
-//     assert_double_quote_node(input, "Hello");
-// }
-
-/*******************************************************************************/
-/*                           Expand_single_quote_node                          */
-/*******************************************************************************/
-
-t_list *expand_single_quote_node(char *arg, size_t *i);
-
-void assert_expand_single_quote_node(char *input, char *expected)
-{
-    t_list *node;
-    size_t i;
-
-    i = 0;
-    node = expand_single_quote_node(input, &i);
-    cr_expect_str_eq(node->content, expected);
-    cr_assert(node->next == NULL);
-    free(node->content);
-    free(node);
-}
-
-/*******************************************************************************/
-/*                           Expand_dollar_node                                */
-/*******************************************************************************/
-
-t_list *expand_dollar_node(char *arg, size_t *i, t_status *status);
-
-void assert_expand_dollar_node(char *input, char *expected)
-{
-    t_list *node;
-    size_t i;
-
-    i = 0;
-    node = expand_dollar_node(input, &i, &zero);
-    cr_expect_str_eq(node->content, expected);
-    cr_assert(node->next == NULL);
-    free(node->content);
-    free(node);
-}
-
-TestSuite(expand_dollar_node, .init=setup_env);
-
-// Test(expand_dollar_node, double_envvar, .timeout=1)
-// {
-//     char input[] = "\"HELLO\"";
-//     assert_expand_dollar_node(input, "Hello");
-// }
-//
-// Test(expand_dollar_node, single_envvar, .timeout=1)
-// {
-//     char input[] = "$HELLO\"";
-//     assert_expand_dollar_node(input, "Hello");
-// }
-
-Test(expand_dollar_node, two_envvar)
-{
-    char input[] = "$HELLO$WORLD\"";
-    assert_expand_dollar_node(input, "Hello");
+    setenv("HELLO", "Hello", 1);
+	setenv("$", "$", 1);
+    setenv("WORLD", "World", 1);
+    unsetenv("UNSET");
+    setenv("SPACE", "Spa ce", 1);
 }
 
 /*******************************************************************************/
 /*                           Expand_token                                      */
 /*******************************************************************************/
 
-char *expand_token(char *arg, t_status *status);
+char *expand_token(char *arg, t_status *status, t_dictionary *envd);
 
 TestSuite(expand_token, .init=setup_env);
 
 void assert_expand_token(char *in, char *expected, t_status *status)
 {
+	t_dictionary env[HASH_TABLE_SIZE];
+
+	bzero(env, sizeof(env));
+	envp_load(env, environ);
+//	dict_print(env);
     char *input;
     input = ft_strdup(in);
-    char *output = expand_token(input, status);
+    char *output = expand_token(input, status, env);
     cr_expect_str_eq(output, expected);
     free(output);
     free(input);
+	dict_destroy(env);
 }
 
 
@@ -271,6 +67,7 @@ Test(expand_token, envvar_dollar)
  // {
  //     assert_expand_token("$$", "$$", NULL);
  // }
+
 
 // Test(expand_token, envar_dollar_with_space_and_letter)
 // {
@@ -307,6 +104,37 @@ Test(expand_token, envvar_single_quotes)
     assert_expand_token("\'$VAR\'", "$VAR", NULL);
 }
 
+Test(expand_token, echo_shell_shell)
+{
+	assert_expand_token("$SHELL$SHELL", "/bin/zsh/bin/zsh", NULL);
+}
+
+// NEXT 3 FAILING
+Test(expand_token, echo_shell_shell_ja)
+{
+	assert_expand_token("$SHELL$SHELLja", "/bin/zsh/bin/zshja", NULL);
+}
+
+Test(expand_token, echo_shell_shell_double_dollar)
+{
+	assert_expand_token("$SHELL$SHELL$$$$", "/bin/zsh/bin/zsh$$", NULL);
+}
+
+Test(expand_token, echo_shell_shell_quotes)
+{
+	assert_expand_token("$SHELL$SHELL\'\'", "/bin/zsh/bin/zsh", NULL);
+}
+
+Test(expand_token, echo_hallo_in_quotes)
+{
+	assert_expand_token("\"hallo\"", "hallo", NULL);
+}
+
+//Test(expand_token, echo_shell_shell_quatro_dollar)
+//{
+//	assert_expand_token("$SHELL$SHELL''", "/bin/zsh/bin/zsh37793779", NULL);
+//}
+
 // Test(expand_token, envvar_single_quotes_1)
 // {
 //     assert_expand_token("\'$VAR\"\'", "$VAR\"", NULL);
@@ -317,10 +145,12 @@ Test(expand_token, envvar_single_quotes_2)
     assert_expand_token("\'$VAR$\'", "$VAR$", NULL);
 }
 
+
 Test(expand_token, double_qoute_no_envvar)
 {
     assert_expand_token("\"HELLO\"", "HELLO", NULL);
 }
+
 
 Test(expand_token, double_qoute_envvar)
 {

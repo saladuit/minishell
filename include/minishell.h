@@ -181,14 +181,13 @@ void				get_next_redir(t_command *cmd, t_redir **redir);
 void				get_next_command(t_command_table *cmd, t_command **command);
 char				**get_arguments(t_command *cmd);
 // Constructers
-t_command				*construct_command(t_list **tokens, t_status *status, 
+t_list					*construct_ast(t_list *tokens, t_status *status, 
 		t_dictionary *env);
 t_command_table	*construct_command_table(t_list **tokens, t_status *status, 
 		t_dictionary *env);
-t_redir					*construct_redir(t_list **tokens, t_status *status, 
+t_command				*construct_command(t_list **tokens, t_status *status, 
 		t_dictionary *env);
-t_list					*construct_ast(t_list *tokens, t_status *status, 
-		t_dictionary *env);
+t_redir					*construct_redir(t_list **tokens, t_status *status);
 // Deconstructers
 void				deconstruct_ast(t_list **ast);
 void				deconstruct_command_table(void *ct);
@@ -219,7 +218,7 @@ bool				is_quotechar(const char c);
 int32_t			is_tokenchar(const char *str);
 
 // Expander
-void					expand_tokens(t_list **arg, t_status status);
+char					*expand_token(char *arg, t_status *status, t_dictionary *envd);
 int32_t				skip_whitespace(char *str);
 
 // Executor
