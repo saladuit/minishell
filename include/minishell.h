@@ -54,7 +54,6 @@ E_EXIT_STATUS_OUT_OF_RANGE:
 */
 
 // Mininums
-
 typedef enum e_status
 {
 	E_USAGE = 0,
@@ -86,7 +85,6 @@ typedef enum e_signal_handler
 }					t_signal_handler;
 
 // Ministructs
-
 typedef struct s_pair
 {
 	char			*key;
@@ -141,30 +139,69 @@ typedef struct s_builtin
 
 // Main
 
-int32_t				minishell(char **envp);
-int32_t				init_handlers(void);
+int32_t			minishell(char **envp);
+int32_t			init_handlers(void);
 void				setup_signals(t_signal_handler handler);
 void				reset_signals(void);
 
 // Environment
-int32_t				envp_load(t_dictionary *env, char **envp);
+int32_t			envp_load(t_dictionary *env, char **envp);
 
 // Pair
 void				pair_clean(t_pair *pair);
 char				*pair_to_str(t_pair *pair);
 
 // Dictionary
-
-size_t				hash(char *str);
-int32_t				dict_set(t_dictionary *dict, char *key, char *value);
+size_t			hash(char *str);
+int32_t			dict_set(t_dictionary *dict, char *key, char *value);
 char				*dict_get(t_dictionary *dict, char *key);
 void				dict_delete(t_dictionary *dict, char *key);
 void				dict_destroy(t_dictionary *dict);
 void				dict_print(t_dictionary *dict);
 char				**dict_to_envp(t_dictionary *dict);
 
-// Messages
+// Lexer
+t_list				*lexer(const char *command_line, t_status *status);
+void					ft_skip_whitespaces(const char **input);
+int32_t				analyzer(t_list *tokens);
+int32_t				pipe_check(t_list *tokens);
+int32_t				input_check(t_list *tokens);
+int32_t				output_check(t_list *tokens);
+int32_t				heredoc_check(t_list *tokens);
+int32_t				append_check(t_list *tokens);
+bool					quotes_even_or_odd(const char *str); // (by Lucien)
 
+// Parser
+t_list				*parser(t_list *tokens, t_status *status, t_dictionary *env);
+// Getters
+void				get_one_command_table(t_list **ast, 
+		t_command_table **command_table);
+char				**get_arguments(t_command *cmd);
+void				get_next_redir(t_command *cmd, t_redir **redir);
+void				get_next_command(t_command_table *cmd, t_command **command);
+char				**get_arguments(t_command *cmd);
+// Constructers
+t_command				*construct_command(t_list **tokens, t_status *status, 
+		t_dictionary *env);
+t_command_table	*construct_command_table(t_list **tokens, t_status *status, 
+		t_dictionary *env);
+t_redir					*construct_redir(t_list **tokens, t_status *status, 
+		t_dictionary *env);
+t_list					*construct_ast(t_list *tokens, t_status *status, 
+		t_dictionary *env);
+// Deconstructers
+void				deconstruct_ast(t_list **ast);
+void				deconstruct_command_table(void *ct);
+void				deconstruct_command(void *command);
+void				deconstruct_redirs(void *redir);
+// Loggers
+void				debug_ast(t_list *ast);
+void				print_command_tables(t_list *command_table);
+void				print_commands(t_command_table *command);
+void				print_redirs(t_command *cmd);
+void				print_arguments(t_command *cmd);
+
+// Messages
 const char		*message_lookup(t_status status);
 t_status			message_system_call_error(const char *function_name);
 void					message_signal(t_status signal_num);
@@ -172,7 +209,6 @@ t_status			message_child_status(t_status status);
 t_status			message_general_error(t_status status, const char *msg);
 
 // Minitypes
-
 bool				is_pipe(int c);
 bool				is_dollar(int c);
 bool				is_redir(int c);
@@ -180,27 +216,14 @@ bool				is_quote(int c);
 bool				is_double_quote(int c);
 bool				is_single_quote(int c);
 bool				is_quotechar(const char c);
-int32_t				is_tokenchar(const char *str);
-
-// Lexer
-
-t_list				*lexer(const char *command_line, t_status *status);
-void				ft_skip_whitespaces(const char **input);
-int32_t				analyzer(t_list *tokens);
-int32_t				pipe_check(t_list *tokens);
-int32_t				input_check(t_list *tokens);
-int32_t				output_check(t_list *tokens);
-int32_t				heredoc_check(t_list *tokens);
-int32_t				append_check(t_list *tokens);
-bool	quotes_even_or_odd(const char *str); // (by Lucien)
+int32_t			is_tokenchar(const char *str);
 
 // Expander
-
-void				expand_tokens(t_list **arg, t_status status);
+void					expand_tokens(t_list **arg, t_status status);
 int32_t				skip_whitespace(char *str);
 
 // Executor
-int32_t				executor(t_minishell *shell);
+int32_t			executor(t_minishell *shell);
 bool				protected_dup2(int fd, t_type type);
 bool				open_redir(char *path, t_type type);
 int					is_dir(char *path);
@@ -208,32 +231,7 @@ char				**get_env_paths(t_dictionary *dict);
 char				*check_env_paths(t_dictionary *dict, char *cmd);
 char				*get_cmd_path(t_dictionary *dict, char *cmd);
 
-// Parser
-
-t_list				*parser(t_list *tokens);
-t_command			*construct_command(t_list **tokens);
-char				**get_arguments(t_command *cmd);
-void				get_next_redir(t_command *cmd, t_redir **redir);
-void				get_next_command(t_command_table *cmd, t_command **command);
-void	get_one_command_table(t_list **ast,
-							t_command_table **command_table);
-char				**get_arguments(t_command *cmd);
-t_command_table		*construct_command_table(t_list **tokens);
-t_redir				*construct_redir(t_list **tokens);
-t_list				*construct_ast(t_list *tokens);
-void				deconstruct_ast(t_list **ast);
-void				deconstruct_command_table(void *ct);
-void				deconstruct_command(void *command);
-void				deconstruct_redirs(void *redir);
-
-void				debug_ast(t_list *ast);
-void				print_command_tables(t_list *command_table);
-void				print_commands(t_command_table *command);
-void				print_redirs(t_command *cmd);
-void				print_arguments(t_command *cmd);
-
 // Builtins
-
 int					ft_echo(char **arguments, t_minishell *shell);
 int					ft_cd(char **arguments, t_minishell *shell);
 int					ft_pwd(char **arguments, t_minishell *shell);
