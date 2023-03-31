@@ -11,7 +11,9 @@ void redirect_all_std(void)
     cr_redirect_stdout();
     cr_redirect_stderr();
 }
+
 TestSuite(lexer, .init=redirect_all_std);
+
 t_list	*lexer(const char *command_line, t_status *exit_status);
 
 /*******************************************************************************/
