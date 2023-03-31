@@ -56,7 +56,7 @@ t_command	*construct_command(t_list **tokens, t_status *status,
 		return (NULL);
 	while (*tokens)
 	{
-		token = expand_token((*tokens)->content, status, env);
+		token = (*tokens)->content;
 		if (is_pipe(*token) && ft_strlen(token) == 1)
 		{
 			*tokens = (*tokens)->next;
@@ -75,7 +75,7 @@ t_command	*construct_command(t_list **tokens, t_status *status,
 		}
 		else
 		{
-			argument = ft_strdup((*tokens)->content);
+			argument = expand_token(token, status, env);
 			if (!argument || !ft_lstadd_backnew(&command->arguments, argument))
 			{
 				if (argument)
