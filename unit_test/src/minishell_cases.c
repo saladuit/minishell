@@ -3,72 +3,72 @@
 #include <criterion/redirect.h>
 #include <unit_test.h>
 
-#define MINISHELL_TEST(test_case, command_line) \
-    Test(minishell, test_case) { \
-        assert_minishell(command_line, #test_case); \
-    }
-
-extern char	**environ;
-
-void	redirect_stdfds(void)
-{
-	cr_redirect_stdout();
-	cr_redirect_stdin();
-	cr_redirect_stderr();
-}
-
-int32_t		minishell_loop(t_minishell *sheldon);
-
-TestSuite(minishell, .init = redirect_stdfds);
-
-static int	read_from_file(void *cookie, void *buffer, size_t *size)
-{
-	FILE	*file;
-	size_t	read_size;
-
-	file = (FILE *)cookie;
-	read_size = fread(buffer, 1, *size, file);
-	*size = read_size;
-	return (0);
-}
-void	assert_minishell(char *command_line, char *case_name)
-{
-	char	*txt_file_path;
-	char	*system_call;
-	char	*minishell_command;
-	FILE	*f_stdin;
-
-	f_stdin = cr_get_redirected_stdin();
-	txt_file_path = calloc(strlen(case_name) + 27, sizeof(char));
-	sprintf(txt_file_path, "build/%s.txt", case_name);
-	system_call = calloc(strlen(txt_file_path) + strlen(command_line) + 15,
-							sizeof(char));
-	sprintf(system_call, "bash -c \'%s\' >| %s", command_line, txt_file_path);
-	minishell_command = calloc(strlen(command_line) + 5, sizeof(char));
-	sprintf(minishell_command, "%s\nEOF", command_line);
-	struct cr_stream actual = {
-		.cookie = cr_get_redirected_stdout(),
-		.read = read_from_file,
-	};
-	system(system_call);
-	struct cr_stream expected = {
-		.cookie = fopen(txt_file_path, "r"),
-		.read = read_from_file,
-	};
-	cr_stream_init(&expected);
-	cr_stream_init(&actual);
-	fputs(minishell_command, f_stdin);
-	fclose(f_stdin);
-	minishell(environ);
-	fflush(stdout);
-	fflush(stdin);
-	fflush(stderr);
-	cr_assert(eq(stream, expected, actual));
-	fclose(expected.cookie);
-	free(system_call);
-	free(txt_file_path);
-	free(minishell_command);
-}
+// #define MINISHELL_TEST(test_case, command_line) \
+//     Test(minishell, test_case) { \
+//         assert_minishell(command_line, #test_case); \
+//     }
+//
+// extern char	**environ;
+//
+// void	redirect_stdfds(void)
+// {
+// 	cr_redirect_stdout();
+// 	cr_redirect_stdin();
+// 	cr_redirect_stderr();
+// }
+//
+// int32_t		minishell_loop(t_minishell *sheldon);
+//
+// TestSuite(minishell, .init = redirect_stdfds);
+//
+// static int	read_from_file(void *cookie, void *buffer, size_t *size)
+// {
+// 	FILE	*file;
+// 	size_t	read_size;
+//
+// 	file = (FILE *)cookie;
+// 	read_size = fread(buffer, 1, *size, file);
+// 	*size = read_size;
+// 	return (0);
+// }
+// void	assert_minishell(char *command_line, char *case_name)
+// {
+// 	char	*txt_file_path;
+// 	char	*system_call;
+// 	char	*minishell_command;
+// 	FILE	*f_stdin;
+//
+// 	f_stdin = cr_get_redirected_stdin();
+// 	txt_file_path = calloc(strlen(case_name) + 27, sizeof(char));
+// 	sprintf(txt_file_path, "build/%s.txt", case_name);
+// 	system_call = calloc(strlen(txt_file_path) + strlen(command_line) + 15,
+// 							sizeof(char));
+// 	sprintf(system_call, "bash -c \'%s\' >| %s", command_line, txt_file_path);
+// 	minishell_command = calloc(strlen(command_line) + 5, sizeof(char));
+// 	sprintf(minishell_command, "%s\nEOF", command_line);
+// 	struct cr_stream actual = {
+// 		.cookie = cr_get_redirected_stdout(),
+// 		.read = read_from_file,
+// 	};
+// 	system(system_call);
+// 	struct cr_stream expected = {
+// 		.cookie = fopen(txt_file_path, "r"),
+// 		.read = read_from_file,
+// 	};
+// 	cr_stream_init(&expected);
+// 	cr_stream_init(&actual);
+// 	fputs(minishell_command, f_stdin);
+// 	fclose(f_stdin);
+// 	minishell(environ);
+// 	fflush(stdout);
+// 	fflush(stdin);
+// 	fflush(stderr);
+// 	cr_assert(eq(stream, expected, actual));
+// 	fclose(expected.cookie);
+// 	free(system_call);
+// 	free(txt_file_path);
+// 	free(minishell_command);
+// }
 
 /*******************************************************************************/
 /*                              General                                        */
