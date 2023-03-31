@@ -29,7 +29,8 @@ void	get_one_command_table(t_list **ast, t_command_table **ct)
 	*ct = (*ast)->content;
 }
 
-t_command_table	*construct_command_table(t_list **tokens)
+t_command_table	*construct_command_table(t_list **tokens, t_status *status,
+		t_dictionary *env)
 {
 	t_command_table	*command_table;
 	t_command		*command;
@@ -39,7 +40,7 @@ t_command_table	*construct_command_table(t_list **tokens)
 		return (NULL);
 	while (*tokens)
 	{
-		command = construct_command(tokens);
+		command = construct_command(tokens, status, env);
 		if (!command || !ft_lstadd_backnew(&command_table->commands, command))
 		{
 			deconstruct_command_table(command_table);

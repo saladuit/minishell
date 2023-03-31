@@ -13,7 +13,7 @@ void	debug_ast(t_list *ast)
 	print_command_tables(ast);
 }
 
-t_list	*construct_ast(t_list *tokens)
+t_list	*construct_ast(t_list *tokens, t_status *status, t_dictionary *env)
 {
 	t_command_table	*command_table;
 	t_list			*ast;
@@ -23,7 +23,7 @@ t_list	*construct_ast(t_list *tokens)
 	ast = NULL;
 	while (tokens)
 	{
-		command_table = construct_command_table(&tokens);
+		command_table = construct_command_table(&tokens, status, env);
 		if (!command_table || !ft_lstadd_backnew(&ast, command_table))
 		{
 			deconstruct_command_table(command_table);

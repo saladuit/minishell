@@ -25,7 +25,7 @@ int32_t	minishell_loop(t_minishell *sheldon)
 	sheldon->tokens = lexer(sheldon->command_line, &sheldon->status);
 	if (!sheldon->tokens)
 		return (minishell_clean(sheldon));
-	sheldon->ast = parser(sheldon->tokens);
+	sheldon->ast = parser(sheldon->tokens, &sheldon->status, &sheldon->env);
 	if (!sheldon->ast)
 		return (minishell_clean(sheldon));
 	sheldon->status = executor(sheldon);
