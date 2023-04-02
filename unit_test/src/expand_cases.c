@@ -37,7 +37,6 @@ void assert_expand_token(char *in, char *expected, t_exitstatus *status)
 	dict_destroy(env);
 }
 
-
 Test(expand_token, exit_status)
 {
     assert_expand_token("$?", "0", &zero);
@@ -109,26 +108,41 @@ Test(expand_token, echo_shell_shell)
 	assert_expand_token("$SHELL$SHELL", "/bin/zsh/bin/zsh", NULL);
 }
 
-// NEXT 3 FAILING
+// NEXT 5 FAILING
+Test(expand_token, envvar_double_dollar)
+{
+	assert_expand_token("$$", "$", NULL);
+}
+
 Test(expand_token, echo_shell_shell_ja)
 {
-	assert_expand_token("$SHELL$SHELLja", "/bin/zsh/bin/zshja", NULL);
+	assert_expand_token("$SHELL$SHELLja", "/bin/zsh", NULL);
+}
+
+Test(expand_token, echo_shell_shell_ja_in_single_quotes)
+{
+	assert_expand_token("$SHELL$SHELL\'ja\'", "/bin/zsh/bin/zshja", NULL);
+}
+
+Test(expand_token, echo_shell_shell_ja_in_double_quotes)
+{
+	assert_expand_token("$SHELL$SHELL\"ja\"", "/bin/zsh/bin/zshja", NULL);
 }
 
 Test(expand_token, echo_shell_shell_double_dollar)
 {
 	assert_expand_token("$SHELL$SHELL$$$$", "/bin/zsh/bin/zsh$$", NULL);
 }
-
-Test(expand_token, echo_shell_shell_quotes)
-{
-	assert_expand_token("$SHELL$SHELL\'\'", "/bin/zsh/bin/zsh", NULL);
-}
-
-Test(expand_token, echo_hallo_in_quotes)
-{
-	assert_expand_token("\"hallo\"", "hallo", NULL);
-}
+//
+//Test(expand_token, echo_shell_shell_quotes)
+//{
+//	assert_expand_token("$SHELL$SHELL\'\'", "/bin/zsh/bin/zsh", NULL);
+//}
+//
+//Test(expand_token, echo_hallo_in_quotes)
+//{
+//	assert_expand_token("\"hallo\"", "hallo", NULL);
+//}
 
 //Test(expand_token, echo_shell_shell_quatro_dollar)
 //{
@@ -146,18 +160,18 @@ Test(expand_token, envvar_single_quotes_2)
 }
 
 
-Test(expand_token, double_qoute_no_envvar)
+Test(expand_token, double_quote_no_envvar)
 {
     assert_expand_token("\"HELLO\"", "HELLO", NULL);
 }
 
 
-Test(expand_token, double_qoute_envvar)
+Test(expand_token, double_quote_envvar)
 {
     assert_expand_token("\"$HELLO\"", "Hello", NULL);
 }
 
-// Test(expand_token, double_qoute_two_envvar, .timeout=1)
+// Test(expand_token, double_quote_two_envvar, .timeout=1)
 // {
 //     assert_expand_token("\"$HELLO$WORLD\"", "HelloWorld", NULL);
 // }
