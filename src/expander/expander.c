@@ -36,6 +36,18 @@ t_list	*copy_until_quote_or_dollar(char *arg, size_t *i)
 	return (node);
 }
 
+static size_t	len_until_quote_or_dollar(char *str)
+{
+	size_t	len;
+
+	if (!str || !str[0])
+		return (0);
+	len = 1;
+	while (str[len] && !is_dollar(str[len]) && !is_quote(str[len]))
+		len++;
+	return (len);
+}
+
 // Return the error code or the environment variable
 // getenv
 char	*expand_dollar(char *arg, t_exitstatus *status, t_dictionary *envd)
@@ -43,15 +55,20 @@ char	*expand_dollar(char *arg, t_exitstatus *status, t_dictionary *envd)
 	char	*expansion;
 	char	*sub;
 	char	*p;
+	size_t	len;
 
-	if (*(++arg) == '\0')
+	if (*(arg + 1) == '\0')
 		return (ft_strdup("$"));
-	if (*arg == '?')
+	if (*(arg + 1) == '?')
 		return (ft_itoa(*status));
 	p = ft_strchr(arg, '$');
+	len = len_until_quote_or_dollar(p);
 	if (p)
 	{
-		sub = ft_substr(arg, 0, p - arg);
+		if (len == 1)
+			sub = ft_substr(p, 0, len);
+		else
+			sub = ft_substr(p, 1, len - 1);
 		expansion = dict_get(envd, sub);
 		free(sub);
 	}
@@ -89,8 +106,8 @@ t_list	*expand_single_quote_node(char *arg, size_t *i)
 	char	*expansion;
 	size_t	len;
 
-	len = ft_strlen(arg) - 2;
-	expansion = ft_substr(arg, 1, len);
+	len = ft_strlen(&arg[*i]) - 2;
+	expansion = ft_substr(&arg[*i], 1, len);
 	if (!expansion)
 		return (NULL);
 	(*i) += len + 2;
@@ -103,14 +120,23 @@ t_list	*expand_dollar_node(char *arg, size_t *i, t_exitstatus *status, t_diction
 	t_list	*node;
 	char	*expansion;
 
-	expansion = expand_dollar(arg, status, envd);
+	expansion = expand_dollar(&arg[*i], status, envd);
 	if (!expansion)
 		return (NULL);
-	(*i)++;
+	*i += 2;
 	skip_until_quote_or_dollar(arg, i);
 	node = ft_lstnew(expansion);
 	return (node);
 }
+
+//static int	is_two_quotes(char *arg)
+//{
+//	printf("%s\n", arg);
+//	if ((is_single_quote(arg[0]) && is_single_quote(arg[1]))
+//		|| (is_double_quote(arg[0]) && is_double_quote(arg[1])))
+//		return (1);
+//	return (0);
+//}
 
 char	*expand_token(char *arg, t_exitstatus *status, t_dictionary *envd)
 {
@@ -126,10 +152,10 @@ char	*expand_token(char *arg, t_exitstatus *status, t_dictionary *envd)
 	{
 		if (is_dollar(arg[i]))
 			node = expand_dollar_node(arg, &i, status, envd);
-		else if (is_single_quote(arg[i]))
-			node = expand_single_quote_node(arg, &i);
-		else if (is_double_quote(arg[i]))
+		else if (is_double_quote(arg[i]) && is_dollar(arg[i + 1]))
 			node = expand_double_quote_node(arg, &i, status, envd);
+		else if (is_single_quote(arg[i]) || is_double_quote(arg[i]))
+			node = expand_single_quote_node(arg, &i);
 		else
 			node = copy_until_quote_or_dollar(arg, &i);
 		if (node == NULL)
