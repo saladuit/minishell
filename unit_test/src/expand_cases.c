@@ -11,6 +11,10 @@ void setup_env(void)
     setenv("WORLD", "World", 1);
     unsetenv("UNSET");
     setenv("SPACE", "Spa ce", 1);
+	setenv("VAR", "b c d", 1);
+	setenv("EMPTY", "", 1);
+	setenv("A", "b c d", 1);
+	setenv("B", "e f g", 1);
 }
 
 /*******************************************************************************/
@@ -108,7 +112,6 @@ Test(expand_token, echo_shell_shell)
 	assert_expand_token("$SHELL$SHELL", "/bin/zsh/bin/zsh", NULL);
 }
 
-// NEXT 5 FAILING
 Test(expand_token, envvar_double_dollar)
 {
 	assert_expand_token("$$", "$", NULL);
@@ -133,6 +136,32 @@ Test(expand_token, echo_shell_shell_double_dollar)
 {
 	assert_expand_token("$SHELL$SHELL$$$$", "/bin/zsh/bin/zsh$$", NULL);
 }
+
+Test(expand_token, echo_abcdef)
+{
+	assert_expand_token("a$VAR\'ef\'", "ab c def", NULL);
+}
+
+Test(expand_token, echo_abcdef_empty_input)
+{
+	assert_expand_token("a$EMPTY\'ef\'", "aef", NULL);
+}
+
+Test(expand_token, echo_a_and_b)
+{
+	assert_expand_token("a$A$B\"h\"", "ab c de f gh", NULL);
+}
+
+Test(expand_token, echo_many_empty_inputs)
+{
+	assert_expand_token("$EMPTY \"$EMPTY\" a$EMPTYb a\"$EMPTY\"b", " a ab", NULL);
+}
+
+Test(expand_token, echo_empty_input)
+{
+	assert_expand_token("  $EMPTY", "  ", NULL);
+}
+
 //
 //Test(expand_token, echo_shell_shell_quotes)
 //{
