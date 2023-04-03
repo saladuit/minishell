@@ -152,6 +152,7 @@ Test(expand_token, echo_a_and_b)
 	assert_expand_token("a$A$B\"h\"", "ab c de f gh", NULL);
 }
 
+// IS FAILING
 Test(expand_token, echo_many_empty_inputs)
 {
 	assert_expand_token("$EMPTY \"$EMPTY\" a$EMPTYb a\"$EMPTY\"b", " a ab", NULL);
