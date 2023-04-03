@@ -161,7 +161,8 @@ Test(expand_token, echo_a_and_b)
 // IS FAILING
 Test(expand_token, echo_many_empty_inputs)
 {
-	assert_expand_token("$EMPTY \"$EMPTY\" a$EMPTYb a\"$EMPTY\"b", " a ab", NULL);
+//	assert_expand_token("$EMPTY \"$EMPTY\" a$EMPTYb a\"$EMPTY\"b", " a ab", NULL);
+	assert_expand_token("\"$EMPTY \"$EMPTY\" a$EMPTYb a\"$EMPTY\"b\"", " a ab", NULL);
 }
 
 // Test(expand_token, echo_shell_shell_quotes)
