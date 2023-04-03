@@ -1,74 +1,66 @@
 #include <minishell.h>
 
-static void	handle_signal(int32_t signal_num)
-{
-	ft_putstr_fd("Received signal ", STDERR_FILENO);
-	ft_putstr_fd("%d", STDERR_FILENO);
-	ft_putstr_fd(": ", STDERR_FILENO);
-	ft_putstr_fd(strsignal(signal_num), STDERR_FILENO);
-	ft_putstr_fd("\n", STDERR_FILENO);
-	exit(signal_num + E_FATAL_SIGNAL);
-}
-
-void	err_msg_quotes_odd(t_exitstatus *exit_status)
-{
-	ft_putendl_fd("sheldon: odd number of first used quote", STDERR_FILENO);
-	*exit_status = E_GENERAL;
-}
-
-bool err_msg_token(char *msg, t_exitstatus *exit_status)
-{
-	ft_putstr_fd("sheldon: syntax error near unexpected token `", STDERR_FILENO);
-	ft_putstr_fd(msg, STDERR_FILENO);
-	ft_putendl_fd("'", STDERR_FILENO);
-	*exit_status = E_UNEXPECTED_TOKEN;
-	return (false);
-}
-
-bool err_cmd_not_found(t_exitstatus *exit_status)
-{
-	ft_putendl_fd("sheldon: $: command not found", STDERR_FILENO);
-	*exit_status = E_COMMAND_NOT_FOUND;
-	return (false);
-}
-
-int32_t	handle_mini_errors(t_exitstatus status)
-{
-	int32_t	exit_status;
-	int32_t	signal_num;
-
-	if (status)
-		ft_putendl_fd((char *)messages_lookup(status), STDERR_FILENO);
-	else if (WIFEXITED(status))
-	{
-		exit_status = WEXITSTATUS(status);
-		ft_putendl_fd((char *)messages_lookup(exit_status), STDERR_FILENO);
-	}
-	else if (WIFSIGNALED(status))
-	{
-		signal_num = WTERMSIG(status);
-		handle_signal(signal_num);
-	}
-	return (status);
-}
-
-const char	*messages_lookup(t_exitstatus status)
+const char	*message_lookup(t_status status)
 {
 	const char *message[] = {
-		[E_USAGE] = "Usage: ",
-		[E_GENERAL] = "Operation not permitted",
-		[E_BUILTIN] = "No such file or directory",
-		[E_EXEC] = "Permission problem or command is not an executable",
-		[E_COMMAND_NOT_FOUND] = "Command not found",
+		[E_USAGE] = "usage: ",
+		[E_GENERAL] = "operation not permitted",
+		[E_BUILTIN] = "no such file or directory",
+		[E_EXEC] = "permission problem or command is not an executable",
+		[E_COMMAND_NOT_FOUND] = "command not found",
 		[E_EXIT_INVALID_ARG] = "numeric argument required",
-		[E_CTRL_C] = "Script terminated by Control-C",
-		[E_UNKNOWN] = "Unknown error code",
-        [E_UNEXPECTED_TOKEN] = "Minishell: bash: syntax error near unexpected token",
+		[E_CTRL_C] = "script terminated by Control-C",
+		[E_UNKNOWN] = "unknown error code",
+    [E_UNEXPECTED_TOKEN] = "syntax error near unexpected token `",
+    [E_QUOTES] = "quote is unclosed",
 	};
 	return (message[status]);
 }
 
-int32_t	handle_system_call_error(const char *function_name)
+static void message_unexpected_token(const char *token)
+{
+	ft_putstr_fd((char *)message_lookup(E_UNEXPECTED_TOKEN), STDERR_FILENO);
+	ft_putstr_fd((char *)token, STDERR_FILENO);
+	ft_putendl_fd("'", STDERR_FILENO);
+}
+
+t_status	message_general_error(t_status status, const char *msg)
+{
+	ft_putstr_fd(E_SHELDON, STDERR_FILENO);
+	if (status == E_UNEXPECTED_TOKEN)
+		message_unexpected_token(msg);
+	else if (status == E_QUOTES)
+		ft_putendl_fd((char *)message_lookup(E_QUOTES), STDERR_FILENO);
+	else if (status)
+		ft_putendl_fd((char *)message_lookup(status), STDERR_FILENO);
+	return (status);
+}
+
+t_status	message_child_status(t_status status)
+{
+	if (WIFEXITED(status))
+	{
+		status = WEXITSTATUS(status);
+		ft_putendl_fd((char *)message_lookup(status), STDERR_FILENO);
+	}
+	return (status);
+}
+
+void	message_signal(t_status signal_num)
+{
+	if (WIFSIGNALED(signal_num))
+	{
+		signal_num = WTERMSIG(signal_num);
+		ft_putstr_fd("Received signal ", STDERR_FILENO);
+		ft_putstr_fd("%d", STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putstr_fd(strsignal(signal_num), STDERR_FILENO);
+		ft_putstr_fd("\n", STDERR_FILENO);
+		exit(signal_num + E_FATAL_SIGNAL);
+	}
+}
+
+t_status	message_system_call_error(const char *function_name)
 {
 	ft_putstr_fd((char *)function_name, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);

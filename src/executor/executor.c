@@ -3,7 +3,7 @@
 int32_t	redirect(t_redir *redir, t_type type)
 {
 	if (!open_redir(redir->filename, type))
-		return (handle_system_call_error("redirect"));
+		return (message_system_call_error("redirect"));
 	return (SUCCESS);
 }
 
@@ -65,13 +65,13 @@ int32_t	wait_for_child_processes(pid_t pid)
 	waitpid(pid, &status, WUNTRACED);
 	while (wait(NULL) != -1 && errno != ECHILD)
 		;
-	if (g_exitcode == E_CTRL_C)
-		return (E_CTRL_C);
-	if (g_exitcode == S_EXEC_QUIT)
-	{
-		printf("Quit: 3\n");
-		return (WEXITSTATUS(status));
-	}
+	// if (g_exitcode == E_CTRL_C)
+	// 	return (E_CTRL_C);
+	// if (g_exitcode == S_EXEC_QUIT)
+	// {
+	// 	printf("Quit: 3\n");
+	// 	return (WEXITSTATUS(status));
+	// }
 	return (WEXITSTATUS(status));
 }
 
@@ -79,20 +79,20 @@ void	execute_child_command(t_minishell *shell, char **arguments)
 {
 	char	*command_path;
 
-	command_path = get_cmd_path(&shell->envd, arguments[0]);
+	command_path = get_cmd_path(&shell->env, arguments[0]);
 	if (!command_path)
 	{
-		handle_system_call_error("malloc");
+		message_system_call_error("malloc");
 		_exit(E_COMMAND_NOT_FOUND);
 	}
 	if (access(command_path, X_OK))
 	{
 		free(command_path);
-		handle_system_call_error("access");
+		message_system_call_error("access");
 		_exit(E_COMMAND_NOT_FOUND);
 	}
-	execve(command_path, arguments, dict_to_envp(&shell->envd));
-	handle_system_call_error("execve");
+	execve(command_path, arguments, dict_to_envp(&shell->env));
+	message_system_call_error("execve");
 	_exit(E_COMMAND_NOT_FOUND);
 }
 

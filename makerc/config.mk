@@ -1,7 +1,6 @@
 MAIN 			:=main.c
 SRCS			=minishell/minishell.c \
 				 lexer/lexer.c \
-				 lexer/lexer_utils.c \
 				 lexer/lexical_analyzer.c \
 				 lexer/analyzer_checks.c \
 				 parser/parser.c \
@@ -16,21 +15,22 @@ SRCS			=minishell/minishell.c \
 				 executor/execute_utils.c \
 				 utils/message.c \
 				 utils/signal.c \
-				 envp/envp.c \
-				 envp/dict.c \
-				 envp/pair.c \
+				 utils/skip_whitespaces.c \
+				 env/env.c \
+				 env/dict.c \
+				 env/pair.c \
 				 types/is_pipe.c \
 				 types/is_double_quote.c \
 				 types/is_dollar.c \
 				 types/is_redir.c \
 				 types/is_single_quote.c \
 				 types/is_quote.c \
+				 types/is_tokenchar.c \
+				 types/is_quotechar.c \
 				 builtins/echo.c \
 				 builtins/cd.c \
 				 builtins/pwd.c \
 				 builtins/export.c \
-				 builtins/export_utils.c \
-				 builtins/export_utils2.c \
 				 builtins/unset.c \
 				 builtins/env.c \
 				 builtins/exit.c

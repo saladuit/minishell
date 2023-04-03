@@ -60,9 +60,8 @@ static size_t	len_until_quote_or_dollar(char *str)
 	return (len);
 }
 
-// Return the error code or the environment variable
 // getenv
-char	*expand_dollar(char *arg, t_exitstatus *status, t_dictionary *envd)
+char	*expand_dollar(char *arg, t_status *status, t_dictionary *env)
 {
 	char	*expansion;
 	char	*sub;
@@ -81,19 +80,19 @@ char	*expand_dollar(char *arg, t_exitstatus *status, t_dictionary *envd)
 			sub = ft_substr(p, 0, len);
 		else
 			sub = ft_substr(p, 1, len - 1);
-		expansion = dict_get(envd, sub);
+		expansion = dict_get(env, sub);
 		free(sub);
 	}
 	else
-		expansion = dict_get(envd, arg);
+		expansion = dict_get(env, arg);
 	if (expansion == NULL)
 		return (ft_strdup(""));
 	return (ft_strdup(expansion));
 }
 
-char	*expand_token(char *arg, t_exitstatus *status, t_dictionary *envd);
+char	*expand_token(char *arg, t_status *status, t_dictionary *env);
 
-t_list	*expand_double_quote_node(char *arg, size_t *i, t_exitstatus *status, t_dictionary *envd)
+t_list	*expand_double_quote_node(char *arg, size_t *i, t_status *status, t_dictionary *env)
 {
 	t_list	*node;
 	char	*expansion;
@@ -105,7 +104,7 @@ t_list	*expand_double_quote_node(char *arg, size_t *i, t_exitstatus *status, t_d
 	buf = ft_strchr(arg + 1, '\"');
 	*buf = '\0';
 	(*i) = buf - arg + 1;
-	expansion = expand_token(arg + 1, status, envd);
+	expansion = expand_token(arg + 1, status, env);
 	if (!expansion)
 		return (NULL);
 	node = ft_lstnew(expansion);
@@ -127,12 +126,12 @@ t_list	*expand_single_quote_node(char *arg, size_t *i)
 	return (node);
 }
 
-t_list	*expand_dollar_node(char *arg, size_t *i, t_exitstatus *status, t_dictionary *envd)
+t_list	*expand_dollar_node(char *arg, size_t *i, t_status *status, t_dictionary *env)
 {
 	t_list	*node;
 	char	*expansion;
 
-	expansion = expand_dollar(&arg[*i], status, envd);
+	expansion = expand_dollar(&arg[*i], status, env);
 	if (!expansion)
 		return (NULL);
 	*i += 2;
@@ -150,7 +149,7 @@ t_list	*expand_dollar_node(char *arg, size_t *i, t_exitstatus *status, t_diction
 //	return (0);
 //}
 
-char	*expand_token(char *arg, t_exitstatus *status, t_dictionary *envd)
+char	*expand_token(char *arg, t_status *status, t_dictionary *env)
 {
 	t_list	*stack;
 	t_list	*node;
@@ -163,9 +162,9 @@ char	*expand_token(char *arg, t_exitstatus *status, t_dictionary *envd)
 	while (arg[i])
 	{
 		if (is_dollar(arg[i]))
-			node = expand_dollar_node(arg, &i, status, envd);
+			node = expand_dollar_node(arg, &i, status, env);
 		else if (is_double_quote(arg[i]) && is_dollar(arg[i + 1]))
-			node = expand_double_quote_node(arg, &i, status, envd);
+			node = expand_double_quote_node(arg, &i, status, env);
 		else if (is_single_quote(arg[i]) || is_double_quote(arg[i]))
 			node = expand_single_quote_node(arg, &i);
 		else

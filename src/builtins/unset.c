@@ -74,12 +74,12 @@ int	ft_unset(char **arguments, t_minishell *shell)
 	{
 		ft_putstr_fd("unset: error: no variable name provided\n",
 						STDERR_FILENO);
-		shell->exit_status = E_BUILTIN;
+		shell->status = E_BUILTIN;
 		return (E_BUILTIN);
 	}
 	while (arguments[i])
 	{
-		dict_delete(&shell->envd, arguments[i]);
+		dict_delete(&shell->env, arguments[i]);
 		i++;
 	}
 	return (0);

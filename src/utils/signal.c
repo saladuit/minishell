@@ -15,13 +15,13 @@ void	sigint_handler(int sig)
 void	execution_sigint_handler(int sig)
 {
 	(void)sig;
-	g_exitcode = E_CTRL_C;
+	// g_exitcode = E_CTRL_C;
 }
 
 void	execution_sigquit_handler(int sig)
 {
 	(void)sig;
-	g_exitcode = S_EXEC_QUIT;
+	// g_exitcode = S_EXEC_QUIT;
 	// printf("Quit: %i\n", g_exitcode);
 }
 
@@ -29,7 +29,7 @@ void	heredoc_sig_handler(int sig)
 {
 	(void)sig;
 	write(1, "\n", 1);
-	g_exitcode = S_HEREDOC;
+	// g_exitcode = S_HEREDOC;
 }
 
 // void	executor_signal_setup(void)
