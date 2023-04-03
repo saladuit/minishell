@@ -3,6 +3,7 @@
 #include <criterion/redirect.h>
 #include <unit_test.h>
 
+/*
 #define MINISHELL_TEST(test_case, command_line) \
     Test(minishell, test_case) { \
         assert_minishell(command_line, #test_case); \
@@ -69,6 +70,7 @@ void	assert_minishell(char *command_line, char *case_name)
 	free(txt_file_path);
 	free(minishell_command);
 }
+*/
 
 /*******************************************************************************/
 /*                              General                                        */

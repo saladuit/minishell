@@ -8,7 +8,7 @@ int	ft_cd(char **arguments, t_minishell *shell)
 	dir = arguments[1];
 	if (dir == NULL)
 	{
-		dir = dict_get(&shell->envd, "HOME");
+		dir = dict_get(&shell->env, "HOME");
 		if (dir == NULL)
 		{
 			ft_putstr_fd("cd: no home directory found\n", STDERR_FILENO);
@@ -26,7 +26,7 @@ int	ft_cd(char **arguments, t_minishell *shell)
 		ft_putstr_fd("cd: error getting current directory\n", STDERR_FILENO);
 		return (E_BUILTIN);
 	}
-	if (dict_set(&shell->envd, "PWD", cwd) == -1)
+	if (dict_set(&shell->env, "PWD", cwd) == -1)
 	{
 		ft_putstr_fd("cd: error setting PWD environment variable\n",
 						STDERR_FILENO);

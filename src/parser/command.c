@@ -43,7 +43,8 @@ void	get_next_command(t_command_table *ct, t_command **command)
 	return ;
 }
 
-t_command	*construct_command(t_list **tokens)
+t_command	*construct_command(t_list **tokens, t_status *status,
+		t_dictionary *env)
 {
 	t_command	*command;
 	t_redir		*redir;
@@ -63,7 +64,7 @@ t_command	*construct_command(t_list **tokens)
 		}
 		if (is_redir(*token))
 		{
-			redir = construct_redir(tokens);
+			redir = construct_redir(tokens, status);
 			if (!redir || !ft_lstadd_backnew(&command->redirs, redir))
 			{
 				deconstruct_redirs(redir);
@@ -74,7 +75,7 @@ t_command	*construct_command(t_list **tokens)
 		}
 		else
 		{
-			argument = ft_strdup((*tokens)->content);
+			argument = expand_token(token, status, env);
 			if (!argument || !ft_lstadd_backnew(&command->arguments, argument))
 			{
 				if (argument)

@@ -12,12 +12,17 @@
 # endif
 
 # define HASH_TABLE_SIZE 32
+
+# define SHELDON "Sheldon"
+# define E_SHELDON "sheldon: "
 # define PROMPT "Sheldon$ "
 
-# include <stdio.h>
+# define NOT_FOUND 1
+
 # include <errno.h>
 # include <fcntl.h>
 # include <libft.h>
+# include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdbool.h>
@@ -26,8 +31,6 @@
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
-
-extern int			g_exitcode;
 
 /*
 E_GENERAL:
@@ -51,8 +54,7 @@ E_EXIT_STATUS_OUT_OF_RANGE:
 */
 
 // Mininums
-
-typedef enum e_exitstatus
+typedef enum e_status
 {
 	E_USAGE = 0,
 	E_GENERAL = 1,
@@ -63,14 +65,9 @@ typedef enum e_exitstatus
 	E_FATAL_SIGNAL = 128,
 	E_CTRL_C = 130,
 	E_UNKNOWN = 225,
-    E_UNEXPECTED_TOKEN = 258,
-}					t_exitstatus;
-
-typedef enum e_signalcode
-{
-	S_HEREDOC = 300,
-	S_EXEC_QUIT = 301
-}					t_signalcode;
+	E_UNEXPECTED_TOKEN = 258,
+	E_QUOTES = 259,
+}					t_status;
 
 typedef enum e_type
 {
@@ -88,7 +85,6 @@ typedef enum e_signal_handler
 }					t_signal_handler;
 
 // Ministructs
-
 typedef struct s_pair
 {
 	char			*key;
@@ -102,15 +98,13 @@ typedef struct s_dictionary
 	size_t			size;
 }					t_dictionary;
 
-extern int			g_exitcode;
-
 typedef struct s_minishell
 {
-	t_dictionary	envd;
+	t_dictionary	env;
 	t_list			*ast;
 	t_list			*tokens;
 	char			*command_line;
-	t_exitstatus	exit_status;
+	t_status		status;
 
 }					t_minishell;
 
@@ -143,51 +137,77 @@ typedef struct s_builtin
 	int				(*func)(char **arguments, t_minishell *shell);
 }					t_builtin;
 
-typedef struct s_env
-{
-	struct s_env	*next;
-}					t_env;
-
 // Main
 
-int32_t				minishell(char **envp);
-int32_t				init_handlers(void);
-int32_t				dup_envp(t_minishell *shell, char **envp);
+int32_t			minishell(char **envp);
+int32_t			init_handlers(void);
 void				setup_signals(t_signal_handler handler);
 void				reset_signals(void);
 
-// void			executor_signal_setup(void);
-
 // Environment
-int32_t				envp_load(t_dictionary *env, char **envp);
+int32_t			envp_load(t_dictionary *env, char **envp);
 
 // Pair
 void				pair_clean(t_pair *pair);
 char				*pair_to_str(t_pair *pair);
 
 // Dictionary
-
-size_t				hash(char *str);
-int32_t				dict_set(t_dictionary *dict, char *key, char *value);
+size_t			hash(char *str);
+int32_t			dict_set(t_dictionary *dict, char *key, char *value);
 char				*dict_get(t_dictionary *dict, char *key);
 void				dict_delete(t_dictionary *dict, char *key);
 void				dict_destroy(t_dictionary *dict);
 void				dict_print(t_dictionary *dict);
 char				**dict_to_envp(t_dictionary *dict);
 
+// Lexer
+t_list				*lexer(const char *command_line, t_status *status);
+void					ft_skip_whitespaces(const char **input);
+int32_t				analyzer(t_list *tokens);
+int32_t				pipe_check(t_list *tokens);
+int32_t				input_check(t_list *tokens);
+int32_t				output_check(t_list *tokens);
+int32_t				heredoc_check(t_list *tokens);
+int32_t				append_check(t_list *tokens);
+bool					quotes_even_or_odd(const char *str); // (by Lucien)
+
+// Parser
+t_list				*parser(t_list *tokens, t_status *status, t_dictionary *env);
+// Getters
+void				get_one_command_table(t_list **ast, 
+		t_command_table **command_table);
+char				**get_arguments(t_command *cmd);
+void				get_next_redir(t_command *cmd, t_redir **redir);
+void				get_next_command(t_command_table *cmd, t_command **command);
+char				**get_arguments(t_command *cmd);
+// Constructers
+t_list					*construct_ast(t_list *tokens, t_status *status, 
+		t_dictionary *env);
+t_command_table	*construct_command_table(t_list **tokens, t_status *status, 
+		t_dictionary *env);
+t_command				*construct_command(t_list **tokens, t_status *status, 
+		t_dictionary *env);
+t_redir					*construct_redir(t_list **tokens, t_status *status);
+// Deconstructers
+void				deconstruct_ast(t_list **ast);
+void				deconstruct_command_table(void *ct);
+void				deconstruct_command(void *command);
+void				deconstruct_redirs(void *redir);
+// Loggers
+void				debug_ast(t_list *ast);
+void				print_command_tables(t_list *command_table);
+void				print_commands(t_command_table *command);
+void				print_redirs(t_command *cmd);
+void				print_arguments(t_command *cmd);
+
 // Messages
-
-const char			*messages_lookup(t_exitstatus code);
-int32_t				handle_mini_errors(t_exitstatus status);
-int32_t				handle_system_call_error(const char *function_name);
-bool				err_cmd_not_found(t_exitstatus *exit_status);
-bool				err_msg_token(char *msg, t_exitstatus *exit_status);
-void				err_msg_quotes_odd(t_exitstatus *exit_status);
-
-
+const char		*message_lookup(t_status status);
+t_status			message_system_call_error(const char *function_name);
+void					message_signal(t_status signal_num);
+t_status			message_child_status(t_status status);
+t_status			message_general_error(t_status status, const char *msg);
 
 // Minitypes
-
 bool				is_pipe(int c);
 bool				is_dollar(int c);
 bool				is_redir(int c);
@@ -195,80 +215,22 @@ bool				is_quote(int c);
 bool				is_double_quote(int c);
 bool				is_single_quote(int c);
 bool				is_quotechar(const char c);
-int32_t				is_tokenchar(const char *str);
-
-// Lexer
-
-t_list				*lexer(const char *command_line, t_exitstatus *exit_status);
-void				ft_skip_whitespaces(const char **input);
-int32_t				analyzer(t_list *tokens);
-int32_t				pipe_check(t_list *tokens);
-int32_t				input_check(t_list *tokens);
-int32_t				output_check(t_list *tokens);
-int32_t				heredoc_check(t_list *tokens);
-int32_t				append_check(t_list *tokens);
-bool				quotes_even_or_odd(const char *str); // NEW (by Lucien)
+int32_t			is_tokenchar(const char *str);
 
 // Expander
-
-void				expand_tokens(t_list **arg, t_exitstatus *status);
-int32_t				expander(t_minishell *shell);
-char				*ft_strjoin_free_free(char *expanded, char *tmp);
-int32_t				check_expand(char *str);
-bool				needs_expanding(char *str);
-bool				valid_varchar(char c);
-void				expand_argument_list(t_list **arg_list, t_minishell *shell);
-int32_t				skip_single_quotes(char *str);
-int32_t				skip_double_quotes(char *str);
-int32_t				skip_variable_name(char *str);
+char					*expand_token(char *arg, t_status *status, t_dictionary *envd);
 int32_t				skip_whitespace(char *str);
-int32_t				find_var_start(char *str, int32_t index);
-char				*expand_variables(char *str, t_minishell *shell);
-char				**split_words(char *str);
-t_list				*pop_node(t_list **list, t_list *pop_node);
-void	expand_redirect_list(t_list **redirects,
-							t_minishell *shell);
-char				*trim_quotes(char *str);
 
 // Executor
-
-int32_t				execute(char *command_path, char **args, char **envp);
-int32_t				executor(t_minishell *shell);
+int32_t			executor(t_minishell *shell);
 bool				protected_dup2(int fd, t_type type);
 bool				open_redir(char *path, t_type type);
-char				*get_redir_file(t_command *command, t_type type);
 int					is_dir(char *path);
 char				**get_env_paths(t_dictionary *dict);
 char				*check_env_paths(t_dictionary *dict, char *cmd);
 char				*get_cmd_path(t_dictionary *dict, char *cmd);
 
-// Parser
-
-t_list				*parser(t_list *tokens);
-t_command			*construct_command(t_list **tokens);
-char				**get_arguments(t_command *cmd);
-void				get_next_redir(t_command *cmd, t_redir **redir);
-void				get_next_command(t_command_table *cmd, t_command **command);
-void	get_one_command_table(t_list **ast,
-							t_command_table **command_table);
-char				**get_arguments(t_command *cmd);
-char				*add_heredoc(char *phrase);
-t_command_table		*construct_command_table(t_list **tokens);
-t_redir				*construct_redir(t_list **tokens);
-t_list				*construct_ast(t_list *tokens);
-void				deconstruct_ast(t_list **ast);
-void				deconstruct_command_table(void *ct);
-void				deconstruct_command(void *command);
-void				deconstruct_redirs(void *redir);
-
-void				debug_ast(t_list *ast);
-void				print_command_tables(t_list *command_table);
-void				print_commands(t_command_table *command);
-void				print_redirs(t_command *cmd);
-void				print_arguments(t_command *cmd);
-
 // Builtins
-
 int					ft_echo(char **arguments, t_minishell *shell);
 int					ft_cd(char **arguments, t_minishell *shell);
 int					ft_pwd(char **arguments, t_minishell *shell);
@@ -276,17 +238,5 @@ int					ft_export(char **arguments, t_minishell *shell);
 int					ft_unset(char **arguments, t_minishell *shell);
 int					ft_env(char **arguments, t_minishell *shell);
 int					ft_exit(char **arguments, t_minishell *shell);
-
-// Export utils
-
-void				sort_export(char **expo);
-void				export_error(char *str);
-bool				valid_var(char *str);
-int32_t				varname_len(char *str);
-int32_t				in_env(char *argument, char **env);
-bool				has_equals(char *str);
-void				print_expo(char **expo);
-void				export_replacevar(char **env, char *argument);
-char				**export_addvar(char **env, char *argument);
 
 #endif

@@ -3,16 +3,18 @@
 #include <unit_test.h>
 #include "libft.h"
 
-extern t_exitstatus zero;
-extern t_exitstatus max;
+extern t_status zero;
+extern t_status max;
 
 void redirect_all_std(void)
 {
     cr_redirect_stdout();
     cr_redirect_stderr();
 }
+
 TestSuite(lexer, .init=redirect_all_std);
-t_list	*lexer(const char *command_line, t_exitstatus *exit_status);
+
+t_list	*lexer(const char *command_line, t_status *exit_status);
 
 /*******************************************************************************/
 /*                           Lexer_one                                         */
@@ -183,22 +185,22 @@ Test(lexer, pre_space_null_append_output_nospace)
 
 Test(lexer, null_quote_count_is_odd_one)
 {
-	assert_lexer_null("echo \'hel\'\'lo\'\'", "sheldon: odd number of first used quote\n");
+	assert_lexer_null("echo \'hel\'\'lo\'\'", "sheldon: quote is unclosed\n");
 }
 
 Test(lexer, null_quote_count_is_odd_two)
 {
-	assert_lexer_null("echo \'hello", "sheldon: odd number of first used quote\n");
+	assert_lexer_null("echo \'hello", "sheldon: quote is unclosed\n");
 }
 
 Test(lexer, null_quote_count_is_odd_three)
 {
-	assert_lexer_null("echo \"hel\"lo\"", "sheldon: odd number of first used quote\n");
+	assert_lexer_null("echo \"hel\"lo\"", "sheldon: quote is unclosed\n");
 }
 
 Test(lexer, null_quote_count_is_odd_four)
 {
-	assert_lexer_null("echo hello\"", "sheldon: odd number of first used quote\n");
+	assert_lexer_null("echo hello\"", "sheldon: quote is unclosed\n");
 }
 
 Test(lexer, null_exclamation_mark)
