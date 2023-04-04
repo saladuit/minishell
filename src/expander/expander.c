@@ -78,6 +78,8 @@ char	*expand_dollar(char *arg, size_t *i, t_status *status, t_dictionary *env)
 		return (ft_strdup("$"));
 	if (arg[*i] == '?')
 		return (++(*i), ft_itoa(*status));
+	if (arg[*i] == '$')
+		return (++(*i), ft_strdup(""));
 	len = *i;
 	while (arg[++len] && !is_dollar(arg[len]) && !is_quote(arg[len])
 		&& !is_white_space(arg[len]))
@@ -114,6 +116,7 @@ static void init_expander(size_t *i, t_dictionary *env)
 	*i = 0;
 }
 
+#include <assert.h>
 char	*expand_token(char *arg, t_status *status, t_dictionary *env)
 {
 	t_list	*stack;
@@ -123,6 +126,7 @@ char	*expand_token(char *arg, t_status *status, t_dictionary *env)
 
 	stack = NULL;
 	node = NULL;
+	assert(arg);
 	init_expander(&i, env);
 	while (arg[i])
 	{
