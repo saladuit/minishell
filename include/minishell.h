@@ -96,6 +96,8 @@ typedef struct s_dictionary
 {
 	t_pair			*table[HASH_TABLE_SIZE];
 	size_t			size;
+	bool			is_single;
+	bool			is_double;
 }					t_dictionary;
 
 typedef struct s_minishell
