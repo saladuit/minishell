@@ -31,6 +31,7 @@
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
+# include <assert.h>
 
 /*
 E_GENERAL:
@@ -92,12 +93,21 @@ typedef struct s_pair
 	struct s_pair	*next;
 }					t_pair;
 
+typedef struct s_expander
+{
+	bool			e_continue;
+	bool			is_single;
+	bool			is_double;
+	char			*new_arg;
+	t_list			*stack;
+	t_list			*node;
+	size_t			i;
+}					t_expander;
+
 typedef struct s_dictionary
 {
 	t_pair			*table[HASH_TABLE_SIZE];
 	size_t			size;
-	bool			is_single;
-	bool			is_double;
 }					t_dictionary;
 
 typedef struct s_minishell
@@ -107,7 +117,6 @@ typedef struct s_minishell
 	t_list			*tokens;
 	char			*command_line;
 	t_status		status;
-
 }					t_minishell;
 
 typedef struct s_redir

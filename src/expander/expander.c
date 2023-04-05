@@ -12,18 +12,6 @@
 
 #include <minishell.h>
 
-static size_t	len_until_quote_or_dollar(char *str)
-{
-	size_t	len;
-
-	if (!str || !str[0])
-		return (0);
-	len = 1;
-	while (str[len] && !is_dollar(str[len]) && !is_quote(str[len]))
-		len++;
-	return (len);
-}
-
 char	*combine_expanded_strings(t_list *stack)
 {
 	char	*result;
@@ -56,88 +44,49 @@ t_list	*copy_until_quote_or_dollar(char *arg, size_t *i)
 	return (node);
 }
 
-char	*expand_dollar(char *arg, size_t *i, t_status *status, t_dictionary *env)
+static void	init_expander(t_expander *exp, char **arg)
 {
-	char	*expansion;
-	char	*sub;
-	size_t	len;
-
-	if ((arg[++(*i)] == '\0' || ft_iswhitespace(arg[*i]))
-		&& !is_dollar(arg[*i]))
-		return (ft_strdup("$"));
-	if (arg[*i] == '?')
-		return (++(*i), ft_itoa(*status));
-	if (arg[*i] == '$')
-		return (++(*i), ft_strdup(""));
-	len = *i;
-	while (arg[++len] && !is_dollar(arg[len]) && !is_quote(arg[len])
-		&& !ft_iswhitespace(arg[len]))
-		;
-	len -= *i;
-	sub = ft_substr(&arg[*i], 0, len);
-	expansion = dict_get(env, sub);
-	free(sub);
-	*i += len;
-	if (expansion == NULL)
-		return (ft_strdup(""));
-	return (ft_strdup(expansion));
+	exp->is_single = false;
+	exp->is_double = false;
+	assert(*arg);
+	exp->i = 0;
 }
 
-//char	*expand_token(char *arg, t_status *status, t_dictionary *env);
-
-t_list	*expand_dollar_node(char *arg, size_t *i, t_status *status,
-	t_dictionary *env)
+static void	xor(t_expander *exp, bool single)
 {
-	t_list	*node;
-	char	*expansion;
-
-	expansion = expand_dollar(arg, i, status, env);
-	if (!expansion)
-		return (NULL);
-	node = ft_lstnew(expansion);
-	return (node);
+	if (single)
+		exp->is_single ^= 1;
+	else
+		exp->is_double ^= 1;
+	exp->i++;
+	exp->e_continue = true;
 }
 
-static void init_expander(size_t *i, t_dictionary *env)
-{
-	env->is_single = false;
-	env->is_double = false;
-	*i = 0;
-}
-
-#include <assert.h>
 char	*expand_token(char *arg, t_status *status, t_dictionary *env)
 {
-	t_list	*stack;
-	t_list	*node;
-	char	*new_arg;
-	size_t	i;
+	t_expander	exp;
 
-	stack = NULL;
-	node = NULL;
-	assert(arg);
-	init_expander(&i, env);
-	while (arg[i])
+	exp.stack = NULL;
+	exp.node = NULL;
+	init_expander(&exp, &arg);
+	while (arg[exp.i])
 	{
-		if (is_dollar(arg[i]) && !env->is_single)
-			node = expand_dollar_node(arg, &i, status, env);
-		else if (is_double_quote(arg[i]) && !env->is_single)
-		{
-			env->is_double ^= 1, i++;
-			continue;
-		}
-		else if (is_single_quote(arg[i]) && !env->is_double)
-		{
-			env->is_single ^= 1, i++;
-			continue;
-		}
+		exp.e_continue = false;
+		if (is_dollar(arg[exp.i]) && !exp.is_single)
+			exp.node = expand_dollar_node(arg, &exp.i, status, env);
+		else if (is_double_quote(arg[exp.i]) && !exp.is_single)
+			xor(&exp, 0);
+		else if (is_single_quote(arg[exp.i]) && !exp.is_double)
+			xor(&exp, 1);
 		else
-			node = copy_until_quote_or_dollar(arg, &i);
-		if (node == NULL)
-			return (ft_lstclear(&stack, free), NULL);
-		ft_lstadd_back(&stack, node);
+			exp.node = copy_until_quote_or_dollar(arg, &exp.i);
+		if (exp.e_continue)
+			continue ;
+		if (exp.node == NULL)
+			return (ft_lstclear(&exp.stack, free), NULL);
+		ft_lstadd_back(&exp.stack, exp.node);
 	}
-	new_arg = combine_expanded_strings(stack);
-	ft_lstclear(&stack, free);
-	return (new_arg);
+	exp.new_arg = combine_expanded_strings(exp.stack);
+	ft_lstclear(&exp.stack, free);
+	return (exp.new_arg);
 }
