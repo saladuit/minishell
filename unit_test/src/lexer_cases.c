@@ -1,7 +1,4 @@
-#include <criterion/assert.h>
-#include <criterion/internal/assert.h>
 #include <unit_test.h>
-#include "libft.h"
 
 extern t_status zero;
 extern t_status max;
@@ -15,6 +12,50 @@ void redirect_all_std(void)
 TestSuite(lexer, .init=redirect_all_std);
 
 t_list	*lexer(const char *command_line, t_status *exit_status);
+
+Test(lexer, malloc_failure_1)
+{
+    t_status exit = 0;
+
+    activate_malloc_hook();
+    set_malloc_failure_condition(1);
+    t_list *tokens = lexer("test_command", &exit);
+    deactivate_malloc_hook();
+    cr_assert_null(tokens, "Expected lexer to return NULL on malloc failure.");
+}
+
+Test(lexer, malloc_failure_2)
+{
+    t_status exit = 0;
+
+    activate_malloc_hook();
+    set_malloc_failure_condition(2);
+    t_list *tokens = lexer("test_command", &exit);
+    deactivate_malloc_hook();
+    cr_assert_null(tokens, "Expected lexer to return NULL on malloc failure.");
+}
+
+Test(lexer, malloc_failure_3)
+{
+    t_status exit = 0;
+
+    activate_malloc_hook();
+    set_malloc_failure_condition(3);
+    t_list *tokens = lexer("test_command", &exit);
+    deactivate_malloc_hook();
+    cr_assert_null(tokens, "Expected lexer to return NULL on malloc failure.");
+}
+
+Test(lexer, malloc_failure_4)
+{
+    t_status exit = 0;
+
+    activate_malloc_hook();
+    set_malloc_failure_condition(4);
+    t_list *tokens = lexer("test_command", &exit);
+    deactivate_malloc_hook();
+    cr_assert_null(tokens, "Expected lexer to return NULL on malloc failure.");
+}
 
 /*******************************************************************************/
 /*                           Lexer_one                                         */
