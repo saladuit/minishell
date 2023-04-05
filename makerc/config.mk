@@ -9,6 +9,7 @@ SRCS			=minishell/minishell.c \
 				 parser/ast.c \
 				 parser/command.c \
 				 parser/command_table.c \
+				 expander/expand_dollar_node.c \
 				 expander/expander.c \
 				 expander/heredoc.c \
 				 executor/executor.c \
