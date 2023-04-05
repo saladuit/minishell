@@ -45,7 +45,8 @@ int32_t	minishell(char **envp)
 		sheldon.status = message_system_call_error("isatty");
 		rl_outstream = stdin;
 	}
-	while (minishell_loop(&sheldon))
+	sheldon.stop = false;
+	while (minishell_loop(&sheldon) && !sheldon.stop)
 		;
 	dict_destroy(&sheldon.env);
 	rl_clear_history();
