@@ -33,9 +33,3 @@ endif
 
 #	Libraries
 LIBFT										:=$(LIBFT_DIR)/libft.a
-
-# #	Coverage
-# COVERAGE								:=$(SRCS:.c=.gcda)	\
-# 													$(SRCS:.c=.gcno)	\
-# 													$(UNIT_SRCS:.c=.gcno)	\
-# 													$(UNIT_SRCS:.c=.gcda)
