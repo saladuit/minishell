@@ -229,8 +229,12 @@ bool				is_quotechar(const char c);
 int32_t			is_tokenchar(const char *str);
 
 // Expander
-char					*expand_token(char *arg, t_status *status, t_dictionary *envd);
-int32_t				skip_whitespace(char *str);
+char				*expand_dollar(char *arg, size_t *i, t_status *status,
+								   t_dictionary *env);
+t_list				*expand_dollar_node(char *arg, size_t *i, t_status *status,
+										  t_dictionary *env);
+char				*expand_token(char *arg, t_status *status, t_dictionary *envd);
+size_t				len_until_quote_or_dollar(char *str);
 
 // Executor
 int32_t			executor(t_minishell *shell);
