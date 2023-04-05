@@ -2,7 +2,6 @@ MAIN 			:=main.c
 SRCS			=minishell/minishell.c \
 				 lexer/lexer.c \
 				 lexer/lexical_analyzer.c \
-				 lexer/analyzer_checks.c \
 				 parser/parser.c \
 				 parser/redir.c \
 				 parser/argument.c \
