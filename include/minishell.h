@@ -23,6 +23,7 @@
 # include <fcntl.h>
 # include <libft.h>
 # include <stdio.h>
+# include <string.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdbool.h>
