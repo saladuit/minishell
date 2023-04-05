@@ -14,6 +14,7 @@ void setup_env(void)
 	setenv("EMPTY", "", 1);
 	setenv("A", "b c d", 1);
 	setenv("B", "e f g", 1);
+	setenv("IFS", "IFS", 1);
 }
 
 /*******************************************************************************/
@@ -292,3 +293,66 @@ Test(expand_token, various_4)
 {
     assert_expand_token("echo $SPACE", "echo Spa ce", NULL);
 }
+
+/*******************************************************************************/
+/*                           Last_github_test_cases                            */
+/*******************************************************************************/
+
+Test(expand_token, dollar_digit_one)
+{
+	assert_expand_token("$1", "", NULL);
+}
+
+Test(expand_token, dollar_digit_nine)
+{
+	assert_expand_token("$9", "", NULL);
+}
+
+Test(expand_token, dollar_at_sign)
+{
+	assert_expand_token("$@", "", NULL);
+}
+
+Test(expand_token, dollar_star)
+{
+	assert_expand_token("$*", "", NULL);
+}
+
+// OUTPUT UNKNOWN
+Test(expand_token, dollar_fence)
+{
+	assert_expand_token("$#", "", NULL);
+}
+
+Test(expand_token, dollar_dash)
+{
+	assert_expand_token("$-","", NULL);
+}
+
+Test(expand_token, dollar_underscore)
+{
+	assert_expand_token("$_", "", NULL);
+}
+
+Test(expand_token, dollar_ifs)
+{
+	assert_expand_token("$IFS", "IFS", NULL);
+}
+
+Test(expand_token, dollar_0)
+{
+	assert_expand_token("$0", "Sheldon", NULL);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
