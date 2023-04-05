@@ -12,12 +12,6 @@
 
 #include <minishell.h>
 
-void	skip_until_quote_or_dollar(char *arg, size_t *i)
-{
-	while (arg[*i] && !is_dollar(arg[*i]) && !is_quote(arg[*i]))
-		(*i)++;
-}
-
 static size_t	len_until_quote_or_dollar(char *str)
 {
 	size_t	len;
@@ -62,11 +56,6 @@ t_list	*copy_until_quote_or_dollar(char *arg, size_t *i)
 	return (node);
 }
 
-bool	is_white_space(int c)
-{
-	return (c == 32 || (c >= 9 && c <= 13));
-}
-
 char	*expand_dollar(char *arg, size_t *i, t_status *status, t_dictionary *env)
 {
 	char	*expansion;
@@ -82,7 +71,7 @@ char	*expand_dollar(char *arg, size_t *i, t_status *status, t_dictionary *env)
 		return (++(*i), ft_strdup(""));
 	len = *i;
 	while (arg[++len] && !is_dollar(arg[len]) && !is_quote(arg[len])
-		&& !is_white_space(arg[len]))
+		&& !ft_iswhitespace(arg[len]))
 		;
 	len -= *i;
 	sub = ft_substr(&arg[*i], 0, len);
@@ -94,7 +83,7 @@ char	*expand_dollar(char *arg, size_t *i, t_status *status, t_dictionary *env)
 	return (ft_strdup(expansion));
 }
 
-char	*expand_token(char *arg, t_status *status, t_dictionary *env);
+//char	*expand_token(char *arg, t_status *status, t_dictionary *env);
 
 t_list	*expand_dollar_node(char *arg, size_t *i, t_status *status,
 	t_dictionary *env)
