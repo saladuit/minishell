@@ -68,7 +68,6 @@ static char	*make_token(const char **command_line, t_status *exit)
 	return (symbol);
 }
 
-// Helper function to create a token and handle errors
 static t_list	*create_token_node(const char **command_line, t_status *exit)
 {
 	t_list	*node;
