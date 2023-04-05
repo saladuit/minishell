@@ -21,7 +21,7 @@ void setup_env(void)
 /*                           Expand_token                                      */
 /*******************************************************************************/
 
-char *expand_token(char *arg, t_status *status, t_dictionary *envd);
+//char *expand_token(char *arg, t_status *status, t_dictionary *envd);
 
 TestSuite(expand_token, .init=setup_env);
 
@@ -35,7 +35,7 @@ void assert_expand_token(char *in, char *expected, t_status *status)
     char *input;
     input = ft_strdup(in);
     char *output = expand_token(input, status, env);
-    cr_expect_str_eq(output, expected, "The expression (as strings) (output) == (expected) is false: actual=`%s` expected=%s` input='%s'",output, expected, in);
+    cr_expect_str_eq(output, expected, "The expression (as strings) (output) == (expected) is false: actual=`%s` expected=%s` input='%s'", output, expected, in);
     free(output);
     free(input);
 	dict_destroy(env);
