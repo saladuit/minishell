@@ -55,12 +55,17 @@ Test(lexer, one_ls)
     assert_lexer_one("ls", expected);
 }
 
-// THIS ONE DOESN'T MAKE SENSE
-//Test(lexer, one_dollar)
-//{
-//    char *expected[] = {"$", NULL};
-//    assert_lexer_one("$", expected);
-//}
+Test(lexer, one_dollar)
+{
+   char *expected[] = {"$", NULL};
+   assert_lexer_one("$", expected);
+}
+
+Test(lexer, one_expansion)
+{
+   char *expected[] = {"$HELLO", NULL};
+   assert_lexer_one("$HELLO", expected);
+}
 
 /*******************************************************************************/
 /*                           Lexer_two                                         */
@@ -119,12 +124,53 @@ Test(lexer, echo_hello_with_quotes_three)
 	assert_lexer_two("echo \"hel\'lo\"", expected);
 }
 
-//Test(lexer, echo_hello_in_quotes)
-//{
-//	char *expected[] = {"echo", "hello", NULL};
-//	assert_lexer_two("echo 'hel'lo'", expected);
-//}
+Test(lexer, file_heredoc)
+{
+    char *expected[] = {"<<", "heredoc", NULL};
+    assert_lexer_two("<<heredoc", expected);
+}
 
+Test(lexer, file_input)
+{
+    char *expected[] = {"<", "input", NULL};
+    assert_lexer_two("<input", expected);
+}
+
+Test(lexer, file_output)
+{
+    char *expected[] = {">", "ouput", NULL};
+    assert_lexer_two(">ouput", expected);
+}
+
+Test(lexer, file_append)
+{
+    char *expected[] = {">>", "append", NULL};
+    assert_lexer_two(" >>append", expected);
+}
+
+Test(lexer, file_heredoc_space)
+{
+    char *expected[] = {"<<", "heredoc", NULL};
+    assert_lexer_two(" <<\theredoc ", expected);
+}
+
+Test(lexer, file_input_space)
+{
+    char *expected[] = {"<", "input", NULL};
+    assert_lexer_two(" <\tinput ", expected);
+}
+
+Test(lexer, file_output_space)
+{
+    char *expected[] = {">", "ouput", NULL};
+    assert_lexer_two(" >\touput ", expected);
+}
+
+Test(lexer, file_append_space)
+{
+    char *expected[] = {">>", "append", NULL};
+    assert_lexer_two(" >>\tappend ", expected);
+}
 /*******************************************************************************/
 /*                           null_Lexer                                        */
 /*******************************************************************************/
@@ -137,9 +183,9 @@ void assert_lexer_null(char *command_line, char *message)
 
     tokens = lexer(command_line, &zero);
     fflush(stderr);
-    cr_expect(tokens==NULL);
+    cr_expect(tokens==NULL, "Expected lexer to return NULL on error.");
     ft_lstclear(&tokens, free);
-    cr_assert_stderr_eq_str(message);
+    cr_expect_stderr_eq_str(message);
 }
 
 Test(lexer, null_pipe)
