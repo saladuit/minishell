@@ -1,4 +1,5 @@
 #include <unit_test.h>
+#include "libft.h"
 
 extern t_status zero;
 extern t_status max;
@@ -16,23 +17,21 @@ t_list	*lexer(const char *command_line, t_status *exit_status);
 Test(lexer, malloc_failure_1)
 {
     t_status exit = 0;
+    int condition;
 
-    activate_malloc_hook();
-    set_malloc_failure_condition(1);
+    set_malloc_failure_condition(0);
     t_list *tokens = lexer("test_command", &exit);
-    deactivate_malloc_hook();
-    cr_assert_null(tokens, "Expected lexer to return NULL on malloc failure.");
-}
-
-Test(lexer, malloc_failure_2)
-{
-    t_status exit = 0;
-
-    activate_malloc_hook();
-    set_malloc_failure_condition(2);
-    t_list *tokens = lexer("test_command", &exit);
-    deactivate_malloc_hook();
-    cr_assert_null(tokens, "Expected lexer to return NULL on malloc failure.");
+    ft_lstclear(&tokens, free);
+    condition = get_malloc_failure_condition();
+    while (condition > 0)
+    {
+        activate_malloc_hook();
+        set_malloc_failure_condition(condition);
+        t_list *tokens = lexer("test_command", &exit);
+        deactivate_malloc_hook();
+        cr_assert_null(tokens, "Expected lexer to return NULL on malloc failure.");
+        condition--;
+    }
 }
 
 /*******************************************************************************/

@@ -13,6 +13,8 @@ void *malloc(size_t size)
       return NULL;
     }
   }
+  else
+    g_malloc_fail_count++;
 
   void *(*real_malloc)(size_t) = dlsym(RTLD_NEXT, "malloc");
   return real_malloc(size);
@@ -31,4 +33,9 @@ void activate_malloc_hook(void)
 void deactivate_malloc_hook(void)
 {
     g_malloc_hook_active = 0;
+}
+
+int get_malloc_failure_condition(void)
+{
+    return g_malloc_fail_count;
 }

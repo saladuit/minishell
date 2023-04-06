@@ -15,4 +15,5 @@ void set_malloc_failure_condition(int condition);
 void activate_malloc_hook(void);
 void deactivate_malloc_hook(void);
 
+int get_malloc_failure_condition(void);
 #endif // CUSTOM_MALLOC_H
