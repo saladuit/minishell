@@ -32,13 +32,9 @@ fsan:
 	@$(MAKE) FSAN=1 DEBUG=1
 
 test:
-	@$(MAKE) DEBUG=1 COV=1 unit_test
-
-ftest:
+	$(RM) $(COVERAGE_GCDA) $(COVERAGE_FILES)
 	@$(MAKE) DEBUG=1 FSAN=1 COV=1 unit_test
-
-coverage:
-	@lcov -q -d build -d unit_test/build -c --output-file build/coverage.info
+	lcov -q -d build -d unit_test/build -c --output-file build/coverage.info
 	@genhtml -q build/coverage.info -o build/coverage_report
 
 analyse:
@@ -52,7 +48,7 @@ clean:
 	@$(MAKE) clean -C $(LIBFT_DIR)
 
 fclean: clean
-	@$(RM) $(MINISHELL) $(UNIT_TEST) $(COVERAGE_FILES)
+	@$(RM) $(MINISHELL) $(UNIT_TEST)
 	@$(MAKE) fclean -C $(LIBFT_DIR)
 
 re: fclean all
@@ -63,12 +59,9 @@ rebug: fclean debug
 
 test_re: fclean test
 
-ftest_re: fclean ftest
-
 bonus: all
 
 .PHONY: all clean fclean re bonus
 .PHONY: malloc_test
-.PHONY: test ftest test_re ftest_re 
+.PHONY: test test_re analyse
 .PHONY: debug rebug fsan resan
-.PHONY: coverage analyse

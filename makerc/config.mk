@@ -33,4 +33,7 @@ endif
 
 #	Libraries
 LIBFT				:=$(LIBFT_DIR)/libft.a
-COVERAGE_FILES      :=build/coverage.info build/coverage_report build/**/*.gc* unit_test/build/*.gc*
+COVERAGE_GCDA      :=build/**/*.gcda unit_test/build/*.gcda
+COVERAGE_GCNO      :=build/**/*.gcno unit_test/build/*.gcno
+COVERAGE_FILES      :=build/coverage.info
+COVERAGE           :=$(COVERAGE_FILES) $(COVERAGE_GCDA) $(COVERAGE_GCNO)

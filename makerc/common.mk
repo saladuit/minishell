@@ -42,7 +42,7 @@ ifdef	COV
 endif
 
 ifdef	FSAN
-				CFLAGS					+=-fsanitize=address
+				CFLAGS					+=-fsanitize=address,undefined
 endif
 
 ifdef	FILTER
