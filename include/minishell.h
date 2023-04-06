@@ -253,6 +253,6 @@ int					ft_pwd(char **arguments, t_minishell *shell);
 int					ft_export(char **arguments, t_minishell *shell);
 int					ft_unset(char **arguments, t_minishell *shell);
 int					ft_env(char **arguments, t_minishell *shell);
-void				ft_exit(char **arguments, t_minishell *shell);
+int 				ft_exit(char **args, t_minishell *shell);
 
 #endif
