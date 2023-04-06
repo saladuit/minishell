@@ -36,9 +36,9 @@ fsan:
 	@$(MAKE) FSAN=1 DEBUG=1
 
 test:
-	$(RM) $(COVERAGE_GCDA) $(COVERAGE_FILES)
+	@$(RM) $(COVERAGE_GCDA) $(COVERAGE_FILES)
 	@$(MAKE) DEBUG=1 FSAN=1 COV=1 unit_test
-	lcov -q -d build -d unit_test/build -c --output-file build/coverage.info
+	@lcov -q -d build -d unit_test/build -c --output-file build/coverage.info
 	@genhtml -q build/coverage.info -o build/coverage_report
 
 analyse:
