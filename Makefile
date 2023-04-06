@@ -1,6 +1,10 @@
 include makerc/common.mk
 include makerc/config.mk
 
+-include $(UNIT_DEPENDS)
+-include $(DEPENDS) 
+-include $(MAIN_DEPENDS)
+
 all: $(MINISHELL)
 
 unit_test: $(UNIT_TEST)
@@ -12,15 +16,15 @@ $(MINISHELL): $(OBJS) $(MAIN_OBJ) $(LIBFT)
 
 $(UNIT_TEST): $(UNIT_OBJS) $(OBJS) $(MAIN_OBJ) $(LIBFT)
 	$(CC) $(CFLAGS) $(UNIT_OBJS) $(OBJS) $(LDFLAGS) $(UNIT_INCLUDE_FLAGS) $(INCLUDE_FLAGS) $(LIBFT) -o $(UNIT_TEST)
-	@./$(UNIT_TEST) $(F)
+	@./$(UNIT_TEST) -j4 $(F)
 
 $(MAIN_OBJ) $(OBJS): $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(INCLUDE_FLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP $(INCLUDE_FLAGS) -c $< -o $@
 
 $(UNIT_OBJS): $(UNIT_BUILD_DIR)/%.o: $(UNIT_SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< $(UNIT_INCLUDE_FLAGS) $(INCLUDE_FLAGS) -o $@
+	$(CC) $(CFLAGS) -MMD -MP -c $< $(UNIT_INCLUDE_FLAGS) $(INCLUDE_FLAGS) -o $@
 
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR)
