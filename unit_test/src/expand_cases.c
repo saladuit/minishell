@@ -50,11 +50,6 @@ Test(expand_token, envvar_not_set)
 	assert_expand_token("$UNSET", "", NULL);
 }
 
-Test(expand_token, null_null, .signal=SIGABRT)
-{
-	expand_token(NULL, NULL, NULL);
-}
-
 Test(expand_token, empty)
 {
 	assert_expand_token("", "", NULL);

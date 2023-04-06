@@ -1,112 +1,74 @@
-include makerc/colours.mk
+include makerc/common.mk
 include makerc/config.mk
-include makerc/unit.mk
 
-################################################################################
+all: $(MINISHELL)
 
-NAME			:=minishell.out
+unit_test: $(UNIT_TEST)
 
-CC				:=gcc
-RM				:=rm -rfv
+$(MINISHELL): SHELL :=/bin/bash
 
-ifeq ($(shell uname -s), Linux)
-LDFLAGS 		=-lreadline
-else
-LDFLAGS 		=-L $(shell brew --prefix readline)/lib -lreadline
-endif
+$(MINISHELL): $(OBJS) $(MAIN_OBJ) $(LIBFT)
+	$(CC) $(CFLAGS) $^ $(LDFLAGS) $(INCLUDE_FLAGS) -o $(MINISHELL)
 
-################################################################################
+$(UNIT_TEST): $(UNIT_OBJS) $(OBJS) $(MAIN_OBJ) $(LIBFT)
+	$(CC) $(CFLAGS) $(UNIT_OBJS) $(OBJS) $(LDFLAGS) $(UNIT_INCLUDE_FLAGS) $(INCLUDE_FLAGS) $(LIBFT) -o $(UNIT_TEST)
+	@./$(UNIT_TEST) $(F)
 
-all: $(NAME)
-
-$(NAME): SHELL :=/bin/bash
-
-$(NAME): $(OBJS) $(MAIN_OBJ) $(LIBFT)
-	$(CC) $(CFLAGS) $^ $(LDFLAGS) $(INCLUDE_FLAGS) -o $(NAME)
-
-$(MAIN_OBJ) $(OBJS): $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(HEADER)
+$(MAIN_OBJ) $(OBJS): $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDE_FLAGS) -c $< -o $@
+
+$(UNIT_OBJS): $(UNIT_BUILD_DIR)/%.o: $(UNIT_SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< $(UNIT_INCLUDE_FLAGS) $(INCLUDE_FLAGS) -o $@
 
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR)
 
-################################################################################
-
-clean: covclean
-	@$(RM) $(OBJS) $(MAIN_OBJ)
-	@$(MAKE) clean -C $(LIBFT_DIR)
-	@$(MAKE) clean -C $(UNIT_DIR)
-
-fclean: clean
-	@$(RM) $(NAME)
-	@$(MAKE) fclean -C $(LIBFT_DIR)
-	@$(MAKE) clean -C $(UNIT_DIR)
-
-re: fclean
-	@$(MAKE)
-
-bonus: all
-
 debug:
 	@$(MAKE) DEBUG=1
-
-rebug: fclean
-	@$(MAKE) debug
 
 fsan:
 	@$(MAKE) FSAN=1 DEBUG=1
 
-resan: fclean
-	@$(MAKE) fsan
+test:
+	@$(MAKE) DEBUG=1 COV=1 unit_test
 
-test: covclean
-	@$(MAKE) DEBUG=1 COV=1
-	@$(MAKE) DEBUG=1 COV=1 -C $(UNIT_DIR)
-	@./$(UNIT_TEST) $(F)
-
-ftest: covclean
-	@$(MAKE) DEBUG=1 FSAN=1 COV=1
-	@$(MAKE) DEBUG=1 FSAN=1 COV=1 -C $(UNIT_DIR)
-	@./$(UNIT_TEST) $(F)
-
-analyse:
-	@cd build && genhtml -q coverage.info -o coverage_report
-	w3m build/coverage_report/index.html
-
-test_re: fclean
-	@$(MAKE) test
-
-ftest_re: fclean
-	@$(MAKE) ftest
-
-covclean:
-	find build -name "*.gc*" -type f -delete
-	rm -rf build/coverage*
+ftest:
+	@$(MAKE) DEBUG=1 FSAN=1 COV=1 unit_test
 
 coverage:
-	@gcov -b -o build/builtins src/builtins/*
-	@gcov -b -o build/envp src/envp/*
-	@gcov -b -o build/executor src/executor/*
-	@gcov -b -o build/expander src/expander/*
-	@gcov -b -o build/lexer src/lexer/*
-	@gcov -b -o build/minishell src/minishell/*
-	@gcov -b -o build/parser src/parser/*
-	@gcov -b -o build/types src/types/*
-	@gcov -b -o build/unit_test unit_test/src/*
-	@gcov -b -o build/utils src/utils/*
-	@lcov -q -d . -c --output-file build/coverage.info
-	rm *.gc*
+	@lcov -q -d build -d unit_test/build -c --output-file build/coverage.info
+	@genhtml -q build/coverage.info -o build/coverage_report
+
+analyse:
+	w3m build/coverage_report/index.html
 
 malloc_test: debug 
 	$(CC) $(CFLAGS) $(OBJS) $(MAIN_OBJ) $(LIBFT) -fsanitize=undefined -rdynamic -o $@ $(INCLUDE_FLAGS) $(LDFLAGS) -L. -lmallocator
 
-valgrind: debug
-	valgrind --leak-check=full ./$(NAME)
+clean:
+	@$(RM) $(BUILD_DIR) $(UNIT_BUILD_DIR)
+	@$(MAKE) clean -C $(LIBFT_DIR)
+
+fclean: clean
+	@$(RM) $(MINISHELL) $(UNIT_TEST) $(COVERAGE_FILES)
+	@$(MAKE) fclean -C $(LIBFT_DIR)
+
+re: fclean all
+
+resan: fclean fsan
+
+rebug: fclean debug
+
+test_re: fclean test
+
+ftest_re: fclean ftest
+
+bonus: all
 
 .PHONY: all clean fclean re bonus
+.PHONY: malloc_test
+.PHONY: test ftest test_re ftest_re 
 .PHONY: debug rebug fsan resan
-.PHONY: valgrind malloc_test
-.PHONY: test ftest test_re ftest_re covclean coverage analyse covclean
-
-################################################################################
+.PHONY: coverage analyse

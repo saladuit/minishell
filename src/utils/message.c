@@ -36,29 +36,29 @@ t_status	message_general_error(t_status status, const char *msg)
 	return (status);
 }
 
-t_status	message_child_status(t_status status)
-{
-	if (WIFEXITED(status))
-	{
-		status = WEXITSTATUS(status);
-		ft_putendl_fd((char *)message_lookup(status), STDERR_FILENO);
-	}
-	return (status);
-}
+// t_status	message_child_status(t_status status)
+// {
+// 	if (WIFEXITED(status))
+// 	{
+// 		status = WEXITSTATUS(status);
+// 		ft_putendl_fd((char *)message_lookup(status), STDERR_FILENO);
+// 	}
+// 	return (status);
+// }
 
-void	message_signal(t_status signal_num)
-{
-	if (WIFSIGNALED(signal_num))
-	{
-		signal_num = WTERMSIG(signal_num);
-		ft_putstr_fd("Received signal ", STDERR_FILENO);
-		ft_putstr_fd("%d", STDERR_FILENO);
-		ft_putstr_fd(": ", STDERR_FILENO);
-		ft_putstr_fd(strsignal(signal_num), STDERR_FILENO);
-		ft_putstr_fd("\n", STDERR_FILENO);
-		exit(signal_num + E_FATAL_SIGNAL);
-	}
-}
+// void	message_signal(t_status signal_num)
+// {
+// 	if (WIFSIGNALED(signal_num))
+// 	{
+// 		signal_num = WTERMSIG(signal_num);
+// 		ft_putstr_fd("Received signal ", STDERR_FILENO);
+// 		ft_putstr_fd("%d", STDERR_FILENO);
+// 		ft_putstr_fd(": ", STDERR_FILENO);
+// 		ft_putstr_fd(strsignal(signal_num), STDERR_FILENO);
+// 		ft_putstr_fd("\n", STDERR_FILENO);
+// 		exit(signal_num + E_FATAL_SIGNAL);
+// 	}
+// }
 
 t_status	message_system_call_error(const char *function_name)
 {

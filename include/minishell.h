@@ -23,6 +23,7 @@
 # include <fcntl.h>
 # include <libft.h>
 # include <stdio.h>
+# include <string.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdbool.h>
@@ -149,6 +150,13 @@ typedef struct s_builtin
 	int				(*func)(char **arguments, t_minishell *shell);
 }					t_builtin;
 
+
+typedef struct
+{
+    const char *token;
+    const char *error_msg;
+} t_tokenerror;
+
 // Main
 
 int32_t			minishell(char **envp);
@@ -175,13 +183,8 @@ char				**dict_to_envp(t_dictionary *dict);
 // Lexer
 t_list				*lexer(const char *command_line, t_status *status);
 void					ft_skip_whitespaces(const char **input);
-int32_t				analyzer(t_list *tokens);
-int32_t				pipe_check(t_list *tokens);
-int32_t				input_check(t_list *tokens);
-int32_t				output_check(t_list *tokens);
-int32_t				heredoc_check(t_list *tokens);
-int32_t				append_check(t_list *tokens);
 bool					quotes_even_or_odd(const char *str); // (by Lucien)
+bool					check_lexical_conventions(const char *command, t_status *exit);
 
 // Parser
 t_list				*parser(t_list *tokens, t_status *status, t_dictionary *env);

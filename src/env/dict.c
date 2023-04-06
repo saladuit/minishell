@@ -90,7 +90,7 @@ void	dict_delete(t_dictionary *dict, char *key)
 	prev = NULL;
 	while (pair != NULL)
 	{
-		if (strcmp(pair->key, key) == 0)
+		if (ft_strncmp(pair->key, key, ft_strlen(pair->key)) == 0)
 		{
 			if (prev == NULL)
 				dict->table[index] = pair->next;

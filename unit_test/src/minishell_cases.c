@@ -1,8 +1,8 @@
-#include <criterion/assert.h>
-#include <criterion/new/assert.h>
-#include <criterion/redirect.h>
 #include <unit_test.h>
 
+void nothing(void)
+{
+}
 /*
 #define MINISHELL_TEST(test_case, command_line) \
     Test(minishell, test_case) { \

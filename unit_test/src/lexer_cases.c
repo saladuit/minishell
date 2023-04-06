@@ -1,7 +1,4 @@
-#include <criterion/assert.h>
-#include <criterion/internal/assert.h>
 #include <unit_test.h>
-#include "libft.h"
 
 extern t_status zero;
 extern t_status max;
@@ -15,6 +12,28 @@ void redirect_all_std(void)
 TestSuite(lexer, .init=redirect_all_std);
 
 t_list	*lexer(const char *command_line, t_status *exit_status);
+
+Test(lexer, malloc_failure_1)
+{
+    t_status exit = 0;
+
+    activate_malloc_hook();
+    set_malloc_failure_condition(1);
+    t_list *tokens = lexer("test_command", &exit);
+    deactivate_malloc_hook();
+    cr_assert_null(tokens, "Expected lexer to return NULL on malloc failure.");
+}
+
+Test(lexer, malloc_failure_2)
+{
+    t_status exit = 0;
+
+    activate_malloc_hook();
+    set_malloc_failure_condition(2);
+    t_list *tokens = lexer("test_command", &exit);
+    deactivate_malloc_hook();
+    cr_assert_null(tokens, "Expected lexer to return NULL on malloc failure.");
+}
 
 /*******************************************************************************/
 /*                           Lexer_one                                         */
@@ -36,12 +55,17 @@ Test(lexer, one_ls)
     assert_lexer_one("ls", expected);
 }
 
-// THIS ONE DOESN'T MAKE SENSE
-//Test(lexer, one_dollar)
-//{
-//    char *expected[] = {"$", NULL};
-//    assert_lexer_one("$", expected);
-//}
+Test(lexer, one_dollar)
+{
+   char *expected[] = {"$", NULL};
+   assert_lexer_one("$", expected);
+}
+
+Test(lexer, one_expansion)
+{
+   char *expected[] = {"$HELLO", NULL};
+   assert_lexer_one("$HELLO", expected);
+}
 
 /*******************************************************************************/
 /*                           Lexer_two                                         */
@@ -100,12 +124,53 @@ Test(lexer, echo_hello_with_quotes_three)
 	assert_lexer_two("echo \"hel\'lo\"", expected);
 }
 
-//Test(lexer, echo_hello_in_quotes)
-//{
-//	char *expected[] = {"echo", "hello", NULL};
-//	assert_lexer_two("echo 'hel'lo'", expected);
-//}
+Test(lexer, file_heredoc)
+{
+    char *expected[] = {"<<", "heredoc", NULL};
+    assert_lexer_two("<<heredoc", expected);
+}
 
+Test(lexer, file_input)
+{
+    char *expected[] = {"<", "input", NULL};
+    assert_lexer_two("<input", expected);
+}
+
+Test(lexer, file_output)
+{
+    char *expected[] = {">", "ouput", NULL};
+    assert_lexer_two(">ouput", expected);
+}
+
+Test(lexer, file_append)
+{
+    char *expected[] = {">>", "append", NULL};
+    assert_lexer_two(" >>append", expected);
+}
+
+Test(lexer, file_heredoc_space)
+{
+    char *expected[] = {"<<", "heredoc", NULL};
+    assert_lexer_two(" <<\theredoc ", expected);
+}
+
+Test(lexer, file_input_space)
+{
+    char *expected[] = {"<", "input", NULL};
+    assert_lexer_two(" <\tinput ", expected);
+}
+
+Test(lexer, file_output_space)
+{
+    char *expected[] = {">", "ouput", NULL};
+    assert_lexer_two(" >\touput ", expected);
+}
+
+Test(lexer, file_append_space)
+{
+    char *expected[] = {">>", "append", NULL};
+    assert_lexer_two(" >>\tappend ", expected);
+}
 /*******************************************************************************/
 /*                           null_Lexer                                        */
 /*******************************************************************************/
@@ -118,9 +183,9 @@ void assert_lexer_null(char *command_line, char *message)
 
     tokens = lexer(command_line, &zero);
     fflush(stderr);
-    cr_expect(tokens==NULL);
+    cr_expect(tokens==NULL, "Expected lexer to return NULL on error.");
     ft_lstclear(&tokens, free);
-    cr_assert_stderr_eq_str(message);
+    cr_expect_stderr_eq_str(message);
 }
 
 Test(lexer, null_pipe)
@@ -152,6 +217,21 @@ Test(lexer, null_pipe_double)
 {
     assert_lexer_null("||", "sheldon: syntax error near unexpected token `||'\n");
 }
+
+// Test(lexer, null_exit_pipe)
+// {
+//     assert_lexer_null("exit|", "sheldon: syntax error near unexpected token `||'\n");
+// }
+//
+// Test(lexer, null_pipe_exit)
+// {
+//     assert_lexer_null("|exit", "sheldon: syntax error near unexpected token `||'\n");
+// }
+//
+// Test(lexer, null_pipe_exit_output)
+// {
+//     assert_lexer_null("exit|<", "sheldon: syntax error near unexpected token `||'\n");
+// }
 
 Test(lexer, null_append_output)
 {
