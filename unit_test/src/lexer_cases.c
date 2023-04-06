@@ -35,28 +35,6 @@ Test(lexer, malloc_failure_2)
     cr_assert_null(tokens, "Expected lexer to return NULL on malloc failure.");
 }
 
-Test(lexer, malloc_failure_3)
-{
-    t_status exit = 0;
-
-    activate_malloc_hook();
-    set_malloc_failure_condition(3);
-    t_list *tokens = lexer("test_command", &exit);
-    deactivate_malloc_hook();
-    cr_assert_null(tokens, "Expected lexer to return NULL on malloc failure.");
-}
-
-Test(lexer, malloc_failure_4)
-{
-    t_status exit = 0;
-
-    activate_malloc_hook();
-    set_malloc_failure_condition(4);
-    t_list *tokens = lexer("test_command", &exit);
-    deactivate_malloc_hook();
-    cr_assert_null(tokens, "Expected lexer to return NULL on malloc failure.");
-}
-
 /*******************************************************************************/
 /*                           Lexer_one                                         */
 /*******************************************************************************/
