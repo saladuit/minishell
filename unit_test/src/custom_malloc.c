@@ -1,5 +1,4 @@
-#include <stddef.h>
-#include <dlfcn.h>
+#include <custom_malloc.h>
 
 static int g_malloc_hook_active = 0;
 static int g_malloc_fail_count = 0;

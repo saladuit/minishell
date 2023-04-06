@@ -1,8 +1,11 @@
 #ifndef CUSTOM_MALLOC_H
-#define CUSTOM_MALLOC_H
-#define _GNU_SOURCE
+# define CUSTOM_MALLOC_H
+# ifdef __linux__
+# define _GNU_SOURCE
+# endif
 
-#include <stddef.h>
+# include <stddef.h>
+# include <dlfcn.h>
 // Custom malloc function
 void *custom_malloc(size_t size);
 
