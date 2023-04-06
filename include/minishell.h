@@ -65,7 +65,7 @@ typedef enum e_status
 	E_EXIT_INVALID_ARG = 128,
 	E_FATAL_SIGNAL = 128,
 	E_CTRL_C = 130,
-	E_UNKNOWN = 225,
+	E_UNKNOWN = 255,
 	E_UNEXPECTED_TOKEN = 258,
 	E_QUOTES = 259,
 }					t_status;
