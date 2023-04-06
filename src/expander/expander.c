@@ -12,7 +12,7 @@
 
 #include <minishell.h>
 
-char	*combine_expanded_strings(t_list *stack)
+static char	*combine_expanded_strings(t_list *stack)
 {
 	char	*result;
 	char	*tmp;
@@ -29,7 +29,7 @@ char	*combine_expanded_strings(t_list *stack)
 	return (result);
 }
 
-t_list	*copy_until_quote_or_dollar(char *arg, size_t *i)
+static t_list	*copy_until_quote_or_dollar(char *arg, size_t *i)
 {
 	char	*expansion;
 	t_list	*node;
@@ -44,11 +44,12 @@ t_list	*copy_until_quote_or_dollar(char *arg, size_t *i)
 	return (node);
 }
 
-static void	init_expander(t_expander *exp, char **arg)
+static void	init_expander(t_expander *exp)
 {
+	exp->stack = NULL;
+	exp->node = NULL;
 	exp->is_single = false;
 	exp->is_double = false;
-	assert(*arg);
 	exp->i = 0;
 }
 
@@ -66,9 +67,8 @@ char	*expand_token(char *arg, t_status *status, t_dictionary *env)
 {
 	t_expander	exp;
 
-	exp.stack = NULL;
-	exp.node = NULL;
-	init_expander(&exp, &arg);
+	assert(arg && env);
+	init_expander(&exp);
 	while (arg[exp.i])
 	{
 		exp.e_continue = false;
