@@ -31,6 +31,7 @@
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
+# include <assert.h>
 
 /*
 E_GENERAL:
@@ -92,6 +93,17 @@ typedef struct s_pair
 	struct s_pair	*next;
 }					t_pair;
 
+typedef struct s_expander
+{
+	bool			e_continue;
+	bool			is_single;
+	bool			is_double;
+	char			*new_arg;
+	t_list			*stack;
+	t_list			*node;
+	size_t			i;
+}					t_expander;
+
 typedef struct s_dictionary
 {
 	t_pair			*table[HASH_TABLE_SIZE];
@@ -105,7 +117,6 @@ typedef struct s_minishell
 	t_list			*tokens;
 	char			*command_line;
 	t_status		status;
-
 }					t_minishell;
 
 typedef struct s_redir
@@ -218,8 +229,12 @@ bool				is_quotechar(const char c);
 int32_t			is_tokenchar(const char *str);
 
 // Expander
-char					*expand_token(char *arg, t_status *status, t_dictionary *envd);
-int32_t				skip_whitespace(char *str);
+char				*expand_dollar(char *arg, size_t *i, t_status *status,
+								   t_dictionary *env);
+t_list				*expand_dollar_node(char *arg, size_t *i, t_status *status,
+										  t_dictionary *env);
+char				*expand_token(char *arg, t_status *status, t_dictionary *envd);
+size_t				len_until_quote_or_dollar(char *str);
 
 // Executor
 int32_t			executor(t_minishell *shell);
