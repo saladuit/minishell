@@ -1,41 +1,124 @@
 #include <minishell.h>
 
-int32_t	check_validity(t_list *tokens)
-{
-	if (!ft_strncmp(tokens->content, "|", 2))
-		return (pipe_check(tokens));
-	else if (!ft_strncmp(tokens->content, "<", 2))
-		return (input_check(tokens));
-	else if (!ft_strncmp(tokens->content, ">", 2))
-		return (output_check(tokens));
-	else if (!ft_strncmp(tokens->content, ">>", 3))
-		return (append_check(tokens));
-	else if (!ft_strncmp(tokens->content, "<<", 3))
-		return (heredoc_check(tokens));
-	return (0);
-}
+/*
+ * Function: compare_command_ignore_spaces
+ *
+ * Description:
+ * Compares two command strings,
+ * ignoring any spaces that may be present within the commands. 
+ * This function is useful for comparing command strings 
+ * that may contain extra spaces,
+ * which should be considered equivalent for the purpose of comparison.
+ * 
+ * Parameters:
+ * const char *command - A null-terminated string 
+ * representing the command to be compared.
+ * char *cmp - A null-terminated string 
+ * representing the reference command to be compared against.
+ *
+ * Returns:
+ * 
+ * NOT_FOUND if the commands are different or 
+ * if there is a mismatch after ignoring spaces. 
+ * Otherwise, it returns 1.
+ */
 
-void	print_syntax_error(t_list *tokens)
+static int	compare_command_ignore_spaces(const char *command, const char *cmp)
 {
-	if (!tokens)
-		printf("Minishell: syntax error near unexpected token `newline\'\n");
-	else
-		printf("Minishell: syntax error near unexpected token `%s\'\n",
-				(char *)tokens->content);
-}
+	size_t	i;
+	size_t	j;
 
-int32_t	analyzer(t_list *tokens)
-{
-	// print_tokens(tokens);
-	if (!ft_strncmp(tokens->content, "|", 2))
-		return (printf("Minishell: syntax error near unexpected token `|\'\n"),
-				1);
-	while (tokens)
+	i = 0;
+	j = 0;
+	while (command[i] && cmp[j])
 	{
-		if (is_tokenchar(tokens->content))
-			if (check_validity(tokens))
-				return (print_syntax_error(tokens->next), 1);
-		tokens = tokens->next;
+		while (command[i] && command[i] == ' ')
+			i++;
+		while (cmp[j] && cmp[j] == ' ')
+			j++;
+		if (command[i++] != cmp[j++])
+			return (false);
 	}
-	return (0);
+	while (command[i])
+	{
+		if (command[i] != ' ')
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+/* Function: check_lexical_conventions
+ *
+ * Description:
+ * Checks whether a given command string adheres 
+ * to the lexical conventions of the shell. 
+ * This function uses the compare_command_ignore_spaces function 
+ * to ignore spaces while 
+ * comparing the command string against a list of tokens 
+ * with corresponding error messages. 
+ * If a match is found, the function sets the exit status 
+ * with the appropriate error message 
+ * and returns false, indicating a lexical error. 
+ * If no matches are found, it returns true, 
+ * indicating that the command adheres to the lexical conventions.
+ *
+ * Parameters:
+ * const char *command - A null-terminated string 
+ * representing the command to be checked 
+ * for adherence to lexical conventions.
+ * t_status *exit - A pointer to a t_status variable, 
+ * which will be set with the appropriate error message 
+ * if a lexical error is detected.
+ *
+ * Returns:
+ * true if the command adheres to the lexical conventions, 
+ * and false if a lexical error is detected. 
+ * If a lexical error is detected, 
+ * the exit status will be set with the appropriate error message.
+ */
+
+static bool	find_matching_error(const char *command,
+		const t_tokenerror token_errors[], const char **error_msg)
+{
+	size_t	i;
+
+	i = 0;
+	while (token_errors[i].token != NULL)
+	{
+		if (compare_command_ignore_spaces(command,
+				token_errors[i].token) == NOT_FOUND)
+		{
+			*error_msg = token_errors[i].error_msg;
+			return (true);
+		}
+		i++;
+	}
+	return (false);
+}
+
+bool	check_lexical_conventions(const char *command, t_status *exit)
+{
+	const char				*error_msg;
+	const t_tokenerror		token_errors[] = {
+	{"|", "|"},
+	{"||", "||"},
+	{"<", "newline"},
+	{"<<", "newline"},
+	{">", "newline"},
+	{">>", "newline"},
+	{"!", "newline"},
+	{">> >", ">"},
+	{"<< >", ">"},
+	{">> <", "<"},
+	{"<< <", "<"},
+	{NULL, NULL}};
+
+	error_msg = NULL;
+	if (find_matching_error(command, token_errors, &error_msg))
+	{
+		*exit = message_general_error(E_UNEXPECTED_TOKEN, error_msg);
+		return (false);
+	}
+	return (true);
 }

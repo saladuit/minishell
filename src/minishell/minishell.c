@@ -48,6 +48,6 @@ int32_t	minishell(char **envp)
 	while (minishell_loop(&sheldon))
 		;
 	dict_destroy(&sheldon.env);
-	rl_clear_history();
+	clear_history();
 	return (sheldon.status);
 }

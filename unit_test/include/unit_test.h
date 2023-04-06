@@ -28,5 +28,8 @@
 # include <criterion/stats.h>
 # include <criterion/types.h>
 # include <minishell.h>
+# include <criterion/assert.h>
+# include <criterion/internal/assert.h>
+# include <custom_malloc.h>
 
 #endif
