@@ -11,7 +11,7 @@ CFLAGS									=-Wall -Wextra -Werror
 
 #	Directories
 SRC_DIR									:=src
-SRCS_DIRS								:=minishell lexer	parser expander executor \
+SRCS_DIRS								:=minishell lexer parser expander executor \
 													utils env types builtins
 INCLUDE_DIR							:=include
 BUILD_DIR								:=build
@@ -28,13 +28,13 @@ UNIT_INCLUDE_DIR				:=$(UNIT_DIR)/$(INCLUDE_DIR)
 
 #	Flags
 ifdef	DEBUG
-				CFLAGS					+=-g
+	CFLAGS								+=-g -MMD -MP
 endif
 
 ifndef	COV
-				ifdef	DEBUG
-								CFLAGS	+=-D DEBUG=1
-				endif
+	ifdef	DEBUG
+		CFLAGS							+=-D DEBUG=1
+	endif
 endif
 
 ifdef	COV

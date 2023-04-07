@@ -8,7 +8,7 @@ UNIT_TEST			:=test.out
 MAIN				:=main.c
 
 #	Source	files
-SRCS				:=$(foreach	dir, $(SRCS_DIRS), $(wildcard $(SRC_DIR)/$(dir)/*.c))
+SRCS				:=$(foreach dir, $(SRCS_DIRS), $(wildcard $(SRC_DIR)/$(dir)/*.c))
 UNIT_SRCS			:=$(wildcard $(UNIT_DIR)/$(SRC_DIR)/*.c)
 
 #	Object	files
@@ -31,7 +31,7 @@ UNIT_INCLUDE_FLAGS	:=$(addprefix -I, $(sort $(dir $(UNIT_HEADERS))))
 
 ifeq ($(shell uname -s), Darwin)
     INCLUDE_FLAGS   +=$(addprefix -I, $(shell brew --prefix readline)/include)
-    LDFLAGS         :=-lcriterion -lreadline -L$(shell brew --prefix readline)/lib 
+    LDFLAGS         :=-lcriterion -lreadline -L$(shell brew --prefix readline)/lib
   else
 		LDFLAGS     :=-lcriterion -lreadline
 endif
