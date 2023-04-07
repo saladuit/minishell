@@ -19,7 +19,7 @@ static int numeric(char *arg)
 		i++;
 	if (arg[i] == '-')
 		i++;
-	while (arg[i] && arg[i] != '#')
+	while (arg[i] && arg[i] != '#' && arg[i] != ';')
 	{
 		if (!ft_isdigit(arg[i]))
 			return (0);
@@ -44,6 +44,8 @@ int	ft_exit(char **args, t_minishell *shell)
 				shell->status += 256;
 		}
 	}
+	if (shell->is_pipeline)
+		_exit(shell->status);
 	shell->stop = true;
 	return (shell->status);
 }
