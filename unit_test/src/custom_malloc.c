@@ -1,5 +1,27 @@
 #include <custom_malloc.h>
+/* Example Usage
+void test_malloc_failure(const char *command)
+{
+    t_status exit;
+    int condition;
+    t_list *tokens;
 
+    exit = 0;
+    set_malloc_failure_condition(0);
+    tokens = lexer(command, &exit);
+    ft_lstclear(&tokens, free);
+    condition = get_malloc_failure_condition();
+    while (condition > 0)
+    {
+        activate_malloc_hook();
+        set_malloc_failure_condition(condition);
+        tokens = lexer(command, &exit);
+        deactivate_malloc_hook();
+        cr_assert_null(tokens, "Expected test function to return NULL on malloc failure.");
+        condition--;
+    }
+}
+*/
 static int g_malloc_hook_active = 0;
 static int g_malloc_fail_count = 0;
 
