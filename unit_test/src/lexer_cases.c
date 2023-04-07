@@ -8,26 +8,37 @@ void redirect_all_std(void)
 
 TestSuite(lexer, .init=redirect_all_std);
 
-t_list	*lexer(const char *command_line, t_status *exit_status);
-
-Test(lexer, malloc_failure_1)
+// Test utility function
+void test_malloc_failure(const char *command)
 {
-    t_status exit = 0;
+    t_status exit;
     int condition;
+    t_list *tokens;
 
+    exit = 0;
     set_malloc_failure_condition(0);
-    t_list *tokens = lexer("test_command", &exit);
+    tokens = lexer(command, &exit);
     ft_lstclear(&tokens, free);
     condition = get_malloc_failure_condition();
     while (condition > 0)
     {
         activate_malloc_hook();
         set_malloc_failure_condition(condition);
-        t_list *tokens = lexer("test_command", &exit);
+        tokens = lexer(command, &exit);
         deactivate_malloc_hook();
-        cr_assert_null(tokens, "Expected lexer to return NULL on malloc failure.");
+        cr_assert_null(tokens, "Expected test function to return NULL on malloc failure.");
         condition--;
     }
+}
+
+Test(lexer, malloc)
+{
+    test_malloc_failure("command");
+}
+
+Test(lexer, malloc_2)
+{
+    test_malloc_failure("command arg1 arg2");
 }
 
 /*******************************************************************************/
