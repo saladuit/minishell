@@ -17,6 +17,11 @@ void setup_env(void)
 
 TestSuite(expand_token, .init=setup_env);
 
+
+/*******************************************************************************/
+/*                           Expand_token                                      */
+/*******************************************************************************/
+
 void assert_expand_token(const char *input, char *expected, t_status status)
 {
 	t_dictionary env[HASH_TABLE_SIZE];
@@ -46,31 +51,6 @@ void assert_expand_token(const char *input, char *expected, t_status status)
   }
 	dict_destroy(env);
 }
-
-/*******************************************************************************/
-/*                           Expand_token                                      */
-/*******************************************************************************/
-
-char *expand_token(char *arg, t_status *status, t_dictionary *envd);
-
-
-// void assert_expand_token(char *in, char *expected, t_status *status)
-// {
-// 	t_dictionary env[HASH_TABLE_SIZE];
-//   char *input;
-//   char *output;
-//
-// 	bzero(env, sizeof(env));
-// 	envp_load(env, environ);
-//   input = ft_strdup(in);
-//   output = expand_token(input, status, env);
-//   cr_expect_str_eq(output, expected, 
-//   		"The expression (as strings) (output) == (expected) is false: actual=`%s` expected=%s` input='%s'",
-//   		output, expected, in);
-//   free(output);
-//   free(input);
-// 	dict_destroy(env);
-// }
 
 /*******************************************************************************/
 /*                           Basic_test_cases                                  */
@@ -369,16 +349,3 @@ Test(expand_token, dollar_0)
 {
 	assert_expand_token("$0", "Sheldon", 0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
