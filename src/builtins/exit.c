@@ -1,5 +1,13 @@
 #include <minishell.h>
 
+static void exit_err_msg(char *arg)
+{
+	ft_putstr_fd(SHELDON, STDERR_FILENO);
+	ft_putstr_fd(": exit: ", STDERR_FILENO);
+	ft_putstr_fd(arg, STDERR_FILENO);
+	ft_putendl_fd(": numeric argument required", STDERR_FILENO);
+}
+
 static int numeric(char *arg)
 {
 	size_t i;
@@ -20,14 +28,6 @@ static int numeric(char *arg)
 	return (1);
 }
 
-static void exit_err_msg(char *arg)
-{
-	ft_putstr_fd(SHELDON, STDERR_FILENO);
-	ft_putstr_fd(": exit: ", STDERR_FILENO);
-	ft_putstr_fd(arg, STDERR_FILENO);
-	ft_putendl_fd(": numeric argument required", STDERR_FILENO);
-}
-
 int	ft_exit(char **args, t_minishell *shell)
 {
 	if (args[1] != NULL)
@@ -39,9 +39,9 @@ int	ft_exit(char **args, t_minishell *shell)
 		}
 		else
 		{
-			shell->status = ft_atoi(args[1]) % 256;
-//			if (0 > shell->status)
-//				shell->status += 256;
+			shell->status = (t_status) ft_atoi(args[1]) % 256;
+			if (0 > shell->status)
+				shell->status += 256;
 		}
 	}
 	shell->stop = true;
