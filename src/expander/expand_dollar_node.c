@@ -49,11 +49,13 @@ char	*expand_dollar(char *arg, size_t *i, t_status *status,
 	if (expansion)
 		return (expansion);
 	len = *i;
-	while (arg[++len] && !is_dollar(arg[len]) && !is_quote(arg[len])
+	while (arg[len++] && !is_dollar(arg[len]) && !is_quote(arg[len])
 		&& !ft_iswhitespace(arg[len]))
 		;
 	len -= *i;
 	sub = ft_substr(&arg[*i], 0, len);
+	if (sub == NULL)
+		return (NULL);
 	expansion = dict_get(env, sub);
 	free(sub);
 	*i += len;
