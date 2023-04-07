@@ -9,7 +9,7 @@ void redirect_all_std_for_exit(void)
 TestSuite(exit, .init=redirect_all_std_for_exit);
 
 /*******************************************************************************/
-/*                                   Exit                                      */
+/*                                Exit_cases                                   */
 /*******************************************************************************/
 
 void	assert_exit(char **in, bool expected_stop, t_status expected_status)
@@ -94,8 +94,14 @@ Test(exit, input_fence)
 	assert_exit(in, true, 0);
 }
 
+Test(exit, input_semicolon)
+{
+	char	*in[] = {"exit", ";", NULL};
+	assert_exit(in, true, 0);
+}
+
 /*******************************************************************************/
-/*                           Exit_with_error_messages                          */
+/*                       Exit_cases_with_error_message                         */
 /*******************************************************************************/
 
 //char	*get_stderr_message(FILE *stderr_msg)
@@ -144,4 +150,55 @@ Test(exit, input_at_sign)
 {
 	char	*in[] = {"exit", "@", NULL};
 	assert_exit_error(in, true, 255, "Sheldon: exit: @: numeric argument required\n");
+}
+
+Test(exit, input_exclamation_mark)
+{
+	char	*in[] = {"exit", "!", NULL};
+	assert_exit_error(in, true, 255, "Sheldon: exit: !: numeric argument required\n");
+}
+
+/*******************************************************************************/
+/*                            Exit_cases_is_pipeline                           */
+/*******************************************************************************/
+
+void	assert_exit_is_pipeline(char **in, t_status expected_status)
+{
+	t_minishell	shell;
+	pid_t		child;
+
+	bzero(&shell, sizeof(t_minishell));
+	shell.is_pipeline = true;
+	child = fork();
+	if (child == -1) {
+		perror("fork");
+		exit(1);
+	}
+	else if (child == 0)
+	{
+		ft_exit(in, &shell);
+	}
+	else
+	{
+		waitpid(child, (int *) &shell.status, 0);
+		cr_expect_eq(WEXITSTATUS(shell.status), expected_status, "The expression (shell.status): %d == (expected_status):  %d is false)", WEXITSTATUS(shell.status), expected_status);
+	}
+}
+
+Test(exit, input_child_zero)
+{
+	char	*in[] = {"exit", "0", NULL};
+	assert_exit_is_pipeline(in, 0);
+}
+
+Test(exit, input_child_one)
+{
+	char	*in[] = {"exit", "1", NULL};
+	assert_exit_is_pipeline(in, 1);
+}
+
+Test(exit, input_child_big_number)
+{
+	char	*in[] = {"exit", "999", NULL};
+	assert_exit_is_pipeline(in, 231);
 }
