@@ -16,7 +16,6 @@ $(MINISHELL): $(OBJS) $(MAIN_OBJ) $(LIBFT)
 
 $(UNIT_TEST): $(UNIT_OBJS) $(OBJS) $(MAIN_OBJ) $(LIBFT)
 	$(CC) $(CFLAGS) $(UNIT_OBJS) $(OBJS) $(LDFLAGS) $(UNIT_INCLUDE_FLAGS) $(INCLUDE_FLAGS) $(LIBFT) -o $(UNIT_TEST)
-	@./$(UNIT_TEST) -j4 $(F)
 
 $(MAIN_OBJ) $(OBJS): $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
@@ -38,6 +37,7 @@ fsan:
 test:
 	@$(RM) $(COVERAGE_GCDA) $(COVERAGE_FILES)
 	@$(MAKE) DEBUG=1 FSAN=1 COV=1 unit_test
+	@./$(UNIT_TEST) -j4 $(F)
 	@lcov -q -d build -d unit_test/build -c --output-file build/coverage.info
 	@genhtml -q build/coverage.info -o build/coverage_report
 
