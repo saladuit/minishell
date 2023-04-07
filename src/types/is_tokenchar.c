@@ -2,9 +2,12 @@
 
 int32_t	is_tokenchar(const char *str)
 {
-	if (*str == '|')
+	char c;
+
+	c = *str;
+	if (is_pipe(c))
 		return (1);
-	else if (*str == '<' || *str == '>')
+	else if (c == '<' || c == '>')
 	{
 		if (!ft_strncmp(str, "<<", 2) || !ft_strncmp(str, ">>", 2))
 			return (2);
