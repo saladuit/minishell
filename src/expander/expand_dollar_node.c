@@ -16,8 +16,6 @@ size_t	len_until_quote_or_dollar(char *str)
 {
 	size_t	len;
 
-	if (!str || !str[0])
-		return (0);
 	len = 1;
 	while (str[len] && !is_dollar(str[len]) && !is_quote(str[len]))
 		len++;
