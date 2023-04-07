@@ -40,7 +40,7 @@ void assert_expand_token(const char *input, char *expected, t_status status)
     set_malloc_failure_condition(condition);
   	output = expand_token((char *)input, &exit, env);
     deactivate_malloc_hook();
-    cr_assert_null(output, "Expected test function to return NULL on malloc failure.");
+    cr_assert_null(output, "Expected test function to return NULL on malloc failure. condition: %d",condition);
   	free(output);
     condition--;
   }
