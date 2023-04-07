@@ -1,7 +1,5 @@
 #include <unit_test.h>
 
-t_status zero = 0;
-t_status max = 255;
 extern char	**environ;
 
 void setup_env(void)
