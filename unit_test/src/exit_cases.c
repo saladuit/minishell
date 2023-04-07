@@ -76,6 +76,12 @@ Test(exit, input_minus_21474836500000)
 	assert_exit(in, true, 224);
 }
 
+Test(exit, input_21474836500000)
+{
+	char	*in[] = {"exit", "214748365000", NULL};
+	assert_exit(in, true, 200);
+}
+
 Test(exit, input_256)
 {
 	char	*in[] = {"exit", "256", NULL};
