@@ -119,6 +119,7 @@ typedef struct s_minishell
 	char			*command_line;
 	t_status		status;
 	bool			stop;
+	bool			is_pipeline;
 }					t_minishell;
 
 typedef struct s_redir
