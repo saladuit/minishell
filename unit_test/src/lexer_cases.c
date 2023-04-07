@@ -1,8 +1,5 @@
 #include <unit_test.h>
 
-extern t_status zero;
-extern t_status max;
-
 void redirect_all_std(void)
 {
     cr_redirect_stdout();
@@ -40,8 +37,10 @@ Test(lexer, malloc_failure_1)
 void assert_lexer_one(char *command_line, char **expected)
 {
     t_list *tokens;
+    t_status status;
 
-    tokens = lexer(command_line, &zero);
+    status = 0;
+    tokens = lexer(command_line, &status);
     cr_expect_str_eq(tokens->content, *expected);
     cr_expect(tokens->next == NULL);
     ft_lstclear(&tokens, free);
@@ -72,8 +71,10 @@ Test(lexer, one_expansion)
 void assert_lexer_two(char *command_line, char **expected)
 {
     t_list *tokens;
+    t_status status;
 
-    tokens = lexer(command_line, &zero);
+    status = 0;
+    tokens = lexer(command_line, &status);
     cr_expect_str_eq(tokens->content, *expected++);
     cr_expect_str_eq(tokens->next->content, *expected);
     cr_expect(tokens->next->next == NULL);
@@ -178,8 +179,10 @@ Test(lexer, file_append_space)
 void assert_lexer_null(char *command_line, char *message)
 {
     t_list *tokens;
+    t_status status;
 
-    tokens = lexer(command_line, &zero);
+    status = 0;
+    tokens = lexer(command_line, &status);
     fflush(stderr);
     cr_expect(tokens==NULL, "Expected lexer to return NULL on error.");
     ft_lstclear(&tokens, free);
