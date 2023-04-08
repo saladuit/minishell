@@ -35,17 +35,18 @@ fsan:
 	@$(MAKE) FSAN=1 DEBUG=1
 
 test:
-	@$(RM) $(COVERAGE_GCDA) $(COVERAGE_FILES)
-	@$(MAKE) DEBUG=1 FSAN=1 COV=1 unit_test
+	@$(MAKE) DEBUG=1 FSAN=1 unit_test
 	@./$(UNIT_TEST) -j4 $(F)
-	@lcov -q -d build -d unit_test/build -c --output-file build/coverage.info
-	@genhtml -q build/coverage.info -o build/coverage_report
+
+coverage:
+	@$(RM) $(COVERAGE_GCDA) $(COVERAGE_FILES)
+	@$(MAKE) DEBUG=1 COV=1 unit_test
+	@./$(UNIT_TEST) -j4 $(F)
+	@lcov -q -d build -d unit_test/build -c --output-file build/coverage.info --rc lcov_branch_coverage=1
+	@genhtml -q build/coverage.info -o build/coverage_report --rc genhtml_branch_coverage=1
 
 analyse:
 	w3m build/coverage_report/index.html
-
-malloc_test: debug 
-	$(CC) $(CFLAGS) $(OBJS) $(MAIN_OBJ) $(LIBFT) -fsanitize=undefined -rdynamic -o $@ $(INCLUDE_FLAGS) $(LDFLAGS) -L. -lmallocator
 
 clean:
 	@$(RM) $(BUILD_DIR) $(UNIT_BUILD_DIR)
@@ -63,9 +64,11 @@ rebug: fclean debug
 
 test_re: fclean test
 
+coverage_re: fclean coverage
+
 bonus: all
 
 .PHONY: all clean fclean re bonus
-.PHONY: malloc_test
-.PHONY: test test_re analyse
+.PHONY: test test_re 
+.PHONY: coverage coverage_re analyse
 .PHONY: debug rebug fsan resan
