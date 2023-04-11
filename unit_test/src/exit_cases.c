@@ -34,12 +34,6 @@ Test(exit, input_123)
 	assert_exit(in, true, 123);
 }
 
-//Test(exit, input_abc)
-//{
-//	char	*in[] = {"exit", "abc", NULL};
-//	assert_exit(in, true, 255);
-//}
-
 Test(exit, input_2147483647)
 {
 	char	*in[] = {"exit", "2147483647", NULL};
