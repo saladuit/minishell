@@ -1,5 +1,22 @@
 #include <minishell.h>
 
+static bool	find_matching_pipe_error(const char *command,
+			const t_tokenerror token_errors[], const char **error_msg)
+{
+	size_t	i;
+
+	i = 0;
+	if (is_pipe(command[i]))
+		i++;
+	if (is_pipe(command[i]))
+		i++;
+	if (i == 1)
+		*error_msg = token_errors[i - 1].error_msg;
+	else if (i == 2)
+		*error_msg = token_errors[i - 1].error_msg;
+	return (true);
+}
+
 /*
  * Function: compare_command_ignore_spaces
  *
@@ -84,6 +101,8 @@ static bool	find_matching_error(const char *command,
 	size_t	i;
 
 	i = 0;
+	if (is_pipe(*command))
+		return (find_matching_pipe_error(command, token_errors, error_msg));
 	while (token_errors[i].token != NULL)
 	{
 		if (compare_command_ignore_spaces(command,
