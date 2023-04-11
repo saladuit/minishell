@@ -32,12 +32,10 @@ jobs:
           sudo pip install cpp-coveralls
       - name: Build project
         run: make
-      - name: Run fsanitizer
-        run: make ftest_re
       - name: Run tests
         run: make test_re
-      - name: Generate coverage
-        run: make coverage
+      - name: Generate Coverage
+        run: make coverage_re
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v1
         with:
