@@ -16,8 +16,6 @@ size_t	len_until_quote_or_dollar(char *str)
 {
 	size_t	len;
 
-	if (!str || !str[0])
-		return (0);
 	len = 1;
 	while (str[len] && !is_dollar(str[len]) && !is_quote(str[len]))
 		len++;
@@ -49,11 +47,13 @@ char	*expand_dollar(char *arg, size_t *i, t_status *status,
 	if (expansion)
 		return (expansion);
 	len = *i;
-	while (arg[++len] && !is_dollar(arg[len]) && !is_quote(arg[len])
+	while (arg[len] && !is_dollar(arg[len]) && !is_quote(arg[len])
 		&& !ft_iswhitespace(arg[len]))
-		;
+		len++;
 	len -= *i;
 	sub = ft_substr(&arg[*i], 0, len);
+	if (sub == NULL)
+		return (NULL);
 	expansion = dict_get(env, sub);
 	free(sub);
 	*i += len;
