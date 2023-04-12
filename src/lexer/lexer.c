@@ -34,10 +34,10 @@ static size_t	get_token_len(const char *command_line)
 	size_t	i;
 
 	i = 0;
-	if (is_tokenchar(&command_line[i]))
-		return (is_tokenchar(&command_line[i]));
+	if (is_metachar(&command_line[i]))
+		return (metachar_len(&command_line[i]));
 	while (command_line[i] && !ft_iswhitespace(command_line[i])
-		&& !is_tokenchar(&command_line[i]))
+		&& !is_metachar(&command_line[i]))
 	{
 		if (is_quotechar(command_line[i]))
 		{
