@@ -33,4 +33,6 @@
 # include <criterion/internal/assert.h>
 # include <custom_malloc.h>
 
+void redirect_all_std(void);
+
 #endif
