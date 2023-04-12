@@ -45,10 +45,10 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Install dependencies
         run: |
-          brew update && brew install criterion readline lcov gcovr
+          brew update && brew install criterion readline lcov
       - name: Build project
         run: make
       - name: Run tests
