@@ -1,8 +1,5 @@
 #include <unit_test.h>
 
-extern t_status zero;
-extern t_status max;
-
 void redirect_all_std(void)
 {
     cr_redirect_stdout();
@@ -11,28 +8,37 @@ void redirect_all_std(void)
 
 TestSuite(lexer, .init=redirect_all_std);
 
-t_list	*lexer(const char *command_line, t_status *exit_status);
-
-Test(lexer, malloc_failure_1)
+// Test utility function
+void test_malloc_failure(const char *command)
 {
-    t_status exit = 0;
+    t_status exit;
+    int condition;
+    t_list *tokens;
 
-    activate_malloc_hook();
-    set_malloc_failure_condition(1);
-    t_list *tokens = lexer("test_command", &exit);
-    deactivate_malloc_hook();
-    cr_assert_null(tokens, "Expected lexer to return NULL on malloc failure.");
+    exit = 0;
+    set_malloc_failure_condition(0);
+    tokens = lexer(command, &exit);
+    ft_lstclear(&tokens, free);
+    condition = get_malloc_failure_condition();
+    while (condition > 0)
+    {
+        activate_malloc_hook();
+        set_malloc_failure_condition(condition);
+        tokens = lexer(command, &exit);
+        deactivate_malloc_hook();
+        cr_assert_null(tokens, "Expected test function to return NULL on malloc failure.");
+        condition--;
+    }
 }
 
-Test(lexer, malloc_failure_2)
+Test(lexer, malloc)
 {
-    t_status exit = 0;
+    test_malloc_failure("command");
+}
 
-    activate_malloc_hook();
-    set_malloc_failure_condition(2);
-    t_list *tokens = lexer("test_command", &exit);
-    deactivate_malloc_hook();
-    cr_assert_null(tokens, "Expected lexer to return NULL on malloc failure.");
+Test(lexer, malloc_2)
+{
+    test_malloc_failure("command arg1 arg2");
 }
 
 /*******************************************************************************/
@@ -42,8 +48,10 @@ Test(lexer, malloc_failure_2)
 void assert_lexer_one(char *command_line, char **expected)
 {
     t_list *tokens;
+    t_status status;
 
-    tokens = lexer(command_line, &zero);
+    status = 0;
+    tokens = lexer(command_line, &status);
     cr_expect_str_eq(tokens->content, *expected);
     cr_expect(tokens->next == NULL);
     ft_lstclear(&tokens, free);
@@ -74,8 +82,10 @@ Test(lexer, one_expansion)
 void assert_lexer_two(char *command_line, char **expected)
 {
     t_list *tokens;
+    t_status status;
 
-    tokens = lexer(command_line, &zero);
+    status = 0;
+    tokens = lexer(command_line, &status);
     cr_expect_str_eq(tokens->content, *expected++);
     cr_expect_str_eq(tokens->next->content, *expected);
     cr_expect(tokens->next->next == NULL);
@@ -180,8 +190,10 @@ Test(lexer, file_append_space)
 void assert_lexer_null(char *command_line, char *message)
 {
     t_list *tokens;
+    t_status status;
 
-    tokens = lexer(command_line, &zero);
+    status = 0;
+    tokens = lexer(command_line, &status);
     fflush(stderr);
     cr_expect(tokens==NULL, "Expected lexer to return NULL on error.");
     ft_lstclear(&tokens, free);
