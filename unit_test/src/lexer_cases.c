@@ -233,7 +233,7 @@ Test(lexer, null_pipe_double)
 // STILL FAILING
 Test(lexer, null_exit_pipe)
 {
-    assert_lexer_null("exit|", "sheldon: syntax error near unexpected token `||'\n");
+    assert_lexer_null("exit|", "sheldon: syntax error near unexpected token `|'\n");
 }
 
 Test(lexer, null_pipe_exit)
@@ -249,6 +249,16 @@ Test(lexer, null_two_pipes_exit)
 Test(lexer, null_three_pipes_exit)
 {
 	assert_lexer_null("|||exit", "sheldon: syntax error near unexpected token `||'\n");
+}
+
+Test(lexer, null_exit_three_pipes_exit)
+{
+	assert_lexer_null("exit|||exit", "sheldon: syntax error near unexpected token `|'\n");
+}
+
+Test(lexer, null_pipe_hallo_pipe_hallo)
+{
+	assert_lexer_null("|hallo|hallo", "sheldon: syntax error near unexpected token `|'\n");
 }
 
 // STILL FAILING
