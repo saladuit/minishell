@@ -1,3 +1,6 @@
-//
-// Created by Lucien Van Bussel on 4/12/23.
-//
+#include <minishell.h>
+
+bool	is_meta(int c)
+{
+	return (c == '|' || c == '<' || c == '>');
+}
