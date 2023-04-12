@@ -241,7 +241,8 @@ bool				is_quote(int c);
 bool				is_double_quote(int c);
 bool				is_single_quote(int c);
 bool				is_quotechar(const char c);
-int32_t			is_tokenchar(const char *str);
+bool				is_metachar(const char *str);
+int32_t				metachar_len(const char *str);
 
 // Expander
 char				*expand_dollar(char *arg, size_t *i, t_status *status,
