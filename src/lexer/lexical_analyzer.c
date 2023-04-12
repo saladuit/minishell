@@ -1,19 +1,14 @@
 #include <minishell.h>
 
 static bool	find_matching_pipe_error(const char *command,
-			const t_tokenerror token_errors[], const char **error_msg)
+										const t_tokenerror token_errors[], const char **error_msg)
 {
 	size_t	i;
 
-	i = 0;
+	i = 1;
 	if (is_pipe(command[i]))
 		i++;
-	if (is_pipe(command[i]))
-		i++;
-	if (i == 1)
-		*error_msg = token_errors[i - 1].error_msg;
-	else if (i == 2)
-		*error_msg = token_errors[i - 1].error_msg;
+	*error_msg = token_errors[i - 1].error_msg;
 	return (true);
 }
 
@@ -49,19 +44,16 @@ static int	compare_command_ignore_spaces(const char *command, const char *cmp)
 	j = 0;
 	while (command[i] && cmp[j])
 	{
-		while (command[i] && command[i] == ' ')
-			i++;
-		while (cmp[j] && cmp[j] == ' ')
+		if (command[i] != ' ' && cmp[j] == ' ')
 			j++;
+		if (command[i] == ' ' && cmp[j] != ' ')
+			i++;
 		if (command[i++] != cmp[j++])
 			return (false);
 	}
 	while (command[i])
-	{
-		if (command[i] != ' ')
+		if (command[i++] != ' ')
 			return (false);
-		i++;
-	}
 	return (true);
 }
 
@@ -114,6 +106,22 @@ static bool	find_matching_error(const char *command,
 		i++;
 	}
 	return (false);
+}
+
+bool	check_meta_conventions(const char *command, const char **error_msg)
+{
+	const t_tokenerror		token_errors[] = {
+			{"|", "|"},
+			{"||", "||"},
+			{"<", "newline"},
+			{"<<", "newline"},
+			{">", "newline"},
+			{">>", "newline"},
+			{NULL, NULL}};
+
+	if (find_matching_error(command, token_errors, error_msg))
+		return (false);
+	return (true);
 }
 
 bool	check_lexical_conventions(const char *command, t_status *exit)
