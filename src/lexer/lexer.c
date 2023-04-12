@@ -68,10 +68,11 @@ static char	*make_token(const char **command_line, t_status *exit)
 	return (symbol);
 }
 
-static t_list	*create_token_node(const char **command_line, t_status *exit)
+static t_list	*create_token_node(const char **command_line,
+									t_status *exit, t_lexer *lex)
 {
-	t_list	*node;
-	char	*token;
+	t_list		*node;
+	char		*token;
 
 	token = make_token(command_line, exit);
 	if (!token)
@@ -79,6 +80,11 @@ static t_list	*create_token_node(const char **command_line, t_status *exit)
 		*exit = message_system_call_error("lexer");
 		return (NULL);
 	}
+	if (lex->token_count != 0 && !check_meta_conventions(token,
+			&lex->error_msg))
+		lex->meta_count++;
+	else
+		lex->meta_count = 0;
 	node = ft_lstnew(token);
 	if (!node)
 	{
@@ -86,32 +92,35 @@ static t_list	*create_token_node(const char **command_line, t_status *exit)
 		free(token);
 		return (NULL);
 	}
+	lex->token_count++;
 	return (node);
 }
 
 t_list	*lexer(const char *command_line, t_status *exit)
 {
-	t_list	*node;
-	t_list	*tokens;
+	t_lexer	lex;
 
+	lexer_initialize(&lex);
 	if (check_lexical_conventions(command_line, exit) == false)
 		return (NULL);
 	if (are_quotes_closed(command_line) == false)
-	{
-		*exit = message_general_error(E_QUOTES, command_line);
-		return (NULL);
-	}
-	tokens = NULL;
-	while (*command_line)
+		return (*exit = message_general_error(E_QUOTES, command_line), NULL);
+	while (*command_line && lex.meta_count < 2)
 	{
 		ft_skip_whitespaces(&command_line);
 		if (*command_line)
 		{
-			node = create_token_node(&command_line, exit);
-			if (!node)
+			lex.node = create_token_node(&command_line, exit, &lex);
+			if (!lex.node)
 				return (NULL);
-			ft_lstadd_back(&tokens, node);
+			ft_lstadd_back(&lex.tokens, lex.node);
 		}
 	}
-	return (tokens);
+	if (lex.meta_count > 1 || !check_meta_conventions(ft_lstlast(
+				lex.tokens)->content, &lex.error_msg))
+	{
+		*exit = message_general_error(E_UNEXPECTED_TOKEN, lex.error_msg);
+		return (NULL);
+	}
+	return (lex.tokens);
 }
