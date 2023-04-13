@@ -98,39 +98,15 @@ Test(exit, input_semicolon)
 /*                       Exit_cases_with_error_message                         */
 /*******************************************************************************/
 
-//char	*get_stderr_message(FILE *stderr_msg)
-//{
-//	char	*error_message = NULL;
-//	size_t	error_size = 0;
-//	size_t	read_size;
-//
-//	/* Read the error message from stderr_msg */
-//	while ((read_size = fread(NULL, 1, 0, stderr_msg)) == 0)
-//	{
-//		error_message = realloc(error_message, error_size + BUFSIZ);
-//		read_size = fread(error_message + error_size, 1, BUFSIZ, stderr_msg);
-//		error_size += read_size;
-//	}
-//
-//	/* Null-terminate the error message */
-//	error_message = realloc(error_message, error_size + 1);
-//	error_message[error_size] = '\0';
-//
-//	return error_message;
-//}
-
 void	assert_exit_error(char **in, bool expected_stop, t_status expected_status, char *expected_message)
 {
 	t_minishell	shell;
-//	char		*err_msg;
 
 	bzero(&shell, sizeof(t_minishell));
 	fflush(stderr);
 	ft_exit(in, &shell);
 	cr_expect_eq(shell.stop, expected_stop);
 	cr_expect_eq(shell.status, expected_status, "The expression (shell.status): %d == (expected_status):  %d is false)", shell.status, expected_status);
-//	err_msg = get_stderr_message(stderr);
-//	cr_expect_stderr_eq_str(expected_message, "actual: \"%s\", expected: \"%s\"\n", err_msg, expected_message);
 	cr_expect_stderr_eq_str(expected_message);
 }
 
@@ -150,6 +126,12 @@ Test(exit, input_exclamation_mark)
 {
 	char	*in[] = {"exit", "!", NULL};
 	assert_exit_error(in, true, 255, "Sheldon: exit: !: numeric argument required\n");
+}
+
+Test(exit, input_one_one)
+{
+	char	*in[] = {"exit", "1", "1", NULL};
+	assert_exit_error(in, false, 1, "Sheldon: exit: too many arguments\n");
 }
 
 /*******************************************************************************/
