@@ -4,8 +4,13 @@ static void exit_err_msg(char *arg)
 {
 	ft_putstr_fd(SHELDON, STDERR_FILENO);
 	ft_putstr_fd(": exit: ", STDERR_FILENO);
-	ft_putstr_fd(arg, STDERR_FILENO);
-	ft_putendl_fd(": numeric argument required", STDERR_FILENO);
+	if (!arg)
+		ft_putendl_fd("too many arguments", STDERR_FILENO);
+	else
+	{
+		ft_putstr_fd(arg, STDERR_FILENO);
+		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
+	}
 }
 
 static int numeric(char *arg)
@@ -30,6 +35,12 @@ static int numeric(char *arg)
 
 int	ft_exit(char **args, t_minishell *shell)
 {
+	if (args[2] != NULL)
+	{
+		shell->status = E_GENERAL;
+		exit_err_msg(NULL);
+		return (shell->status);
+	}
 	if (args[1] != NULL)
 	{
 		if (!numeric(args[1]))
