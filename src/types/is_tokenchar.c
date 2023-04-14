@@ -7,7 +7,7 @@ bool	is_metachar(const char *str)
 	return (false);
 }
 
-int32_t	metachar_len(const char *str)
+size_t	metachar_len(const char *str)
 {
 	if (!ft_strncmp(str, "<<", 2) || !ft_strncmp(str, ">>", 2))
 		return (2);
