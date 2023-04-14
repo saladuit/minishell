@@ -1,41 +1,26 @@
 #include <minishell.h>
 
-static bool	validflag(char *flag)
-{
-	int32_t	i;
-
-	if (flag && flag[0] == '-')
-	{
-		i = 1;
-		while (flag[i] && flag[i] == 'n')
-			i++;
-		if (!flag[i] && i > 1)
-			return (1);
-	}
-	return (0);
-}
-
 int32_t	ft_echo(char **arguments, t_minishell *shell)
 {
-	int32_t	i;
+	size_t	i;
 	bool	newline;
 
 	(void)shell;
 	newline = true;
 	i = 1;
-	while (validflag(arguments[i]))
+	if (arguments[i] && !ft_strncmp(arguments[i], "-n", 2))
 	{
 		newline = false;
 		i++;
 	}
 	while (arguments[i])
 	{
-		write(1, arguments[i], ft_strlen(arguments[i]));
+		write(STDOUT_FILENO, arguments[i], ft_strlen(arguments[i]));
 		i++;
 		if (arguments[i])
-			write(1, " ", 1);
+			write(STDOUT_FILENO, " ", 1);
 	}
 	if (newline)
-		write(1, "\n", 1);
+		write(STDOUT_FILENO, "\n", 1);
 	return (0);
 }
