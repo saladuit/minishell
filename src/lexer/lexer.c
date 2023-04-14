@@ -39,7 +39,7 @@ static size_t	get_token_len(const char *command_line)
 	while (command_line[i] && !ft_iswhitespace(command_line[i])
 		&& !is_metachar(&command_line[i]))
 	{
-		if (is_quotechar(command_line[i]))
+		if (is_quote(command_line[i]))
 		{
 			next_quote = i + 1;
 			while (command_line[next_quote] != command_line[i]
