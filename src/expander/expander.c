@@ -67,7 +67,6 @@ char	*expand_token(char *arg, t_status *status, t_dictionary *env)
 {
 	t_expander	exp;
 
-	assert(arg && env);
 	init_expander(&exp);
 	while (arg[exp.i])
 	{
