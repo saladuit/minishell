@@ -6,8 +6,7 @@ static bool	are_quotes_closed(const char *str)
 {
 	size_t	count;
 	size_t	i;
-	int		quote;
-	char	c;
+	char quote;
 
 	i = 0;
 	count = 0;
@@ -16,11 +15,14 @@ static bool	are_quotes_closed(const char *str)
 	{
 		if (is_quote(str[i]) && !quote)
 		{
-			c = str[i];
-			quote = 1;
-		}
-		if (str[i] == c && quote)
+			quote = str[i];
 			count++;
+		}
+		else if (str[i] == quote)
+		{
+			quote = 0;
+			count++;
+		}
 		i++;
 	}
 	if (count % 2 == 0)
@@ -39,7 +41,7 @@ static size_t	get_token_len(const char *command_line)
 	while (command_line[i] && !ft_iswhitespace(command_line[i])
 		&& !is_metachar(&command_line[i]))
 	{
-		if (is_quotechar(command_line[i]))
+		if (is_quote(command_line[i]))
 		{
 			next_quote = i + 1;
 			while (command_line[next_quote] != command_line[i]

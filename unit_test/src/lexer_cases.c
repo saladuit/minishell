@@ -2,39 +2,6 @@
 
 TestSuite(lexer, .init=redirect_all_std);
 
-// Test utility function
-void test_malloc_failure(const char *command)
-{
-    t_status exit;
-    int condition;
-    t_list *tokens;
-
-    exit = 0;
-    set_malloc_failure_condition(0);
-    tokens = lexer(command, &exit);
-    ft_lstclear(&tokens, free);
-    condition = get_malloc_failure_condition();
-    while (condition > 0)
-    {
-        activate_malloc_hook();
-        set_malloc_failure_condition(condition);
-        tokens = lexer(command, &exit);
-        deactivate_malloc_hook();
-        cr_assert_null(tokens, "Expected test function to return NULL on malloc failure.");
-        condition--;
-    }
-}
-
-Test(lexer, malloc)
-{
-    test_malloc_failure("command");
-}
-
-Test(lexer, malloc_2)
-{
-    test_malloc_failure("command arg1 arg2");
-}
-
 /*******************************************************************************/
 /*                           Lexer_one                                         */
 /*******************************************************************************/
@@ -42,13 +9,26 @@ Test(lexer, malloc_2)
 void assert_lexer_one(char *command_line, char **expected)
 {
     t_list *tokens;
+    int32_t condition;
     t_status status;
 
     status = 0;
+    set_malloc_failure_condition(0);
     tokens = lexer(command_line, &status);
+    condition = get_malloc_failure_condition();
+    cr_assert(tokens != NULL, "Expected test function to return a list of tokens.");
     cr_expect_str_eq(tokens->content, *expected);
     cr_expect(tokens->next == NULL);
     ft_lstclear(&tokens, free);
+    while (condition > 0)
+    {
+        activate_malloc_hook();
+        set_malloc_failure_condition(condition);
+        tokens = lexer(command_line, &status);
+        deactivate_malloc_hook();
+        cr_assert_null(tokens, "Expected test function to return NULL on malloc failure.");
+        condition--;
+    }
 }
 
 Test(lexer, one_ls)
@@ -69,6 +49,24 @@ Test(lexer, one_expansion)
    assert_lexer_one("$HELLO", expected);
 }
 
+Test(lexer, single_quote_in_double_quotes_and_vice_versa_one_node)
+{
+    char *expected[] = {"\"'\"'\"'", NULL};
+    assert_lexer_one("\"'\"'\"'", expected);
+}
+
+Test(lexer, double_quote_in_single_quotes)
+{
+    char *expected[] = {"'\"'", NULL};
+    assert_lexer_one("'\"'", expected);
+}
+
+Test(lexer, single_quote_in_double_quotes)
+{
+    char *expected[] = {"\"'\"", NULL};
+    assert_lexer_one("\"'\"", expected);
+}
+
 /*******************************************************************************/
 /*                           Lexer_two                                         */
 /*******************************************************************************/
@@ -77,13 +75,26 @@ void assert_lexer_two(char *command_line, char **expected)
 {
     t_list *tokens;
     t_status status;
+    int32_t condition;
 
     status = 0;
+    set_malloc_failure_condition(0);
     tokens = lexer(command_line, &status);
+    condition = get_malloc_failure_condition();
+    cr_assert(tokens != NULL, "Expected test function to return a list of tokens.");
     cr_expect_str_eq(tokens->content, *expected++);
     cr_expect_str_eq(tokens->next->content, *expected);
     cr_expect(tokens->next->next == NULL);
     ft_lstclear(&tokens, free);
+    while (condition > 0)
+    {
+        activate_malloc_hook();
+        set_malloc_failure_condition(condition);
+        tokens = lexer(command_line, &status);
+        deactivate_malloc_hook();
+        cr_assert_null(tokens, "Expected test function to return NULL on malloc failure.");
+        condition--;
+    }
 }
 
 Test(lexer, two_ls_l)
@@ -174,6 +185,12 @@ Test(lexer, file_append_space)
 {
     char *expected[] = {">>", "append", NULL};
     assert_lexer_two(" >>\tappend ", expected);
+}
+
+Test(lexer, single_quote_in_double_quotes_and_vice_versa_two_nodes)
+{
+    char *expected[] = {"\"'\"", "'\"'", NULL};
+    assert_lexer_two("\"'\" '\"'", expected);
 }
 /*******************************************************************************/
 /*                           null_Lexer                                        */
@@ -320,8 +337,3 @@ Test(lexer, null_exclamation_mark)
 {
 	assert_lexer_null("!", "sheldon: syntax error near unexpected token `newline'\n");
 }
-
-//Test(lexer, null_command)
-//{
-//    assert_lexer_null("echo");
-//}
