@@ -35,6 +35,8 @@ static int numeric(char *arg)
 
 int	ft_exit(char **args, t_minishell *shell)
 {
+	long long	res;
+
 	if (args[2] != NULL)
 	{
 		shell->status = E_GENERAL;
@@ -43,17 +45,13 @@ int	ft_exit(char **args, t_minishell *shell)
 	}
 	if (args[1] != NULL)
 	{
-		if (!numeric(args[1]))
+		if (!numeric(args[1]) || (!ft_ltoi_with_overflow(args[1], &res)))
 		{
 			shell->status = E_UNKNOWN;
 			exit_err_msg(args[1]);
 		}
 		else
-		{
 			shell->status = (t_status) ft_atoi(args[1]) % 256;
-			if (0 > shell->status)
-				shell->status += 256;
-		}
 	}
 	if (shell->is_pipeline)
 		_exit(shell->status);
