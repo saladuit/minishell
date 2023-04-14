@@ -24,7 +24,7 @@ void	assert_exit(char **in, bool expected_stop, t_status expected_status)
 
 Test(exit, no_argument)
 {
-	char	*in[] = {"exit", NULL};
+	char	*in[] = {"exit", NULL, NULL};
 	assert_exit(in, true, 0);
 }
 
