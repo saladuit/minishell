@@ -187,6 +187,8 @@ int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds,
 	pid_t		pid;
 	int32_t		i;
 
+	if (ct->n_commands > 1)
+		shell->is_pipeline = true;
 	if (init_first_pipe(pipe_fds) == -1)
 		return (E_GENERAL);
 	i = 0;

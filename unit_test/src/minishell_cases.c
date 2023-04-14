@@ -32,6 +32,7 @@ static int	read_from_file(void *cookie, void *buffer, size_t *size)
 	*size = read_size;
 	return (0);
 }
+
 void	assert_minishell(char *command_line, char *case_name)
 {
 	char	*txt_file_path;
