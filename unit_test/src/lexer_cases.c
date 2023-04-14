@@ -61,6 +61,18 @@ Test(lexer, single_quote_in_double_quotes_and_vice_versa_one_node)
     assert_lexer_one("\"'\"'\"'", expected);
 }
 
+Test(lexer, double_quote_in_single_quotes)
+{
+    char *expected[] = {"'\"'", NULL};
+    assert_lexer_one("'\"'", expected);
+}
+
+Test(lexer, single_quote_in_double_quotes)
+{
+    char *expected[] = {"\"'\"", NULL};
+    assert_lexer_one("\"'\"", expected);
+}
+
 /*******************************************************************************/
 /*                           Lexer_two                                         */
 /*******************************************************************************/
@@ -181,7 +193,7 @@ Test(lexer, file_append_space)
     assert_lexer_two(" >>\tappend ", expected);
 }
 
-Test(lexer, single_quote_in_double_quotes_and_vice_versa)
+Test(lexer, single_quote_in_double_quotes_and_vice_versa_two_nodes)
 {
     char *expected[] = {"\"'\"", "'\"'", NULL};
     assert_lexer_two("\"'\" '\"'", expected);
