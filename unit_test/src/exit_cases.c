@@ -70,6 +70,12 @@ Test(exit, input_minus_21474836500000)
 	assert_exit(in, true, 224);
 }
 
+Test(exit, input_minus_1234)
+{
+	char	*in[] = {"exit", "-1234", NULL};
+	assert_exit(in, true, 46);
+}
+
 Test(exit, input_21474836500000)
 {
 	char	*in[] = {"exit", "214748365000", NULL};
@@ -92,6 +98,42 @@ Test(exit, input_semicolon)
 {
 	char	*in[] = {"exit", ";", NULL};
 	assert_exit(in, true, 0);
+}
+
+Test(exit, input_one_with_zeros_in_front)
+{
+	char	*in[] = {"exit", "0001", NULL};
+	assert_exit(in, true, 1);
+}
+
+Test(exit, input_one_with_spaces_in_front)
+{
+	char	*in[] = {"exit", "   1", NULL};
+	assert_exit(in, true, 1);
+}
+
+Test(exit, input_one_with_spaces_and_zeros_in_front)
+{
+	char	*in[] = {"exit", "   0001", NULL};
+	assert_exit(in, true, 1);
+}
+
+Test(exit, input_only_zeros)
+{
+	char	*in[] = {"exit", "0000", NULL};
+	assert_exit(in, true, 0);
+}
+
+Test(exit, input_only_spaces)
+{
+	char	*in[] = {"exit", "    ", NULL};
+	assert_exit(in, true, 0);
+}
+
+Test(exit, input_very_big_number)
+{
+	char	*in[] = {"exit", "129052340578423590778257728345834758", NULL};
+	assert_exit(in, true, 255);
 }
 
 /*******************************************************************************/
