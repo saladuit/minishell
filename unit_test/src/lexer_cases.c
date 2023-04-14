@@ -22,6 +22,7 @@ void assert_lexer_one(char *command_line, char **expected)
     set_malloc_failure_condition(0);
     tokens = lexer(command_line, &status);
     condition = get_malloc_failure_condition();
+    cr_assert(tokens != NULL, "Expected test function to return a list of tokens.");
     cr_expect_str_eq(tokens->content, *expected);
     cr_expect(tokens->next == NULL);
     ft_lstclear(&tokens, free);
@@ -74,6 +75,7 @@ void assert_lexer_two(char *command_line, char **expected)
     set_malloc_failure_condition(0);
     tokens = lexer(command_line, &status);
     condition = get_malloc_failure_condition();
+    cr_assert(tokens != NULL, "Expected test function to return a list of tokens.");
     cr_expect_str_eq(tokens->content, *expected++);
     cr_expect_str_eq(tokens->next->content, *expected);
     cr_expect(tokens->next->next == NULL);
