@@ -66,7 +66,7 @@ typedef enum e_status
 	E_EXIT_INVALID_ARG = 128,
 	E_FATAL_SIGNAL = 128,
 	E_CTRL_C = 130,
-	E_UNKNOWN = 225,
+	E_UNKNOWN = 255,
 	E_UNEXPECTED_TOKEN = 258,
 	E_QUOTES = 259,
 }					t_status;
@@ -127,6 +127,8 @@ typedef struct s_minishell
 	t_list			*tokens;
 	char			*command_line;
 	t_status		status;
+	bool			stop;
+	bool			is_pipeline;
 }					t_minishell;
 
 typedef struct s_redir
@@ -252,7 +254,7 @@ char				*expand_token(char *arg, t_status *status, t_dictionary *envd);
 size_t				len_until_quote_or_dollar(char *str);
 
 // Executor
-int32_t			executor(t_minishell *shell);
+int32_t				executor(t_minishell *shell);
 bool				protected_dup2(int fd, t_type type);
 bool				open_redir(char *path, t_type type);
 int					is_dir(char *path);
@@ -267,6 +269,6 @@ int					ft_pwd(char **arguments, t_minishell *shell);
 int					ft_export(char **arguments, t_minishell *shell);
 int					ft_unset(char **arguments, t_minishell *shell);
 int					ft_env(char **arguments, t_minishell *shell);
-int					ft_exit(char **arguments, t_minishell *shell);
+int 				ft_exit(char **args, t_minishell *shell);
 
 #endif
