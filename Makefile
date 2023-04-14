@@ -35,7 +35,7 @@ fsan:
 	@$(MAKE) FSAN=1 DEBUG=1
 
 test:
-	@$(MAKE) DEBUG=1 FSAN=1 unit_test
+	@$(MAKE) DEBUG=1 FSAN=1 fsan unit_test
 	@./$(UNIT_TEST) -j4 $(F)
 
 coverage:
