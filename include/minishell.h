@@ -111,6 +111,15 @@ typedef struct s_dictionary
 	size_t			size;
 }					t_dictionary;
 
+typedef struct s_lexer
+{
+	t_list		*node;
+	t_list		*tokens;
+	size_t		token_count;
+	size_t		meta_count;
+	const char	*error_msg;
+}				t_lexer;
+
 typedef struct s_minishell
 {
 	t_dictionary	env;
@@ -186,6 +195,8 @@ t_list				*lexer(const char *command_line, t_status *status);
 void					ft_skip_whitespaces(const char **input);
 bool					quotes_even_or_odd(const char *str); // (by Lucien)
 bool					check_lexical_conventions(const char *command, t_status *exit);
+bool				check_meta_conventions(const char *command, const char **error_msg);
+void 				lexer_initialize(t_lexer *lex);
 
 // Parser
 t_list				*parser(t_list *tokens, t_status *status, t_dictionary *env);
@@ -226,12 +237,14 @@ t_status			message_general_error(t_status status, const char *msg);
 // Minitypes
 bool				is_pipe(int c);
 bool				is_dollar(int c);
+bool				is_meta(int c);
 bool				is_redir(int c);
 bool				is_quote(int c);
 bool				is_double_quote(int c);
 bool				is_single_quote(int c);
 bool				is_quotechar(const char c);
-int32_t			is_tokenchar(const char *str);
+bool				is_metachar(const char *str);
+int32_t				metachar_len(const char *str);
 
 // Expander
 char				*expand_dollar(char *arg, size_t *i, t_status *status,

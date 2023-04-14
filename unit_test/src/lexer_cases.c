@@ -219,25 +219,52 @@ Test(lexer, null_heredoc)
     assert_lexer_null("<<", "sheldon: syntax error near unexpected token `newline'\n");
 }
 
+Test(lexer, null_input_output)
+{
+assert_lexer_null("<>", "sheldon: syntax error near unexpected token `newline'\n");
+}
+
 Test(lexer, null_pipe_double)
 {
     assert_lexer_null("||", "sheldon: syntax error near unexpected token `||'\n");
 }
 
-// Test(lexer, null_exit_pipe)
-// {
-//     assert_lexer_null("exit|", "sheldon: syntax error near unexpected token `||'\n");
-// }
-//
-// Test(lexer, null_pipe_exit)
-// {
-//     assert_lexer_null("|exit", "sheldon: syntax error near unexpected token `||'\n");
-// }
-//
-// Test(lexer, null_pipe_exit_output)
-// {
-//     assert_lexer_null("exit|<", "sheldon: syntax error near unexpected token `||'\n");
-// }
+// STILL FAILING
+Test(lexer, null_exit_pipe)
+{
+    assert_lexer_null("exit|", "sheldon: syntax error near unexpected token `|'\n");
+}
+
+Test(lexer, null_pipe_exit)
+{
+    assert_lexer_null("|exit", "sheldon: syntax error near unexpected token `|'\n");
+}
+
+Test(lexer, null_two_pipes_exit)
+{
+	assert_lexer_null("||exit", "sheldon: syntax error near unexpected token `||'\n");
+}
+
+Test(lexer, null_three_pipes_exit)
+{
+	assert_lexer_null("|||exit", "sheldon: syntax error near unexpected token `||'\n");
+}
+
+Test(lexer, null_exit_three_pipes_exit)
+{
+	assert_lexer_null("exit|||exit", "sheldon: syntax error near unexpected token `|'\n");
+}
+
+Test(lexer, null_pipe_hallo_pipe_hallo)
+{
+	assert_lexer_null("|hallo|hallo", "sheldon: syntax error near unexpected token `|'\n");
+}
+
+// STILL FAILING
+Test(lexer, null_pipe_exit_output)
+{
+    assert_lexer_null("exit|<", "sheldon: syntax error near unexpected token `newline'\n");
+}
 
 Test(lexer, null_append_output)
 {
