@@ -57,7 +57,7 @@ void	dict_print(t_dictionary *dict)
 	while (i < HASH_TABLE_SIZE)
 	{
 		pair = dict->table[i];
-		while (pair)
+		while (pair && ft_strlen(pair->key) > 0)
 		{
 			printf("%s=%s\n", pair->key, pair->value);
 			pair = pair->next;
