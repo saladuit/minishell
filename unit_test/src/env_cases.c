@@ -1,54 +1,79 @@
 #include <unit_test.h>
 
 /*******************************************************************************/
-/*                           Envp_load                                         */
+/*                               Env_cases                                     */
 /*******************************************************************************/
 
-TestSuite(envp_load, .init=redirect_all_std);
+TestSuite(env_builtin, .init=redirect_all_std);
 
-void assert_envp_load(char **input,char *key, char *expected)
+void assert_env(char **input, char *expected, char **environ)
 {
-  int condition;
-  t_dictionary env[HASH_TABLE_SIZE];
+	t_minishell	shell;
 
-  bzero(env, sizeof(env));
-  set_malloc_failure_condition(0);
-  envp_load(env, input);
-  cr_expect_str_eq(dict_get(env, key), expected);
-  condition = get_malloc_failure_condition();
-  dict_destroy(env);
-  while (condition > 0)
-  {
-    activate_malloc_hook();
-    set_malloc_failure_condition(condition);
-    bzero(env, sizeof(env));
-    envp_load(env, input);
-    deactivate_malloc_hook();
-    cr_expect_null(dict_get(env, key), "Expected test function to return NULL on malloc failure.");
-    condition--;
-  }
+	bzero(&shell, sizeof(shell));
+	envp_load(&shell.env, environ);
+	ft_env(input, &shell);
+	cr_assert_not_null(expected);
+	fflush(stdout);
+	cr_assert_stdout_eq_str(expected);
+	dict_destroy(&shell.env);
 }
 
-Test(envp_load, basic)
+Test(env_builtin, empty)
 {
-  char *input[] = {"HELLO=Hello", NULL};
-  assert_envp_load(input , "HELLO", "Hello");
+	char	*environ[] = {"", NULL};
+	char	*input[] = {"env", NULL};
+	char	*expected = "";
+	assert_env(input, expected, environ);
 }
 
-Test(envp_load, empty_equals)
+Test(env_builtin, empty_is_empty)
 {
-  char *input[] = {"HELLO=", NULL};
-  assert_envp_load(input , "HELLO", "");
+	char	*environ[] = {"EMPTY=", NULL};
+	char	*input[] = {"env", NULL};
+	char	*expected = "EMPTY=\n";
+	assert_env(input, expected, environ);
+	}
+
+Test(env_builtin, hello)
+{
+	char	*environ[] = {"HELLO=Hello", NULL};
+	char	*input[] = {"env", NULL};
+	char	*expected = "HELLO=Hello\n";
+	assert_env(input, expected, environ);
 }
 
-Test(envp_load, empty)
+Test(env_builtin, hello_bye)
 {
-  char *input[] = {"HELLO", NULL};
-  assert_envp_load(input , "HELLO", "");
+	char	*environ[] = {"HELLO=Hello\nBYE=Bye", NULL};
+	char	*input[] = {"env", NULL};
+	char	*expected = "HELLO=Hello\nBYE=Bye\n";
+	assert_env(input, expected, environ);
 }
 
-Test(envp_load, dollar)
+/*******************************************************************************/
+/*                            Env_multiple_args                                */
+/*******************************************************************************/
+
+void	assert_env_multiple_args(char **input, int expected)
 {
-  char *input[] = {"DOLLAR=$", NULL};
-  assert_envp_load(input , "DOLLAR", "$");
+	t_minishell	shell;
+
+	bzero(&shell, sizeof(shell));
+	int	expression = ft_env(input, &shell);
+	cr_assert_eq(expression, expected);
+}
+
+Test(env_builtin, arg_is_two)
+{
+	char	*input[] = {"env", "yes", NULL};
+	int		expected = 127;
+	assert_env_multiple_args(input, expected);
+}
+
+Test(env_builtin, arg_is_three)
+{
+	char	*input[] = {"env", "yes", "no", NULL};
+	int		expected = 127;
+	assert_env_multiple_args(input, expected);
 }
