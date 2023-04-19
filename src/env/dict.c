@@ -130,7 +130,7 @@ int32_t	dict_set(t_dictionary *dict, char *key, char *value)
 
 	index = hash(key);
 	pair = dict->table[index];
-	while (pair != NULL && strcmp(pair->key, key) != 0)
+	while (pair && strcmp(pair->key, key) != 0)
 		pair = pair->next;
 	if (pair && pair->value)
 		free(pair->value);
