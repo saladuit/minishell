@@ -117,6 +117,7 @@ typedef struct s_lexer
 	t_list		*tokens;
 	size_t		token_count;
 	size_t		meta_count;
+	bool		meta_conv;
 	const char	*error_msg;
 }				t_lexer;
 
@@ -194,9 +195,10 @@ char				**dict_to_envp(t_dictionary *dict);
 t_list				*lexer(const char *command_line, t_status *status);
 void					ft_skip_whitespaces(const char **input);
 bool					quotes_even_or_odd(const char *str); // (by Lucien)
-bool					check_lexical_conventions(const char *command, t_status *exit);
-bool				check_meta_conventions(const char *command, const char **error_msg);
+bool					check_lexical_conventions(const char *command, t_status *exit, t_lexer *lex);
+bool				check_meta_conventions(const char *command, const char **error_msg, t_lexer *lex);
 void 				lexer_initialize(t_lexer *lex);
+bool				control_conventions(const char *command, t_status *exit, t_lexer *lex, const char **error_msg);
 
 // Parser
 t_list				*parser(t_list *tokens, t_status *status, t_dictionary *env);

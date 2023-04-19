@@ -83,7 +83,7 @@ static t_list	*create_token_node(const char **command_line,
 		return (NULL);
 	}
 	if (lex->token_count != 0 && !check_meta_conventions(token,
-			&lex->error_msg))
+			&lex->error_msg, lex))
 		lex->meta_count++;
 	else
 		lex->meta_count = 0;
@@ -103,7 +103,7 @@ t_list	*lexer(const char *command_line, t_status *exit)
 	t_lexer	lex;
 
 	lexer_initialize(&lex);
-	if (check_lexical_conventions(command_line, exit) == false)
+	if (check_lexical_conventions(command_line, exit, &lex) == false)
 		return (NULL);
 	if (are_quotes_closed(command_line) == false)
 		return (*exit = message_general_error(E_QUOTES, command_line), NULL);
@@ -118,8 +118,9 @@ t_list	*lexer(const char *command_line, t_status *exit)
 			ft_lstadd_back(&lex.tokens, lex.node);
 		}
 	}
-	if (lex.meta_count > 1 || !check_meta_conventions(ft_lstlast(
-				lex.tokens)->content, &lex.error_msg))
+//	if (lex.meta_count > 1 || !check_meta_conventions(ft_lstlast(
+//				lex.tokens)->content, &lex.error_msg))
+	if (!control_conventions(command_line, exit, &lex, &lex.error_msg))
 	{
 		*exit = message_general_error(E_UNEXPECTED_TOKEN, lex.error_msg);
 		return (NULL);

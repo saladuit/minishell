@@ -238,7 +238,12 @@ Test(lexer, null_heredoc)
 
 Test(lexer, null_input_output)
 {
-assert_lexer_null("<>", "sheldon: syntax error near unexpected token `newline'\n");
+	assert_lexer_null("<>", "sheldon: syntax error near unexpected token `newline'\n");
+}
+
+Test(lexer, null_echo_hello_pipe_cat_heredoc_append)
+{
+	assert_lexer_null(" echo \"hello\" | cat << >>", "sheldon: syntax error near unexpected token `>>'\n");
 }
 
 Test(lexer, null_pipe_double)
