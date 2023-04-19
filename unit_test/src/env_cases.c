@@ -27,7 +27,15 @@ Test(env_builtin, empty)
 	assert_env(input, expected, environ);
 }
 
-Test(env_builtin, empty_is_empty)
+Test(env_builtin, non_existent_key)
+{
+	char	*environ[] = {"", NULL};
+	char	*input[] = {"env", NULL};
+	char	*expected = "";
+	assert_env(input, expected, environ);
+}
+
+Test(env_builtin, only_value_is_empty)
 {
 	char	*environ[] = {"EMPTY=", NULL};
 	char	*input[] = {"env", NULL};
@@ -35,7 +43,7 @@ Test(env_builtin, empty_is_empty)
 	assert_env(input, expected, environ);
 	}
 
-Test(env_builtin, hello)
+Test(env_builtin, key_and_value)
 {
 	char	*environ[] = {"HELLO=Hello", NULL};
 	char	*input[] = {"env", NULL};
@@ -43,7 +51,7 @@ Test(env_builtin, hello)
 	assert_env(input, expected, environ);
 }
 
-Test(env_builtin, hello_bye)
+Test(env_builtin, two_keys_with_value)
 {
 	char	*environ[] = {"HELLO=Hello\nBYE=Bye", NULL};
 	char	*input[] = {"env", NULL};
@@ -67,13 +75,13 @@ void	assert_env_multiple_args(char **input, int expected)
 Test(env_builtin, arg_is_two)
 {
 	char	*input[] = {"env", "yes", NULL};
-	int		expected = 127;
+	int		expected = E_COMMAND_NOT_FOUND;
 	assert_env_multiple_args(input, expected);
 }
 
 Test(env_builtin, arg_is_three)
 {
 	char	*input[] = {"env", "yes", "no", NULL};
-	int		expected = 127;
+	int		expected = E_COMMAND_NOT_FOUND;
 	assert_env_multiple_args(input, expected);
 }
