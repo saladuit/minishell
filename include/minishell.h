@@ -126,6 +126,7 @@ typedef struct s_minishell
 	t_list			*ast;
 	t_list			*tokens;
 	char			*command_line;
+	int32_t			std_fds[2];
 	t_status		status;
 	bool			stop;
 	bool			is_pipeline;
@@ -254,7 +255,7 @@ char				*expand_token(char *arg, t_status *status, t_dictionary *envd);
 size_t				len_until_quote_or_dollar(char *str);
 
 // Executor
-int32_t				executor(t_minishell *shell);
+void				executor(t_minishell *shell);
 bool				protected_dup2(int fd, t_type type);
 bool				open_redir(char *path, t_type type);
 int					is_dir(char *path);

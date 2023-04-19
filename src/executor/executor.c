@@ -179,7 +179,7 @@ int32_t	prepare_next_pipe(int32_t *pipe_fds, int32_t *std_fds, bool last)
 	return (SUCCESS);
 }
 
-int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds,
+void	execute_pipeline(t_command_table *ct, int32_t *std_fds,
 		t_minishell *shell)
 {
 	t_command	*cmd;
@@ -190,7 +190,7 @@ int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds,
 	if (ct->n_commands > 1)
 		shell->is_pipeline = true;
 	if (init_first_pipe(pipe_fds) == -1)
-		return (E_GENERAL);
+		return ;
 	i = 0;
 	while (i++ < ct->n_commands)
 	{
@@ -208,35 +208,35 @@ int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds,
 		else
 			prepare_next_pipe(pipe_fds, std_fds, true);
 	}
-	return (wait_for_child_processes(pid));
+	shell->status = wait_for_child_processes(pid);
 }
 
-int32_t		execute_command_table(
-	t_command_table *ct, int32_t *std_fds, t_minishell *shell)
+void		execute_command_table(t_command_table *ct, t_minishell *shell)
 {
 	t_command	*cmd;
 
 	if (ct->commands->next == NULL)
 	{
 		get_next_command(ct, &cmd);
-		return (execute_simple_command(cmd, shell));
+		execute_simple_command(cmd, shell);
 	}
-	return (execute_pipeline(ct, std_fds, shell));
+	else
+		execute_pipeline(ct, shell);
 }
 
-int32_t	executor(t_minishell *shell)
+void reset_std_fds(int32_t *std_fds)
 {
-	t_command_table	*ct;
-	int32_t			status;
-	int32_t			std_fds[2];
-
-	std_fds[STDIN_FILENO] = dup(STDIN_FILENO);
-	std_fds[STDOUT_FILENO] = dup(STDOUT_FILENO);
-	get_one_command_table(&shell->ast, &ct);
-	status = execute_command_table(ct, std_fds, shell);
 	dup2(std_fds[STDIN_FILENO], STDIN_FILENO);
 	dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO);
 	close(std_fds[STDIN_FILENO]);
 	close(std_fds[STDOUT_FILENO]);
-	return (status);
+}
+
+void	executor(t_minishell *shell)
+{
+	t_command_table	*ct;
+
+	get_one_command_table(&shell->ast, &ct);
+	execute_command_table(ct, shell);
+	reset_std_fds(shell->std_fds);
 }
