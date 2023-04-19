@@ -147,75 +147,111 @@ int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
 	return (wait_for_child_processes(pid));
 }
 
-int32_t	init_first_pipe(int32_t *pipe_fds)
+int32_t create_pipe(int32_t *pipe_fds)
 {
-	if (pipe(pipe_fds) == -1)
-		return (ERROR);
-	if (dup2(pipe_fds[1], STDOUT_FILENO) == -1)
-		return (ERROR);
-	close(pipe_fds[1]);
-	// close(pipe_fds[0]);
-	return (SUCCESS);
+    if (pipe(pipe_fds) == -1)
+        return (ERROR);
+    return (SUCCESS);
 }
 
-int32_t	prepare_next_pipe(int32_t *pipe_fds, int32_t *std_fds, bool last)
+int32_t duplicate_fd(int32_t old_fd, int32_t new_fd)
 {
-	dup2(pipe_fds[0], STDIN_FILENO);
-	// return (ERROR);
-	close(pipe_fds[0]);
-	if (last)
-	{
-		if (dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO) == -1)
-			return (ERROR);
-	}
-	else
-	{
-		if (pipe(pipe_fds) == -1)
-			return (ERROR);
-		if (dup2(pipe_fds[1], STDOUT_FILENO) == -1)
-			return (ERROR);
-		close(pipe_fds[1]);
-	}
-	return (SUCCESS);
+    if (dup2(old_fd, new_fd) == -1)
+        return (ERROR);
+    return (SUCCESS);
 }
 
-void	execute_pipeline(t_command_table *ct, int32_t *std_fds,
-		t_minishell *shell)
+int32_t close_fd(int32_t fd)
 {
-	t_command	*cmd;
-	int32_t		pipe_fds[2];
-	pid_t		pid;
-	int32_t		i;
+    if (close(fd) == -1)
+        return (ERROR);
+    return (SUCCESS);
+}
 
-	if (ct->n_commands > 1)
-		shell->is_pipeline = true;
-	if (init_first_pipe(pipe_fds) == -1)
-		return ;
-	i = 0;
-	while (i++ < ct->n_commands)
-	{
-		get_next_command(ct, &cmd);
-		pid = fork();
-		if (pid == 0)
-		{
-			close(pipe_fds[0]);
-			execute_pipe_command(cmd, shell);
-		}
-		if (!cmd)
-			break ;
-		if (i == ct->n_commands)
-			prepare_next_pipe(pipe_fds, std_fds, false);
-		else
-			prepare_next_pipe(pipe_fds, std_fds, true);
-	}
-	shell->status = wait_for_child_processes(pid);
+int32_t handle_first_pipe(int32_t *pipe_fds)
+{
+    if (create_pipe(pipe_fds) == ERROR)
+        return (ERROR);
+    if (duplicate_fd(pipe_fds[1], STDOUT_FILENO) == ERROR)
+        return (ERROR);
+    return close_fd(pipe_fds[1]);
+}
+
+int32_t handle_middle_pipes(int32_t *pipe_fds)
+{
+    if (duplicate_fd(pipe_fds[STDIN_FILENO], STDIN_FILENO) == ERROR)
+        return (ERROR);
+    if (close_fd(pipe_fds[STDIN_FILENO]) == ERROR)
+        return (ERROR);
+    if (create_pipe(pipe_fds) == ERROR)
+        return (ERROR);
+    if (duplicate_fd(pipe_fds[STDOUT_FILENO], STDOUT_FILENO) == ERROR)
+        return (ERROR);
+    return close_fd(pipe_fds[STDOUT_FILENO]);
+}
+
+int32_t handle_last_pipe(int32_t *pipe_fds, int32_t *std_fds)
+{
+    if (duplicate_fd(pipe_fds[STDIN_FILENO], STDIN_FILENO) == ERROR)
+        return (ERROR);
+    if (close_fd(pipe_fds[STDIN_FILENO]) == ERROR)
+        return (ERROR);
+    return duplicate_fd(std_fds[STDOUT_FILENO], STDOUT_FILENO);
+}
+
+int32_t process_command(int32_t *pipe_fds, t_command_table *ct, t_minishell *shell)
+{
+    t_command *cmd;
+    pid_t pid;
+
+    get_next_command(ct, &cmd);
+    pid = fork();
+    if (pid == -1)
+				return (E
+    if (pid == 0)
+    {
+        close(pipe_fds[STDIN_FILENO]);
+        execute_pipe_command(cmd, shell);
+    }
+    return (pid);
+}
+
+int32_t handle_pipes(int32_t *pipe_fds, int32_t *std_fds, int32_t n_commands, int32_t i)
+{
+		if (i == 0)
+			return (handle_first_pipe(pipe_fds));
+		else if (i == n_commands - 1)
+			return (handle_last_pipe(pipe_fds, std_fds));
+		return (handle_middle_pipes(pipe_fds));
+}
+
+void execute_pipeline(t_command_table *ct, t_minishell *shell)
+{
+  int32_t pipe_fds[2];
+  int32_t pid;
+  int32_t i;
+
+  i = 0;
+  shell->is_pipeline = true;
+  while (i < ct->n_commands)
+  {
+  	if (handle_pipes(pipe_fds, shell->std_fds, ct->n_commands, i) == ERROR)
+  	{
+  		shell->message_general_error(s);
+  		shell->status = E_GENERAL;
+  		break ;
+  	}
+  	pid = process_command(pipe_fds, ct, shell);
+    i++;
+  }
+  shell->status = wait_for_child_processes(pid);
 }
 
 void		execute_command_table(t_command_table *ct, t_minishell *shell)
 {
 	t_command	*cmd;
 
-	if (ct->commands->next == NULL)
+	if (ct->n_commands == 1)
 	{
 		get_next_command(ct, &cmd);
 		execute_simple_command(cmd, shell);
@@ -226,10 +262,10 @@ void		execute_command_table(t_command_table *ct, t_minishell *shell)
 
 void reset_std_fds(int32_t *std_fds)
 {
-	dup2(std_fds[STDIN_FILENO], STDIN_FILENO);
-	dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO);
-	close(std_fds[STDIN_FILENO]);
-	close(std_fds[STDOUT_FILENO]);
+	assert(dup2(std_fds[STDIN_FILENO], STDIN_FILENO) == SUCCESS);
+	assert(dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO) == SUCCESS);
+	assert(close(std_fds[STDIN_FILENO] == SUCCESS));
+	assert(close(std_fds[STDOUT_FILENO] == SUCCESS));
 }
 
 void	executor(t_minishell *shell)
