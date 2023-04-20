@@ -35,7 +35,7 @@ t_command_table	*construct_command_table(t_list **tokens, t_status *status,
 
 	command_table = ft_calloc(1, sizeof(t_command_table));
 	if (!command_table)
-		return (*status = message_system_call_error("ast"), NULL);
+		return (NULL);
 	while (*tokens)
 	{
 		command = construct_command(tokens, status, env);
@@ -43,7 +43,7 @@ t_command_table	*construct_command_table(t_list **tokens, t_status *status,
 		{
 			deconstruct_command_table(command_table);
 			deconstruct_command(command);
-			return (*status = message_system_call_error("ast"), NULL);
+			return (NULL);
 		}
 		command_table->n_commands++;
 	}
