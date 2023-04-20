@@ -11,6 +11,10 @@
 #  define DEBUG 0
 # endif
 
+# ifndef LOG
+#  define LOG 0
+# endif
+
 # define HASH_TABLE_SIZE 32
 
 # define SHELDON "Sheldon"
@@ -217,7 +221,7 @@ t_command_table	*construct_command_table(t_list **tokens, t_status *status,
 		t_dictionary *env);
 t_command				*construct_command(t_list **tokens, t_status *status, 
 		t_dictionary *env);
-t_redir					*construct_redir(t_list **tokens, t_status *status);
+t_redir					*construct_redir(t_list **tokens);
 // Deconstructers
 void				deconstruct_ast(t_list **ast);
 void				deconstruct_command_table(void *ct);

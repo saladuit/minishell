@@ -25,15 +25,15 @@ TestSuite(expand_token, .init=setup_env);
 void assert_expand_token(const char *input, char *expected, t_status status)
 {
 	t_dictionary env[HASH_TABLE_SIZE];
-	t_status exit;
+	t_status local_status;
 	int condition;
 	char *output;
 
-	exit = status;
+	local_status = status;
 	bzero(env, sizeof(env));
 	envp_load(env, environ);
 	set_malloc_failure_condition(0);
-	output = expand_token((char *)input, &exit, env);
+	output = expand_token((char *)input, &local_status, env);
 	cr_expect_str_eq(output, expected,
 					 "The expression (as strings) (output) == (expected) is false: actual=`%s` expected=%s` input='%s'",
 					 output, expected, input);
@@ -43,7 +43,7 @@ void assert_expand_token(const char *input, char *expected, t_status status)
 	{
 		activate_malloc_hook();
 		set_malloc_failure_condition(condition);
-		output = expand_token((char *)input, &exit, env);
+		output = expand_token((char *)input, &local_status, env);
 		deactivate_malloc_hook();
 		cr_assert_null(output, "Expected test function to return NULL on malloc failure. condition: %d",condition);
 		free(output);
