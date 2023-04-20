@@ -72,5 +72,10 @@ t_list	*expand_dollar_node(char *arg, size_t *i, t_status *status,
 	if (!expansion)
 		return (NULL);
 	node = ft_lstnew(expansion);
+	if (!node)
+	{
+		free(expansion);
+		return (NULL);
+	}
 	return (node);
 }
