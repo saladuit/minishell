@@ -22,8 +22,6 @@ char	**get_arguments(t_command *cmd)
 	char	**arguments;
 	int32_t	i;
 
-	if (!cmd->arguments)
-		return (NULL);
 	arguments = ft_calloc(cmd->n_arguments + 1, sizeof(char *));
 	if (!arguments)
 		return (NULL);

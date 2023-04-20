@@ -18,8 +18,6 @@ t_list	*construct_ast(t_list *tokens, t_status *status, t_dictionary *env)
 	t_command_table	*command_table;
 	t_list			*ast;
 
-	if (tokens == NULL)
-		return (NULL);
 	ast = NULL;
 	while (tokens)
 	{
