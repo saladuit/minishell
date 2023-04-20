@@ -29,7 +29,7 @@ $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR)
 
 debug:
-	@$(MAKE) DEBUG=1
+	@$(MAKE) DEBUG=1 LOG=1
 
 fsan:
 	@$(MAKE) FSAN=1 DEBUG=1

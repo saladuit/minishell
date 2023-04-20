@@ -31,10 +31,8 @@ ifdef	DEBUG
 	CFLAGS								+=-g -MMD -MP
 endif
 
-ifndef	COV
-	ifdef	DEBUG
-		CFLAGS							+=-D DEBUG=1
-	endif
+ifdef LOG
+	CFLAGS								+=-D LOG=1
 endif
 
 ifdef	COV

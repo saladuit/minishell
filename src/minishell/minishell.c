@@ -28,7 +28,7 @@ int32_t	minishell_loop(t_minishell *sheldon)
 	sheldon->ast = parser(sheldon->tokens, &sheldon->status, &sheldon->env);
 	if (!sheldon->ast)
 		return (minishell_clean(sheldon));
-	if (DEBUG)
+	if (LOG)
 		debug_ast(sheldon->ast);
 	sheldon->status = executor(sheldon);
 	return (minishell_clean(sheldon));
@@ -40,7 +40,7 @@ int32_t	minishell(char **envp)
 
 	ft_bzero(&sheldon, sizeof(t_minishell));
 	sheldon.status = envp_load(&sheldon.env, envp);
-	if (DEBUG)
+	if (LOG)
 		dict_print(&sheldon.env);
 	if (!isatty(STDIN_FILENO))
 	{
