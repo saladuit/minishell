@@ -39,5 +39,10 @@ t_list	*parser(t_list *tokens, t_status *status, t_dictionary *env)
 	t_list	*ast;
 
 	ast = construct_ast(tokens, status, env);
+	if (!ast)
+	{
+		*status = message_system_call_error("ast");
+		return (NULL);
+	}
 	return (ast);
 }

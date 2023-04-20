@@ -50,6 +50,8 @@ void assert_parser(char *command_line)
     sheldon.ast = parser(sheldon.tokens, &sheldon.status, &sheldon.env);
     deactivate_malloc_hook();
     cr_assert_null(sheldon.ast, "Expected test function to return NULL on malloc failure.");
+    cr_assert(sheldon.status == E_GENERAL, "Expected test function to return E_GENERAL on malloc failure.");
+    sheldon.status = 0;
     deconstruct_ast(&sheldon.ast);
     condition--;
   }

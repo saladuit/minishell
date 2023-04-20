@@ -63,15 +63,20 @@ static t_type	set_type(char *symbol, size_t len)
 	return (APPEND);
 }
 
-t_redir	*construct_redir(t_list **tokens, t_status *status)
+t_redir	*construct_redir(t_list **tokens)
 {
 	t_redir	*redir;
 
 	redir = ft_calloc(1, sizeof(t_redir));
 	if (!redir)
-		return (*status = message_general_error(E_GENERAL, "Construct_redir"), NULL);
+		return (NULL);
 	redir->type = set_type((*tokens)->content, ft_strlen((*tokens)->content));
 	*tokens = (*tokens)->next;
 	redir->filename = ft_strdup((char *)(*tokens)->content);
+	if (!redir->filename)
+	{
+		free(redir);
+		redir = NULL;
+	}
 	return (redir);
 }

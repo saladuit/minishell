@@ -62,7 +62,7 @@ t_command	*construct_command(t_list **tokens, t_status *status,
 		}
 		if (is_redir(*token))
 		{
-			redir = construct_redir(tokens, status);
+			redir = construct_redir(tokens);
 			if (!redir || !ft_lstadd_backnew(&command->redirs, redir))
 			{
 				deconstruct_redirs(redir);
