@@ -24,17 +24,18 @@
  */
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
-	size_t	srclen;
+	size_t	i;
+	size_t	len;
 
-	srclen = ft_strlen(src);
-	if (srclen + 1 < dstsize)
+	i = 0;
+	len = ft_strlen(src);
+	if (dstsize == 0)
+		return (len);
+	while (src[i] && i < (dstsize - 1))
 	{
-		ft_memcpy(dst, src, srclen + 1);
+		dst[i] = src[i];
+		i++;
 	}
-	else if (dstsize != 0)
-	{
-		ft_memcpy(dst, src, dstsize);
-		dst[dstsize - 1] = '\0';
-	}
-	return (srclen);
+	dst[i] = '\0';
+	return (len);
 }
