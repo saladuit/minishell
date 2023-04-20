@@ -22,12 +22,21 @@
  */
 char	*ft_strdup(const char *s1)
 {
-	char	*dst;
-	size_t	srclen;
+	char	*dup;
+	char	*temp;
+	int		strsize;
 
-	srclen = ft_strlen(s1) + 1;
-	dst = (char *)malloc(srclen * sizeof(char));
-	if (dst)
-		ft_strlcpy(dst, s1, srclen + 1);
-	return (dst);
+	strsize = ft_strlen(s1);
+	dup = malloc((strsize + 1) * sizeof(char));
+	if (!dup)
+		return (NULL);
+	temp = dup;
+	while (*s1)
+	{
+		*temp = *s1;
+		temp++;
+		s1++;
+	}
+	dup[strsize] = '\0';
+	return (dup);
 }
