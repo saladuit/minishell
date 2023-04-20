@@ -12,7 +12,7 @@ static void	export_error_msg_not_valid(char *arg, t_status *status)
 static void	export_error_msg_out_of_memory(t_minishell *shell, size_t *i)
 {
 	ft_putstr_fd("export: error: out of memory\n", STDERR_FILENO);
-	shell->status = E_BUILTIN;
+	shell->status = E_GENERAL;
 	(*i)++;
 }
 
@@ -51,6 +51,8 @@ int	ft_export(char **arguments, t_minishell *shell)
 		if (!value)
 			return (export_error_msg_out_of_memory(shell, &i), CONTINUE);
 		dict_set(&shell->env, key, value);
+		if (dict_get(&shell->env, key) == NULL)
+			return (export_error_msg_out_of_memory(shell, &i), CONTINUE);
 		i++;
 	}
 	return (SUCCESS);
