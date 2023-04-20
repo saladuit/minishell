@@ -192,11 +192,10 @@ Test(lexer, single_quote_in_double_quotes_and_vice_versa_two_nodes)
     char *expected[] = {"\"'\"", "'\"'", NULL};
     assert_lexer_two("\"'\" '\"'", expected);
 }
+
 /*******************************************************************************/
 /*                           null_Lexer                                        */
 /*******************************************************************************/
-
-// possible test case -- multiple commands: "ls -l ; pwd | grep foo"
 
 void assert_lexer_null(char *command_line, char *message)
 {
@@ -238,7 +237,7 @@ Test(lexer, null_heredoc)
 
 Test(lexer, null_input_output)
 {
-assert_lexer_null("<>", "sheldon: syntax error near unexpected token `newline'\n");
+	assert_lexer_null("<>", "sheldon: syntax error near unexpected token `newline'\n");
 }
 
 Test(lexer, null_pipe_double)
@@ -246,7 +245,6 @@ Test(lexer, null_pipe_double)
     assert_lexer_null("||", "sheldon: syntax error near unexpected token `||'\n");
 }
 
-// STILL FAILING
 Test(lexer, null_exit_pipe)
 {
     assert_lexer_null("exit|", "sheldon: syntax error near unexpected token `|'\n");
@@ -277,7 +275,6 @@ Test(lexer, null_pipe_hallo_pipe_hallo)
 	assert_lexer_null("|hallo|hallo", "sheldon: syntax error near unexpected token `|'\n");
 }
 
-// STILL FAILING
 Test(lexer, null_pipe_exit_output)
 {
     assert_lexer_null("exit|<", "sheldon: syntax error near unexpected token `newline'\n");
