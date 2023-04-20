@@ -1,21 +1,27 @@
 #include <minishell.h>
 
+static void pwd_error_msg(void)
+{
+	ft_putstr_fd("pwd: ", STDERR_FILENO);
+	ft_putendl_fd(strerror(errno), STDERR_FILENO);
+}
+
 int	ft_pwd(char **arguments, t_minishell *shell)
 {
 	char	*buf;
 
-	buf = NULL;
 	if (arguments)
-		buf = getcwd(buf, 0);
+		buf = getcwd(NULL, 0);
+	else
+		buf = NULL;
 	if (buf == NULL)
 	{
 		shell->status = E_GENERAL;
-		ft_putendl_fd("pwd: error: getcwd fails\n", STDERR_FILENO);
+		pwd_error_msg();
 		return (1);
 	}
 	write(STDOUT_FILENO, buf, ft_strlen(buf));
 	write(STDOUT_FILENO, "\n", 1);
 	free(buf);
-	shell->status = E_USAGE;
 	return (0);
 }
