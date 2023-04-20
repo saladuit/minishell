@@ -8,7 +8,7 @@ static bool	find_matching_pipe_error(const char *command,
 	i = 1;
 	if (is_pipe(command[i]))
 		i++;
-	*error_msg = token_errors[i + 4].error_msg;
+	*error_msg = token_errors[i - 1].error_msg;
 	return (true);
 }
 
@@ -35,21 +35,6 @@ static bool	find_matching_pipe_error(const char *command,
  * Otherwise, it returns 1.
  */
 
-static size_t strlen_ignore_spaces(const char *str)
-{
-	size_t	i;
-	size_t	len;
-
-	if (!str || !str[0])
-		return (0);
-	i = 0;
-	len  = 0;
-	while (str[i])
-		if (!ft_iswhitespace(str[i++]))
-			len++;
-	return (len);
-}
-
 static int	compare_command_ignore_spaces(const char *command, const char *cmp)
 {
 	size_t	i;
@@ -57,19 +42,17 @@ static int	compare_command_ignore_spaces(const char *command, const char *cmp)
 
 	i = 0;
 	j = 0;
-	if (strlen_ignore_spaces(command) != strlen_ignore_spaces(cmp))
-		return (false);
 	while (command[i] && cmp[j])
 	{
-		if (command[i] != ' ' && cmp[j] == ' ')
+		if (command[i] != SPACE && cmp[j] == SPACE)
 			j++;
-		if (command[i] == ' ' && cmp[j] != ' ')
+		if (command[i] == SPACE && cmp[j] != SPACE)
 			i++;
 		if (command[i++] != cmp[j++])
 			return (false);
 	}
 	while (command[i])
-		if (command[i++] != ' ')
+		if (command[i++] != SPACE)
 			return (false);
 	return (true);
 }
@@ -105,14 +88,12 @@ static int	compare_command_ignore_spaces(const char *command, const char *cmp)
  */
 
 static bool	find_matching_error(const char *command,
-		const t_tokenerror token_errors[], const char **error_msg, t_lexer *lex)
+		const t_tokenerror token_errors[], const char **error_msg)
 {
 	size_t	i;
 
 	i = 0;
-	if (lex->token_count > 0 && !lex->meta_conv)
-		i = 5;
-	if (is_pipe(*command) && lex->token_count == 0)
+	if (is_pipe(*command))
 		return (find_matching_pipe_error(command, token_errors, error_msg));
 	while (token_errors[i].token != NULL)
 	{
@@ -127,58 +108,44 @@ static bool	find_matching_error(const char *command,
 	return (false);
 }
 
-bool	check_meta_conventions(const char *command, const char **error_msg, t_lexer *lex)
+bool	check_meta_conventions(const char *command, const char **error_msg)
 {
-	lex->meta_conv = true;
-	if (lex->meta_count == 2)
-		return (false);
 	const t_tokenerror		token_errors[] = {
 			{"|", "|"},
 			{"||", "||"},
-			{"<", "<"},
-			{"<<", "<<"},
-			{">", ">"},
-			{">>", ">>"},
+			{"<", "newline"},
+			{"<<", "newline"},
+			{">", "newline"},
+			{">>", "newline"},
 			{NULL, NULL}};
 
-	if (find_matching_error(command, token_errors, error_msg, lex))
+	if (find_matching_error(command, token_errors, error_msg))
 		return (false);
 	return (true);
 }
 
-bool	check_lexical_conventions(const char *command, t_status *exit, t_lexer *lex)
+bool	check_lexical_conventions(const char *command, t_status *exit)
 {
 	const char				*error_msg;
 	const t_tokenerror		token_errors[] = {
-	{"!", "newline"},
-	{">> >", ">"},
-	{"<< >", ">"},
-	{">> <", "<"},
-	{"<< <", "<"},
 	{"|", "|"},
 	{"||", "||"},
 	{"<", "newline"},
 	{"<<", "newline"},
 	{">", "newline"},
 	{">>", "newline"},
+	{"!", "newline"},
+	{">> >", ">"},
+	{"<< >", ">"},
+	{">> <", "<"},
+	{"<< <", "<"},
 	{NULL, NULL}};
 
 	error_msg = NULL;
-	if (find_matching_error(command, token_errors, &error_msg, lex))
+	if (find_matching_error(command, token_errors, &error_msg))
 	{
-		if (lex->token_count == 0)
-			*exit = message_general_error(E_UNEXPECTED_TOKEN, error_msg);
+		*exit = message_general_error(E_UNEXPECTED_TOKEN, error_msg);
 		return (false);
 	}
 	return (true);
-}
-
-bool	control_conventions(const char *command, t_status *exit, t_lexer *lex, const char **error_msg)
-{
-	if (lex->meta_count > 1)
-		return (check_meta_conventions(command, error_msg, lex));
-	else if (lex->token_count > 0)
-		return (check_lexical_conventions(command, exit, lex));
-	else
-		return (true);
 }
