@@ -39,9 +39,5 @@ t_list	*parser(t_list *tokens, t_status *status, t_dictionary *env)
 	t_list	*ast;
 
 	ast = construct_ast(tokens, status, env);
-	if (!ast)
-		return (NULL);
-	if (DEBUG)
-		debug_ast(ast);
 	return (ast);
 }

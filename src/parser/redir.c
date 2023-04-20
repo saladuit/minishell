@@ -41,8 +41,6 @@ void	print_redirs(t_command *cmd)
 
 void	get_next_redir(t_command *cmd, t_redir **redir)
 {
-	if (!cmd->redirs)
-		return ;
 	*redir = cmd->redirs->content;
 	if (cmd->redirs->next == NULL)
 	{

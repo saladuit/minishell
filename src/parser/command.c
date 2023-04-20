@@ -30,8 +30,6 @@ void	print_commands(t_command_table *ct)
 
 void	get_next_command(t_command_table *ct, t_command **command)
 {
-	if (!ct->commands)
-		return ;
 	*command = ct->commands->content;
 	if (ct->commands->next == NULL)
 	{
@@ -57,7 +55,7 @@ t_command	*construct_command(t_list **tokens, t_status *status,
 	while (*tokens)
 	{
 		token = (*tokens)->content;
-		if (is_pipe(*token) && ft_strlen(token) == 1)
+		if (is_pipe(*token))
 		{
 			*tokens = (*tokens)->next;
 			break ;
