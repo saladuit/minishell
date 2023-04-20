@@ -21,11 +21,9 @@ void	print_command_tables(t_list *ast)
 	printf("Command_table #%d at %p\n", i, ct);
 	print_commands(ct);
 }
-// There should actually also be a datastructure for the ast that keeps track of the head of the ct
+
 void	get_one_command_table(t_list **ast, t_command_table **ct)
 {
-	if (!*ast)
-		return ;
 	*ct = (*ast)->content;
 }
 
