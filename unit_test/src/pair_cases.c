@@ -40,3 +40,9 @@ Test(pair_to_str, systemic_tests)
     test_pair_to_str("empty", "", "empty=");
     test_pair_to_str("", "value", "=value");
 }
+
+Test(pair_to_str, boundary_tests)
+{
+    test_pair_to_str("a", "b", "a=b");
+    test_pair_to_str("", "", "=");
+}
