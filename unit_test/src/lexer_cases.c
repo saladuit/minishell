@@ -1,5 +1,6 @@
 #include <unit_test.h>
 
+
 TestSuite(lexer, .init=redirect_all_std);
 
 /*******************************************************************************/
@@ -197,6 +198,7 @@ Test(lexer, single_quote_in_double_quotes_and_vice_versa_two_nodes)
 /*                           null_Lexer                                        */
 /*******************************************************************************/
 
+
 void assert_lexer_null(char *command_line, char *message)
 {
     t_list *tokens;
@@ -204,10 +206,9 @@ void assert_lexer_null(char *command_line, char *message)
 
     status = 0;
     tokens = lexer(command_line, &status);
+    cr_assert_null(tokens, "Expected lexer to return NULL on error.");
     fflush(stderr);
-    cr_expect(tokens==NULL, "Expected lexer to return NULL on error.");
-    ft_lstclear(&tokens, free);
-    cr_expect_stderr_eq_str(message);
+    cr_assert_stderr_eq_str(message);
 }
 
 Test(lexer, null_pipe)

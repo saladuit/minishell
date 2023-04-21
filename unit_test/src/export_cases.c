@@ -1,5 +1,7 @@
 #include <unit_test.h>
 
+TestSuite(export, .init=redirect_all_std);
+
 /*******************************************************************************/
 /*                               Export_no_arg                                 */
 /*******************************************************************************/
@@ -23,14 +25,11 @@ Test(export, no_argument)
 /*                               Export_cases                                  */
 /*******************************************************************************/
 
-//TestSuite(export, .init=redirect_all_std);
-
 void	assert_export(char **in, char *key, char *expected_value, t_status expected_status, char **environ)
 {
 	char		*expression;
 	t_minishell	shell;
 
-	fflush(stdout);
 	bzero(&shell, sizeof(t_minishell));
 	envp_load(&shell.env, environ);
 	ft_export(in, &shell);
@@ -102,11 +101,25 @@ Test(export, empty_value_with_equal_sign)
 	assert_export(in, key, expected_value, E_USAGE, environ);
 }
 
+Test(export, exixitn_key_and_overwrite_value)
+{
+	char	*environ[] = {"HELLO=hoi", NULL};
+	char	*in[] = {"export", "HELLO=Hello", NULL};
+	char	*key = "HELLO";
+	char	*expected_value = "Hello";
+	assert_export(in, key, expected_value, E_USAGE, environ);
+}
+Test(export, overwrite_existing_key)
+{
+	char	*environ[] = {"HELLO=hoi", NULL};
+	char	*in[] = {"export", "HELLO=Hello", NULL};
+	char	*key = "HELLO";
+	char	*expected_value = "Hello";
+	assert_export(in, key, expected_value, E_USAGE, environ);
+}
 /*******************************************************************************/
 /*                          Export_not_valid_cases                             */
 /*******************************************************************************/
-
-TestSuite(export, .init=redirect_all_std);
 
 void	assert_export_not_valid_cases(char **in, t_status expected_status, char **environ, char *message)
 {
@@ -114,12 +127,13 @@ void	assert_export_not_valid_cases(char **in, t_status expected_status, char **e
 	(void)message;
 	(void)expected_status;
 
-	fflush(stderr);
 	bzero(&shell, sizeof(t_minishell));
 	envp_load(&shell.env, environ);
 	ft_export(in, &shell);
+	fflush(stderr);
 	cr_assert_eq(shell.status, expected_status);
 	cr_expect_stderr_eq_str(message);
+	dict_destroy(&shell.env);
 }
 
 Test(export, invalid_key)
@@ -159,47 +173,50 @@ void	assert_export_malloc_check(char **in, t_status expected_status, char **envi
 	t_minishell	shell;
 	int			condition;
 
-	(void)expected_status;
 	bzero(&shell, sizeof(t_minishell));
 	envp_load(&shell.env, environ);
 	set_malloc_failure_condition(0);
 	ft_export(in, &shell);
 	condition = get_malloc_failure_condition();
+	dict_destroy(&shell.env);
 	while (condition > 0)
 	{
+		bzero(&shell, sizeof(t_minishell));
+		envp_load(&shell.env, environ);
 		activate_malloc_hook();
 		set_malloc_failure_condition(condition);
 		ft_export(in, &shell);
 		deactivate_malloc_hook();
+		cr_assert_eq(shell.status, expected_status);
+		dict_destroy(&shell.env);
 		condition--;
 	}
-	dict_destroy(&shell.env);
 }
 
 Test(export, malloc_check_one_arg)
 {
 	char	*environ[] = {"", NULL};
 	char	*in[] = {"export", "HELLO=Hello", NULL};
-	assert_export_malloc_check(in, E_BUILTIN, environ);
+	assert_export_malloc_check(in, E_GENERAL, environ);
 }
 
 Test(export, malloc_check_two_args)
 {
 	char	*environ[] = {"", NULL};
 	char	*in[] = {"export", "ORANGE=Orange" , "BANANAS=Bananas", NULL};
-	assert_export_malloc_check(in, E_BUILTIN, environ);
+	assert_export_malloc_check(in, E_GENERAL, environ);
 }
 
 Test(export, malloc_check_invalid_arg)
 {
 	char	*environ[] = {"", NULL};
 	char	*in[] = {"export", "1234", NULL};
-	assert_export_malloc_check(in, E_BUILTIN, environ);
+	assert_export_malloc_check(in, E_GENERAL, environ);
 }
 
 Test(export, malloc_check_no_arg)
 {
 	char	*environ[] = {"", NULL};
 	char	*in[] = {"export", NULL};
-	assert_export_malloc_check(in, E_BUILTIN, environ);
+	assert_export_malloc_check(in, E_GENERAL, environ);
 }

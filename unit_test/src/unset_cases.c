@@ -17,6 +17,7 @@ void	assert_unset_cases(char **environ, char **in, char *expected, char *key)
 		cr_assert_null(expression);
 	else
 		cr_assert_str_eq(expression, expected, "The expression: \'%s\' == expected: \'%s\' is false.\n", expression, expected);
+	dict_destroy(&shell.env);
 }
 
 Test(unset, no_arg)

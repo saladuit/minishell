@@ -41,6 +41,11 @@ static t_list	*copy_until_quote_or_dollar(char *arg, size_t *i)
 		return (NULL);
 	*i += len;
 	node = ft_lstnew(expansion);
+	if (!node)
+	{
+		free(expansion);
+		return (NULL);
+	}
 	return (node);
 }
 
