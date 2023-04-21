@@ -18,10 +18,13 @@ Test(dict_delete, empty_dictionary)
 Test(dict_delete, non_existent_key)
 {
     t_dictionary dict;
+    char *key = strdup("b");
     bzero(&dict, sizeof(t_dictionary));
     dict_set(&dict, "a", "value_a");
-    dict_delete(&dict, "b");
+    dict_delete(&dict, key);
     cr_assert_eq(dict.size, 1, "Deleting a non-existent key should not affect the size");
+    dict_destroy(&dict);
+    free(key);
 }
 
 Test(dict_delete, single_key_no_collision)
@@ -36,6 +39,7 @@ Test(dict_delete, single_key_no_collision)
     dict_set(&dict, key, value);
     dict_delete(&dict, key);
     cr_assert_eq(dict.size, 0, "Deleting a single key should result in an empty dictionary");
+    dict_destroy(&dict);
 }
 
 Test(dict_delete, delete_key_with_collision)
@@ -61,6 +65,12 @@ Test(dict_delete, delete_key_with_collision)
     cr_assert_not_null(dict.table[hash(second_key)], "The other key in the collision should remain");
     cr_assert_str_eq(dict.table[hash(second_key)]->key, second_key, "The remaining key should have the correct key");
     cr_assert_str_eq(dict.table[hash(second_key)]->value, second_value, "The remaining key should have the correct value");
+
+    // free(first_key);
+    // free(first_value);
+    // free(second_key);
+    // free(second_value);
+    dict_destroy(&dict);
 }
 
 Test(dict_delete, delete_last_key_in_collision_chain)
@@ -88,6 +98,13 @@ Test(dict_delete, delete_last_key_in_collision_chain)
     dict_delete(&dict, third_key);
     cr_assert_eq(dict.size, 2, "Deleting the last key in a collision chain should decrease the size by 1");
     cr_assert_null(dict.table[hash("b")], "The deleted key should no longer be in the dictionary");
+    // free(third_key);
+    // free(third_value);
+    // free(first_key);
+    // free(first_value);
+    // free(second_key);
+    // free(second_value);
+    dict_destroy(&dict);
 }
 
 /*******************************************************************************/
@@ -104,6 +121,7 @@ Test(dict_to_envp, empty_dictionary)
     char **envp = dict_to_envp(&dict);
     cr_assert_not_null(envp, "The envp array should not be NULL for an empty dictionary");
     cr_assert_null(envp[0], "The envp array should be NULL-terminated");
+    ft_matrixfree(&envp);
 }
 
 Test(dict_to_envp, single_key_value)
@@ -123,6 +141,10 @@ Test(dict_to_envp, single_key_value)
     cr_assert_not_null(envp[0], "The first element should not be NULL");
     cr_assert_str_eq(envp[0], "a=value_a", "The envp should contain the correct key-value pair");
     cr_assert_null(envp[1], "The envp array should be NULL-terminated");
+    ft_matrixfree(&envp);
+    // free(key);
+    // free(value);
+    dict_destroy(&dict);
 }
 
 Test(dict_to_envp, multiple_key_values)
@@ -171,4 +193,11 @@ Test(dict_to_envp, multiple_key_values)
         ft_matrixfree(&envp);
         condition--;
     }
+    // free(first_key);
+    // free(first_value);
+    // free(second_key);
+    // free(second_value);
+    // free(third_key);
+    // free(third_value);
+    dict_destroy(&dict);
 }

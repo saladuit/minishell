@@ -2,6 +2,8 @@
 
 void	pair_clean(t_pair *pair)
 {
+	if (!pair)
+		return ;
 	free(pair->key);
 	free(pair->value);
 	free(pair);
