@@ -18,13 +18,16 @@ Test(dict_delete, empty_dictionary)
 Test(dict_delete, non_existent_key)
 {
     t_dictionary dict;
-    char *key = strdup("b");
+    char *non_existent_key = strdup("b");
+	char *key = strdup("a");
+	char *value = strdup("value_a");
+
     bzero(&dict, sizeof(t_dictionary));
-    dict_set(&dict, "a", "value_a");
-    dict_delete(&dict, key);
-    cr_assert_eq(dict.size, 1, "Deleting a non-existent key should not affect the size");
-    dict_destroy(&dict);
-    free(key);
+	dict_set(&dict, key, value);
+    dict_delete(&dict, non_existent_key);
+	cr_assert_eq(dict.size, 1, "Deleting a non-existent key should not affect the size");
+	dict_destroy(&dict);
+	free(non_existent_key);
 }
 
 Test(dict_delete, single_key_no_collision)
