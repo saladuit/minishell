@@ -24,7 +24,7 @@ size_t	len_until_quote_or_dollar(char *str)
 
 static char	*edge_case_handling(char c, size_t *i, t_status *status)
 {
-	if ((c == '\0' || ft_iswhitespace(c)) && !is_dollar(c))
+	if (c == '\0' || ft_iswhitespace(c))
 		return (ft_strdup("$"));
 	if (c == '?')
 		return (++(*i), ft_itoa(*status));
