@@ -70,6 +70,15 @@ Test(unset, two_args)
 	assert_unset_cases(environ, in, expected, "B");
 }
 
+Test(unset, two_keys_with_the_same_index)
+{
+	char	*environ[] = {"A=A\na=a\n", NULL};
+	char	*in[] = {"unset", "A", "a", NULL};
+	char	*expected = NULL;
+	assert_unset_cases(environ, in, expected, "A");
+	assert_unset_cases(environ, in, expected, "a");
+}
+
 Test(unset, three_args)
 {
 	char	*environ[] = {"A=a\nB=b\nCCC=ccc\n", NULL};

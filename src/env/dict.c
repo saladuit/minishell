@@ -23,7 +23,7 @@ char	**dict_to_envp(t_dictionary *dict)
 	char	**envp;
 	size_t	i;
 	size_t	j;
-	t_pair	*next;
+	t_pair	*iter;
 
 	envp = ft_calloc(dict->size + 1, sizeof(char *));
 	if (!envp)
@@ -32,18 +32,19 @@ char	**dict_to_envp(t_dictionary *dict)
 	j = 0;
 	while (i < HASH_TABLE_SIZE)
 	{
-		while (dict->table[i])
-		{
-			next = dict->table[i]->next;
-			envp[j] = pair_to_str(dict->table[i]);
-			dict->table[i] = next;
-			if (!envp[j])
-				continue ;
-			j++;
-			//This shoulnd't increment if pair_to_str fails this will leave some uninitalised space,
-			//but it will continue to work at least
-		}
-		i++;
+    iter = dict->table[i];
+    while (iter)
+    {
+      envp[j] = pair_to_str(iter);
+      if (envp[j] == NULL)
+      {
+        ft_matrixfree(&envp);
+        return (NULL);
+      }
+      iter = iter->next;
+      j++;
+    }
+    i++;
 	}
 	return (envp);
 }
@@ -73,38 +74,36 @@ size_t	hash(char *str)
 	h = 0;
 	while (*str)
 	{
-		h = h * 31 + *str;
+		h = h * (HASH_TABLE_SIZE - 1) + *str;
 		str++;
 	}
 	return (h % HASH_TABLE_SIZE);
 }
 
-void	dict_delete(t_dictionary *dict, char *key)
+void dict_delete(t_dictionary *dict, char *key)
 {
-	size_t	index;
-	t_pair	*pair;
-	t_pair	*prev;
+  size_t index;
+  t_pair *iter;
+  t_pair *prev;
 
-	index = hash(key);
-	pair = dict->table[index];
-	prev = NULL;
-	while (pair != NULL)
-	{
-		if (ft_strncmp(pair->key, key, ft_strlen(pair->key)) == 0)
-		{
-			if (prev == NULL)
-				dict->table[index] = pair->next;
-			else
-				prev->next = pair->next;
-			free(pair->key);
-			free(pair->value);
-			free(pair);
-			dict->size--;
-			break ;
-		}
-		prev = pair;
-		pair = pair->next;
-	}
+  index = hash(key);
+  iter = dict->table[index];
+  prev = NULL;
+  while (iter != NULL)
+  {
+    if (ft_strncmp(iter->key, key, ft_strlen(key) + 1) == 0)
+    {
+      if (prev == NULL)
+        dict->table[index] = iter->next;
+      else
+        prev->next = iter->next;
+      pair_clean(iter);
+      dict->size--;
+      return ;
+    }
+    prev = iter;
+    iter = iter->next;
+  }
 }
 
 char	*dict_get(t_dictionary *dict, char *key)
@@ -116,7 +115,7 @@ char	*dict_get(t_dictionary *dict, char *key)
 	pair = dict->table[index];
 	while (pair != NULL)
 	{
-		if (strcmp(pair->key, key) == 0)
+		if (ft_strncmp(pair->key, key, ft_strlen(key) + 1) == 0)
 			return (pair->value);
 		pair = pair->next;
 	}
@@ -130,9 +129,9 @@ int32_t	dict_set(t_dictionary *dict, char *key, char *value)
 
 	index = hash(key);
 	pair = dict->table[index];
-	while (pair && strcmp(pair->key, key) != 0)
+	while (pair && ft_strncmp(pair->key, key, ft_strlen(key) + 1) != 0)
 		pair = pair->next;
-	if (pair && pair->value)
+	if (pair)
 		free(pair->value);
 	if (pair == NULL)
 	{

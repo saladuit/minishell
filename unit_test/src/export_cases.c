@@ -101,7 +101,7 @@ Test(export, empty_value_with_equal_sign)
 	assert_export(in, key, expected_value, E_USAGE, environ);
 }
 
-Test(export, exixitn_key_and_overwrite_value)
+Test(export, existing_key_and_overwrite_value)
 {
 	char	*environ[] = {"HELLO=hoi", NULL};
 	char	*in[] = {"export", "HELLO=Hello", NULL};
@@ -109,9 +109,17 @@ Test(export, exixitn_key_and_overwrite_value)
 	char	*expected_value = "Hello";
 	assert_export(in, key, expected_value, E_USAGE, environ);
 }
-Test(export, overwrite_existing_key)
+Test(export, overwrite_existing_key_with_equal_sign)
 {
-	char	*environ[] = {"HELLO=hoi", NULL};
+	char	*environ[] = {"HELLO=", NULL};
+	char	*in[] = {"export", "HELLO=Hello", NULL};
+	char	*key = "HELLO";
+	char	*expected_value = "Hello";
+	assert_export(in, key, expected_value, E_USAGE, environ);
+}
+Test(export, overwrite_existing_key_without_equal_sign)
+{
+	char	*environ[] = {"HELLO", NULL};
 	char	*in[] = {"export", "HELLO=Hello", NULL};
 	char	*key = "HELLO";
 	char	*expected_value = "Hello";

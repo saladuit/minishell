@@ -2,12 +2,9 @@
 
 void	pair_clean(t_pair *pair)
 {
-	if (pair->key)
-		free(pair->key);
-	if (pair->value)
-		free(pair->value);
-	if (pair)
-		free(pair);
+	free(pair->key);
+	free(pair->value);
+	free(pair);
 }
 
 char	*pair_to_str(t_pair *pair)
