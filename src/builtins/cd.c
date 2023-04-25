@@ -29,7 +29,7 @@ int	ft_cd(char **arguments, t_minishell *shell)
 		shell->status = E_BUILTIN;
 		return (1);
 	}
-	if (dict_set(&shell->env, "PWD", cwd) == -1 || arguments[0][0] == 'b')
+	if (dict_set(&shell->env, "PWD", cwd) == ERROR)
 	{
 		ft_putstr_fd("cd: error setting PWD environment variable\n",
 						STDERR_FILENO);
