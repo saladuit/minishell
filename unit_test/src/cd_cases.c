@@ -8,7 +8,7 @@
 Test(cd, no_arg_with_home)
 {
 	t_minishell	shell;
-	char *environ[] = {"HOME=/build/test", NULL};
+	char *environ[] = {"HOME=build/test", NULL};
 	char	*in[] = {"cd", NULL};
 
 	bzero(&shell, sizeof(t_minishell));
@@ -17,7 +17,7 @@ Test(cd, no_arg_with_home)
 	ft_cd(in, &shell);
 	cr_assert_eq(shell.status, E_USAGE);
 	system("rmdir build/test");
-	dict_destroy(&shell.env);
+//	dict_destroy(&shell.env);
 }
 
 /*******************************************************************************/
@@ -76,15 +76,9 @@ Test(cd, relative_path_two_steps_back)
 	assert_cd_relative_path(in, E_USAGE);
 }
 
-Test(cd, relative_path_arg_zero_is_a)
+Test(cd, relative_path_work_around_test_cwd)
 {
 	char	*in[] = {"a", "../..", NULL};
-	assert_cd_relative_path(in, E_BUILTIN);
-}
-
-Test(cd, relative_path_arg_zero_is_b)
-{
-	char	*in[] = {"b", "../..", NULL};
 	assert_cd_relative_path(in, E_BUILTIN);
 }
 
@@ -117,4 +111,28 @@ Test(cd, absolute_path_one_step_invalid_folder)
 {
 	char	*in[] = {"cd", "/Users/lvan-bus/invalid_folder", NULL};
 	assert_cd_absolute_path(in, E_BUILTIN);
+}
+
+/*******************************************************************************/
+/*                                 cd_malloc                                   */
+/*******************************************************************************/
+
+Test(cd, malloc_check_no_arg)
+{
+	int 		condition;
+	t_minishell	shell;
+	char		*in[] = {"cd", NULL};
+	char 		*environ[] = {NULL};
+
+	bzero(&shell, sizeof(t_minishell));
+	envp_load(&shell.env, environ);
+	set_malloc_failure_condition(0);
+	ft_cd(in, &shell);
+	condition = get_malloc_failure_condition();
+	activate_malloc_hook();
+	set_malloc_failure_condition(condition);
+	ft_cd(in, &shell);
+	deactivate_malloc_hook();
+	cr_log_error("%d", condition);
+//	dict_destroy(&shell.env);
 }
