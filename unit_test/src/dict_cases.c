@@ -116,11 +116,9 @@ Test(dict_to_envp, empty_dictionary)
 Test(dict_to_envp, single_key_value)
 {
     t_dictionary dict;
-    char *key;
-    char *value;
+    char *key = "a";
+    char *value = "value_a";
 
-    key = strdup("a");
-    value = strdup("value_a");
     bzero(&dict, sizeof(t_dictionary));
     dict_set(&dict, key, value);
 
@@ -131,28 +129,19 @@ Test(dict_to_envp, single_key_value)
     cr_assert_str_eq(envp[0], "a=value_a", "The envp should contain the correct key-value pair");
     cr_assert_null(envp[1], "The envp array should be NULL-terminated");
     ft_matrixfree(&envp);
-    // free(key);
-    // free(value);
     dict_destroy(&dict);
 }
 
 Test(dict_to_envp, multiple_key_values)
 {
     t_dictionary dict;
-    char *first_key;
-    char *first_value;
-    char *second_key;
-    char *second_value;
-    char *third_key;
-    char *third_value;
-    int32_t condition;
-
-    first_key = strdup("a");
-    first_value = strdup("value_a");
-    second_key = strdup("b");
-    second_value = strdup("value_b");
-    third_key = strdup("c");
-    third_value = strdup("value_c");
+	char		*first_key = "a";
+	char		*first_value = "value_a";
+	char		*second_key = "b";
+	char		*second_value = "value_b";
+	char		*third_key = "c";
+	char		*third_value = "value_c";
+    int32_t		condition;
 
     bzero(&dict, sizeof(t_dictionary));
 
@@ -182,11 +171,5 @@ Test(dict_to_envp, multiple_key_values)
         ft_matrixfree(&envp);
         condition--;
     }
-    // free(first_key);
-    // free(first_value);
-    // free(second_key);
-    // free(second_value);
-    // free(third_key);
-    // free(third_value);
     dict_destroy(&dict);
 }
