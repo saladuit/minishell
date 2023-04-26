@@ -4,20 +4,19 @@
 /*                                 cd_home                                     */
 /*******************************************************************************/
 
-// STILL FAILING
 Test(cd, no_arg_with_home)
 {
 	t_minishell	shell;
-	char *environ[] = {"HOME=build/test", NULL};
+	char	*environ[] = {"HOME=/tmp/cd-no_arg_with_home", NULL};
 	char	*in[] = {"cd", NULL};
 
+	system("mkdir /tmp/cd-no_arg_with_home");
 	bzero(&shell, sizeof(t_minishell));
 	envp_load(&shell.env, environ);
-	system("mkdir build/test");
 	ft_cd(in, &shell);
 	cr_assert_eq(shell.status, E_USAGE);
-	system("rmdir build/test");
-//	dict_destroy(&shell.env);
+	system("rmdir /tmp/cd-no_arg_with_home");
+	dict_destroy(&shell.env);
 }
 
 /*******************************************************************************/
@@ -32,6 +31,7 @@ Test(cd, no_arg_with_home_unset)
 
 	bzero(&shell, sizeof(t_minishell));
 	envp_load(&shell.env, environ);
+	cr_assert_not_null(&shell.env);
 	ft_cd(in, &shell);
 	cr_assert_eq(shell.status, E_BUILTIN);
 	dict_destroy(&shell.env);
@@ -48,6 +48,7 @@ void	assert_cd_relative_path(char **in, t_status expected_status)
 	bzero(&shell, sizeof(t_minishell));
 	ft_cd(in, &shell);
 	cr_assert_eq(shell.status, expected_status);
+	dict_destroy(&shell.env);
 }
 
 Test(cd, relative_path_one_step)
@@ -58,10 +59,10 @@ Test(cd, relative_path_one_step)
 
 Test(cd, relative_path_two_steps)
 {
-	system("mkdir build/test");
-	char	*in[] = {"cd", "build/test", NULL};
+	system("mkdir -p /tmp/cd-relative_path_two_steps/test && cd /tmp/cd-relative_path_two_steps");
+	char	*in[] = {"cd", "test", NULL};
 	assert_cd_relative_path(in, E_USAGE);
-	system("rmdir build/test");
+	system("rm -R /tmp/cd-relative_path_two_steps");
 }
 
 Test(cd, relative_path_one_step_back)
@@ -74,12 +75,6 @@ Test(cd, relative_path_two_steps_back)
 {
 	char	*in[] = {"cd", "../..", NULL};
 	assert_cd_relative_path(in, E_USAGE);
-}
-
-Test(cd, relative_path_work_around_test_cwd)
-{
-	char	*in[] = {"a", "../..", NULL};
-	assert_cd_relative_path(in, E_BUILTIN);
 }
 
 Test(cd, relative_path_not_existing)
@@ -99,17 +94,18 @@ void	assert_cd_absolute_path(char **in, t_status expected_status)
 	bzero(&shell, sizeof(t_minishell));
 	ft_cd(in, &shell);
 	cr_assert_eq(shell.status, expected_status);
+	dict_destroy(&shell.env);
 }
 
-Test(cd, absolute_path_two_steps)
+Test(cd, absolute_path)
 {
-	char	*in[] = {"cd", "/Users/lvan-bus/desktop", NULL};
+	char	*in[] = {"cd", "/tmp", NULL};
 	assert_cd_absolute_path(in, E_USAGE);
 }
 
-Test(cd, absolute_path_one_step_invalid_folder)
+Test(cd, absolute_path_invalid_folder)
 {
-	char	*in[] = {"cd", "/Users/lvan-bus/invalid_folder", NULL};
+	char	*in[] = {"cd", "/invalid_folder", NULL};
 	assert_cd_absolute_path(in, E_BUILTIN);
 }
 
@@ -121,7 +117,7 @@ Test(cd, malloc_check_no_arg)
 {
 	int 		condition;
 	t_minishell	shell;
-	char		*in[] = {"cd", NULL};
+	char		*in[] = {"cd", "/tmp", NULL};
 	char 		*environ[] = {NULL};
 
 	bzero(&shell, sizeof(t_minishell));
@@ -129,10 +125,17 @@ Test(cd, malloc_check_no_arg)
 	set_malloc_failure_condition(0);
 	ft_cd(in, &shell);
 	condition = get_malloc_failure_condition();
-	activate_malloc_hook();
-	set_malloc_failure_condition(condition);
-	ft_cd(in, &shell);
-	deactivate_malloc_hook();
-	cr_log_error("%d", condition);
-//	dict_destroy(&shell.env);
+	dict_destroy(&shell.env);
+	while (condition > 0)
+	{
+		bzero(&shell, sizeof(t_minishell));
+		envp_load(&shell.env, environ);
+		activate_malloc_hook();
+		set_malloc_failure_condition(condition);
+		ft_cd(in, &shell);
+		deactivate_malloc_hook();
+		cr_assert_eq(shell.status, E_GENERAL, "status: %d expected status: %d condition: %d", shell.status, E_GENERAL, condition);
+		dict_destroy(&shell.env);
+		condition--;
+	}
 }
