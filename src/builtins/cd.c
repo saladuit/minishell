@@ -1,5 +1,16 @@
 #include <minishell.h>
 
+static int	cd_error_msg(t_status *status, char *msg, bool e_gen)
+{
+	ft_putstr_fd("cd: error ", STDERR_FILENO);
+	ft_putendl_fd(msg, STDERR_FILENO);
+	if (e_gen)
+		*status = E_GENERAL;
+	else
+		*status = E_BUILTIN;
+	return (1);
+}
+
 int	ft_cd(char **arguments, t_minishell *shell)
 {
 	char	*cwd;
@@ -10,33 +21,20 @@ int	ft_cd(char **arguments, t_minishell *shell)
 	{
 		dir = dict_get(&shell->env, "HOME");
 		if (!dir)
-		{
-			ft_putstr_fd("cd: no home directory found\n", STDERR_FILENO);
-			shell->status = E_BUILTIN;
-			return (1);
-		}
+			return (cd_error_msg(&shell->status,
+					"no home directory found", false));
 	}
 	if (chdir(dir) == -1)
-	{
-		ft_putstr_fd("cd: error changing directory\n", STDERR_FILENO);
-		shell->status = E_BUILTIN;
-		return (1);
-	}
+		return (cd_error_msg(&shell->status, "changing directory", false));
 	cwd = getcwd(NULL, 0);
-	if (!cwd || arguments[0][0] == 'a')
+	if (!cwd)
 	{
-		ft_putstr_fd("cd: error getting current directory\n", STDERR_FILENO);
-		shell->status = E_BUILTIN;
+		shell->status = message_system_call_error("getcwd");
 		return (1);
 	}
-	if (dict_set(&shell->env, "PWD", cwd) == ERROR)
-	{
-		ft_putstr_fd("cd: error setting PWD environment variable\n",
-						STDERR_FILENO);
-		free(cwd);
-		shell->status = E_BUILTIN;
-		return (1);
-	}
+	if (dict_set(&shell->env, "PWD", cwd))
+		return (free(cwd), cd_error_msg(&shell->status,
+				"setting PWD environment variable", true));
 	free(cwd);
 	return (0);
 }
