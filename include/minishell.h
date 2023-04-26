@@ -76,7 +76,8 @@ typedef enum e_type
 	INPUT,
 	OUTPUT,
 	APPEND,
-	HEREDOC
+	HEREDOC,
+	TYPE_COUNT,
 }					t_type;
 
 typedef enum e_signal_handler
@@ -256,12 +257,6 @@ size_t				len_until_quote_or_dollar(char *str);
 
 // Executor
 void				executor(t_minishell *shell);
-bool				protected_dup2(int fd, t_type type);
-bool				open_redir(char *path, t_type type);
-int					is_dir(char *path);
-char				**get_env_paths(t_dictionary *dict);
-char				*check_env_paths(t_dictionary *dict, char *cmd);
-char				*get_cmd_path(t_dictionary *dict, char *cmd);
 
 // Builtins
 int					ft_echo(char **arguments, t_minishell *shell);
