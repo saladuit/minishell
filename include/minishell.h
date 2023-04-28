@@ -11,11 +11,16 @@
 #  define DEBUG 0
 # endif
 
+# ifndef LOG
+#  define LOG 0
+# endif
+
 # define HASH_TABLE_SIZE 32
 
 # define SHELDON "Sheldon"
 # define E_SHELDON "sheldon: "
 # define PROMPT "Sheldon$ "
+# define SPACE ' '
 
 # define NOT_FOUND 1
 
@@ -118,6 +123,7 @@ typedef struct s_lexer
 	t_list		*tokens;
 	size_t		token_count;
 	size_t		meta_count;
+	bool		meta_conv;
 	const char	*error_msg;
 }				t_lexer;
 
@@ -199,6 +205,7 @@ bool					quotes_even_or_odd(const char *str); // (by Lucien)
 bool					check_lexical_conventions(const char *command, t_status *exit);
 bool				check_meta_conventions(const char *command, const char **error_msg);
 void 				lexer_initialize(t_lexer *lex);
+bool				control_conventions(const char *command, t_status *exit, t_lexer *lex, const char **error_msg);
 
 // Parser
 t_list				*parser(t_list *tokens, t_status *status, t_dictionary *env);
@@ -216,7 +223,7 @@ t_command_table	*construct_command_table(t_list **tokens, t_status *status,
 		t_dictionary *env);
 t_command				*construct_command(t_list **tokens, t_status *status, 
 		t_dictionary *env);
-t_redir					*construct_redir(t_list **tokens, t_status *status);
+t_redir					*construct_redir(t_list **tokens);
 // Deconstructers
 void				deconstruct_ast(t_list **ast);
 void				deconstruct_command_table(void *ct);

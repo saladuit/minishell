@@ -114,7 +114,7 @@ t_list	*lexer(const char *command_line, t_status *exit)
 		{
 			lex.node = create_token_node(&command_line, exit, &lex);
 			if (!lex.node)
-				return (NULL);
+				return (ft_lstclear(&lex.tokens, free), NULL);
 			ft_lstadd_back(&lex.tokens, lex.node);
 		}
 	}
@@ -122,7 +122,7 @@ t_list	*lexer(const char *command_line, t_status *exit)
 				lex.tokens)->content, &lex.error_msg))
 	{
 		*exit = message_general_error(E_UNEXPECTED_TOKEN, lex.error_msg);
-		return (NULL);
+		return (ft_lstclear(&lex.tokens, free), NULL);
 	}
 	return (lex.tokens);
 }

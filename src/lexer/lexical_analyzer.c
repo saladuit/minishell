@@ -44,15 +44,15 @@ static int	compare_command_ignore_spaces(const char *command, const char *cmp)
 	j = 0;
 	while (command[i] && cmp[j])
 	{
-		if (command[i] != ' ' && cmp[j] == ' ')
+		if (command[i] != SPACE && cmp[j] == SPACE)
 			j++;
-		if (command[i] == ' ' && cmp[j] != ' ')
+		if (command[i] == SPACE && cmp[j] != SPACE)
 			i++;
 		if (command[i++] != cmp[j++])
 			return (false);
 	}
 	while (command[i])
-		if (command[i++] != ' ')
+		if (command[i++] != SPACE)
 			return (false);
 	return (true);
 }
