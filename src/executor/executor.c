@@ -386,8 +386,8 @@ void reset_std_fds(int32_t *std_fds)
 {
 	assert(dup2(std_fds[STDIN_FILENO], STDIN_FILENO) >= SUCCESS);
 	assert(dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO) >= SUCCESS);
-	assert(close(std_fds[STDIN_FILENO] >= SUCCESS));
-	assert(close(std_fds[STDOUT_FILENO] >= SUCCESS));
+	assert(close(std_fds[STDIN_FILENO] == SUCCESS));
+	assert(close(std_fds[STDOUT_FILENO] == SUCCESS));
 }
 
 void	executor(t_minishell *shell)
