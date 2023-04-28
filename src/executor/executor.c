@@ -77,8 +77,7 @@ static bool handle_redirection(t_redir *redir, int32_t *input_fd, int32_t *outpu
 
   ret = redirect(redir, redir->type);
   if (ret == ERROR)
-    return false;
-
+    return (false);
   if (redir->type == INPUT || redir->type == HEREDOC)
   {
     close_fd_if_open(input_fd);
@@ -89,8 +88,7 @@ static bool handle_redirection(t_redir *redir, int32_t *input_fd, int32_t *outpu
     close_fd_if_open(output_fd);
     *output_fd = ret;
   }
-
-  return true;
+  return (true);
 }
 
 int32_t setup_redirects(t_command *command)
