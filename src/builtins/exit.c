@@ -37,7 +37,7 @@ int	ft_exit(char **args, t_minishell *shell)
 {
 	long long	res;
 
-	if (args[2] != NULL)
+	if (args[1] && args[2] != NULL)
 	{
 		shell->status = E_GENERAL;
 		exit_err_msg(NULL);

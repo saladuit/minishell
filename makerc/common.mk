@@ -36,13 +36,13 @@ ifdef LOG
 endif
 
 ifdef	COV
-				CFLAGS					+=--coverage
+	CFLAGS								+=--coverage
 endif
 
 ifdef	FSAN
-				CFLAGS					+=-fsanitize=address,undefined
+	CFLAGS								+=-fsanitize=address,undefined
 endif
 
 ifdef	FILTER
-				F								:=--filter $(FILTER)
+	F											:=--filter $(FILTER)
 endif

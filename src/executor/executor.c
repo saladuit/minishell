@@ -1,5 +1,5 @@
 #include <minishell.h>
-
+#include "libft.h"
 
 static int	open_heredoc(char *path)
 {
@@ -25,7 +25,7 @@ static int	open_append(char *path)
 	return (open(path, O_WRONLY | O_CREAT | O_APPEND, 0664));
 }
 
-static bool	open_fd_type(char *path, t_type type)
+static bool	open_fd_type(char *path, t_type type, t_status *status)
 {
 	assert(type < TYPE_COUNT);
 	if (type == HEREDOC)
@@ -34,8 +34,13 @@ static bool	open_fd_type(char *path, t_type type)
 		return (open_input(path));
 	else if (type == OUTPUT)
 		return (open_output(path));
-	else
+	else if (type == APPEND)
 		return (open_append(path));
+	else
+	{
+		*status = message_general_error(E_GENERAL, "open_fd_type: invalid type");
+		return (false);
+	}
 }
 static int32_t redirect_file_descriptor(int source_fd, t_type redirection)
 {
@@ -47,11 +52,11 @@ static int32_t redirect_file_descriptor(int source_fd, t_type redirection)
     return (dup2(source_fd, target_fd));
 }
 
-int32_t	redirect(t_redir *redir, t_type type)
+int32_t	redirect(t_redir *redir, t_type type, t_status *status)
 {
 	int32_t	fd;
 
-	fd = open_fd_type(redir->filename, type);
+	fd = open_fd_type(redir->filename, type, status);
 	if (fd == ERROR)
 		return (ERROR);
 	if (redirect_file_descriptor(fd, type) == ERROR)
@@ -71,11 +76,11 @@ static void close_fd_if_open(int32_t *fd)
   }
 }
 
-static bool handle_redirection(t_redir *redir, int32_t *input_fd, int32_t *output_fd)
+static bool handle_redirection(t_redir *redir, int32_t *input_fd, int32_t *output_fd, t_status *status)
 {
   int32_t ret;
 
-  ret = redirect(redir, redir->type);
+  ret = redirect(redir, redir->type, status);
   if (ret == ERROR)
     return (false);
   if (redir->type == INPUT || redir->type == HEREDOC)
@@ -91,22 +96,24 @@ static bool handle_redirection(t_redir *redir, int32_t *input_fd, int32_t *outpu
   return (true);
 }
 
-int32_t setup_redirects(t_command *command)
+int32_t setup_redirects(t_command *command, t_status *status)
 {
   t_redir *redir;
   int32_t i;
-  int32_t input_fd = -1;
-  int32_t output_fd = -1;
+  int32_t input_fd;
+  int32_t output_fd;
 
   i = 0;
+  input_fd = -1;
+  output_fd = -1;
   while (i < command->n_redirs)
   {
     get_next_redir(command, &redir);
-    if (!handle_redirection(redir, &input_fd, &output_fd))
+    if (handle_redirection(redir, &input_fd, &output_fd, status) == false)
     {
       close_fd_if_open(&input_fd);
       close_fd_if_open(&output_fd);
-      return (message_system_call_error("redirect"));
+      return (message_system_call_error("setup_redirects: "));
     }
     i++;
   }
@@ -150,18 +157,9 @@ int32_t	wait_for_child_processes(pid_t pid)
 	int32_t	status;
 
 	status = 0;
-	// close(STDIN_FILENO);
-	// close(STDOUT_FILENO);
 	waitpid(pid, &status, WUNTRACED);
 	while (wait(NULL) != -1 && errno != ECHILD)
 		;
-	// if (g_exitcode == E_CTRL_C)
-	// 	return (E_CTRL_C);
-	// if (g_exitcode == S_EXEC_QUIT)
-	// {
-	// 	printf("Quit: 3\n");
-	// 	return (WEXITSTATUS(status));
-	// }
 	return (WEXITSTATUS(status));
 }
 
@@ -170,6 +168,10 @@ static bool	file_is_executable(char *path)
 	return (access(path, X_OK) == SUCCESS);
 }
 
+static bool	file_exits(char *path)
+{
+	return (access(path, F_OK) == SUCCESS);
+}
 static char	*search_cmd_in_path(const char *path, const char *cmd)
 {
 	char		**path_dirs;
@@ -185,49 +187,52 @@ static char	*search_cmd_in_path(const char *path, const char *cmd)
 		cmd_path = ft_strjoin(path_dirs[i], cmd);
 		if (!cmd_path)
 			break ;
-		if (file_is_executable(cmd_path))
-		{
-			ft_matrixfree(&path_dirs);
-			return (cmd_path);
-		}
+		if (file_exits(cmd_path))
+			break;
 		free(cmd_path);
+		cmd_path = NULL;
 		i++;
 	}
 	ft_matrixfree(&path_dirs);
-	return (NULL);
+	return (cmd_path);
 }
 
 char		*get_cmd_path(char *path, char *cmd)
 {
 	char	*cmd_path;
+	char	*slash_cmd;
 
 	if (!path || !cmd)
 		return (NULL);
 	if (cmd[0] == '/' || cmd[0] == '.')
 	{
-		if (file_is_executable(cmd))
+		if (file_exits(cmd))
 			return (ft_strdup(cmd));
 		return (NULL);
 	}
-	cmd_path = search_cmd_in_path(path, cmd);
+	slash_cmd = ft_strjoin("/", cmd);
+	cmd_path = search_cmd_in_path(path, slash_cmd);
+	free(slash_cmd);
 	return (cmd_path);
 }
 
 void	execute_child_command(t_minishell *shell, char **arguments)
 {
 	char	*command_path;
+	char *path;
 
-	command_path = get_cmd_path(dict_get(&shell->env, "PATH"), arguments[0]);
+	path = dict_get(&shell->env, "PATH");
+	command_path = get_cmd_path(path, arguments[0]);
 	if (!command_path)
 	{
-		message_system_call_error("malloc");
+		message_general_error(E_COMMAND_NOT_FOUND, NULL);
 		_exit(E_COMMAND_NOT_FOUND);
 	}
-	if (access(command_path, X_OK))
+	if (file_is_executable(command_path))
 	{
 		free(command_path);
-		message_system_call_error("access");
-		_exit(E_COMMAND_NOT_FOUND);
+		message_general_error(E_EXEC, NULL);
+		_exit(E_EXEC);
 	}
 	execve(command_path, arguments, dict_to_envp(&shell->env));
 	message_system_call_error("execve");
@@ -240,14 +245,18 @@ int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
 	int32_t	status;
 	char	**arguments;
 
-	status = setup_redirects(cmd);
+	status = setup_redirects(cmd, &shell->status);
 	if (status)
 		return (status);
 	arguments = get_arguments(cmd);
-	if (!arguments)
+	if (!arguments || *arguments == NULL)
+	{
+		return (E_GENERAL);
+	}
+	if (*arguments == NULL)
 	{
 		free(arguments);
-		return (1);
+		return (SUCCESS);
 	}
 	status = execute_builtin(arguments, shell);
 	if (status >= 0)
@@ -259,19 +268,18 @@ int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
 	if (pid == 0)
 	{
 		execute_child_command(shell, arguments);
-		_exit(127);
+		_exit(E_COMMAND_NOT_FOUND);
 	}
 	free(arguments);
 	return (wait_for_child_processes(pid));
 }
 
-// Needs to always exit even if it is builtin
 int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
 {
 	char	**arguments;
 	int32_t	status;
 
-	status = setup_redirects(cmd);
+	status = setup_redirects(cmd, &shell->status);
 	if (status)
 		_exit(status);
 	arguments = get_arguments(cmd);
@@ -285,14 +293,13 @@ int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
 	return (status);
 }
 
-
 int32_t handle_first_pipe(int32_t *pipe_fds)
 {
     if (pipe(pipe_fds) == ERROR)
         return (ERROR);
     if (dup2(pipe_fds[1], STDOUT_FILENO) == ERROR)
         return (ERROR);
-    return close(pipe_fds[1]);
+    return (close(pipe_fds[1]));
 }
 
 int32_t handle_middle_pipes(int32_t *pipe_fds)
@@ -305,16 +312,16 @@ int32_t handle_middle_pipes(int32_t *pipe_fds)
         return (ERROR);
     if (dup2(pipe_fds[STDOUT_FILENO], STDOUT_FILENO) == ERROR)
         return (ERROR);
-    return close(pipe_fds[STDOUT_FILENO]);
+    return (close(pipe_fds[STDOUT_FILENO]));
 }
 
 int32_t handle_last_pipe(int32_t *pipe_fds, int32_t *std_fds)
 {
     if (dup2(pipe_fds[STDIN_FILENO], STDIN_FILENO) == ERROR)
         return (ERROR);
-    // if (close(pipe_fds[STDIN_FILENO]) == ERROR)
-    //     return (ERROR);
-    return dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO);
+    if (close(pipe_fds[STDIN_FILENO]) == ERROR)
+        return (ERROR);
+    return (dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO));
 }
 
 int32_t handle_pipes(int32_t *pipe_fds, int32_t *std_fds, int32_t n_commands, int32_t i)
@@ -382,12 +389,12 @@ void		execute_command_table(t_command_table *ct, t_minishell *shell)
 		execute_pipeline(ct, shell);
 }
 
-void reset_std_fds(int32_t *std_fds)
+void reset_std_fds(int32_t *std_fds, t_status *status)
 {
-	assert(dup2(std_fds[STDIN_FILENO], STDIN_FILENO) >= SUCCESS);
-	assert(dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO) >= SUCCESS);
-	assert(close(std_fds[STDIN_FILENO] == SUCCESS));
-	assert(close(std_fds[STDOUT_FILENO] == SUCCESS));
+  if (dup2(std_fds[STDIN_FILENO], STDIN_FILENO) == ERROR) 
+    *status = message_system_call_error("Reset_std_fds: ");
+  if (dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO) == ERROR)
+    *status = message_general_error(E_GENERAL, "Reset_std_fds: ");
 }
 
 void	executor(t_minishell *shell)
@@ -396,5 +403,5 @@ void	executor(t_minishell *shell)
 
 	get_one_command_table(&shell->ast, &ct);
 	execute_command_table(ct, shell);
-	reset_std_fds(shell->std_fds);
+	reset_std_fds(shell->std_fds, &shell->status);
 }

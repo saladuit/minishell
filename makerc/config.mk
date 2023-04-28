@@ -17,9 +17,9 @@ MAIN_OBJ			:=$(addprefix $(BUILD_DIR)/, $(MAIN:%.c=%.o))
 UNIT_OBJS			:=$(patsubst $(UNIT_DIR)/$(SRC_DIR)/%.c, $(UNIT_DIR)/$(BUILD_DIR)/%.o, $(UNIT_SRCS))
 
 #	Dependency	files
-DEPENDS             := $(patsubst %.o,%.d,$(OBJS))
-MAIN_DEPENDS        := $(patsubst %.o,%.d,$(MAIN_OBJS))
-UNIT_DEPENDS        := $(patsubst %.o,%.d,$(UNIT_OBJS))
+# DEPENDS             := $(patsubst %.o,%.d,$(OBJS))
+# MAIN_DEPENDS        := $(patsubst %.o,%.d,$(MAIN_OBJ))
+# UNIT_DEPENDS        := $(patsubst %.o,%.d,$(UNIT_OBJS))
 
 #	Headers
 HEADERS				=$(LIBFT_INCLUDE_DIR)/libft.h \
