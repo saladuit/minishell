@@ -251,9 +251,7 @@ int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
 		return (status);
 	arguments = get_arguments(cmd);
 	if (!arguments || *arguments == NULL)
-	{
 		return (E_GENERAL);
-	}
 	if (*arguments == NULL)
 	{
 		free(arguments);
