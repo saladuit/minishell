@@ -165,9 +165,8 @@ typedef struct s_command_table
 typedef struct s_builtin
 {
 	const char		*name;
-	int				(*func)(char **arguments, t_minishell *shell);
+	void			(*func)(char **arguments, t_minishell *shell);
 }					t_builtin;
-
 
 typedef struct
 {
@@ -267,7 +266,7 @@ void				executor(t_minishell *shell);
 
 // Builtins
 void				ft_echo(char **arguments, t_minishell *shell);
-int					ft_cd(char **arguments, t_minishell *shell);
+void				ft_cd(char **arguments, t_minishell *shell);
 void				ft_pwd(char **arguments, t_minishell *shell);
 void				ft_export(char **arguments, t_minishell *shell);
 void				ft_unset(char **arguments, t_minishell *shell);
