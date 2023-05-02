@@ -41,6 +41,8 @@ int32_t	envp_load(t_dictionary *env, char **envp)
 			free(key);
 			return (message_system_call_error("dict_set"));
 		}
+		free(value);
+		free(key);
 	}
 	return (SUCCESS);
 }

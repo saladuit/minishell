@@ -33,17 +33,29 @@ static int numeric(char *arg)
 	return (1);
 }
 
+static size_t count_args(char **args)
+{
+	size_t count;
+
+	count = 0;
+	while (args[count])
+		count++;
+	return (count);
+}
+
 void	ft_exit(char **args, t_minishell *shell)
 {
 	long long	res;
+	size_t		count;
 
-	if (args[1] && args[2] != NULL)
+	count = count_args(args);
+	if (count > 2)
 	{
 		shell->status = E_GENERAL;
 		exit_err_msg(NULL);
 		return ;
 	}
-	if (args[1] != NULL)
+	if (count == 2)
 	{
 		if (!numeric(args[1]) || (!ft_ltoi_with_overflow(args[1], &res)))
 		{
