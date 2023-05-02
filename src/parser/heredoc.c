@@ -3,11 +3,7 @@
 static void	exit_d_check(char *line, bool *exit)
 {
 	if (!line)
-	{
-//		write(STDERR_FILENO, "\n", 1);
-//		remove_split(p->path_list);
 		*exit = true;
-	}
 }
 
 int32_t	here_doc(char *delimiter)
@@ -16,6 +12,8 @@ int32_t	here_doc(char *delimiter)
 	char	*line;
 	bool	exit;
 
+	if (!delimiter || ft_strlen(delimiter) == 0)
+		return (ERROR);
 	if (pipe(fd) == -1)
 		return (ERROR);
 	exit = false;
