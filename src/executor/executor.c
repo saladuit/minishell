@@ -219,7 +219,7 @@ char		*get_cmd_path(char *path, char *cmd)
 void	execute_child_command(t_minishell *shell, char **arguments)
 {
 	char	*command_path;
-	char *path;
+	char	*path;
 
 	path = dict_get(&shell->env, "PATH");
 	command_path = get_cmd_path(path, arguments[0]);
@@ -228,7 +228,7 @@ void	execute_child_command(t_minishell *shell, char **arguments)
 		message_general_error(E_COMMAND_NOT_FOUND, NULL);
 		_exit(E_COMMAND_NOT_FOUND);
 	}
-	if (file_is_executable(command_path))
+	if (!file_is_executable(command_path))
 	{
 		free(command_path);
 		message_general_error(E_EXEC, NULL);
