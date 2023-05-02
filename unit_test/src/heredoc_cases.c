@@ -1,6 +1,28 @@
 #include <unit_test.h>
 
 /*******************************************************************************/
+/*                            heredoc_basic_cases                              */
+/*******************************************************************************/
+
+void	assert_heredoc_basic(char *delimiter, int32_t expected_output)
+{
+	int32_t	output_fd;
+
+	output_fd = here_doc(delimiter);
+	cr_assert_eq(output_fd, expected_output);
+}
+
+Test(heredoc, null_delimiter)
+{
+	assert_heredoc_basic(NULL, ERROR);
+}
+
+Test(heredoc, empty_delimiter)
+{
+	assert_heredoc_basic("", ERROR);
+}
+
+/*******************************************************************************/
 /*                               heredoc_cases                                 */
 /*******************************************************************************/
 
@@ -41,4 +63,3 @@ Test(heredoc, two_lines)
 	char	*expected_output = "line 1\nline 2\n";
 	assert_heredoc(delimiter, input, expected_output);
 }
-
