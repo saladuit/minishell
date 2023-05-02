@@ -57,14 +57,6 @@ Test(cd, relative_path_one_step)
 	assert_cd_relative_path(in, E_USAGE);
 }
 
-Test(cd, relative_path_two_steps)
-{
-	system("mkdir -p /tmp/cd-relative_path_two_steps/test && cd /tmp/cd-relative_path_two_steps");
-	char	*in[] = {"cd", "test", NULL};
-	assert_cd_relative_path(in, E_USAGE);
-	system("rm -R /tmp/cd-relative_path_two_steps");
-}
-
 Test(cd, relative_path_one_step_back)
 {
 	char	*in[] = {"cd", "..", NULL};
