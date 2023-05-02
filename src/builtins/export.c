@@ -28,7 +28,7 @@ static void	get_value(char **value, char *key)
 	}
 }
 
-int	ft_export(char **arguments, t_minishell *shell)
+void	ft_export(char **arguments, t_minishell *shell)
 {
 	char	*key;
 	char	*value;
@@ -36,7 +36,7 @@ int	ft_export(char **arguments, t_minishell *shell)
 
 	i = 1;
 	if (!arguments[i])
-		return (dict_print(&shell->env), SUCCESS);
+		return ;
 	while (arguments[i] != NULL)
 	{
 		if (!ft_isalpha(arguments[i][0]))
@@ -46,14 +46,23 @@ int	ft_export(char **arguments, t_minishell *shell)
 		}
 		key = ft_strdup(arguments[i]);
 		if (key == NULL)
-			return (export_error_msg_out_of_memory(shell, &i), CONTINUE);
+		{
+			export_error_msg_out_of_memory(shell, &i);
+			return ;
+		}
 		get_value(&value, key);
 		if (!value)
-			return (export_error_msg_out_of_memory(shell, &i), CONTINUE);
+		{
+			export_error_msg_out_of_memory(shell, &i);
+			return ;
+		}
 		dict_set(&shell->env, key, value);
 		if (dict_get(&shell->env, key) == NULL)
-			return (export_error_msg_out_of_memory(shell, &i), CONTINUE);
+		{
+			export_error_msg_out_of_memory(shell, &i);
+			return ;
+		}
 		i++;
 	}
-	return (SUCCESS);
+	return ;
 }

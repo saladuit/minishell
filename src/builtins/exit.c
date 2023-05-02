@@ -33,7 +33,7 @@ static int numeric(char *arg)
 	return (1);
 }
 
-int	ft_exit(char **args, t_minishell *shell)
+void	ft_exit(char **args, t_minishell *shell)
 {
 	long long	res;
 
@@ -41,7 +41,7 @@ int	ft_exit(char **args, t_minishell *shell)
 	{
 		shell->status = E_GENERAL;
 		exit_err_msg(NULL);
-		return (shell->status);
+		return ;
 	}
 	if (args[1] != NULL)
 	{
@@ -56,5 +56,5 @@ int	ft_exit(char **args, t_minishell *shell)
 	if (shell->is_pipeline)
 		_exit(shell->status);
 	shell->stop = true;
-	return (shell->status);
+	return ;
 }

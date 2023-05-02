@@ -143,13 +143,14 @@ t_builtin	builtin_lookup(char *cmd)
 int32_t	execute_builtin(char **arguments, t_minishell *shell)
 {
 	t_builtin	builtin_function;
-	int32_t		ret;
+//	int32_t		ret;
 
 	builtin_function = builtin_lookup(arguments[0]);
 	if (builtin_function.name == NULL)
 		return (-1);
-	ret = builtin_function.func(arguments, shell);
-	return (ret);
+//	ret = builtin_function.func(arguments, shell);
+	builtin_function.func(arguments, shell);
+	return (shell->status);
 }
 
 int32_t	wait_for_child_processes(pid_t pid)

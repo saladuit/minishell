@@ -266,12 +266,12 @@ size_t				len_until_quote_or_dollar(char *str);
 void				executor(t_minishell *shell);
 
 // Builtins
-int					ft_echo(char **arguments, t_minishell *shell);
+void				ft_echo(char **arguments, t_minishell *shell);
 int					ft_cd(char **arguments, t_minishell *shell);
-int					ft_pwd(char **arguments, t_minishell *shell);
-int					ft_export(char **arguments, t_minishell *shell);
-int					ft_unset(char **arguments, t_minishell *shell);
-int					ft_env(char **arguments, t_minishell *shell);
-int 				ft_exit(char **args, t_minishell *shell);
+void				ft_pwd(char **arguments, t_minishell *shell);
+void				ft_export(char **arguments, t_minishell *shell);
+void				ft_unset(char **arguments, t_minishell *shell);
+void				ft_env(char **arguments, t_minishell *shell);
+void 				ft_exit(char **args, t_minishell *shell);
 
 #endif
