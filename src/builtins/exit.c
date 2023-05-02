@@ -43,7 +43,7 @@ static size_t count_args(char **args)
 	return (count);
 }
 
-int	ft_exit(char **args, t_minishell *shell)
+void	ft_exit(char **args, t_minishell *shell)
 {
 	long long	res;
 	size_t		count;
@@ -53,7 +53,7 @@ int	ft_exit(char **args, t_minishell *shell)
 	{
 		shell->status = E_GENERAL;
 		exit_err_msg(NULL);
-		return (shell->status);
+		return ;
 	}
 	if (count == 2)
 	{
@@ -68,5 +68,5 @@ int	ft_exit(char **args, t_minishell *shell)
 	if (shell->is_pipeline)
 		_exit(shell->status);
 	shell->stop = true;
-	return (shell->status);
+	return ;
 }

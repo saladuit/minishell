@@ -5,11 +5,16 @@ include makerc/config.mk
 -include $(DEPENDS) 
 -include $(MAIN_DEPENDS)
 
+# $(info $(UNIT_DEPENDS))
+# $(info  $(DEPENDS))
+# $(info $(MAIN_DEPENDS))
+
 all: $(MINISHELL)
 
 unit_test: $(UNIT_TEST)
 
 $(MINISHELL): SHELL :=/bin/bash
+
 
 $(MINISHELL): $(OBJS) $(MAIN_OBJ) $(LIBFT)
 	$(CC) $(CFLAGS) $^ $(LDFLAGS) $(INCLUDE_FLAGS) -o $(MINISHELL)
@@ -32,7 +37,7 @@ debug:
 	@$(MAKE) DEBUG=1 LOG=1
 
 fsan:
-	@$(MAKE) FSAN=1 DEBUG=1
+	@$(MAKE) FSAN=1 LOG=1 DEBUG=1
 
 test:
 	@$(MAKE) DEBUG=1 FSAN=1 fsan unit_test
@@ -68,7 +73,4 @@ coverage_re: fclean coverage
 
 bonus: all
 
-.PHONY: all clean fclean re bonus
-.PHONY: test test_re 
-.PHONY: coverage coverage_re analyse
-.PHONY: debug rebug fsan resan
+.PHONY: all clean fclean re bonus test test_re coverage coverage_re analyse  debug rebug fsan resan

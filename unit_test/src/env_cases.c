@@ -68,7 +68,8 @@ void	assert_env_multiple_args(char **input, int expected)
 	t_minishell	shell;
 
 	bzero(&shell, sizeof(shell));
-	int	expression = ft_env(input, &shell);
+	ft_env(input, &shell);
+	int	expression = (int) shell.status;
 	cr_assert_eq(expression, expected);
 }
 

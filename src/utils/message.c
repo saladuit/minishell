@@ -29,9 +29,7 @@ t_status	message_general_error(t_status status, const char *msg)
 	ft_putstr_fd(E_SHELDON, STDERR_FILENO);
 	if (status == E_UNEXPECTED_TOKEN)
 		message_unexpected_token(msg);
-	else if (status == E_QUOTES)
-		ft_putendl_fd((char *)message_lookup(E_QUOTES), STDERR_FILENO);
-	else if (status)
+	else 
 		ft_putendl_fd((char *)message_lookup(status), STDERR_FILENO);
 	return (status);
 }
@@ -62,6 +60,7 @@ t_status	message_general_error(t_status status, const char *msg)
 
 t_status	message_system_call_error(const char *function_name)
 {
+	ft_putstr_fd(E_SHELDON, STDERR_FILENO);
 	ft_putstr_fd((char *)function_name, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
 	ft_putstr_fd(strerror(errno), STDERR_FILENO);

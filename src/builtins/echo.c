@@ -1,6 +1,6 @@
 #include <minishell.h>
 
-int32_t	ft_echo(char **arguments, t_minishell *shell)
+void	ft_echo(char **arguments, t_minishell *shell)
 {
 	size_t	i;
 	bool	newline;
@@ -22,5 +22,4 @@ int32_t	ft_echo(char **arguments, t_minishell *shell)
 	}
 	if (newline)
 		write(STDOUT_FILENO, "\n", 1);
-	return (0);
 }

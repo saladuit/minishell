@@ -6,7 +6,7 @@ static void pwd_error_msg(void)
 	ft_putendl_fd(strerror(errno), STDERR_FILENO);
 }
 
-int	ft_pwd(char **arguments, t_minishell *shell)
+void	ft_pwd(char **arguments, t_minishell *shell)
 {
 	char	*buf;
 
@@ -18,10 +18,9 @@ int	ft_pwd(char **arguments, t_minishell *shell)
 	{
 		shell->status = E_GENERAL;
 		pwd_error_msg();
-		return (1);
+		return ;
 	}
 	write(STDOUT_FILENO, buf, ft_strlen(buf));
 	write(STDOUT_FILENO, "\n", 1);
 	free(buf);
-	return (0);
 }

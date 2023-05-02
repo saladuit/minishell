@@ -1,26 +1,123 @@
 #include <minishell.h>
+#include "libft.h"
 
-int32_t	redirect(t_redir *redir, t_type type)
+static int	open_heredoc(char *path)
 {
-	if (!open_redir(redir->filename, type))
-		return (message_system_call_error("redirect"));
+	int fd;
+
+	fd = open(path, O_RDONLY);
+	unlink(path);
+	return (fd);
+}
+
+static int	open_input(char *path)
+{
+	return (open(path, O_RDONLY));
+}
+
+static int	open_output(char *path)
+{
+	return (open(path, O_WRONLY | O_CREAT | O_TRUNC, 0664));
+}
+
+static int	open_append(char *path)
+{
+	return (open(path, O_WRONLY | O_CREAT | O_APPEND, 0664));
+}
+
+static bool	open_fd_type(char *path, t_type type, t_status *status)
+{
+	assert(type < TYPE_COUNT);
+	if (type == HEREDOC)
+		return (open_heredoc(path));
+	else if (type == INPUT)
+		return (open_input(path));
+	else if (type == OUTPUT)
+		return (open_output(path));
+	else if (type == APPEND)
+		return (open_append(path));
+	else
+	{
+		*status = message_general_error(E_GENERAL, "open_fd_type: invalid type");
+		return (false);
+	}
+}
+static int32_t redirect_file_descriptor(int source_fd, t_type redirection)
+{
+    int target_fd;
+    if (redirection == INPUT || redirection == HEREDOC)
+        target_fd = STDIN_FILENO;
+    else
+        target_fd = STDOUT_FILENO;
+    return (dup2(source_fd, target_fd));
+}
+
+int32_t	redirect(t_redir *redir, t_type type, t_status *status)
+{
+	int32_t	fd;
+
+	fd = open_fd_type(redir->filename, type, status);
+	if (fd == ERROR)
+		return (ERROR);
+	if (redirect_file_descriptor(fd, type) == ERROR)
+	{
+		close(fd);
+		return (ERROR);
+	}
 	return (SUCCESS);
 }
 
-int32_t	setup_redirects(t_command *command)
+static void close_fd_if_open(int32_t *fd)
 {
-	t_redir	*redir;
-	int32_t	ret;
-	int32_t	i;
+  if (*fd != -1)
+  {
+    close(*fd);
+    *fd = -1;
+  }
+}
 
-	i = 0;
-	ret = 0;
-	while (i++ < command->n_redirs)
-	{
-		get_next_redir(command, &redir);
-		ret = redirect(redir, redir->type);
-	}
-	return (ret);
+static bool handle_redirection(t_redir *redir, int32_t *input_fd, int32_t *output_fd, t_status *status)
+{
+  int32_t ret;
+
+  ret = redirect(redir, redir->type, status);
+  if (ret == ERROR)
+    return (false);
+  if (redir->type == INPUT || redir->type == HEREDOC)
+  {
+    close_fd_if_open(input_fd);
+    *input_fd = ret;
+  }
+  else
+  {
+    close_fd_if_open(output_fd);
+    *output_fd = ret;
+  }
+  return (true);
+}
+
+int32_t setup_redirects(t_command *command, t_status *status)
+{
+  t_redir *redir;
+  int32_t i;
+  int32_t input_fd;
+  int32_t output_fd;
+
+  i = 0;
+  input_fd = -1;
+  output_fd = -1;
+  while (i < command->n_redirs)
+  {
+    get_next_redir(command, &redir);
+    if (handle_redirection(redir, &input_fd, &output_fd, status) == false)
+    {
+      close_fd_if_open(&input_fd);
+      close_fd_if_open(&output_fd);
+      return (message_system_call_error("setup_redirects: "));
+    }
+    i++;
+  }
+  return (SUCCESS);
 }
 
 t_builtin	builtin_lookup(char *cmd)
@@ -46,13 +143,14 @@ t_builtin	builtin_lookup(char *cmd)
 int32_t	execute_builtin(char **arguments, t_minishell *shell)
 {
 	t_builtin	builtin_function;
-	int32_t		ret;
+//	int32_t		ret;
 
 	builtin_function = builtin_lookup(arguments[0]);
 	if (builtin_function.name == NULL)
 		return (-1);
-	ret = builtin_function.func(arguments, shell);
-	return (ret);
+//	ret = builtin_function.func(arguments, shell);
+	builtin_function.func(arguments, shell);
+	return (shell->status);
 }
 
 int32_t	wait_for_child_processes(pid_t pid)
@@ -60,49 +158,127 @@ int32_t	wait_for_child_processes(pid_t pid)
 	int32_t	status;
 
 	status = 0;
-	close(STDIN_FILENO);
-	// close(STDOUT_FILENO);
 	waitpid(pid, &status, WUNTRACED);
 	while (wait(NULL) != -1 && errno != ECHILD)
 		;
-	// if (g_exitcode == E_CTRL_C)
-	// 	return (E_CTRL_C);
-	// if (g_exitcode == S_EXEC_QUIT)
-	// {
-	// 	printf("Quit: 3\n");
-	// 	return (WEXITSTATUS(status));
-	// }
 	return (WEXITSTATUS(status));
+}
+
+static bool	file_is_executable(char *path)
+{
+	return (access(path, X_OK) == SUCCESS);
+}
+
+static bool	file_exits(char *path)
+{
+	return (access(path, F_OK) == SUCCESS);
+}
+static char	*search_cmd_in_path(const char *path, const char *cmd)
+{
+	char		**path_dirs;
+	char		*cmd_path;
+	size_t		i;
+
+	path_dirs = ft_split(path, ':');
+	if (!path_dirs)
+		return (NULL);
+	i = 0;
+	while (path_dirs[i])
+	{
+		cmd_path = ft_strjoin(path_dirs[i], cmd);
+		if (!cmd_path)
+			break ;
+		if (file_exits(cmd_path))
+			break;
+		free(cmd_path);
+		cmd_path = NULL;
+		i++;
+	}
+	ft_matrixfree(&path_dirs);
+	return (cmd_path);
+}
+
+char		*get_cmd_path(char *path, char *cmd)
+{
+	char	*cmd_path;
+	char	*slash_cmd;
+
+	if (!path || !cmd)
+		return (NULL);
+	if (cmd[0] == '/' || cmd[0] == '.')
+	{
+		if (file_exits(cmd))
+			return (ft_strdup(cmd));
+		return (NULL);
+	}
+	slash_cmd = ft_strjoin("/", cmd);
+	cmd_path = search_cmd_in_path(path, slash_cmd);
+	free(slash_cmd);
+	return (cmd_path);
 }
 
 void	execute_child_command(t_minishell *shell, char **arguments)
 {
 	char	*command_path;
+	char	*path;
 
-	command_path = get_cmd_path(&shell->env, arguments[0]);
+	path = dict_get(&shell->env, "PATH");
+	command_path = get_cmd_path(path, arguments[0]);
 	if (!command_path)
 	{
-		message_system_call_error("malloc");
+		message_general_error(E_COMMAND_NOT_FOUND, NULL);
 		_exit(E_COMMAND_NOT_FOUND);
 	}
-	if (access(command_path, X_OK))
+	if (!file_is_executable(command_path))
 	{
 		free(command_path);
-		message_system_call_error("access");
-		_exit(E_COMMAND_NOT_FOUND);
+		message_general_error(E_EXEC, NULL);
+		_exit(E_EXEC);
 	}
 	execve(command_path, arguments, dict_to_envp(&shell->env));
 	message_system_call_error("execve");
 	_exit(E_COMMAND_NOT_FOUND);
 }
 
-// Needs to always exit even if it is builtin
+int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
+{
+	pid_t	pid;
+	int32_t	status;
+	char	**arguments;
+
+	status = setup_redirects(cmd, &shell->status);
+	if (status)
+		return (status);
+	arguments = get_arguments(cmd);
+	if (!arguments || *arguments == NULL)
+		return (E_GENERAL);
+	if (*arguments == NULL)
+	{
+		free(arguments);
+		return (SUCCESS);
+	}
+	status = execute_builtin(arguments, shell);
+	if (status >= 0)
+	{
+		free(arguments);
+		return (status);
+	}
+	pid = fork();
+	if (pid == 0)
+	{
+		execute_child_command(shell, arguments);
+		_exit(E_COMMAND_NOT_FOUND);
+	}
+	free(arguments);
+	return (wait_for_child_processes(pid));
+}
+
 int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
 {
 	char	**arguments;
 	int32_t	status;
 
-	status = setup_redirects(cmd);
+	status = setup_redirects(cmd, &shell->status);
 	if (status)
 		_exit(status);
 	arguments = get_arguments(cmd);
@@ -116,127 +292,115 @@ int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
 	return (status);
 }
 
-int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
+int32_t handle_first_pipe(int32_t *pipe_fds)
 {
-	pid_t	pid;
-	int32_t	status;
-	char	**arguments;
+    if (pipe(pipe_fds) == ERROR)
+        return (ERROR);
+    if (dup2(pipe_fds[1], STDOUT_FILENO) == ERROR)
+        return (ERROR);
+    return (close(pipe_fds[1]));
+}
 
-	status = setup_redirects(cmd);
-	if (status)
-		return (status);
-	arguments = get_arguments(cmd);
-	if (!arguments)
-	{
-		free(arguments);
-		return (1);
-	}
-	status = execute_builtin(arguments, shell);
-	if (status >= 0)
-	{
-		free(arguments);
-		return (status);
-	}
-	pid = fork();
+int32_t handle_middle_pipes(int32_t *pipe_fds)
+{
+    if (dup2(pipe_fds[STDIN_FILENO], STDIN_FILENO) == ERROR)
+        return (ERROR);
+    if (close(pipe_fds[STDIN_FILENO]) == ERROR)
+        return (ERROR);
+    if (pipe(pipe_fds) == ERROR)
+        return (ERROR);
+    if (dup2(pipe_fds[STDOUT_FILENO], STDOUT_FILENO) == ERROR)
+        return (ERROR);
+    return (close(pipe_fds[STDOUT_FILENO]));
+}
+
+int32_t handle_last_pipe(int32_t *pipe_fds, int32_t *std_fds)
+{
+    if (dup2(pipe_fds[STDIN_FILENO], STDIN_FILENO) == ERROR)
+        return (ERROR);
+    if (close(pipe_fds[STDIN_FILENO]) == ERROR)
+        return (ERROR);
+    return (dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO));
+}
+
+int32_t handle_pipes(int32_t *pipe_fds, int32_t *std_fds, int32_t n_commands, int32_t i)
+{
+		if (i == 0)
+			return (handle_first_pipe(pipe_fds));
+		else if (i == n_commands - 1)
+			return (handle_last_pipe(pipe_fds, std_fds));
+		return (handle_middle_pipes(pipe_fds));
+}
+
+int32_t process_command(int32_t *pipe_fds, t_command_table *ct, t_minishell *shell)
+{
+  t_command *cmd;
+  pid_t pid;
+
+  get_next_command(ct, &cmd);
+  pid = fork();
+  if (pid == -1)
+		return (ERROR);
 	if (pid == 0)
-	{
-		execute_child_command(shell, arguments);
-		_exit(127);
-	}
-	free(arguments);
-	return (wait_for_child_processes(pid));
+  {
+    assert(close(pipe_fds[STDIN_FILENO]) == SUCCESS);
+    execute_pipe_command(cmd, shell);
+  }
+  return (pid);
 }
 
-int32_t	init_first_pipe(int32_t *pipe_fds)
+void execute_pipeline(t_command_table *ct, t_minishell *shell)
 {
-	if (pipe(pipe_fds) == -1)
-		return (ERROR);
-	if (dup2(pipe_fds[1], STDOUT_FILENO) == -1)
-		return (ERROR);
-	close(pipe_fds[1]);
-	// close(pipe_fds[0]);
-	return (SUCCESS);
+  int32_t pipe_fds[2];
+  int32_t pid;
+  int32_t i;
+
+  i = 0;
+  shell->is_pipeline = true;
+  while (i < ct->n_commands)
+  {
+  	if (handle_pipes(pipe_fds, shell->std_fds, ct->n_commands, i) == ERROR)
+  	{
+  		shell->status = message_general_error(E_GENERAL, "Executor: ");
+  		break ;
+  	}
+  	pid = process_command(pipe_fds, ct, shell);
+  	if (pid == ERROR)
+  	{
+  		shell->status = message_general_error(E_GENERAL, "Executor: ");
+  		break ;
+  	}
+    i++;
+  }
+  shell->status = wait_for_child_processes(pid);
 }
 
-int32_t	prepare_next_pipe(int32_t *pipe_fds, int32_t *std_fds, bool last)
+void		execute_command_table(t_command_table *ct, t_minishell *shell)
 {
-	dup2(pipe_fds[0], STDIN_FILENO);
-	// return (ERROR);
-	close(pipe_fds[0]);
-	if (last)
+	t_command	*cmd;
+
+	if (ct->n_commands == 1)
 	{
-		if (dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO) == -1)
-			return (ERROR);
+		get_next_command(ct, &cmd);
+		execute_simple_command(cmd, shell);
 	}
 	else
-	{
-		if (pipe(pipe_fds) == -1)
-			return (ERROR);
-		if (dup2(pipe_fds[1], STDOUT_FILENO) == -1)
-			return (ERROR);
-		close(pipe_fds[1]);
-	}
-	return (SUCCESS);
+		execute_pipeline(ct, shell);
 }
 
-int32_t	execute_pipeline(t_command_table *ct, int32_t *std_fds,
-		t_minishell *shell)
+void reset_std_fds(int32_t *std_fds, t_status *status)
 {
-	t_command	*cmd;
-	int32_t		pipe_fds[2];
-	pid_t		pid;
-	int32_t		i;
-
-	if (ct->n_commands > 1)
-		shell->is_pipeline = true;
-	if (init_first_pipe(pipe_fds) == -1)
-		return (E_GENERAL);
-	i = 0;
-	while (i++ < ct->n_commands)
-	{
-		get_next_command(ct, &cmd);
-		pid = fork();
-		if (pid == 0)
-		{
-			close(pipe_fds[0]);
-			execute_pipe_command(cmd, shell);
-		}
-		if (!cmd)
-			break ;
-		if (i == ct->n_commands)
-			prepare_next_pipe(pipe_fds, std_fds, false);
-		else
-			prepare_next_pipe(pipe_fds, std_fds, true);
-	}
-	return (wait_for_child_processes(pid));
+  if (dup2(std_fds[STDIN_FILENO], STDIN_FILENO) == ERROR) 
+    *status = message_system_call_error("Reset_std_fds: ");
+  if (dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO) == ERROR)
+    *status = message_general_error(E_GENERAL, "Reset_std_fds: ");
 }
 
-int32_t		execute_command_table(
-	t_command_table *ct, int32_t *std_fds, t_minishell *shell)
-{
-	t_command	*cmd;
-
-	if (ct->commands->next == NULL)
-	{
-		get_next_command(ct, &cmd);
-		return (execute_simple_command(cmd, shell));
-	}
-	return (execute_pipeline(ct, std_fds, shell));
-}
-
-int32_t	executor(t_minishell *shell)
+void	executor(t_minishell *shell)
 {
 	t_command_table	*ct;
-	int32_t			status;
-	int32_t			std_fds[2];
 
-	std_fds[STDIN_FILENO] = dup(STDIN_FILENO);
-	std_fds[STDOUT_FILENO] = dup(STDOUT_FILENO);
 	get_one_command_table(&shell->ast, &ct);
-	status = execute_command_table(ct, std_fds, shell);
-	dup2(std_fds[STDIN_FILENO], STDIN_FILENO);
-	dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO);
-	close(std_fds[STDIN_FILENO]);
-	close(std_fds[STDOUT_FILENO]);
-	return (status);
+	execute_command_table(ct, shell);
+	reset_std_fds(shell->std_fds, &shell->status);
 }

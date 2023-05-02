@@ -81,7 +81,8 @@ typedef enum e_type
 	INPUT,
 	OUTPUT,
 	APPEND,
-	HEREDOC
+	HEREDOC,
+	TYPE_COUNT,
 }					t_type;
 
 typedef enum e_signal_handler
@@ -132,6 +133,7 @@ typedef struct s_minishell
 	t_list			*ast;
 	t_list			*tokens;
 	char			*command_line;
+	int32_t			std_fds[2];
 	t_status		status;
 	bool			stop;
 	bool			is_pipeline;
@@ -163,9 +165,8 @@ typedef struct s_command_table
 typedef struct s_builtin
 {
 	const char		*name;
-	int				(*func)(char **arguments, t_minishell *shell);
+	void			(*func)(char **arguments, t_minishell *shell);
 }					t_builtin;
-
 
 typedef struct
 {
@@ -261,21 +262,15 @@ char				*expand_token(char *arg, t_status *status, t_dictionary *envd);
 size_t				len_until_quote_or_dollar(char *str);
 
 // Executor
-int32_t				executor(t_minishell *shell);
-bool				protected_dup2(int fd, t_type type);
-bool				open_redir(char *path, t_type type);
-int					is_dir(char *path);
-char				**get_env_paths(t_dictionary *dict);
-char				*check_env_paths(t_dictionary *dict, char *cmd);
-char				*get_cmd_path(t_dictionary *dict, char *cmd);
+void				executor(t_minishell *shell);
 
 // Builtins
-int					ft_echo(char **arguments, t_minishell *shell);
-int					ft_cd(char **arguments, t_minishell *shell);
-int					ft_pwd(char **arguments, t_minishell *shell);
-int					ft_export(char **arguments, t_minishell *shell);
-int					ft_unset(char **arguments, t_minishell *shell);
-int					ft_env(char **arguments, t_minishell *shell);
-int 				ft_exit(char **args, t_minishell *shell);
+void				ft_echo(char **arguments, t_minishell *shell);
+void				ft_cd(char **arguments, t_minishell *shell);
+void				ft_pwd(char **arguments, t_minishell *shell);
+void				ft_export(char **arguments, t_minishell *shell);
+void				ft_unset(char **arguments, t_minishell *shell);
+void				ft_env(char **arguments, t_minishell *shell);
+void 				ft_exit(char **args, t_minishell *shell);
 
 #endif
