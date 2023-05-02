@@ -18,16 +18,15 @@ Test(dict_delete, empty_dictionary)
 Test(dict_delete, non_existent_key)
 {
     t_dictionary dict;
-    char *non_existent_key = strdup("b");
-	char *key = strdup("a");
-	char *value = strdup("value_a");
+    char *non_existent_key = "b";
+	char *key = "a";
+	char *value = "value_a";
 
     bzero(&dict, sizeof(t_dictionary));
 	dict_set(&dict, key, value);
     dict_delete(&dict, non_existent_key);
 	cr_assert_eq(dict.size, 1, "Deleting a non-existent key should not affect the size");
 	dict_destroy(&dict);
-	free(non_existent_key);
 }
 
 Test(dict_delete, single_key_no_collision)
@@ -36,8 +35,8 @@ Test(dict_delete, single_key_no_collision)
     char *key;
     char *value;
 
-    key = strdup("a");
-    value = strdup("value_a");
+    key = "a";
+    value = "value_a";
     bzero(&dict, sizeof(t_dictionary));
     dict_set(&dict, key, value);
     dict_delete(&dict, key);
@@ -53,10 +52,10 @@ Test(dict_delete, delete_key_with_collision)
     char *second_key;
     char *second_value;
 
-    first_key = strdup("a");
-    first_value = strdup("value_a");
-    second_key = strdup("A");
-    second_value = strdup("value_A");
+    first_key = "a";
+    first_value = "value_a";
+    second_key = "A";
+    second_value = "value_A";
 
     bzero(&dict, sizeof(t_dictionary));
     dict_set(&dict, first_key, first_value);
@@ -79,19 +78,12 @@ Test(dict_delete, delete_key_with_collision)
 Test(dict_delete, delete_last_key_in_collision_chain)
 {
     t_dictionary dict;
-    char *first_key;
-    char *first_value;
-    char *second_key;
-    char *second_value;
-    char *third_key;
-    char *third_value;
-
-    first_key = strdup("a");
-    first_value = strdup("value_a");
-    second_key = strdup("A");
-    second_value = strdup("value_A");
-    third_key = strdup("b");
-    third_value = strdup("value_b");
+    char	*first_key = "a";
+	char	*first_value = "value_a";
+	char	*second_key = "A";
+	char	*second_value = "value_A";
+	char	*third_key = "b";
+	char	*third_value = "value_b";
 
     bzero(&dict, sizeof(t_dictionary));
     dict_set(&dict, first_key, first_value);
@@ -101,12 +93,6 @@ Test(dict_delete, delete_last_key_in_collision_chain)
     dict_delete(&dict, third_key);
     cr_assert_eq(dict.size, 2, "Deleting the last key in a collision chain should decrease the size by 1");
     cr_assert_null(dict.table[hash("b")], "The deleted key should no longer be in the dictionary");
-    // free(third_key);
-    // free(third_value);
-    // free(first_key);
-    // free(first_value);
-    // free(second_key);
-    // free(second_value);
     dict_destroy(&dict);
 }
 
@@ -130,11 +116,9 @@ Test(dict_to_envp, empty_dictionary)
 Test(dict_to_envp, single_key_value)
 {
     t_dictionary dict;
-    char *key;
-    char *value;
+    char *key = "a";
+    char *value = "value_a";
 
-    key = strdup("a");
-    value = strdup("value_a");
     bzero(&dict, sizeof(t_dictionary));
     dict_set(&dict, key, value);
 
@@ -145,28 +129,19 @@ Test(dict_to_envp, single_key_value)
     cr_assert_str_eq(envp[0], "a=value_a", "The envp should contain the correct key-value pair");
     cr_assert_null(envp[1], "The envp array should be NULL-terminated");
     ft_matrixfree(&envp);
-    // free(key);
-    // free(value);
     dict_destroy(&dict);
 }
 
 Test(dict_to_envp, multiple_key_values)
 {
     t_dictionary dict;
-    char *first_key;
-    char *first_value;
-    char *second_key;
-    char *second_value;
-    char *third_key;
-    char *third_value;
-    int32_t condition;
-
-    first_key = strdup("a");
-    first_value = strdup("value_a");
-    second_key = strdup("b");
-    second_value = strdup("value_b");
-    third_key = strdup("c");
-    third_value = strdup("value_c");
+	char		*first_key = "a";
+	char		*first_value = "value_a";
+	char		*second_key = "b";
+	char		*second_value = "value_b";
+	char		*third_key = "c";
+	char		*third_value = "value_c";
+    int32_t		condition;
 
     bzero(&dict, sizeof(t_dictionary));
 
@@ -196,11 +171,5 @@ Test(dict_to_envp, multiple_key_values)
         ft_matrixfree(&envp);
         condition--;
     }
-    // free(first_key);
-    // free(first_value);
-    // free(second_key);
-    // free(second_value);
-    // free(third_key);
-    // free(third_value);
     dict_destroy(&dict);
 }

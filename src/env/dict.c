@@ -135,14 +135,21 @@ int32_t	dict_set(t_dictionary *dict, char *key, char *value)
 		free(pair->value);
 	if (pair == NULL)
 	{
-		pair = malloc(sizeof(t_pair));
+		pair = ft_calloc(1, sizeof(t_pair));
 		if (!pair)
 			return (ERROR);
-		pair->key = key;
+		pair->key = ft_strdup(key);
+		if (!pair->key)
+			return (pair_clean(pair), ERROR);
 		pair->next = dict->table[index];
 		dict->table[index] = pair;
 		dict->size++;
 	}
-	pair->value = value;
+	pair->value = ft_strdup(value);
+	if (!pair->value)
+	{
+		dict->table[index] = NULL;
+		return (pair_clean(pair), ERROR);
+	}
 	return (SUCCESS);
 }

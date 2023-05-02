@@ -125,8 +125,9 @@ Test(export, overwrite_existing_key_without_equal_sign)
 	char	*expected_value = "Hello";
 	assert_export(in, key, expected_value, E_USAGE, environ);
 }
+
 /*******************************************************************************/
-/*                          Export_not_valid_cases                             */
+/*                           Export_invalid_cases                              */
 /*******************************************************************************/
 
 void	assert_export_not_valid_cases(char **in, t_status expected_status, char **environ, char *message)
@@ -158,18 +159,31 @@ Test(export, two_invalid_keys)
 	assert_export_not_valid_cases(in, E_GENERAL, environ, "Sheldon: export: `1234': not a valid identifier\nSheldon: export: `5678': not a valid identifier\n");
 }
 
-Test(export, invalid_key_and_a_valid_key)
-{
-	char	*environ[] = {"", NULL};
-	char	*in[] = {"export", "1234", "check", NULL};
-	assert_export_not_valid_cases(in, E_GENERAL, environ, "Sheldon: export: `1234': not a valid identifier\n");
-}
-
 Test(export, invalid_with_equal_sign)
 {
 	char	*environ[] = {"", NULL};
 	char	*in[] = {"export", "=value", NULL};
 	assert_export_not_valid_cases(in, E_GENERAL, environ, "Sheldon: export: `=value': not a valid identifier\n");
+}
+
+/*******************************************************************************/
+/*                        Export_invalid_and_valid_case                        */
+/*******************************************************************************/
+
+Test(export, invalid_key_and_a_valid_key)
+{
+	t_minishell	shell;
+	char		*expression;
+	char		*environ[] = {"", NULL};
+	char		*in[] = {"export", "1234", "check", NULL};
+
+	bzero(&shell, sizeof(t_minishell));
+	envp_load(&shell.env, environ);
+	ft_export(in, &shell);
+	fflush(stderr);
+	cr_assert_eq(shell.status, E_GENERAL);
+	expression = dict_get(&shell.env, "check");
+	cr_assert_str_eq(expression, "");
 }
 
 /*******************************************************************************/
