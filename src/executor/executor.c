@@ -1,26 +1,22 @@
 #include <minishell.h>
 #include "libft.h"
 
-static int	open_heredoc(char *path)
+static int32_t	open_heredoc(char *path)
 {
-	int fd;
-
-	fd = open(path, O_RDONLY);
-	unlink(path);
-	return (fd);
+	return (here_doc(path));
 }
 
-static int	open_input(char *path)
+static int32_t	open_input(char *path)
 {
 	return (open(path, O_RDONLY));
 }
 
-static int	open_output(char *path)
+static int32_t	open_output(char *path)
 {
 	return (open(path, O_WRONLY | O_CREAT | O_TRUNC, 0664));
 }
 
-static int	open_append(char *path)
+static int32_t	open_append(char *path)
 {
 	return (open(path, O_WRONLY | O_CREAT | O_APPEND, 0664));
 }
@@ -142,12 +138,10 @@ t_builtin	builtin_lookup(char *cmd)
 int32_t	execute_builtin(char **arguments, t_minishell *shell)
 {
 	t_builtin	builtin_function;
-//	int32_t		ret;
 
 	builtin_function = builtin_lookup(arguments[0]);
 	if (builtin_function.name == NULL)
 		return (-1);
-//	ret = builtin_function.func(arguments, shell);
 	builtin_function.func(arguments, shell);
 	return (shell->status);
 }
@@ -259,6 +253,8 @@ int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
 		return (status);
 	}
 	pid = fork();
+	if (pid == -1)
+		return (E_GENERAL);
 	if (pid == 0)
 	{
 		execute_child_command(shell, arguments);

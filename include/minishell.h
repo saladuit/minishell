@@ -215,6 +215,8 @@ char				**get_arguments(t_command *cmd);
 void				get_next_redir(t_command *cmd, t_redir **redir);
 void				get_next_command(t_command_table *cmd, t_command **command);
 char				**get_arguments(t_command *cmd);
+int32_t				here_doc(char *delimiter);
+
 // Constructers
 t_list					*construct_ast(t_list *tokens, t_status *status, 
 		t_dictionary *env);
