@@ -34,10 +34,16 @@ int32_t	minishell_loop(t_minishell *sheldon)
 	return (minishell_clean(sheldon));
 }
 
-static void dup_std_fds(int32_t *std_fds)
+void dup_std_fds(int32_t *std_fds)
 {
 	std_fds[STDIN_FILENO] = dup(STDIN_FILENO);
 	std_fds[STDOUT_FILENO] = dup(STDOUT_FILENO);
+}
+
+void close_std_fds(int32_t *std_fds)
+{
+	close(std_fds[STDIN_FILENO]);
+	close(std_fds[STDOUT_FILENO]);
 }
 
 void minishell_init(t_minishell *sheldon, char **envp)
@@ -55,6 +61,22 @@ void minishell_init(t_minishell *sheldon, char **envp)
 	sheldon->stop = false;
 }
 
+void readline_cleanup(void)
+{
+	clear_history();
+	rl_cleanup_after_signal();
+	rl_free_line_state();
+	rl_free_undo_list();
+	rl_deprep_terminal();
+}
+
+void minishell_deinit(t_minishell *sheldon)
+{
+	dict_destroy(&sheldon->env);
+	close_std_fds(sheldon->std_fds);
+	readline_cleanup();
+}
+
 int32_t	minishell(char **envp)
 {
 	t_minishell	sheldon;
@@ -62,7 +84,6 @@ int32_t	minishell(char **envp)
 	minishell_init(&sheldon, envp);
 	while (minishell_loop(&sheldon) && !sheldon.stop)
 		;
-	dict_destroy(&sheldon.env);
-	clear_history();
+	minishell_deinit(&sheldon);
 	return (sheldon.status);
 }
