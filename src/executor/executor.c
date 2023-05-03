@@ -25,7 +25,7 @@ static int	open_append(char *path)
 	return (open(path, O_WRONLY | O_CREAT | O_APPEND, 0664));
 }
 
-static bool	open_fd_type(char *path, t_type type, t_status *status)
+static int32_t	open_fd_type(char *path, t_type type, t_status *status)
 {
 	if (type == HEREDOC)
 		return (open_heredoc(path));
