@@ -33,10 +33,7 @@ void	assert_heredoc(char *delimiter, char *input, char *expected_output)
 	char 	buf[1024];
 	ssize_t	num_bytes;
 
-	if (pipe(pipe_fd) == -1) {
-		perror("pipe");
-		exit(EXIT_FAILURE);
-	}
+	cr_assert(pipe(pipe_fd) == SUCCESS, "%s", strerror(errno));
 	write(pipe_fd[1], input, strlen(input));
 	dup2(pipe_fd[0], STDIN_FILENO);
 	output_fd = here_doc(delimiter);
