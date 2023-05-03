@@ -114,10 +114,12 @@ void assert_minishell(char *command_line, char *case_name)
 /*                              Bacis_tests                                    */
 /*******************************************************************************/
 MINISHELL_TEST(empty, "");
-MINISHELL_TEST(ls, "pwd");
-MINISHELL_TEST(ls_la, "ls -la");
-MINISHELL_TEST(ls_leading_whitespace, " ls");
-MINISHELL_TEST(ls_trailing_whitespace, " ls");
+MINISHELL_TEST(echo, "echo");
+MINISHELL_TEST(echo_leading_whitespace, " echo");
+MINISHELL_TEST(echo_trailing_whitespace, "echo ");
+MINISHELL_TEST(echo_pipe_echo, "echo | echo");
+MINISHELL_TEST(echo_pipe_echo_status, "echo | echo $?");
+MINISHELL_TEST(echo_hello, "echo hello");
 MINISHELL_TEST(invalid_command, "invalid_command");
 MINISHELL_TEST(absolute_invalid_command, "/invalid_command");
 
