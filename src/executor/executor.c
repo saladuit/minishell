@@ -327,7 +327,7 @@ int32_t handle_pipes(int32_t *pipe_fds, int32_t *std_fds, int32_t n_commands, in
 		return (handle_middle_pipes(pipe_fds));
 }
 
-int32_t process_command(int32_t *pipe_fds, t_command_table *ct, t_minishell *shell)
+int32_t process_command(t_command_table *ct, t_minishell *shell)
 {
   t_command *cmd;
   pid_t pid;
@@ -338,7 +338,6 @@ int32_t process_command(int32_t *pipe_fds, t_command_table *ct, t_minishell *she
 		return (ERROR);
 	if (pid == 0)
   {
-    assert(close(pipe_fds[STDIN_FILENO]) == SUCCESS);
     execute_pipe_command(cmd, shell);
   }
   return (pid);
@@ -359,7 +358,7 @@ void execute_pipeline(t_command_table *ct, t_minishell *shell)
   		shell->status = message_general_error(E_GENERAL, "Executor: ");
   		break ;
   	}
-  	pid = process_command(pipe_fds, ct, shell);
+  	pid = process_command(ct, shell);
   	if (pid == ERROR)
   	{
   		shell->status = message_general_error(E_GENERAL, "Executor: ");
@@ -388,7 +387,7 @@ void reset_std_fds(int32_t *std_fds, t_status *status)
   if (dup2(std_fds[STDIN_FILENO], STDIN_FILENO) == ERROR) 
     *status = message_system_call_error("Reset_std_fds: ");
   if (dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO) == ERROR)
-    *status = message_general_error(E_GENERAL, "Reset_std_fds: ");
+    *status = message_system_call_error("Reset_std_fds: ");
 }
 
 void	executor(t_minishell *shell)
