@@ -28,9 +28,9 @@ int32_t	minishell_loop(t_minishell *sheldon)
 	sheldon->ast = parser(sheldon->tokens, &sheldon->status, &sheldon->env);
 	if (!sheldon->ast)
 		return (minishell_clean(sheldon));
-	executor(sheldon);
 	if (LOG)
 		debug_ast(sheldon->ast);
+	executor(sheldon);
 	return (minishell_clean(sheldon));
 }
 
