@@ -275,4 +275,8 @@ void				ft_unset(char **arguments, t_minishell *shell);
 void				ft_env(char **arguments, t_minishell *shell);
 void 				ft_exit(char **args, t_minishell *shell);
 
+// Signals
+void 				initialize_signal_handling(void);
+bool				signal_ctrl_d(char *str, char **env);
+
 #endif
