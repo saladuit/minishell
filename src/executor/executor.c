@@ -27,7 +27,6 @@ static int	open_append(char *path)
 
 static bool	open_fd_type(char *path, t_type type, t_status *status)
 {
-	assert(type < TYPE_COUNT);
 	if (type == HEREDOC)
 		return (open_heredoc(path));
 	else if (type == INPUT)

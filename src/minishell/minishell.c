@@ -38,7 +38,6 @@ static void dup_std_fds(int32_t *std_fds)
 {
 	std_fds[STDIN_FILENO] = dup(STDIN_FILENO);
 	std_fds[STDOUT_FILENO] = dup(STDOUT_FILENO);
-	assert(std_fds[STDIN_FILENO] != ERROR && std_fds[STDOUT_FILENO] != ERROR);
 }
 
 void minishell_init(t_minishell *sheldon, char **envp)
