@@ -62,6 +62,7 @@ int32_t	redirect(t_redir *redir, t_type type, t_status *status)
 		close(fd);
 		return (ERROR);
 	}
+	close(fd);
 	return (SUCCESS);
 }
 
