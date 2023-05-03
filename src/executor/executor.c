@@ -155,6 +155,8 @@ int32_t wait_for_child_processes(pid_t *pid_array, size_t array_length)
 	{
 		waitpid(pid_array[i], &status, WUNTRACED);
 	}
+	while (waitpid(-1, &status, WUNTRACED) > 0)
+		;
 	return (WEXITSTATUS(status));
 }
 
