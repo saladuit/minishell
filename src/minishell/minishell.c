@@ -62,6 +62,7 @@ int32_t	minishell(char **envp)
 {
 	t_minishell	sheldon;
 
+	initialize_signal_handling();
 	minishell_init(&sheldon, envp);
 	while (minishell_loop(&sheldon) && !sheldon.stop)
 		;
