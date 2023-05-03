@@ -14,6 +14,8 @@ static int32_t	minishell_clean(t_minishell *sheldon)
 int32_t	minishell_loop(t_minishell *sheldon)
 {
 	sheldon->command_line = readline(PROMPT);
+	if (signal_ctrl_d((char *)sheldon->command_line, dict_to_envp(&sheldon->env)) == true)
+		return (false);
 	if (!sheldon->command_line)
 		return (STOP);
 	if (!*sheldon->command_line)
