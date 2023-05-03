@@ -41,14 +41,13 @@ static bool	open_fd_type(char *path, t_type type, t_status *status)
 		return (false);
 	}
 }
+
 static int32_t redirect_file_descriptor(int source_fd, t_type redirection)
 {
-    int target_fd;
     if (redirection == INPUT || redirection == HEREDOC)
-        target_fd = STDIN_FILENO;
+    	return (dup2(source_fd, STDIN_FILENO));
     else
-        target_fd = STDOUT_FILENO;
-    return (dup2(source_fd, target_fd));
+    	return (dup2(source_fd, STDOUT_FILENO));
 }
 
 int32_t	redirect(t_redir *redir, t_type type, t_status *status)
