@@ -163,15 +163,11 @@ int32_t	wait_for_child_processes(pid_t pid)
 	return (WEXITSTATUS(status));
 }
 
-static bool	file_is_executable(char *path)
-{
-	return (access(path, X_OK) == SUCCESS);
-}
-
 static bool	file_exits(char *path)
 {
 	return (access(path, F_OK) == SUCCESS);
 }
+
 static char	*search_cmd_in_path(const char *path, const char *cmd)
 {
 	char		**path_dirs;
@@ -220,6 +216,7 @@ void	execute_child_command(t_minishell *shell, char **arguments)
 {
 	char	*command_path;
 	char	*path;
+	char **envp;
 
 	path = dict_get(&shell->env, "PATH");
 	command_path = get_cmd_path(path, arguments[0]);
@@ -228,13 +225,10 @@ void	execute_child_command(t_minishell *shell, char **arguments)
 		message_general_error(E_COMMAND_NOT_FOUND, NULL);
 		_exit(E_COMMAND_NOT_FOUND);
 	}
-	if (!file_is_executable(command_path))
-	{
-		free(command_path);
-		message_general_error(E_EXEC, NULL);
-		_exit(E_EXEC);
-	}
-	execve(command_path, arguments, dict_to_envp(&shell->env));
+	envp = dict_to_envp(&shell->env);
+	execve(command_path, arguments, envp);
+	ft_matrixfree(&envp);
+	free(command_path);
 	message_system_call_error("execve");
 	_exit(E_COMMAND_NOT_FOUND);
 }
