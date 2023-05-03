@@ -262,7 +262,8 @@ int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
 		_exit(E_COMMAND_NOT_FOUND);
 	}
 	free(arguments);
-	return (wait_for_child_processes(&pid, 1));
+	waitpid(pid, &status, WUNTRACED);
+	return (WEXITSTATUS(status));
 }
 
 int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
@@ -369,7 +370,6 @@ void execute_pipeline(t_command_table *ct, t_minishell *shell)
     i++;
   }
   shell->status = wait_for_child_processes(ct->pids, ct->n_commands);
-  free(ct->pids);
 }
 
 void		execute_command_table(t_command_table *ct, t_minishell *shell)
