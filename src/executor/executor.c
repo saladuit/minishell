@@ -207,6 +207,8 @@ char		*get_cmd_path(char *path, char *cmd)
 		return (NULL);
 	}
 	slash_cmd = ft_strjoin("/", cmd);
+	if (!slash_cmd)
+		return (NULL);
 	cmd_path = search_cmd_in_path(path, slash_cmd);
 	free(slash_cmd);
 	return (cmd_path);
