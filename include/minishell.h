@@ -160,6 +160,7 @@ typedef struct s_command_table
 	t_list			*commands_head;
 	t_list			*commands;
 	int32_t			n_commands;
+	pid_t				*pids;
 }					t_command_table;
 
 typedef struct s_builtin

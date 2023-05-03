@@ -146,14 +146,15 @@ int32_t	execute_builtin(char **arguments, t_minishell *shell)
 	return (shell->status);
 }
 
-int32_t	wait_for_child_processes(pid_t pid)
+int32_t wait_for_child_processes(pid_t *pid_array, size_t array_length)
 {
-	int32_t	status;
+	int32_t status;
+	size_t i;
 
-	status = 0;
-	waitpid(pid, &status, WUNTRACED);
-	while (wait(NULL) != -1 && errno != ECHILD)
-		;
+	for (i = 0; i < array_length; ++i)
+	{
+		waitpid(pid_array[i], &status, WUNTRACED);
+	}
 	return (WEXITSTATUS(status));
 }
 
@@ -261,7 +262,7 @@ int32_t	execute_simple_command(t_command *cmd, t_minishell *shell)
 		_exit(E_COMMAND_NOT_FOUND);
 	}
 	free(arguments);
-	return (wait_for_child_processes(pid));
+	return (wait_for_child_processes(&pid, 1));
 }
 
 int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
@@ -333,36 +334,42 @@ int32_t process_command(t_command_table *ct, t_minishell *shell)
   if (pid == -1)
 		return (ERROR);
 	if (pid == 0)
-  {
     execute_pipe_command(cmd, shell);
-  }
   return (pid);
+}
+
+int32_t process_command_and_handle_error(t_command_table *ct, t_minishell *shell)
+{
+    int32_t pid = process_command(ct, shell);
+    if (pid == ERROR)
+    {
+        shell->status = message_general_error(E_GENERAL, "Executor: ");
+        return ERROR;
+    }
+    return pid;
 }
 
 void execute_pipeline(t_command_table *ct, t_minishell *shell)
 {
   int32_t pipe_fds[2];
-  int32_t pid;
   int32_t i;
 
   i = 0;
   shell->is_pipeline = true;
   while (i < ct->n_commands)
   {
-  	if (handle_pipes(pipe_fds, shell->std_fds, ct->n_commands, i) == ERROR)
-  	{
-  		shell->status = message_general_error(E_GENERAL, "Executor: ");
-  		break ;
-  	}
-  	pid = process_command(ct, shell);
-  	if (pid == ERROR)
-  	{
-  		shell->status = message_general_error(E_GENERAL, "Executor: ");
-  		break ;
-  	}
+    if (handle_pipes(pipe_fds, shell->std_fds, ct->n_commands, i) == ERROR)
+    {
+      shell->status = message_general_error(E_GENERAL, "Executor: ");
+      break;
+    }
+    ct->pids[i] = process_command_and_handle_error(ct, shell);
+    if (ct->pids[i] == ERROR)
+      break;
     i++;
   }
-  shell->status = wait_for_child_processes(pid);
+  shell->status = wait_for_child_processes(ct->pids, ct->n_commands);
+  free(ct->pids);
 }
 
 void		execute_command_table(t_command_table *ct, t_minishell *shell)
