@@ -12,8 +12,10 @@
 
 #include <minishell.h>
 
-void std_fds_close(int32_t *std_fds)
+void	std_fds_close(int32_t *std_fds, t_status *status)
 {
-	close(std_fds[STDIN_FILENO]);
-	close(std_fds[STDOUT_FILENO]);
+	if (close(std_fds[STDIN_FILENO]) != SUCCESS)
+		*status = message_system_call_error("std_fds_close: ");
+	if (close(std_fds[STDOUT_FILENO]) != SUCCESS)
+		*status = message_system_call_error("std_fds_close: ");
 }

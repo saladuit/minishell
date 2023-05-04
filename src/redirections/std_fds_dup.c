@@ -12,8 +12,12 @@
 
 #include <minishell.h>
 
-void std_fds_dup(int32_t *std_fds)
+void	std_fds_dup(int32_t *std_fds, t_status *status)
 {
 	std_fds[STDIN_FILENO] = dup(STDIN_FILENO);
+	if (std_fds[STDIN_FILENO] == ERROR)
+		*status = message_system_call_error("std_fds_dup: ");
 	std_fds[STDOUT_FILENO] = dup(STDOUT_FILENO);
+	if (std_fds[STDOUT_FILENO] == ERROR)
+		*status = message_system_call_error("std_fds_dup: ");
 }
