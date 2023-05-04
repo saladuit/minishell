@@ -175,9 +175,11 @@ typedef struct
     const char *error_msg;
 } t_tokenerror;
 
-// Main
+// Minishell
 
 int32_t			minishell(char **envp);
+
+// Signals
 int32_t			init_handlers(void);
 void				setup_signals(t_signal_handler handler);
 void				reset_signals(void);
@@ -266,6 +268,11 @@ size_t				len_until_quote_or_dollar(char *str);
 
 // Executor
 void				executor(t_minishell *shell);
+
+// Std_fds
+void std_fds_reset(int32_t *std_fds, t_status *status);
+void std_fds_dup(int32_t *std_fds);
+void std_fds_close(int32_t *std_fds);
 
 // Builtins
 void				ft_echo(char **arguments, t_minishell *shell);
