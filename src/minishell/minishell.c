@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: safoh <safoh@student.codam.nl>             +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/04 11:40:08 by safoh             #+#    #+#             */
+/*   Updated: 2023/05/04 11:40:09 by safoh            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <minishell.h>
 
 static int32_t	minishell_clean(t_minishell *sheldon)
@@ -30,20 +42,13 @@ int32_t	minishell_loop(t_minishell *sheldon)
 	sheldon->ast = parser(sheldon->tokens, &sheldon->status, &sheldon->env);
 	if (!sheldon->ast)
 		return (minishell_clean(sheldon));
-	executor(sheldon);
 	if (LOG)
 		debug_ast(sheldon->ast);
+	executor(sheldon);
 	return (minishell_clean(sheldon));
 }
 
-static void dup_std_fds(int32_t *std_fds)
-{
-	std_fds[STDIN_FILENO] = dup(STDIN_FILENO);
-	std_fds[STDOUT_FILENO] = dup(STDOUT_FILENO);
-	assert(std_fds[STDIN_FILENO] != ERROR && std_fds[STDOUT_FILENO] != ERROR);
-}
-
-void minishell_init(t_minishell *sheldon, char **envp)
+void	minishell_init(t_minishell *sheldon, char **envp)
 {
 	ft_bzero(sheldon, sizeof(t_minishell));
 	sheldon->status = envp_load(&sheldon->env, envp);
@@ -54,8 +59,19 @@ void minishell_init(t_minishell *sheldon, char **envp)
 		sheldon->status = message_system_call_error("isatty");
 		rl_outstream = stdin;
 	}
-	dup_std_fds(sheldon->std_fds);
+	std_fds_dup(sheldon->std_fds);
 	sheldon->stop = false;
+}
+
+void	minishell_deinit(t_minishell *sheldon)
+{
+	dict_destroy(&sheldon->env);
+	std_fds_close(sheldon->std_fds);
+	clear_history();
+	rl_cleanup_after_signal();
+	rl_free_line_state();
+	rl_free_undo_list();
+	rl_deprep_terminal();
 }
 
 int32_t	minishell(char **envp)
@@ -66,7 +82,6 @@ int32_t	minishell(char **envp)
 	minishell_init(&sheldon, envp);
 	while (minishell_loop(&sheldon) && !sheldon.stop)
 		;
-	dict_destroy(&sheldon.env);
-	clear_history();
+	minishell_deinit(&sheldon);
 	return (sheldon.status);
 }
