@@ -12,6 +12,8 @@
 
 #include <minishell.h>
 
+int	signal_error = E_USAGE;
+
 static int32_t	minishell_clean(t_minishell *sheldon)
 {
 	if (sheldon->tokens)
@@ -26,7 +28,9 @@ static int32_t	minishell_clean(t_minishell *sheldon)
 int32_t	minishell_loop(t_minishell *sheldon)
 {
 	sheldon->command_line = readline(PROMPT);
-	if (signal_ctrl_d((char *)sheldon->command_line, dict_to_envp(&sheldon->env)) == true)
+	if (signal_error)
+		sheldon->status = E_GENERAL;
+	if (signal_ctrl_d((char *)sheldon->command_line, dict_to_envp(&sheldon->env), &sheldon->status) == true)
 		return (false);
 	if (!sheldon->command_line)
 		return (STOP);
@@ -50,6 +54,7 @@ int32_t	minishell_loop(t_minishell *sheldon)
 
 void	minishell_init(t_minishell *sheldon, char **envp)
 {
+	initialize_signal_handling(&sheldon->status);
 	ft_bzero(sheldon, sizeof(t_minishell));
 	sheldon->status = envp_load(&sheldon->env, envp);
 	if (LOG)
@@ -78,7 +83,6 @@ int32_t	minishell(char **envp)
 {
 	t_minishell	sheldon;
 
-	initialize_signal_handling();
 	minishell_init(&sheldon, envp);
 	while (minishell_loop(&sheldon) && !sheldon.stop)
 		;
