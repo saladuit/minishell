@@ -340,17 +340,6 @@ int32_t process_command(t_command_table *ct, t_minishell *shell)
   return (pid);
 }
 
-int32_t process_command_and_handle_error(t_command_table *ct, t_minishell *shell)
-{
-    int32_t pid = process_command(ct, shell);
-    if (pid == ERROR)
-    {
-        shell->status = message_general_error(E_GENERAL, "Executor: ");
-        return ERROR;
-    }
-    return pid;
-}
-
 void execute_pipeline(t_command_table *ct, t_minishell *shell)
 {
   int32_t pipe_fds[2];
@@ -362,12 +351,15 @@ void execute_pipeline(t_command_table *ct, t_minishell *shell)
   {
     if (handle_pipes(pipe_fds, shell->std_fds, ct->n_commands, i) == ERROR)
     {
-      shell->status = message_general_error(E_GENERAL, "Executor: ");
+      shell->status = message_general_error(E_GENERAL, "Execute pipline: ");
       break;
     }
-    ct->pids[i] = process_command_and_handle_error(ct, shell);
+    ct->pids[i] = process_command(ct, shell);
     if (ct->pids[i] == ERROR)
+    {
+      shell->status = message_general_error(E_GENERAL, "Execute pipeline: ");
       break;
+    }
     i++;
   }
   shell->status = wait_for_child_processes(ct->pids, ct->n_commands);
