@@ -12,7 +12,7 @@ CFLAGS									=-Wall -Wextra -Werror
 #	Directories
 SRC_DIR									:=src
 SRCS_DIRS								:=minishell lexer parser expander executor \
-													utils env types builtins
+													utils env types builtins redirections
 INCLUDE_DIR							:=include
 BUILD_DIR								:=build
 LIB_DIR									:=libs
