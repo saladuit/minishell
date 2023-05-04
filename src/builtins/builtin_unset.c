@@ -6,6 +6,6 @@ void	ft_unset(char **arguments, t_minishell *shell)
 
 	i = 1;
 	while (arguments[i])
-		dict_delete(&shell->env, arguments[i++]);
+		dict_remove_pair(&shell->env, arguments[i++]);
 	return ;
 }
