@@ -21,12 +21,12 @@ Test(dict_delete, empty_dictionary)
     t_dictionary dict;
     bzero(&dict, sizeof(t_dictionary));
 
-    dict_delete(&dict, "a");
+    dict_remove_pair(&dict, "a");
     cr_assert_eq(dict.size, 0, "Deleting from an empty dictionary should not affect the size");
 }
 
 
-Test(dict_delete, non_existent_key)
+Test(dict_remove_pair, non_existent_key)
 {
     t_dictionary dict;
     char *non_existent_key = "b";
@@ -35,12 +35,12 @@ Test(dict_delete, non_existent_key)
 
     bzero(&dict, sizeof(t_dictionary));
 	dict_set(&dict, key, value);
-    dict_delete(&dict, non_existent_key);
+    dict_remove_pair(&dict, non_existent_key);
 	cr_assert_eq(dict.size, 1, "Deleting a non-existent key should not affect the size");
 	dict_destroy(&dict);
 }
 
-Test(dict_delete, single_key_no_collision)
+Test(dict_remove_pair, single_key_no_collision)
 {
     t_dictionary dict;
     char *key;
@@ -50,12 +50,12 @@ Test(dict_delete, single_key_no_collision)
     value = "value_a";
     bzero(&dict, sizeof(t_dictionary));
     dict_set(&dict, key, value);
-    dict_delete(&dict, key);
+    dict_remove_pair(&dict, key);
     cr_assert_eq(dict.size, 0, "Deleting a single key should result in an empty dictionary");
     dict_destroy(&dict);
 }
 
-Test(dict_delete, delete_key_with_collision)
+Test(dict_remove_pair, delete_key_with_collision)
 {
     t_dictionary dict;
     char *first_key;
@@ -72,7 +72,7 @@ Test(dict_delete, delete_key_with_collision)
     dict_set(&dict, first_key, first_value);
     dict_set(&dict, second_key, second_value);
 
-    dict_delete(&dict, first_key);
+    dict_remove_pair(&dict, first_key);
 
     cr_assert_eq(dict.size, 1, "Deleting one key in a collision should decrease the size by 1");
     cr_assert_not_null(dict.table[hash(second_key)], "The other key in the collision should remain");
@@ -101,7 +101,7 @@ Test(dict_delete, delete_last_key_in_collision_chain)
     dict_set(&dict, second_key, second_value);
     dict_set(&dict, third_key, third_value);
 
-    dict_delete(&dict, third_key);
+    dict_remove_pair(&dict, third_key);
     cr_assert_eq(dict.size, 2, "Deleting the last key in a collision chain should decrease the size by 1");
     cr_assert_null(dict.table[hash("b")], "The deleted key should no longer be in the dictionary");
     dict_destroy(&dict);
