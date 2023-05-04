@@ -12,9 +12,10 @@ int32_t	here_doc(char *delimiter, int fd_write_end)
 		line = readline("> ");
 		if (!line)
 			_exit(E_COMMAND_NOT_FOUND);
-		if (ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0) {
+		if (ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0)
+		{
 			free(line);
-			break;
+			break ;
 		}
 		write(fd_write_end, line, ft_strlen(line));
 		write(fd_write_end, "\n", 1);
