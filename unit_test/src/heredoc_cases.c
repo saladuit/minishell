@@ -6,10 +6,13 @@
 
 void	assert_heredoc_basic(char *delimiter, int32_t expected_output)
 {
-	int32_t	output_fd;
+	int32_t	pipe_fd[2];
+	int32_t	output;
 
-	output_fd = here_doc(delimiter);
-	cr_assert_eq(output_fd, expected_output);
+	output = here_doc(delimiter, pipe_fd[WRITE_END]);
+	cr_assert_eq(output, expected_output);
+	close(pipe_fd[READ_END]);
+	close(pipe_fd[WRITE_END]);
 }
 
 Test(heredoc, null_delimiter)
@@ -29,20 +32,18 @@ Test(heredoc, empty_delimiter)
 void	assert_heredoc(char *delimiter, char *input, char *expected_output)
 {
 	int		pipe_fd[2];
-	int		output_fd;
 	char 	buf[1024];
 	ssize_t	num_bytes;
 
 	cr_assert(pipe(pipe_fd) == SUCCESS, "%s", strerror(errno));
-	write(pipe_fd[1], input, strlen(input));
-	dup2(pipe_fd[0], STDIN_FILENO);
-	output_fd = here_doc(delimiter);
-	num_bytes = read(output_fd, buf, sizeof(buf));
+	write(pipe_fd[WRITE_END], input, strlen(input));
+	dup2(pipe_fd[READ_END], STDIN_FILENO);
+	here_doc(delimiter, pipe_fd[WRITE_END]);
+	num_bytes = read(pipe_fd[READ_END], buf, sizeof(buf));
 	buf[num_bytes] = '\0';
 	cr_assert_str_eq(buf, expected_output);
-	close(pipe_fd[0]);
-	close(pipe_fd[1]);
-	close(output_fd);
+	close(pipe_fd[READ_END]);
+	close(pipe_fd[WRITE_END]);
 }
 
 Test(heredoc, one_line)
