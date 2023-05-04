@@ -57,14 +57,14 @@ void	minishell_init(t_minishell *sheldon, char **envp)
 		sheldon->status = message_system_call_error("isatty");
 		rl_outstream = stdin;
 	}
-	std_fds_dup(sheldon->std_fds);
+	std_fds_dup(sheldon->std_fds, &sheldon->status);
 	sheldon->stop = false;
 }
 
 void	minishell_deinit(t_minishell *sheldon)
 {
 	dict_destroy(&sheldon->env);
-	std_fds_close(sheldon->std_fds);
+	std_fds_close(sheldon->std_fds, &sheldon->status);
 	clear_history();
 	rl_cleanup_after_signal();
 	rl_free_line_state();
