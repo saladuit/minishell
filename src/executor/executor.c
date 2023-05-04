@@ -378,19 +378,11 @@ void		execute_command_table(t_command_table *ct, t_minishell *shell)
 		execute_pipeline(ct, shell);
 }
 
-void reset_std_fds(int32_t *std_fds, t_status *status)
-{
-  if (dup2(std_fds[STDIN_FILENO], STDIN_FILENO) == ERROR) 
-    *status = message_system_call_error("Reset_std_fds: ");
-  if (dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO) == ERROR)
-    *status = message_system_call_error("Reset_std_fds: ");
-}
-
 void	executor(t_minishell *shell)
 {
 	t_command_table	*ct;
 
 	get_one_command_table(&shell->ast, &ct);
 	execute_command_table(ct, shell);
-	reset_std_fds(shell->std_fds, &shell->status);
+	std_fds_reset(shell->std_fds, &shell->status);
 }
