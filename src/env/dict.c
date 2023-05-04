@@ -25,30 +25,30 @@ size_t	hash(char *str)
 	return (h % HASH_TABLE_SIZE);
 }
 
-void dict_delete(t_dictionary *dict, char *key)
+void	dict_remove_pair(t_dictionary *dict, char *key)
 {
-  size_t index;
-  t_pair *iter;
-  t_pair *prev;
+	size_t	index;
+	t_pair	*iter;
+	t_pair	*prev;
 
-  index = hash(key);
-  iter = dict->table[index];
-  prev = NULL;
-  while (iter != NULL)
-  {
-    if (ft_strncmp(iter->key, key, ft_strlen(key) + 1) == 0)
-    {
-      if (prev == NULL)
-        dict->table[index] = iter->next;
-      else
-        prev->next = iter->next;
-      pair_clean(iter);
-      dict->size--;
-      return ;
-    }
-    prev = iter;
-    iter = iter->next;
-  }
+	index = hash(key);
+	iter = dict->table[index];
+	prev = NULL;
+	while (iter != NULL)
+	{
+		if (ft_strncmp(iter->key, key, ft_strlen(key) + 1) == 0)
+		{
+			if (prev == NULL)
+				dict->table[index] = iter->next;
+			else
+				prev->next = iter->next;
+			pair_clean(iter);
+			dict->size--;
+			return ;
+		}
+		prev = iter;
+		iter = iter->next;
+	}
 }
 
 char	*dict_get(t_dictionary *dict, char *key)
@@ -77,24 +77,19 @@ int32_t	dict_set(t_dictionary *dict, char *key, char *value)
 	while (pair && ft_strncmp(pair->key, key, ft_strlen(key) + 1) != 0)
 		pair = pair->next;
 	if (pair)
-		free(pair->value);
-	if (pair == NULL)
 	{
-		pair = ft_calloc(1, sizeof(t_pair));
+		free(pair->value);
+		pair->value = ft_strdup(value);
+		if (!pair->value)
+			return (pair_clean(pair), ERROR);
+	}
+	else
+	{
+		pair = create_pair(key, value, dict->table[index]);
 		if (!pair)
 			return (ERROR);
-		pair->key = ft_strdup(key);
-		if (!pair->key)
-			return (pair_clean(pair), ERROR);
-		pair->next = dict->table[index];
 		dict->table[index] = pair;
 		dict->size++;
-	}
-	pair->value = ft_strdup(value);
-	if (!pair->value)
-	{
-		dict->table[index] = NULL;
-		return (pair_clean(pair), ERROR);
 	}
 	return (SUCCESS);
 }

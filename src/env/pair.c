@@ -42,3 +42,26 @@ char	*pair_to_str(t_pair *pair)
 	ft_strlcat(str, pair->value, length);
 	return (str);
 }
+
+t_pair	*create_pair(char *key, char *value, t_pair *next)
+{
+	t_pair	*pair;
+
+	pair = ft_calloc(1, sizeof(t_pair));
+	if (!pair)
+		return (NULL);
+	pair->key = ft_strdup(key);
+	if (!pair->key)
+	{
+		pair_clean(pair);
+		return (NULL);
+	}
+	pair->value = ft_strdup(value);
+	if (!pair->value)
+	{
+		pair_clean(pair);
+		return (NULL);
+	}
+	pair->next = next;
+	return (pair);
+}
