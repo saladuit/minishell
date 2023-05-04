@@ -46,19 +46,7 @@ int32_t	minishell_loop(t_minishell *sheldon)
 	return (minishell_clean(sheldon));
 }
 
-void dup_std_fds(int32_t *std_fds)
-{
-	std_fds[STDIN_FILENO] = dup(STDIN_FILENO);
-	std_fds[STDOUT_FILENO] = dup(STDOUT_FILENO);
-}
-
-void close_std_fds(int32_t *std_fds)
-{
-	close(std_fds[STDIN_FILENO]);
-	close(std_fds[STDOUT_FILENO]);
-}
-
-void minishell_init(t_minishell *sheldon, char **envp)
+void	minishell_init(t_minishell *sheldon, char **envp)
 {
 	ft_bzero(sheldon, sizeof(t_minishell));
 	sheldon->status = envp_load(&sheldon->env, envp);
@@ -69,24 +57,19 @@ void minishell_init(t_minishell *sheldon, char **envp)
 		sheldon->status = message_system_call_error("isatty");
 		rl_outstream = stdin;
 	}
-	dup_std_fds(sheldon->std_fds);
+	std_fds_dup(sheldon->std_fds);
 	sheldon->stop = false;
 }
 
-void readline_cleanup(void)
+void	minishell_deinit(t_minishell *sheldon)
 {
+	dict_destroy(&sheldon->env);
+	std_fds_close(sheldon->std_fds);
 	clear_history();
 	rl_cleanup_after_signal();
 	rl_free_line_state();
 	rl_free_undo_list();
 	rl_deprep_terminal();
-}
-
-void minishell_deinit(t_minishell *sheldon)
-{
-	dict_destroy(&sheldon->env);
-	close_std_fds(sheldon->std_fds);
-	readline_cleanup();
 }
 
 int32_t	minishell(char **envp)
