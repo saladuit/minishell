@@ -46,9 +46,9 @@ static int32_t redirect_file_descriptor(int source_fd, t_type redirection)
     	return (dup2(source_fd, STDOUT_FILENO));
 }
 
-int32_t	redirect(t_redir *redir, t_type type, t_status *status)
+int32_t redirect(t_redir *redir, t_type type, t_status *status)
 {
-	int32_t	fd;
+	int32_t fd;
 
 	fd = open_fd_type(redir->filename, type, status);
 	if (fd == ERROR)
@@ -58,8 +58,7 @@ int32_t	redirect(t_redir *redir, t_type type, t_status *status)
 		close(fd);
 		return (ERROR);
 	}
-	close(fd);
-	return (SUCCESS);
+	return (fd);
 }
 
 static void close_fd_if_open(int32_t *fd)
