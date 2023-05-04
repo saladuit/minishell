@@ -53,49 +53,53 @@ void	get_next_command(t_command_table *ct, t_command **command)
 	return ;
 }
 
+static int32_t	process_token(t_list **tokens, t_status *status,
+		t_dictionary *env, t_command *command)
+{
+	char	*token;
+
+	token = (*tokens)->content;
+	if (is_pipe(*token))
+	{
+		return (SUCCESS);
+	}
+	if (is_redir(*token))
+	{
+		if (handle_redir(tokens, command) == ERROR)
+			return (ERROR);
+	}
+	else
+	{
+		if (handle_argument(token, status, env, command) == ERROR)
+			return (ERROR);
+	}
+	return (CONTINUE);
+}
+
 t_command	*construct_command(t_list **tokens, t_status *status,
 		t_dictionary *env)
 {
 	t_command	*command;
-	t_redir		*redir;
-	char		*argument;
-	char		*token;
+	int32_t		result;
 
 	command = ft_calloc(1, sizeof(t_command));
 	if (!command)
 		return (NULL);
 	while (*tokens)
 	{
-		token = (*tokens)->content;
-		if (is_pipe(*token))
+		result = process_token(tokens, status, env, command);
+		if (result != CONTINUE)
 		{
-			*tokens = (*tokens)->next;
+			if (result == SUCCESS)
+				*tokens = (*tokens)->next;
 			break ;
 		}
-		if (is_redir(*token))
-		{
-			redir = construct_redir(tokens);
-			if (!redir || !ft_lstadd_backnew(&command->redirs, redir))
-			{
-				deconstruct_redirs(redir);
-				deconstruct_command(command);
-				return (NULL);
-			}
-			command->n_redirs++;
-		}
-		else
-		{
-			argument = expand_token(token, status, env);
-			if (!argument || !ft_lstadd_backnew(&command->arguments, argument))
-			{
-				if (argument)
-					free(argument);
-				deconstruct_command(command);
-				return (NULL);
-			}
-			command->n_arguments++;
-		}
 		*tokens = (*tokens)->next;
+	}
+	if (result == ERROR)
+	{
+		deconstruct_command(command);
+		return (NULL);
 	}
 	command->arguments_head = command->arguments;
 	command->redirs_head = command->redirs;

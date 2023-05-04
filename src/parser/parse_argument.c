@@ -12,6 +12,22 @@
 
 #include <minishell.h>
 
+int32_t	handle_argument(char *token, t_status *status, t_dictionary *env,
+		t_command *command)
+{
+	char	*argument;
+
+	argument = expand_token(token, status, env);
+	if (!argument || !ft_lstadd_backnew(&command->arguments, argument))
+	{
+		if (argument)
+			free(argument);
+		return (ERROR);
+	}
+	command->n_arguments++;
+	return (SUCCESS);
+}
+
 void	print_arguments(t_command *cmd)
 {
 	char	**arguments;
