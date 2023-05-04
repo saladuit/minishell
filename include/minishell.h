@@ -21,6 +21,8 @@
 # define E_SHELDON "sheldon: "
 # define PROMPT "Sheldon$ "
 # define SPACE ' '
+# define READ_END 0
+# define WRITE_END 1
 
 # define NOT_FOUND 1
 
@@ -31,6 +33,7 @@
 # include <string.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <signal.h>
 # include <stdbool.h>
 # include <stdlib.h>
 # include <sys/types.h>
@@ -38,6 +41,9 @@
 # include <termios.h>
 # include <unistd.h>
 # include <assert.h>
+
+// GLOBAL VARIABLE
+extern int	signal_error;
 
 /*
 E_GENERAL:
@@ -218,7 +224,7 @@ char				**get_arguments(t_command *cmd);
 void				get_next_redir(t_command *cmd, t_redir **redir);
 void				get_next_command(t_command_table *cmd, t_command **command);
 char				**get_arguments(t_command *cmd);
-int32_t				here_doc(char *delimiter);
+int32_t				here_doc(char *delimiter, int fd_write_end);
 
 // Constructers
 t_list					*construct_ast(t_list *tokens, t_status *status, 
@@ -284,7 +290,9 @@ void				ft_env(char **arguments, t_minishell *shell);
 void 				ft_exit(char **args, t_minishell *shell);
 
 // Signals
-void 				initialize_signal_handling(void);
-bool				signal_ctrl_d(char *str, char **env);
+void 				initialize_signal_handling(t_status *status);
+void				signal_ctrl_c(int sig);
+bool				signal_ctrl_d(char *str, char **env, t_status *status);
+void				signal_ctrl_c_heredoc(int sig);
 
 #endif
