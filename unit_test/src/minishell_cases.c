@@ -53,33 +53,13 @@ static char *create_txt_file_path(const char *case_name)
     return (txt_file_path);
 }
 
-// static char *create_system_call(const char *command_line, const char *txt_file_path)
-// {
-//     char *system_call;
-//
-//     system_call = calloc(strlen(txt_file_path) + strlen(command_line) + 23, sizeof(char));
-//     cr_assert(system_call != NULL, "calloc failed");
-//     sprintf(system_call, "bash -c \'%s\necho $?\' >| %s", command_line, txt_file_path);
-//     return (system_call);
-// }
-//
-// static char *create_minishell_command(const char *command_line)
-// {
-//     char *minishell_command;
-//
-//     minishell_command = calloc(strlen(command_line) + 13, sizeof(char));
-//     cr_assert(minishell_command != NULL, "calloc failed");
-//     sprintf(minishell_command, "%s\necho $?\nEOF", command_line);
-//     return (minishell_command);
-// }
-
 static char *create_system_call(const char *command_line, const char *txt_file_path)
 {
     char *system_call;
 
-    system_call = calloc(strlen(txt_file_path) + strlen(command_line) + 15, sizeof(char));
+    system_call = calloc(strlen(txt_file_path) + strlen(command_line) + 23, sizeof(char));
     cr_assert(system_call != NULL, "calloc failed");
-    sprintf(system_call, "bash -c \'%s\' >| %s", command_line, txt_file_path);
+    sprintf(system_call, "bash -c \'%s\necho $?\' >| %s", command_line, txt_file_path);
     return (system_call);
 }
 
@@ -87,9 +67,9 @@ static char *create_minishell_command(const char *command_line)
 {
     char *minishell_command;
 
-    minishell_command = calloc(strlen(command_line) + 5, sizeof(char));
+    minishell_command = calloc(strlen(command_line) + 13, sizeof(char));
     cr_assert(minishell_command != NULL, "calloc failed");
-    sprintf(minishell_command, "%s\nEOF", command_line);
+    sprintf(minishell_command, "%s\necho $?\nEOF", command_line);
     return (minishell_command);
 }
 
