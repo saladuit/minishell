@@ -289,6 +289,14 @@ void				ft_unset(char **arguments, t_minishell *shell);
 void				ft_env(char **arguments, t_minishell *shell);
 void 				ft_exit(char **args, t_minishell *shell);
 
+// Builtin export sub functions
+void				export_error_msg_not_valid(char *arg, t_status *status);
+void				export_error_msg_out_of_memory(t_minishell *shell, size_t *i,
+									   bool *ret);
+bool				validate_alpha(char *arg, size_t *i, t_status *status);
+void				validate_arg(char *arg, bool *ret);
+bool				validate_dict(t_minishell *shell, char *key, size_t *i, bool *ret);
+
 // Signals
 void 				initialize_signal_handling(t_status *status);
 void				signal_ctrl_c(int sig);
