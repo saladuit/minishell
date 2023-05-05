@@ -55,7 +55,7 @@
 # include <unistd.h>
 
 // GLOBAL VARIABLE
-extern int	signal_error;
+// extern int	signal_error;
 
 /*
 E_GENERAL:

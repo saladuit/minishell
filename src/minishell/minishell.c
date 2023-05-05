@@ -28,8 +28,8 @@ static int32_t	minishell_clean(t_minishell *sheldon)
 int32_t	minishell_loop(t_minishell *sheldon)
 {
 	sheldon->command_line = readline(PROMPT);
-	if (signal_error)
-		sheldon->status = E_GENERAL;
+	// if (signal_error)
+	// 	sheldon->status = E_GENERAL;
 	if (signal_ctrl_d((char *)sheldon->command_line, dict_to_envp(&sheldon->env), &sheldon->status) == true)
 		return (false);
 	if (!sheldon->command_line)
@@ -65,7 +65,6 @@ void	minishell_init(t_minishell *sheldon, char **envp)
 		rl_outstream = stdin;
 	}
 	std_fds_dup(sheldon->std_fds, &sheldon->status);
-	sheldon->stop = false;
 }
 
 void	minishell_deinit(t_minishell *sheldon)

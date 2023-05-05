@@ -68,7 +68,7 @@ static char *create_minishell_command(const char *command_line)
 {
     char *minishell_command;
 
-    minishell_command = calloc(strlen(command_line) + 17, sizeof(char));
+    minishell_command = calloc(strlen(command_line) + 1, sizeof(char));
     cr_assert(minishell_command != NULL, "calloc failed");
     sprintf(minishell_command, "%s", command_line);
     cr_log_info("minishell_command: %s", minishell_command);
