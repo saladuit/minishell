@@ -1,12 +1,12 @@
 #include <criterion/internal/assert.h>
 #include <unit_test.h>
 
-//#define MINISHELL_TEST(test_case, command_line) \
-//    Test(minishell, test_case) { \
-//        assert_minishell(command_line, #test_case); \
-//    }
-//
-//extern char	**environ;
+#define MINISHELL_TEST(test_case, command_line) \
+    Test(minishell, test_case) { \
+        assert_minishell(command_line, #test_case); \
+    }
+
+extern char	**environ;
 
 void	redirect_stdfds(void)
 {
