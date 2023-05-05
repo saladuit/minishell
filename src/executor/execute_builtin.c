@@ -41,5 +41,5 @@ int32_t	execute_builtin(char **arguments, t_minishell *shell)
 	if (builtin_function.name == NULL)
 		return (-1);
 	builtin_function.func(arguments, shell);
-	return (SUCCESS);
+	return (shell->status);
 }
