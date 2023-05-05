@@ -4,7 +4,7 @@ void	signal_ctrl_c(int sig)
 {
 	(void)sig;
 	ft_putstr_fd("\n", 1);
-	signal_error = E_GENERAL;
+	// signal_error = E_GENERAL;
 	rl_on_new_line();
 	rl_redisplay();
 	signal(SIGQUIT, SIG_IGN);
@@ -16,9 +16,9 @@ bool	signal_ctrl_d(char *str, char **env, t_status *status)
 	(void)status;
 	if (str)
 		return (false);
-	signal_error = E_USAGE;
-	*status = E_USAGE;
-	ft_putstr_fd("exit", STDOUT_FILENO);
+	// signal_error = E_USAGE;
+	// *status = E_USAGE;
+	// ft_putstr_fd("exit", STDOUT_FILENO);
 	return (true);
 }
 

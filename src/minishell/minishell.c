@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: safoh <safoh@student.codam.nl>             +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/04 11:40:08 by safoh             #+#    #+#             */
-/*   Updated: 2023/05/04 11:40:09 by safoh            ###   ########.fr       */
+/*                                                    .--.  _                 */
+/*   minishell.c                                     |o_o || |                */
+/*                                                   |:_/ || |_ _   ___  __   */
+/*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
+/*                                                 (|     | )|_| |_| |>  <    */
+/*   Created: 2023/05/04 13:36:02 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
+/*   Updated: 2023/05/04 13:36:02 by safoh        \___)=(___/                 */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ static int32_t	minishell_clean(t_minishell *sheldon)
 int32_t	minishell_loop(t_minishell *sheldon)
 {
 	sheldon->command_line = readline(PROMPT);
-	if (signal_error)
-		sheldon->status = E_GENERAL;
+	// if (signal_error)
+	// 	sheldon->status = E_GENERAL;
 	if (signal_ctrl_d((char *)sheldon->command_line, dict_to_envp(&sheldon->env), &sheldon->status) == true)
 		return (false);
 	if (!sheldon->command_line)
@@ -61,17 +61,16 @@ void	minishell_init(t_minishell *sheldon, char **envp)
 		dict_print(&sheldon->env);
 	if (!isatty(STDIN_FILENO))
 	{
-		sheldon->status = message_system_call_error("isatty");
+		message_system_call_error("isatty");
 		rl_outstream = stdin;
 	}
-	std_fds_dup(sheldon->std_fds);
-	sheldon->stop = false;
+	std_fds_dup(sheldon->std_fds, &sheldon->status);
 }
 
 void	minishell_deinit(t_minishell *sheldon)
 {
 	dict_destroy(&sheldon->env);
-	std_fds_close(sheldon->std_fds);
+	std_fds_close(sheldon->std_fds, &sheldon->status);
 	clear_history();
 	rl_cleanup_after_signal();
 	rl_free_line_state();

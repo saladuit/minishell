@@ -1,7 +1,18 @@
-#include <unit_test.h>
-#include "custom_malloc.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                    .--.  _                 */
+/*   pair_cases.c                                    |o_o || |                */
+/*                                                   |:_/ || |_ _   ___  __   */
+/*   By: safoh <safoh@student.codam.nl>             //   \ \ __| | | \ \/ /   */
+/*                                                 (|     | )|_| |_| |>  <    */
+/*   Created: 2023/05/04 13:39:39 by safoh        /'\_   _/`\__|\__,_/_/\_\   */
+/*   Updated: 2023/05/04 13:39:39 by safoh        \___)=(___/                 */
+/*                                                                            */
+/* ************************************************************************** */
 
-t_pair *create_pair(const char *key, const char *value)
+#include <unit_test.h>
+
+t_pair *mock_pair(const char *key, const char *value)
 {
     t_pair *pair = (t_pair *)malloc(sizeof(t_pair));
     pair->key = strdup(key);
@@ -11,7 +22,7 @@ t_pair *create_pair(const char *key, const char *value)
 
 void test_pair_to_str(const char *key, const char *value, const char *expected)
 {
-    t_pair *pair = create_pair(key, value);
+    t_pair *pair = mock_pair(key, value);
     char *result;;
     int32_t condition = 0;
 
