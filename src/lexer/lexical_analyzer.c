@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   lexical_analyzer.c                                 :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lvan-bus <lvan-bus@student.codam.n>          +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/05/05 09:29:24 by lvan-bus      #+#    #+#                 */
+/*   Updated: 2023/05/05 09:29:25 by lvan-bus      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <minishell.h>
 
 static bool	find_matching_pipe_error(const char *command,
-										const t_tokenerror token_errors[], const char **error_msg)
+				const t_tokenerror token_errors[], const char **error_msg)
 {
 	size_t	i;
 
@@ -111,13 +123,13 @@ static bool	find_matching_error(const char *command,
 bool	check_meta_conventions(const char *command, const char **error_msg)
 {
 	const t_tokenerror		token_errors[] = {
-			{"|", "|"},
-			{"||", "||"},
-			{"<", "newline"},
-			{"<<", "newline"},
-			{">", "newline"},
-			{">>", "newline"},
-			{NULL, NULL}};
+	{"|", "|"},
+	{"||", "||"},
+	{"<", "newline"},
+	{"<<", "newline"},
+	{">", "newline"},
+	{">>", "newline"},
+	{NULL, NULL}};
 
 	if (find_matching_error(command, token_errors, error_msg))
 		return (false);
