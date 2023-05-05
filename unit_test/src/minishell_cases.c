@@ -50,6 +50,7 @@ static char *create_txt_file_path(const char *case_name)
     txt_file_path = calloc(strlen(case_name) + 27, sizeof(char));
     cr_assert(txt_file_path != NULL, "calloc failed");
     sprintf(txt_file_path, "build/%s.txt", case_name);
+    cr_log_info("txt_file_path: %s", txt_file_path);
     return (txt_file_path);
 }
 
@@ -57,9 +58,10 @@ static char *create_system_call(const char *command_line, const char *txt_file_p
 {
     char *system_call;
 
-    system_call = calloc(strlen(txt_file_path) + strlen(command_line) + 23, sizeof(char));
+    system_call = calloc(strlen(txt_file_path) + strlen(command_line) + 26, sizeof(char));
     cr_assert(system_call != NULL, "calloc failed");
     sprintf(system_call, "bash -c \'%s\necho $?\' >| %s", command_line, txt_file_path);
+    cr_log_info("system_call: %s", system_call);
     return (system_call);
 }
 
@@ -67,9 +69,10 @@ static char *create_minishell_command(const char *command_line)
 {
     char *minishell_command;
 
-    minishell_command = calloc(strlen(command_line) + 13, sizeof(char));
+    minishell_command = calloc(strlen(command_line) + 17, sizeof(char));
     cr_assert(minishell_command != NULL, "calloc failed");
-    sprintf(minishell_command, "%s\necho $?\nEOF", command_line);
+    sprintf(minishell_command, "%s", command_line);
+    cr_log_info("minishell_command: %s", minishell_command);
     return (minishell_command);
 }
 
@@ -95,6 +98,8 @@ void assert_minishell(char *command_line, char *case_name)
     char *system_call;
     char *minishell_command;
     FILE *f_stdin;
+    int32_t ret;
+    const unsigned char hex = 0x0a;
 
     f_stdin = cr_get_redirected_stdin();
     cr_assert(f_stdin != NULL, "cr_get_redirected_stdin failed");
@@ -109,7 +114,8 @@ void assert_minishell(char *command_line, char *case_name)
 
     setup_streams(&actual, &expected, txt_file_path);
 
-    minishell(environ);
+    ret = minishell(environ);
+    fprintf(stdout, "%d%c", ret, hex);
     fflush(stdout);
     fflush(stdin);
     fflush(stderr);
@@ -126,14 +132,9 @@ void assert_minishell(char *command_line, char *case_name)
 /*                              Bacis_tests                                    */
 /*******************************************************************************/
 MINISHELL_TEST(empty, "");
-MINISHELL_TEST(echo, "echo");
-MINISHELL_TEST(echo_leading_whitespace, " echo");
-MINISHELL_TEST(echo_trailing_whitespace, "echo ");
-MINISHELL_TEST(echo_pipe_echo, "echo | echo");
-// MINISHELL_TEST(echo_pipe_echo_status, "echo | echo $?");
-MINISHELL_TEST(echo_hello, "echo hello");
 MINISHELL_TEST(invalid_command, "invalid_command");
 MINISHELL_TEST(absolute_invalid_command, "/invalid_command");
+MINISHELL_TEST(relative_invalid_command, "relavtive/invalid_command");
 
 /*******************************************************************************/
 /*                              Miscellaneous                                  */
@@ -154,51 +155,43 @@ MINISHELL_TEST(execution_command_not_found_and_no_such_file_or_directory, "asd\n
 /*                               exit_status                                   */
 /*******************************************************************************/
 
-// MINISHELL_TEST(exit_status_quoted,
-// "export a=\"$?\"\nrm .\necho $a\n\nexport b=\'$?\'\nrm .\necho $b");
-// MINISHELL_TEST(exit_status_basic, "echo hello\necho $?");
-// MINISHELL_TEST(exit_status_trailing,
-// "echo $?a\necho $??\necho $?$?\necho $?$?a");
-// MINISHELL_TEST(exit_status_error, "rm .\necho $?");
+MINISHELL_TEST(exit_status_basic, "echo hello\necho $?");
+MINISHELL_TEST(exit_status_trailing, "echo $?a\necho $??\necho $?$?\necho $?$?a");
+MINISHELL_TEST(exit_status_error, "rm .\necho $?");
 
 /*******************************************************************************/
 /*                                  cat                                       */
 /*******************************************************************************/
 
-// MINISHELL_TEST(cat_me_relative, "cat ../sample-txt/cat-me.txt");
-// MINISHELL_TEST(cat_me, "cat sample-txt/cat-me.txt | grep cat | wc
-		// -w");
+MINISHELL_TEST(cat_me_relative, "cat /Makefile");
+MINISHELL_TEST(cat_me, "cat sample-txt/cat-me.txt | grep cat | wc -w");
 
 /*******************************************************************************/
 /*                                  pipes                                      */
 /*******************************************************************************/
 
-// MINISHELL_TEST(pipes_ls_grep_t, "ls | grep t");
-// MINISHELL_TEST(pipes_redir_and_pipe,
-// "ls > foo\nsort < foo | grep t\nrm foo");
-// MINISHELL_TEST(pipes_grep_ls, "ls / | grep bin");
-// MINISHELL_TEST(pipes_ls_cat, "ls | cat");
-// MINISHELL_TEST(execution_pipeline_command_not_found,
-// "echo hi > foo | asd\ncat foo\n");
+MINISHELL_TEST(pipes_ls_grep_t, "cat < Makefile | grep t");
+MINISHELL_TEST(pipes_redir_and_pipe, "cat > build/pipes_redir_and_pipe_cat.txt\nsort < pipes_redir_and_pipe_cat.txt | grep t");
+MINISHELL_TEST(execution_pipeline_command_not_found, "echo | command_not_found");
 
 /*******************************************************************************/
 /*                                  Expansion                                 */
 /*******************************************************************************/
 
-// MINISHELL_TEST(execution_empty_single_quotes, "\'\'");
-// MINISHELL_TEST(execution_empty_double_quotes, "\"\"");
-// MINISHELL_TEST(expansion_1, "echo $?");
-// MINISHELL_TEST(expansion_2, "echo $?$?");
-// MINISHELL_TEST(expansion_3, "echo foo$?");
-// MINISHELL_TEST(expansion_4, "echo $?foo");
-// MINISHELL_TEST(expansion_5, "echo $");
-// MINISHELL_TEST(expansion_6, "echo $_x");
-// MINISHELL_TEST(expansion_7, "echo $ax");
-// MINISHELL_TEST(expansion_8, "echo $1x");
-// MINISHELL_TEST(expansion_9, "echo $11");
-// MINISHELL_TEST(expansion_10, "echo $@1");
-// MINISHELL_TEST(expansion_11, "echo $ 1");
-// MINISHELL_TEST(expansion_12, "echo $x_");
+MINISHELL_TEST(execution_empty_single_quotes, "\'\'");
+MINISHELL_TEST(execution_empty_double_quotes, "\"\"");
+MINISHELL_TEST(expansion_1, "echo $?");
+MINISHELL_TEST(expansion_2, "echo $?$?");
+MINISHELL_TEST(expansion_3, "echo foo$?");
+MINISHELL_TEST(expansion_4, "echo $?foo");
+MINISHELL_TEST(expansion_5, "echo $");
+MINISHELL_TEST(expansion_6, "echo $_x");
+MINISHELL_TEST(expansion_7, "echo $ax");
+MINISHELL_TEST(expansion_8, "echo $1x");
+MINISHELL_TEST(expansion_9, "echo $11");
+MINISHELL_TEST(expansion_10, "echo $@1");
+MINISHELL_TEST(expansion_11, "echo $ 1");
+MINISHELL_TEST(expansion_12, "echo $x_");
 // MINISHELL_TEST(expansion_13, "echo $xa");
 // MINISHELL_TEST(expansion_14, "echo $x1");
 // MINISHELL_TEST(expansion_15, "echo 1$USER-");
@@ -451,9 +444,14 @@ MINISHELL_TEST(execution_command_not_found_and_no_such_file_or_directory, "asd\n
 /*                                   echo                                      */
 /*******************************************************************************/
 
-// MINISHELL_TEST(echo, "echo");
-// MINISHELL_TEST(echo_basic, "echo a");
-// MINISHELL_TEST(echo_double, "echo a b");
+MINISHELL_TEST(echo, "echo");
+MINISHELL_TEST(echo_leading_whitespace, " echo");
+MINISHELL_TEST(echo_trailing_whitespace, "echo ");
+MINISHELL_TEST(echo_one_argument, "echo a");
+MINISHELL_TEST(echo_two_arguments, "echo a b");
+MINISHELL_TEST(echo_pipe_echo, "echo | echo");
+MINISHELL_TEST(echo_pipe_echo_status, "echo | echo | echo");
+MINISHELL_TEST(echo_hello, "echo hello");
 // MINISHELL_TEST(echo_n_option_several, "echo -n -n a -n -n");
 // MINISHELL_TEST(echo_n_option_nn, "echo -nn a -nn");
 // MINISHELL_TEST(echo_n_option_nan, "echo -nan a -nan");
@@ -469,28 +467,23 @@ MINISHELL_TEST(execution_command_not_found_and_no_such_file_or_directory, "asd\n
 /*******************************************************************************/
 
 // PASSING
-// MINISHELL_TEST(cd_twice, "cd / | cd /\npwd");
-// FAILING
-// MINISHELL_TEST(cd_no_args, "cd\npwd");
-// MINISHELL_TEST(cd_dir_up, "pwd\ncd ..\npwd");
-// MINISHELL_TEST(cd_no_args_pwd, "cd\npwd");
-// MINISHELL_TEST(cd_pipeline_twice, "cd $HOME\ncd / | cd /\npwd");
-// MINISHELL_TEST(cd_no_home, "unset HOME\ncd /\ncd asd\npwd");
-// MINISHELL_TEST(cd_slash, "cd /\npwd");
-// MINISHELL_TEST(cd_pipeline_last, "cd $HOME\npwd | cd /\npwd");
-// MINISHELL_TEST(cd_first_pipeline, "cd $HOME\ncd / | pwd\npwd");
-// MINISHELL_TEST(cd_nonexistent, "cd /\ncd nonexistent\npwd");
+MINISHELL_TEST(cd_twice, "cd / | cd /\npwd");
+MINISHELL_TEST(cd_no_args, "cd\npwd");
+MINISHELL_TEST(cd_dir_up, "pwd\ncd ..\npwd");
+MINISHELL_TEST(cd_pipeline_twice, "cd $HOME\ncd / | cd /\npwd");
+MINISHELL_TEST(cd_no_home, "unset HOME\ncd /\ncd asd\npwd");
+MINISHELL_TEST(cd_absolute, "cd /\npwd");
+MINISHELL_TEST(cd_pipeline_last, "cd $HOME\npwd | cd /\npwd");
+MINISHELL_TEST(cd_first_pipeline, "cd $HOME\ncd / | pwd\npwd");
+MINISHELL_TEST(cd_nonexistent, "cd /\ncd nonexistent\npwd");
 
 /*******************************************************************************/
 /*                                  pwd                                       */
 /*******************************************************************************/
 
-// MINISHELL_TEST(pwd, "pwd");
-// MINISHELL_TEST(pwd_arg, "pwd arg");
-// MINISHELL_TEST(pwd_old,
-// "env | grep OLDPWD\nexport | grep OLDPWD\n\ncd .\nenv | grep OLDPWD\nexport | grep OLDPWD");
-// MINISHELL_TEST(pwd_removed_dir, "mkdir test\ncd test\nrmdir
-		// /tmp/test\npwd");
+MINISHELL_TEST(pwd, "pwd");
+MINISHELL_TEST(pwd_arg, "pwd arg");
+MINISHELL_TEST(pwd_removed_dir, "mkdir test\ncd test\nrmdir/tmp/test\npwd");
 
 /*******************************************************************************/
 /*                                  export                                     */
