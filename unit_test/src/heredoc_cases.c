@@ -21,6 +21,7 @@ void	assert_heredoc_basic(char *delimiter, int32_t expected_output)
 	int32_t	pipe_fd[2];
 	int32_t	output;
 
+	bzero(&pipe_fd, sizeof(pipe_fd));
 	output = here_doc(delimiter, pipe_fd[WRITE_END]);
 	cr_assert_eq(output, expected_output);
 	close(pipe_fd[READ_END]);
