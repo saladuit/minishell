@@ -335,3 +335,23 @@ Test(lexer, null_exclamation_mark)
 {
 	assert_lexer_null("!", "sheldon: syntax error near unexpected token `newline'\n");
 }
+
+Test(lexer, null_input_input)
+{
+	assert_lexer_null("< <", "sheldon: syntax error near unexpected token `<'\n");
+}
+
+Test(lexer, null_output_ouput)
+{
+	assert_lexer_null("> >", "sheldon: syntax error near unexpected token `>'\n");
+}
+
+Test(lexer, null_append_append)
+{
+	assert_lexer_null(">> >>", "sheldon: syntax error near unexpected token `>>'\n");
+}
+
+Test(lexer, null_heredoc_heredoc)
+{
+	assert_lexer_null("<< <<", "sheldon: syntax error near unexpected token `<<'\n");
+}

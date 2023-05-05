@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   builtin_exit.c                                     :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lvan-bus <lvan-bus@student.codam.n>          +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/05/04 19:06:52 by lvan-bus      #+#    #+#                 */
+/*   Updated: 2023/05/04 19:06:54 by lvan-bus      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <minishell.h>
 
-static void exit_err_msg(char *arg)
+static void	exit_err_msg(char *arg)
 {
 	ft_putstr_fd(SHELDON, STDERR_FILENO);
 	ft_putstr_fd(": exit: ", STDERR_FILENO);
@@ -13,9 +25,9 @@ static void exit_err_msg(char *arg)
 	}
 }
 
-static int numeric(char *arg)
+static int	numeric(char *arg)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (arg[i] && ft_iswhitespace(arg[i]))
@@ -33,9 +45,9 @@ static int numeric(char *arg)
 	return (1);
 }
 
-static size_t count_args(char **args)
+static size_t	count_args(char **args)
 {
-	size_t count;
+	size_t	count;
 
 	count = 0;
 	while (args[count])
@@ -63,7 +75,7 @@ void	ft_exit(char **args, t_minishell *shell)
 			exit_err_msg(args[1]);
 		}
 		else
-			shell->status = (t_status) ft_atoi(args[1]) % 256;
+			shell->status = (t_status)ft_atoi(args[1]) % 256;
 	}
 	if (shell->is_pipeline)
 		_exit(shell->status);

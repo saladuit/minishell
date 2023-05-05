@@ -1,34 +1,37 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   parse_heredoc.c                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lvan-bus <lvan-bus@student.codam.n>          +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/05/05 09:27:00 by lvan-bus      #+#    #+#                 */
+/*   Updated: 2023/05/05 09:27:02 by lvan-bus      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <minishell.h>
 
-// check !line later, now resolving a segfault
-// error code CNTRL_D = -2 could be a solution
-int32_t	here_doc(char *delimiter)
+int32_t	here_doc(char *delimiter, int fd_write_end)
 {
-	int		fd[2];
 	char	*line;
 
 	if (!delimiter || ft_strlen(delimiter) == 0)
 		return (ERROR);
-	if (pipe(fd) == -1)
-		return (ERROR);
+	signal(SIGINT, signal_ctrl_c_heredoc);
 	while (1)
 	{
 		line = readline("> ");
 		if (!line)
-		{
-			close(fd[0]);
-			close(fd[1]);
-			return (ERROR);
-		}
+			_exit(E_COMMAND_NOT_FOUND);
 		if (ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0)
 		{
 			free(line);
 			break ;
 		}
-		write(fd[1], line, ft_strlen(line));
-		write(fd[1], "\n", 1);
+		write(fd_write_end, line, ft_strlen(line));
+		write(fd_write_end, "\n", 1);
 		free(line);
 	}
-	close(fd[1]);
-	return (fd[0]);
+	return (SUCCESS);
 }

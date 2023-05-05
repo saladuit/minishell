@@ -1,38 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   builtin_pwd.c                                      :+:    :+:            */
+/*   builtin_export_validate.c                          :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: lvan-bus <lvan-bus@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/05/04 19:07:13 by lvan-bus      #+#    #+#                 */
-/*   Updated: 2023/05/04 19:07:14 by lvan-bus      ########   odam.nl         */
+/*   Created: 2023/05/05 09:24:19 by lvan-bus      #+#    #+#                 */
+/*   Updated: 2023/05/05 09:24:20 by lvan-bus      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-static void	pwd_error_msg(void)
+bool	validate_alpha(char *arg, size_t *i, t_status *status)
 {
-	ft_putstr_fd("pwd: ", STDERR_FILENO);
-	ft_putendl_fd(strerror(errno), STDERR_FILENO);
+	if (!ft_isalpha(arg[0]))
+	{
+		export_error_msg_not_valid(arg, status);
+		(*i)++;
+		return (false);
+	}
+	return (true);
 }
 
-void	ft_pwd(char **arguments, t_minishell *shell)
+void	validate_arg(char *arg, bool *ret)
 {
-	char	*buf;
+	if (!arg)
+		*ret = true;
+}
 
-	if (arguments)
-		buf = getcwd(NULL, 0);
-	else
-		buf = NULL;
-	if (buf == NULL)
+bool	validate_dict(t_minishell *shell, char *key, size_t *i, bool *ret)
+{
+	if (dict_get(&shell->env, key) == NULL)
 	{
-		shell->status = E_GENERAL;
-		pwd_error_msg();
-		return ;
+		export_error_msg_out_of_memory(shell, i, ret);
+		return (false);
 	}
-	write(STDOUT_FILENO, buf, ft_strlen(buf));
-	write(STDOUT_FILENO, "\n", 1);
-	free(buf);
+	return (true);
 }

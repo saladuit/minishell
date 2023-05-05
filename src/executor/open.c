@@ -12,9 +12,39 @@
 
 #include <minishell.h>
 
+static void	close_pipe(int32_t *pipe_fd)
+{
+	if (close(pipe_fd[READ_END]) != SUCCESS)
+		_exit(E_COMMAND_NOT_FOUND);
+	if (close(pipe_fd[WRITE_END]) != SUCCESS)
+		_exit(E_COMMAND_NOT_FOUND);
+}
+
 static int32_t	open_heredoc(char *path)
 {
-	return (here_doc(path));
+	pid_t		child;
+	int32_t		pipe_fd[2];
+	int32_t		status;
+
+	if (pipe(pipe_fd) == ERROR)
+		return (ERROR);
+	child = fork();
+	if (child == -1)
+		return (close_pipe(pipe_fd), ERROR);
+	if (child == 0)
+	{
+		if (close(pipe_fd[READ_END]) != SUCCESS)
+			_exit(E_COMMAND_NOT_FOUND);
+		if (here_doc(path, pipe_fd[WRITE_END]) != SUCCESS)
+			_exit(E_COMMAND_NOT_FOUND);
+		if (pipe_fd[WRITE_END] == ERROR)
+			_exit(E_COMMAND_NOT_FOUND);
+		_exit(E_COMMAND_NOT_FOUND);
+	}
+	if (close(pipe_fd[WRITE_END]) != SUCCESS)
+		return (ERROR);
+	waitpid(child, &status, WUNTRACED);
+	return (pipe_fd[READ_END]);
 }
 
 static int32_t	open_input(char *path)

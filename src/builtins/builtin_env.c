@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   builtin_env.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lvan-bus <lvan-bus@student.codam.n>          +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/05/04 19:06:43 by lvan-bus      #+#    #+#                 */
+/*   Updated: 2023/05/04 19:06:45 by lvan-bus      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <minishell.h>
 
-static void env_err_msg(char *msg)
+static void	env_err_msg(char *msg)
 {
 	ft_putstr_fd("env: ", STDERR_FILENO);
 	ft_putstr_fd(msg, STDERR_FILENO);

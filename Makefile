@@ -13,9 +13,9 @@
 include makerc/common.mk
 include makerc/config.mk
 
--include $(UNIT_DEPENDS)
--include $(DEPENDS) 
--include $(MAIN_DEPENDS)
+#-include $(UNIT_DEPENDS)
+#-include $(DEPENDS)
+#-include $(MAIN_DEPENDS)
 
 # $(info $(UNIT_DEPENDS))
 # $(info  $(DEPENDS))

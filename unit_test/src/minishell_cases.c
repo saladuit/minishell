@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <criterion/internal/assert.h>
 #include <unit_test.h>
 
 #define MINISHELL_TEST(test_case, command_line) \

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   lexer.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lvan-bus <lvan-bus@student.codam.n>          +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/05/05 09:28:44 by lvan-bus      #+#    #+#                 */
+/*   Updated: 2023/05/05 09:28:46 by lvan-bus      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <minishell.h>
 
 // returns true if the count of quotes (' or ") is even
@@ -6,7 +18,7 @@ static bool	are_quotes_closed(const char *str)
 {
 	size_t	count;
 	size_t	i;
-	char quote;
+	char	quote;
 
 	i = 0;
 	count = 0;
