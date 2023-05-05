@@ -63,7 +63,7 @@ static void	execute_simple_command(t_command *cmd, t_minishell *shell)
 		return ;
 	if (*arguments == NULL)
 		return ;
-	if (execute_builtin(arguments, shell) == SUCCESS)
+	if (execute_builtin(arguments, shell) >= SUCCESS)
 		return ;
 	execute_non_builtin(arguments, shell);
 }
