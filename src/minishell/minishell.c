@@ -54,7 +54,7 @@ void	minishell_init(t_minishell *sheldon, char **envp)
 		dict_print(&sheldon->env);
 	if (!isatty(STDIN_FILENO))
 	{
-		sheldon->status = message_system_call_error("isatty");
+		message_system_call_error("isatty");
 		rl_outstream = stdin;
 	}
 	std_fds_dup(sheldon->std_fds, &sheldon->status);
