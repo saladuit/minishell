@@ -214,6 +214,7 @@ bool					check_lexical_conventions(const char *command, t_status *exit);
 bool				check_meta_conventions(const char *command, const char **error_msg);
 void 				lexer_initialize(t_lexer *lex);
 bool				control_conventions(const char *command, t_status *exit, t_lexer *lex, const char **error_msg);
+int					compare_command_ignore_spaces(const char *command, const char *cmp);
 
 // Parser
 t_list				*parser(t_list *tokens, t_status *status, t_dictionary *env);
@@ -257,6 +258,7 @@ t_status			message_general_error(t_status status, const char *msg);
 bool				is_pipe(int c);
 bool				is_dollar(int c);
 bool				is_meta(int c);
+bool				is_metas(const char *str);
 bool				is_redir(int c);
 bool				is_quote(int c);
 bool				is_double_quote(int c);
