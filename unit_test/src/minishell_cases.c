@@ -48,7 +48,7 @@ static char *create_txt_file_path(const char *case_name)
 
     txt_file_path = calloc(strlen(case_name) + 27, sizeof(char));
     cr_assert(txt_file_path != NULL, "calloc failed");
-    sprintf(txt_file_path, "build/%s.txt", case_name);
+    snprintf(txt_file_path, strlen(case_name) + 27, "build/%s.txt", case_name);
     cr_log_info("txt_file_path: %s", txt_file_path);
     return (txt_file_path);
 }
@@ -59,7 +59,7 @@ static char *create_system_call(const char *command_line, const char *txt_file_p
 
     system_call = calloc(strlen(txt_file_path) + strlen(command_line) + 26, sizeof(char));
     cr_assert(system_call != NULL, "calloc failed");
-    sprintf(system_call, "bash -c \'%s\necho $?\' >| %s", command_line, txt_file_path);
+    snprintf(system_call, strlen(txt_file_path) + strlen(command_line) + 26, "bash -c \'%s\necho $?\' >| %s", command_line, txt_file_path);
     cr_log_info("system_call: %s", system_call);
     return (system_call);
 }
@@ -70,7 +70,7 @@ static char *create_minishell_command(const char *command_line)
 
     minishell_command = calloc(strlen(command_line) + 1, sizeof(char));
     cr_assert(minishell_command != NULL, "calloc failed");
-    sprintf(minishell_command, "%s", command_line);
+    snprintf(minishell_command, strlen(command_line) + 1,"%s", command_line);
     cr_log_info("minishell_command: %s", minishell_command);
     return (minishell_command);
 }
