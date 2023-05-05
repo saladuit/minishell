@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   lexer_initialize.c                                 :+:    :+:            */
+/*   builtin_unset.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: lvan-bus <lvan-bus@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/05/05 09:29:06 by lvan-bus      #+#    #+#                 */
-/*   Updated: 2023/05/05 09:29:07 by lvan-bus      ########   odam.nl         */
+/*   Created: 2023/05/04 19:07:21 by lvan-bus      #+#    #+#                 */
+/*   Updated: 2023/05/04 19:07:23 by lvan-bus      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	lexer_initialize(t_lexer *lex)
+void	ft_unset(char **arguments, t_minishell *shell)
 {
-	ft_bzero(lex, sizeof(t_lexer));
-	lex->token_count = 0;
-	lex->meta_count = 0;
-	lex->error_msg = NULL;
-	lex->tokens = NULL;
+	size_t	i;
+
+	i = 1;
+	while (arguments[i])
+		dict_delete(&shell->env, arguments[i++]);
+	return ;
 }

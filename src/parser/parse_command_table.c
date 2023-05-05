@@ -8,6 +8,7 @@ void	deconstruct_command_table(void *command_table)
 		return ;
 	ct = (t_command_table *)command_table;
 	ft_lstclear(&ct->commands, deconstruct_command);
+	free(ct->pids);
 	free(ct);
 }
 
@@ -47,6 +48,9 @@ t_command_table	*construct_command_table(t_list **tokens, t_status *status,
 		}
 		command_table->n_commands++;
 	}
+	command_table->pids = ft_calloc(command_table->n_commands, sizeof(pid_t));
+	if (!command_table->pids)
+		return (deconstruct_command_table(command_table), NULL);
 	command_table->commands_head = command_table->commands;
 	return (command_table);
 }

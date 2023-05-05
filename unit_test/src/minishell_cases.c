@@ -1,9 +1,6 @@
+//#include <criterion/internal/assert.h>
 #include <unit_test.h>
 
-void nothing(void)
-{
-}
-/*
 #define MINISHELL_TEST(test_case, command_line) \
     Test(minishell, test_case) { \
         assert_minishell(command_line, #test_case); \
@@ -18,77 +15,148 @@ void	redirect_stdfds(void)
 	cr_redirect_stderr();
 }
 
-int32_t		minishell_loop(t_minishell *sheldon);
+//int32_t		minishell_loop(t_minishell *sheldon);
+//
+//TestSuite(minishell, .init = redirect_stdfds);
+//
+//static int	read_from_file(void *cookie, void *buffer, size_t *size)
+//{
+//	FILE	*file;
+//	size_t	read_size;
+//
+//	file = (FILE *)cookie;
+//	read_size = fread(buffer, 1, *size, file);
+//	cr_assert(read_size <= *size, "fread failed");
+//	*size = read_size;
+//	return (0);
+//}
+//
+//static char *create_txt_file_path(const char *case_name)
+//{
+//    char *txt_file_path;
+//
+//    txt_file_path = calloc(strlen(case_name) + 27, sizeof(char));
+//    cr_assert(txt_file_path != NULL, "calloc failed");
+//    sprintf(txt_file_path, "build/%s.txt", case_name);
+//    return (txt_file_path);
+//}
 
-TestSuite(minishell, .init = redirect_stdfds);
+// static char *create_system_call(const char *command_line, const char *txt_file_path)
+// {
+//     char *system_call;
+//
+//     system_call = calloc(strlen(txt_file_path) + strlen(command_line) + 23, sizeof(char));
+//     cr_assert(system_call != NULL, "calloc failed");
+//     sprintf(system_call, "bash -c \'%s\necho $?\' >| %s", command_line, txt_file_path);
+//     return (system_call);
+// }
+//
+// static char *create_minishell_command(const char *command_line)
+// {
+//     char *minishell_command;
+//
+//     minishell_command = calloc(strlen(command_line) + 13, sizeof(char));
+//     cr_assert(minishell_command != NULL, "calloc failed");
+//     sprintf(minishell_command, "%s\necho $?\nEOF", command_line);
+//     return (minishell_command);
+// }
 
-static int	read_from_file(void *cookie, void *buffer, size_t *size)
-{
-	FILE	*file;
-	size_t	read_size;
-
-	file = (FILE *)cookie;
-	read_size = fread(buffer, 1, *size, file);
-	*size = read_size;
-	return (0);
-}
-
-void	assert_minishell(char *command_line, char *case_name)
-{
-	char	*txt_file_path;
-	char	*system_call;
-	char	*minishell_command;
-	FILE	*f_stdin;
-
-	f_stdin = cr_get_redirected_stdin();
-	txt_file_path = calloc(strlen(case_name) + 27, sizeof(char));
-	sprintf(txt_file_path, "build/%s.txt", case_name);
-	system_call = calloc(strlen(txt_file_path) + strlen(command_line) + 15,
-							sizeof(char));
-	sprintf(system_call, "bash -c \'%s\' >| %s", command_line, txt_file_path);
-	minishell_command = calloc(strlen(command_line) + 5, sizeof(char));
-	sprintf(minishell_command, "%s\nEOF", command_line);
-	struct cr_stream actual = {
-		.cookie = cr_get_redirected_stdout(),
-		.read = read_from_file,
-	};
-	system(system_call);
-	struct cr_stream expected = {
-		.cookie = fopen(txt_file_path, "r"),
-		.read = read_from_file,
-	};
-	cr_stream_init(&expected);
-	cr_stream_init(&actual);
-	fputs(minishell_command, f_stdin);
-	fclose(f_stdin);
-	minishell(environ);
-	fflush(stdout);
-	fflush(stdin);
-	fflush(stderr);
-	cr_assert(eq(stream, expected, actual));
-	fclose(expected.cookie);
-	free(system_call);
-	free(txt_file_path);
-	free(minishell_command);
-}
-*/
-
-/*******************************************************************************/
-/*                              General                                        */
-/*******************************************************************************/
-
-// MINISHELL_TEST(execution_invalid_path, "/made/up/path");
-// MINISHELL_TEST(execution_basic,
-// "ls .\nl\"s\" .\nl\'s\' .\nexport s=\" s\"\nl$s .\nexport s=\"s\"\nl$s .\nlsX .");
-// MINISHELL_TEST(execution_leading_whitespace, "a");
-// MINISHELL_TEST(execution_space_in_string, "\' \'");
-// MINISHELL_TEST(execution_ls, "ls");
-// MINISHELL_TEST(execution_space, "");
-// MINISHELL_TEST(execution_trailing_whitespace, "a");
-// MINISHELL_TEST(execution_whitespace_center, "$whitespace_center");
-// MINISHELL_TEST(execution_command_not_found, "asd");
-// MINISHELL_TEST(execution_command_not_found_and_no_such_file_or_directory,
-// "asd\n/asd\ncat foo");
+//static char *create_system_call(const char *command_line, const char *txt_file_path)
+//{
+//    char *system_call;
+//
+//    system_call = calloc(strlen(txt_file_path) + strlen(command_line) + 15, sizeof(char));
+//    cr_assert(system_call != NULL, "calloc failed");
+//    sprintf(system_call, "bash -c \'%s\' >| %s", command_line, txt_file_path);
+//    return (system_call);
+//}
+//
+//static char *create_minishell_command(const char *command_line)
+//{
+//    char *minishell_command;
+//
+//    minishell_command = calloc(strlen(command_line) + 5, sizeof(char));
+//    cr_assert(minishell_command != NULL, "calloc failed");
+//    sprintf(minishell_command, "%s\nEOF", command_line);
+//    return (minishell_command);
+//}
+//
+//static void setup_streams(struct cr_stream *actual, struct cr_stream *expected, const char *txt_file_path)
+//{
+//    actual->cookie = cr_get_redirected_stdout();
+//    cr_assert(actual->cookie != NULL, "cr_get_redirected_stdout failed");
+//    actual->read = read_from_file;
+//
+//    expected->cookie = fopen(txt_file_path, "r");
+//    cr_assert(expected->cookie != NULL, "fopen failed");
+//    expected->read = read_from_file;
+//
+//    cr_stream_init(expected);
+//    cr_stream_init(actual);
+//}
+//
+//void assert_minishell(char *command_line, char *case_name)
+//{
+//    struct cr_stream actual;
+//    struct cr_stream expected;
+//    char *txt_file_path;
+//    char *system_call;
+//    char *minishell_command;
+//    FILE *f_stdin;
+//
+//    f_stdin = cr_get_redirected_stdin();
+//    cr_assert(f_stdin != NULL, "cr_get_redirected_stdin failed");
+//
+//    txt_file_path = create_txt_file_path(case_name);
+//    system_call = create_system_call(command_line, txt_file_path);
+//    minishell_command = create_minishell_command(command_line);
+//    cr_assert(fputs(minishell_command, f_stdin) >= 0, "fputs failed");
+//    cr_assert(fclose(f_stdin) == 0, "fclose failed");
+//
+//    system(system_call);
+//
+//    setup_streams(&actual, &expected, txt_file_path);
+//
+//    minishell(environ);
+//    fflush(stdout);
+//    fflush(stdin);
+//    fflush(stderr);
+//
+//    cr_assert(eq(stream, expected, actual));
+//    fclose(expected.cookie);
+//
+//    free(txt_file_path);
+//    free(system_call);
+//    free(minishell_command);
+//}
+//
+///*******************************************************************************/
+///*                              Bacis_tests                                    */
+///*******************************************************************************/
+//MINISHELL_TEST(empty, "");
+//MINISHELL_TEST(echo, "echo");
+//MINISHELL_TEST(echo_leading_whitespace, " echo");
+//MINISHELL_TEST(echo_trailing_whitespace, "echo ");
+//MINISHELL_TEST(echo_pipe_echo, "echo | echo");
+//// MINISHELL_TEST(echo_pipe_echo_status, "echo | echo $?");
+//MINISHELL_TEST(echo_hello, "echo hello");
+//MINISHELL_TEST(invalid_command, "invalid_command");
+//MINISHELL_TEST(absolute_invalid_command, "/invalid_command");
+//
+///*******************************************************************************/
+///*                              Miscellaneous                                  */
+///*******************************************************************************/
+//
+//MINISHELL_TEST(execution_invalid_path, "/made/up/path");
+//MINISHELL_TEST(execution_basic,"ls .\nl\"s\" .\nl\'s\' .\nexport s=\" s\"\nl$s .\nexport s=\"s\"\nl$s .\nlsX .");
+//MINISHELL_TEST(execution_leading_whitespace, " a");
+//MINISHELL_TEST(execution_space_in_string, "\' \'");
+//MINISHELL_TEST(execution_ls, "ls");
+//MINISHELL_TEST(execution_space, "");
+//MINISHELL_TEST(execution_trailing_whitespace, "a ");
+//MINISHELL_TEST(execution_whitespace_center, "$whitespace_center");
+//MINISHELL_TEST(execution_command_not_found, "asd");
+//MINISHELL_TEST(execution_command_not_found_and_no_such_file_or_directory, "asd\n/asd\ncat foo");
 
 /*******************************************************************************/
 /*                               exit_status                                   */

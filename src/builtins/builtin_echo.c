@@ -1,22 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   lexer_initialize.c                                 :+:    :+:            */
+/*   builtin_echo.c                                     :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: lvan-bus <lvan-bus@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/05/05 09:29:06 by lvan-bus      #+#    #+#                 */
-/*   Updated: 2023/05/05 09:29:07 by lvan-bus      ########   odam.nl         */
+/*   Created: 2023/05/04 19:06:10 by lvan-bus      #+#    #+#                 */
+/*   Updated: 2023/05/04 19:06:12 by lvan-bus      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	lexer_initialize(t_lexer *lex)
+void	ft_echo(char **arguments, t_minishell *shell)
 {
-	ft_bzero(lex, sizeof(t_lexer));
-	lex->token_count = 0;
-	lex->meta_count = 0;
-	lex->error_msg = NULL;
-	lex->tokens = NULL;
+	size_t	i;
+	bool	newline;
+
+	(void)shell;
+	newline = true;
+	i = 1;
+	if (arguments[i] && !ft_strncmp(arguments[i], "-n", 2))
+	{
+		newline = false;
+		i++;
+	}
+	while (arguments[i])
+	{
+		write(STDOUT_FILENO, arguments[i], ft_strlen(arguments[i]));
+		i++;
+		if (arguments[i])
+			write(STDOUT_FILENO, " ", 1);
+	}
+	if (newline)
+		write(STDOUT_FILENO, "\n", 1);
 }

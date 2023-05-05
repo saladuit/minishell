@@ -1,22 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   lexer_initialize.c                                 :+:    :+:            */
+/*   builtin_env.c                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: lvan-bus <lvan-bus@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/05/05 09:29:06 by lvan-bus      #+#    #+#                 */
-/*   Updated: 2023/05/05 09:29:07 by lvan-bus      ########   odam.nl         */
+/*   Created: 2023/05/04 19:06:43 by lvan-bus      #+#    #+#                 */
+/*   Updated: 2023/05/04 19:06:45 by lvan-bus      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	lexer_initialize(t_lexer *lex)
+static void	env_err_msg(char *msg)
 {
-	ft_bzero(lex, sizeof(t_lexer));
-	lex->token_count = 0;
-	lex->meta_count = 0;
-	lex->error_msg = NULL;
-	lex->tokens = NULL;
+	ft_putstr_fd("env: ", STDERR_FILENO);
+	ft_putstr_fd(msg, STDERR_FILENO);
+	ft_putendl_fd(": No such file or directory", STDERR_FILENO);
+}
+
+void	ft_env(char **arguments, t_minishell *shell)
+{
+	if (arguments[1])
+	{
+		shell->status = E_COMMAND_NOT_FOUND;
+		env_err_msg(arguments[1]);
+		return ;
+	}
+	dict_print(&shell->env);
+	return ;
 }
