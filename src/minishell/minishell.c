@@ -54,8 +54,8 @@ int32_t	minishell_loop(t_minishell *sheldon)
 
 void	minishell_init(t_minishell *sheldon, char **envp)
 {
-	initialize_signal_handling(&sheldon->status);
 	ft_bzero(sheldon, sizeof(t_minishell));
+	initialize_signal_handling(&sheldon->status);
 	sheldon->status = envp_load(&sheldon->env, envp);
 	if (LOG)
 		dict_print(&sheldon->env);
