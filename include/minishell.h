@@ -55,7 +55,7 @@
 # include <unistd.h>
 
 // GLOBAL VARIABLE
-// extern int	signal_error;
+extern int	g_signal_error;
 
 /*
 E_GENERAL:
@@ -201,6 +201,7 @@ int32_t				minishell(char **envp);
 int32_t				init_handlers(void);
 void				setup_signals(t_signal_handler handler);
 void				reset_signals(void);
+void				set_status_reset_signal(t_status *status);
 
 // Environment
 int32_t				envp_load(t_dictionary *env, char **envp);
@@ -230,7 +231,8 @@ bool				check_meta_conventions(const char *command,
 void				lexer_initialize(t_lexer *lex);
 bool				control_conventions(const char *command, t_status *exit,
 						t_lexer *lex, const char **error_msg);
-int					compare_command_ignore_spaces(const char *command, const char *cmp);
+int					compare_command_ignore_spaces(const char *command,
+						const char *cmp);
 
 // Parser
 t_list				*parser(t_list *tokens, t_status *status,
@@ -306,6 +308,7 @@ int32_t				open_fd_type(char *path, t_type type);
 int32_t				setup_redirects(t_command *command);
 int32_t				pipes_handle(int32_t *pipe_fds, int32_t *std_fds,
 						int32_t n_commands, int32_t i);
+void				close_pipe(int32_t *pipe_fd);
 int32_t				execute_builtin(char **arguments, t_minishell *shell);
 void				execute_child_command(t_minishell *shell, char **arguments);
 void				execute_pipeline(t_command_table *ct, t_minishell *shell);
@@ -326,14 +329,16 @@ void				ft_exit(char **args, t_minishell *shell);
 
 // Builtin export sub functions
 void				export_error_msg_not_valid(char *arg, t_status *status);
-void				export_error_msg_out_of_memory(t_minishell *shell, size_t *i,
-									   bool *ret);
+void				export_error_msg_out_of_memory(t_minishell *shell,
+						size_t *i, bool *ret);
 bool				validate_alpha(char *arg, size_t *i, t_status *status);
 void				validate_arg(char *arg, bool *ret);
-bool				validate_dict(t_minishell *shell, char *key, size_t *i, bool *ret);
+bool				validate_dict(t_minishell *shell, char *key,
+						size_t *i, bool *ret);
 
 // Signals
-void 				initialize_signal_handling(t_status *status);
+void				initialize_signal_handling(t_status *status);
+void				initialize_signal_handling_for_execve(t_status *status);
 void				signal_ctrl_c(int sig);
 bool				signal_ctrl_d(char *str, char **env, t_status *status);
 void				signal_ctrl_c_heredoc(int sig);

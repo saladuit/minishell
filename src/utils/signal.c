@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   signal.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lvan-bus <lvan-bus@student.codam.n>          +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/05/09 09:57:13 by lvan-bus      #+#    #+#                 */
+/*   Updated: 2023/05/09 09:57:15 by lvan-bus      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <minishell.h>
 
 void	signal_ctrl_c(int sig)
 {
 	(void)sig;
 	ft_putstr_fd("\n", 1);
-	// signal_error = E_GENERAL;
+	g_signal_error = E_GENERAL;
 	rl_on_new_line();
 	rl_redisplay();
 	signal(SIGQUIT, SIG_IGN);
@@ -16,9 +28,6 @@ bool	signal_ctrl_d(char *str, char **env, t_status *status)
 	(void)status;
 	if (str)
 		return (false);
-	// signal_error = E_USAGE;
-	// *status = E_USAGE;
-	// ft_putstr_fd("exit", STDOUT_FILENO);
 	return (true);
 }
 
@@ -34,5 +43,10 @@ void	signal_ctrl_c_heredoc(int sig)
 {
 	(void)sig;
 	_exit(E_COMMAND_NOT_FOUND);
-	signal(SIGINT, SIG_IGN);
+}
+
+void	initialize_signal_handling_for_execve(t_status *status)
+{
+	(void)status;
+	signal(SIGQUIT, signal_ctrl_c_heredoc);
 }

@@ -1,31 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_strbapi.c                                       :+:    :+:            */
+/*   set_status_reset_signal.c                          :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: lvan-bus <lvan-bus@student.codam.n>          +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/05/09 10:04:56 by lvan-bus      #+#    #+#                 */
-/*   Updated: 2023/05/09 10:04:57 by lvan-bus      ########   odam.nl         */
+/*   Created: 2023/05/09 10:03:07 by lvan-bus      #+#    #+#                 */
+/*   Updated: 2023/05/09 10:03:10 by lvan-bus      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <minishell.h>
 
-bool	ft_strbapi(char const *s, bool (*f)(int))
+void	set_status_reset_signal(t_status *status)
 {
-	size_t	i;
-	size_t	len;
-
-	if ((s == 0) || (f == 0))
-		return (0);
-	i = 0;
-	len = ft_strlen(s);
-	while (i < len)
-	{
-		if (!f(s[i]))
-			return (false);
-		i++;
-	}
-	return (true);
+	*status = E_GENERAL;
+	g_signal_error = E_USAGE;
 }
