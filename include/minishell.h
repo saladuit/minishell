@@ -340,7 +340,6 @@ bool				validate_dict(t_minishell *shell, char *key,
 void				initialize_signal_handling(t_status *status);
 void				initialize_signal_handling_for_execve(t_status *status);
 void				signal_ctrl_c(int sig);
-bool				signal_ctrl_d(char *str, char **env, t_status *status);
 void				signal_ctrl_c_heredoc(int sig);
 
 #endif
