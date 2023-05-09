@@ -306,8 +306,8 @@ size_t				len_until_quote_or_dollar(char *str);
 void				executor(t_minishell *shell);
 int32_t				open_fd_type(char *path, t_type type);
 int32_t				setup_redirects(t_command *command);
-int32_t				pipes_handle(int32_t *pipe_fds, int32_t *std_fds,
-						int32_t n_commands, int32_t i);
+int32_t				pipes_handle(int32_t *pipe_fds, int32_t n_commands,
+						int32_t i, int32_t prev_read);
 void				close_pipe(int32_t *pipe_fd);
 int32_t				execute_builtin(char **arguments, t_minishell *shell);
 void				execute_child_command(t_minishell *shell, char **arguments);

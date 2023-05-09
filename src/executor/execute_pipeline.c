@@ -49,43 +49,47 @@ static int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
 	return (status);
 }
 
-static int32_t	process_command(t_command_table *ct, t_minishell *shell)
-{
-	t_command	*cmd;
-	pid_t		pid;
-
-	get_next_command(ct, &cmd);
-	pid = fork();
-	if (pid == -1)
-		return (ERROR);
-	if (pid == 0)
-		execute_pipe_command(cmd, shell);
-	return (pid);
-}
-
 void	execute_pipeline(t_command_table *ct, t_minishell *shell)
 {
 	int32_t	pipe_fds[2];
 	int32_t	i;
+	t_command	*cmd;
+	pid_t		pid;
+	int32_t		prev_read;
 
 	i = 0;
 	shell->is_pipeline = true;
 	while (i < ct->n_commands)
 	{
-		if (pipes_handle(pipe_fds, shell->std_fds, ct->n_commands, i) == ERROR)
+		if (pipe(pipe_fds) == ERROR)
+			return ;
+		get_next_command(ct, &cmd);
+		pid = fork();
+		if (pid == -1)
+			return ;
+		if (pid == 0)
 		{
-			shell->status = message_general_error(E_GENERAL,
-					"Execute pipline: ");
-			break ;
+			if (pipes_handle(pipe_fds, ct->n_commands, i, prev_read) == ERROR)
+			{
+				_exit(message_general_error(E_GENERAL, "Execute pipeline: "));
+				close(pipe_fds[WRITE_END]);
+				close(pipe_fds[READ_END]);
+			}
+			execute_pipe_command(cmd, shell);
 		}
-		ct->pids[i] = process_command(ct, shell);
-		if (ct->pids[i] == ERROR)
-		{
-			shell->status = message_general_error(E_GENERAL,
-					"Execute pipeline: ");
-			break ;
+		ct->pids[i] = pid;
+		if (ct->pids[i] == ERROR) {
+			shell->status = message_general_error(E_GENERAL, "Execute pipeline: ");
+			close(pipe_fds[WRITE_END]);
+			close(pipe_fds[READ_END]);
+			break;
 		}
+		if (i)
+			close(prev_read);
+		prev_read = pipe_fds[READ_END];
+		close(pipe_fds[WRITE_END]);
 		i++;
 	}
+	close(pipe_fds[READ_END]);
 	wait_for_child_processes(ct->pids, ct->n_commands, shell);
 }

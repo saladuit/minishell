@@ -22,41 +22,38 @@ void	close_pipe(int32_t *pipe_fd)
 
 static int32_t	pipe_handle_first_command(int32_t *pipe_fds)
 {
-	if (pipe(pipe_fds) == ERROR)
+	close(pipe_fds[READ_END]);
+	if (dup2(pipe_fds[WRITE_END], STDOUT_FILENO) == ERROR)
 		return (ERROR);
-	if (dup2(pipe_fds[STDOUT_FILENO], STDOUT_FILENO) == ERROR)
-		return (ERROR);
-	return (close(pipe_fds[STDOUT_FILENO]));
+	return (close(pipe_fds[WRITE_END]));
 }
 
-static int32_t	pipe_handle_middle_command(int32_t *pipe_fds)
+static int32_t	pipe_handle_middle_command(int32_t *pipe_fds, int32_t prev_read)
 {
-	if (dup2(pipe_fds[STDIN_FILENO], STDIN_FILENO) == ERROR)
+	if (dup2(prev_read, STDIN_FILENO) == ERROR)
 		return (ERROR);
-	if (close(pipe_fds[STDIN_FILENO]) == ERROR)
+	if (close(pipe_fds[READ_END]) == ERROR)
 		return (ERROR);
-	if (pipe(pipe_fds) == ERROR)
+	if (dup2(pipe_fds[WRITE_END], STDIN_FILENO) == ERROR)
 		return (ERROR);
-	if (dup2(pipe_fds[STDOUT_FILENO], STDOUT_FILENO) == ERROR)
-		return (ERROR);
-	return (close(pipe_fds[STDOUT_FILENO]));
+	return (close(pipe_fds[WRITE_END]));
+
 }
 
-static int32_t	pipe_handle_last_command(int32_t *pipe_fds, int32_t *std_fds)
+static int32_t	pipe_handle_last_command(int32_t *pipe_fds, int32_t prev_read)
 {
-	if (dup2(pipe_fds[STDIN_FILENO], STDIN_FILENO) == ERROR)
+	close(pipe_fds[WRITE_END]);
+	if (dup2(prev_read, STDIN_FILENO) == ERROR)
 		return (ERROR);
-	if (close(pipe_fds[STDIN_FILENO]) == ERROR)
-		return (ERROR);
-	return (dup2(std_fds[STDOUT_FILENO], STDOUT_FILENO));
+	return (close(pipe_fds[READ_END]));
 }
 
-int32_t	pipes_handle(int32_t *pipe_fds, int32_t *std_fds, int32_t n_commands,
-		int32_t i)
+int32_t	pipes_handle(int32_t *pipe_fds, int32_t n_commands,
+		int32_t i, int32_t prev_read)
 {
 	if (i == 0)
 		return (pipe_handle_first_command(pipe_fds));
 	else if (i == n_commands - 1)
-		return (pipe_handle_last_command(pipe_fds, std_fds));
-	return (pipe_handle_middle_command(pipe_fds));
+		return (pipe_handle_last_command(pipe_fds, prev_read));
+	return (pipe_handle_middle_command(pipe_fds, prev_read));
 }
