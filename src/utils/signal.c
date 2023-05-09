@@ -22,15 +22,6 @@ void	signal_ctrl_c(int sig)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-bool	signal_ctrl_d(char *str, char **env, t_status *status)
-{
-	(void)env;
-	(void)status;
-	if (str)
-		return (false);
-	return (true);
-}
-
 void	initialize_signal_handling(t_status *status)
 {
 	(void)status;
