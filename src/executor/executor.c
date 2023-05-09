@@ -50,21 +50,25 @@ static int32_t	execute_non_builtin(char **arguments, t_minishell *shell)
 		_exit(E_COMMAND_NOT_FOUND);
 	}
 	waitpid(pid, &status, WUNTRACED);
-	if (WIFEXITED(status))
-		shell->status = WEXITSTATUS(status);
+	shell->status = WEXITSTATUS(status);
 	return (SUCCESS);
 }
 
 static void	execute_simple_command(t_command *cmd, t_minishell *shell)
 {
 	char	**arguments;
+	int32_t	status;
 
 	if (setup_and_get_args(cmd, shell, &arguments) == ERROR)
 		return ;
 	if (*arguments == NULL)
 		return ;
-	if (execute_builtin(arguments, shell) >= SUCCESS)
+	status = execute_builtin(arguments, shell);
+	if (status >= SUCCESS)
+	{
+		shell->status = status;
 		return ;
+	}
 	execute_non_builtin(arguments, shell);
 }
 
@@ -73,6 +77,7 @@ void	executor(t_minishell *shell)
 	t_command_table	*ct;
 	t_command		*cmd;
 
+	shell->status = E_USAGE;
 	get_one_command_table(&shell->ast, &ct);
 	if (ct->n_commands == 1)
 	{

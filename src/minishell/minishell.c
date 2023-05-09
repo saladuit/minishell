@@ -12,7 +12,7 @@
 
 #include <minishell.h>
 
-int	signal_error = E_USAGE;
+int	g_signal_error = E_USAGE;
 
 static int32_t	minishell_clean(t_minishell *sheldon)
 {
@@ -28,9 +28,10 @@ static int32_t	minishell_clean(t_minishell *sheldon)
 int32_t	minishell_loop(t_minishell *sheldon)
 {
 	sheldon->command_line = readline(PROMPT);
-	// if (signal_error)
-	// 	sheldon->status = E_GENERAL;
-	if (signal_ctrl_d((char *)sheldon->command_line, dict_to_envp(&sheldon->env), &sheldon->status) == true)
+	if (g_signal_error)
+		set_status_reset_signal(&sheldon->status);
+	if (signal_ctrl_d((char *)sheldon->command_line,
+			dict_to_envp(&sheldon->env), &sheldon->status) == true)
 		return (false);
 	if (!sheldon->command_line)
 		return (STOP);

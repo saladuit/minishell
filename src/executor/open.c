@@ -12,14 +12,6 @@
 
 #include <minishell.h>
 
-static void	close_pipe(int32_t *pipe_fd)
-{
-	if (close(pipe_fd[READ_END]) != SUCCESS)
-		_exit(E_COMMAND_NOT_FOUND);
-	if (close(pipe_fd[WRITE_END]) != SUCCESS)
-		_exit(E_COMMAND_NOT_FOUND);
-}
-
 static int32_t	open_heredoc(char *path)
 {
 	pid_t		child;

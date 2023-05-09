@@ -38,7 +38,7 @@ static int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
 	status = setup_redirects(cmd);
 	if (status)
 		_exit(E_COMMAND_NOT_FOUND);
-	arguments = get_arguments(cmd); //TODO test wether exit status is correct
+	arguments = get_arguments(cmd);
 	if (!arguments)
 		_exit(E_COMMAND_NOT_FOUND);
 	status = execute_builtin(arguments, shell);

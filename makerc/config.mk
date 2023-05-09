@@ -13,7 +13,7 @@
 #	config.mk
 
 #	Executable	names
-MINISHELL			:=minishell.out
+MINISHELL			:=minishell
 UNIT_TEST			:=test.out
 
 #	Main	source
