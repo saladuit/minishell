@@ -134,6 +134,9 @@ MINISHELL_TEST(empty, "");
 MINISHELL_TEST(invalid_command, "invalid_command");
 MINISHELL_TEST(absolute_invalid_command, "/invalid_command");
 MINISHELL_TEST(relative_invalid_command, "relavtive/invalid_command");
+MINISHELL_TEST(spaces, "     ");
+MINISHELL_TEST(tab, "\t");
+
 
 /*******************************************************************************/
 /*                              Miscellaneous                                  */
