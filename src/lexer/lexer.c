@@ -115,7 +115,8 @@ t_list	*lexer(const char *command_line, t_status *exit)
 	t_lexer	lex;
 
 	lexer_initialize(&lex);
-	if (check_lexical_conventions(command_line, exit) == false)
+	if (ft_strbapi(command_line, (bool (*)(int)) &ft_iswhitespace) == true
+		|| check_lexical_conventions(command_line, exit) == false)
 		return (NULL);
 	if (are_quotes_closed(command_line) == false)
 		return (*exit = message_general_error(E_QUOTES, command_line), NULL);
