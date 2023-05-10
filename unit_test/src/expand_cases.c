@@ -349,3 +349,8 @@ Test(expand_token, dollar_0)
 {
 	assert_expand_token("$0", "Sheldon", 0);
 }
+
+Test(expand_token, key_key_equal_sign_string_key)
+{
+	assert_expand_token("$HELLO$HELLO=lol$HELLO", "HelloHello=lolHello", 0);
+}
