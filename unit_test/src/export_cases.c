@@ -138,6 +138,15 @@ Test(export, overwrite_existing_key_without_equal_sign)
 	assert_export(in, key, expected_value, E_USAGE, environ);
 }
 
+Test(export, underscore_string_equals_string)
+{
+	char	*environ[] = {"_TEST=test", NULL};
+	char	*in[] = {"export", "_TEST=test", NULL};
+	char	*key = "_TEST";
+	char	*expected_value = "test";
+	assert_export(in, key, expected_value, E_USAGE, environ);
+}
+
 /*******************************************************************************/
 /*                           Export_invalid_cases                              */
 /*******************************************************************************/
