@@ -84,7 +84,7 @@ Test(cd, relative_path_two_steps_back)
 Test(cd, relative_path_not_existing)
 {
 	char	*in[] = {"cd", "not_existing", NULL};
-	assert_cd_relative_path(in, E_BUILTIN);
+	assert_cd_relative_path(in, E_GENERAL);
 }
 
 /*******************************************************************************/
@@ -110,7 +110,7 @@ Test(cd, absolute_path)
 Test(cd, absolute_path_invalid_folder)
 {
 	char	*in[] = {"cd", "/invalid_folder", NULL};
-	assert_cd_absolute_path(in, E_BUILTIN);
+	assert_cd_absolute_path(in, E_GENERAL);
 }
 
 /*******************************************************************************/
