@@ -20,13 +20,14 @@ void	ft_echo(char **arguments, t_minishell *shell)
 	(void)shell;
 	newline = true;
 	i = 1;
-	if (arguments[i] && !ft_strncmp(arguments[i], "-n", 2))
-	{
-		newline = false;
-		i++;
-	}
 	while (arguments[i])
 	{
+		if (arguments[i] && !ft_strncmp(arguments[i], "-n", 2))
+		{
+			newline = false;
+			i++;
+			continue ;
+		}
 		write(STDOUT_FILENO, arguments[i], ft_strlen(arguments[i]));
 		i++;
 		if (arguments[i])
