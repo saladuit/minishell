@@ -35,7 +35,7 @@
 # define SPACE ' '
 # define READ_END 0
 # define WRITE_END 1
-
+# define UNDERSCORE '_'
 # define NOT_FOUND 1
 
 # include <assert.h>
@@ -192,6 +192,13 @@ typedef struct s_tokenerror
 	const char		*token;
 	const char		*error_msg;
 }					t_tokenerror;
+
+typedef struct	s_execute
+{
+	int32_t		pipe_fds[2];
+	int32_t		prev_read;
+	pid_t		pid;
+}				t_execute;
 
 // Minishell
 
