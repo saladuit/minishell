@@ -14,7 +14,7 @@
 
 bool	validate_alpha(char *arg, size_t *i, t_status *status)
 {
-	if (!ft_isalpha(arg[0]))
+	if (!ft_isalpha(arg[0]) && arg[0] != UNDERSCORE)
 	{
 		export_error_msg_not_valid(arg, status);
 		(*i)++;
