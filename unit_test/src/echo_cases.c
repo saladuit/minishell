@@ -41,6 +41,20 @@ Test(echo, input_empty_with_flag)
 	assert_echo_case(input, expected);
 }
 
+Test(echo, input_string_with_multiple_flags)
+{
+	char		*input[] = {"echo", "-n", "-n", "-n", "test", NULL};
+	char		*expected = "test";
+	assert_echo_case(input, expected);
+}
+
+Test(echo, input_empty_with_two_flags)
+{
+	char		*input[] = {"echo", "-n", "-n", NULL};
+	char		*expected = "";
+	assert_echo_case(input, expected);
+}
+
 Test(echo, input_hello_world)
 {
 	char		*input[] = {"echo", "hello world", NULL};
