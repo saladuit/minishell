@@ -51,7 +51,7 @@ void	ft_cd(char **arguments, t_minishell *shell)
 		return ;
 	if (chdir(dir) == -1 && !ret)
 	{
-		cd_error_msg(&shell->status, "changing directory", false, &ret);
+		cd_error_msg(&shell->status, "changing directory", true, &ret);
 		return ;
 	}
 	if (!ret)
