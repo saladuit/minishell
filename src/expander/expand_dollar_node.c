@@ -22,17 +22,19 @@ size_t	len_until_quote_or_dollar(char *str)
 	return (len);
 }
 
-static char	*edge_case_handling(char c, size_t *i, t_status *status)
+static char	*edge_case_handling(char c, size_t *i, t_status *status, char *arg)
 {
-	if (c == '\0' || ft_iswhitespace(c))
+	(void)arg;
+	if (c == '\0' || ft_iswhitespace(c) || is_quote(c))
 		return (ft_strdup("$"));
 	if (c == '?')
 		return (++(*i), ft_itoa(*status));
-	if (c == '$' || ('0' < c && c <= '9') || c == '*' || c == '#' || c == '-'
-		|| c == '_')
+	if (c == '$' || ('0' < c && c <= '9') || c == '*' || c == '#' || c == '-')
 		return (++(*i), ft_strdup(""));
 	if (c == '0')
 		return (++(*i), ft_strdup(SHELDON));
+//	if (c == '=')
+//		return (ft_strdup(arg));
 	return (NULL);
 }
 
@@ -43,7 +45,7 @@ char	*expand_dollar(char *arg, size_t *i, t_status *status,
 	char	*sub;
 	size_t	len;
 
-	expansion = edge_case_handling(arg[++(*i)], i, status);
+	expansion = edge_case_handling(arg[++(*i)], i, status, arg);
 	if (expansion)
 		return (expansion);
 	len = *i;
