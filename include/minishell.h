@@ -298,6 +298,7 @@ bool				is_quote(int c);
 bool				is_double_quote(int c);
 bool				is_single_quote(int c);
 bool				is_metachar(const char *str);
+bool				is_equalssign(int c);
 size_t				metachar_len(const char *str);
 
 // Expander
