@@ -22,10 +22,11 @@ void	assert_echo_case(char **input, char *expected)
 
 	bzero(&shell, sizeof(shell));
 	ft_echo(input, &shell);
+	fflush(stdout);
 	cr_assert_stdout_eq_str(expected);
 }
 
-TestSuite(echo, .init=redirect_all_std);
+//TestSuite(echo, .init=redirect_all_std);
 
 Test(echo, input_empty)
 {
