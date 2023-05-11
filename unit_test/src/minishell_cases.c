@@ -466,6 +466,14 @@ MINISHELL_TEST(echo_n_option_nan, "echo -nan a -nan");
 // MINISHELL_TEST(echo_expansion, "echo $whitespace_center");
 
 /*******************************************************************************/
+/*                                  Expand                                     */
+/*******************************************************************************/
+
+MINISHELL_TEST(expand_empty_variable, "echo $empty_variable");
+MINISHELL_TEST(expand_two_empty_variable, "echo $empty_variable$empty_variable");
+MINISHELL_TEST(expand_two_empty_variable_as_two_arguments, "echo $empty_variable $empty_variable");
+
+/*******************************************************************************/
 /*                                  cd                                         */
 /*******************************************************************************/
 
@@ -494,7 +502,7 @@ MINISHELL_TEST(pwd_arg, "pwd arg");
 
 //FIXME All of these test cases should be echo'd they probably don't work
 // NUL
-// MINISHELL_TEST(export_NULL, "export 0=NUL");
+MINISHELL_TEST(export_NULL, "export 0=NUL");
 // MINISHELL_TEST(export_NULL_1, "export \0=NULL");
 // MINISHELL_TEST(export_NULL_2, "export \\\0=NULL");
 // MINISHELL_TEST(export_NULL_3, "export NUL\\\0=NULL");
@@ -507,21 +515,16 @@ MINISHELL_TEST(pwd_arg, "pwd arg");
 // MINISHELL_TEST(export_NULL_double_qoute_1, "export \"0\"=NUL");
 // MINISHELL_TEST(export_NULL_double_qoute_2, "export \"\0\"=NULL");
 // MINISHELL_TEST(export_NULL_double_qoute_3, "export \"\\\0\"=NULL");
-// MINISHELL_TEST(export_NULL_double_qoute_4,
-		// "export \"NUL\\\0\"=NULL");
-// MINISHELL_TEST(export_NULL_double_qoute_5,
-		// "export \"\\\0NUL\"=NULL");
+// MINISHELL_TEST(export_NULL_double_qoute_4, "export \"NUL\\\0\"=NULL");
+// MINISHELL_TEST(export_NULL_double_qoute_5, "export \"\\\0NUL\"=NULL");
 
 //Basic
 // MINISHELL_TEST(export, "export");
 // MINISHELL_TEST(export_single_character, "export A=single\necho $A");
 // MINISHELL_TEST(export_envvar, "export BASIC=basic\necho $BASIC");
-// MINISHELL_TEST(export_envvar_single_quoted,
-// "export BASIC=\'basic\'\necho $BASIC");
-// MINISHELL_TEST(export_envvar_double_quoted,
-// "export BASIC=\"basic\"\necho $BASIC");
-// MINISHELL_TEST(export_number_as_second_character,
-		// "export _ALL_1=all_1");
+// MINISHELL_TEST(export_envvar_single_quoted,"export BASIC=\'basic\'\necho $BASIC");
+// MINISHELL_TEST(export_envvar_double_quoted, "export BASIC=\"basic\"\necho $BASIC");
+// MINISHELL_TEST(export_number_as_second_character,"export _ALL_1=all_1");
 
 //Multiple
 // MINISHELL_TEST(export_multiple,
