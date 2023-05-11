@@ -12,8 +12,6 @@
 
 #include <unit_test.h>
 
-TestSuite(export, .init=redirect_all_std);
-
 /*******************************************************************************/
 /*                               Export_no_arg                                 */
 /*******************************************************************************/
@@ -24,7 +22,7 @@ void	assert_export_no_arg(char **in, t_status expected_status)
 
 	bzero(&shell, sizeof(t_minishell));
 	ft_export(in, &shell);
-	cr_assert_eq(shell.status, expected_status);
+	cr_expect_eq(shell.status, expected_status, "expected status %d, got %d", expected_status, shell.status);
 }
 
 Test(export, no_argument)
@@ -45,9 +43,9 @@ void	assert_export(char **in, char *key, char *expected_value, t_status expected
 	bzero(&shell, sizeof(t_minishell));
 	envp_load(&shell.env, environ);
 	ft_export(in, &shell);
-	cr_assert_eq(shell.status, expected_status);
+	cr_expect_eq(shell.status, expected_status, "expected status %d, got %d", expected_status, shell.status);
 	expression = dict_get(&shell.env, key);
-	cr_assert_str_eq(expression, expected_value);
+	cr_expect_str_eq(expression, expected_value, "expected value %s, got %s", expected_value, expression);
 }
 
 Test(export, one_arg)
@@ -161,26 +159,26 @@ void	assert_export_not_valid_cases(char **in, t_status expected_status, char **e
 	envp_load(&shell.env, environ);
 	ft_export(in, &shell);
 	fflush(stderr);
-	cr_assert_eq(shell.status, expected_status);
+	cr_expect_eq(shell.status, expected_status, "expected status %d, got %d", expected_status, shell.status);
 	cr_expect_stderr_eq_str(message);
 	dict_destroy(&shell.env);
 }
 
-Test(export, invalid_key)
+Test(export, invalid_key, .init=redirect_stderr)
 {
 	char	*environ[] = {"", NULL};
 	char	*in[] = {"export", "1234", NULL};
 	assert_export_not_valid_cases(in, E_GENERAL, environ, "Sheldon: export: `1234': not a valid identifier\n");
 }
 
-Test(export, two_invalid_keys)
+Test(export, two_invalid_keys, .init=redirect_stderr)
 {
 	char	*environ[] = {"", NULL};
 	char	*in[] = {"export", "1234", "5678", NULL};
 	assert_export_not_valid_cases(in, E_GENERAL, environ, "Sheldon: export: `1234': not a valid identifier\nSheldon: export: `5678': not a valid identifier\n");
 }
 
-Test(export, invalid_with_equal_sign)
+Test(export, invalid_with_equal_sign, .init=redirect_stderr)
 {
 	char	*environ[] = {"", NULL};
 	char	*in[] = {"export", "=value", NULL};

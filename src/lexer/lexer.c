@@ -110,12 +110,17 @@ static t_list	*create_token_node(const char **command_line,
 	return (node);
 }
 
+bool	is_whitespace(int c)
+{
+	return (ft_iswhitespace(c));
+}
+
 t_list	*lexer(const char *command_line, t_status *exit)
 {
 	t_lexer	lex;
 
 	lexer_initialize(&lex);
-	if (ft_strbapi(command_line, (bool (*)(int)) &ft_iswhitespace) == true
+	if (ft_strbapi(command_line, is_whitespace) == true
 		|| check_lexical_conventions(command_line, exit) == false)
 		return (NULL);
 	if (are_quotes_closed(command_line) == false)

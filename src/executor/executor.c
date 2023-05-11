@@ -24,9 +24,9 @@ static int32_t	setup_and_get_args(t_command *cmd, t_minishell *shell,
 		return (ERROR);
 	}
 	*arguments = get_arguments(cmd);
-	if (!*arguments)
+	if (*arguments == NULL)
 	{
-		shell->status = E_GENERAL;
+		shell->status = message_system_call_error("setup_and_get_args: ");
 		return (ERROR);
 	}
 	return (SUCCESS);
@@ -40,7 +40,6 @@ static int32_t	execute_non_builtin(char **arguments, t_minishell *shell)
 	pid = fork();
 	if (pid == ERROR)
 	{
-		ft_matrixfree(&arguments);
 		shell->status = message_system_call_error("fork");
 		return (ERROR);
 	}
@@ -61,15 +60,17 @@ static void	execute_simple_command(t_command *cmd, t_minishell *shell)
 
 	if (setup_and_get_args(cmd, shell, &arguments) == ERROR)
 		return ;
-	if (*arguments == NULL)
+	if (arguments == NULL)
 		return ;
 	status = execute_builtin(arguments, shell);
 	if (status >= SUCCESS)
 	{
+		free(arguments);
 		shell->status = status;
 		return ;
 	}
 	execute_non_builtin(arguments, shell);
+	free(arguments);
 }
 
 void	executor(t_minishell *shell)

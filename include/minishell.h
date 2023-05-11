@@ -290,6 +290,7 @@ t_status			message_child_status(t_status status);
 t_status			message_general_error(t_status status, const char *msg);
 
 // Minitypes
+bool				is_alnumunderscore(int c);
 bool				is_pipe(int c);
 bool				is_dollar(int c);
 bool				is_meta(int c);
@@ -332,6 +333,7 @@ void				ft_echo(char **arguments, t_minishell *shell);
 void				ft_cd(char **arguments, t_minishell *shell);
 void				ft_pwd(char **arguments, t_minishell *shell);
 void				ft_export(char **arguments, t_minishell *shell);
+void				free_key_value(char **key, char **value);
 void				ft_unset(char **arguments, t_minishell *shell);
 void				ft_env(char **arguments, t_minishell *shell);
 void				ft_exit(char **args, t_minishell *shell);
@@ -340,7 +342,7 @@ void				ft_exit(char **args, t_minishell *shell);
 void				export_error_msg_not_valid(char *arg, t_status *status);
 void				export_error_msg_out_of_memory(t_minishell *shell,
 						size_t *i, bool *ret);
-bool				validate_alpha(char *arg, size_t *i, t_status *status);
+// bool				validate_alpha(char *arg, size_t *i, t_status *status);
 void				validate_arg(char *arg, bool *ret);
 bool				validate_dict(t_minishell *shell, char *key,
 						size_t *i, bool *ret);
