@@ -11,11 +11,12 @@
 /* ************************************************************************** */
 
 #include <limits.h>
+#include <stddef.h>
 
 int	ft_ltoi_with_overflow(const char *str, long long *result)
 {
-	int	i;
-	int	sign;
+	size_t	i;
+	long	sign;
 
 	sign = 1;
 	i = 0;
