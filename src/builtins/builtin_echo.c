@@ -12,6 +12,15 @@
 
 #include <minishell.h>
 
+static void	write_arg_and_set_flag(char **arguments, size_t *i,
+									bool *still_flags)
+{
+	write(STDOUT_FILENO, arguments[*i], ft_strlen(arguments[*i]));
+	if (arguments[++*i])
+		write(STDOUT_FILENO, " ", 1);
+	*still_flags = false;
+}
+
 void	ft_echo(char **arguments, t_minishell *shell)
 {
 	size_t	i;
@@ -30,11 +39,12 @@ void	ft_echo(char **arguments, t_minishell *shell)
 			i++;
 			continue ;
 		}
-		still_flags = false;
-		write(STDOUT_FILENO, arguments[i], ft_strlen(arguments[i]));
-		i++;
-		if (arguments[i])
-			write(STDOUT_FILENO, " ", 1);
+		if (ft_strlen(arguments[i]) == 0)
+		{
+			i++;
+			continue ;
+		}
+		write_arg_and_set_flag(arguments, &i, &still_flags);
 	}
 	if (newline)
 		write(STDOUT_FILENO, "\n", 1);
