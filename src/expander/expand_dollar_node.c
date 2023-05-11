@@ -47,7 +47,8 @@ char	*expand_dollar(char *arg, size_t *i, t_status *status,
 	if (expansion)
 		return (expansion);
 	len = *i;
-	while (ft_isalnum(arg[len]) || arg[len] == UNDERSCORE)
+	while (arg[len] && !is_dollar(arg[len]) && !is_quote(arg[len])
+		&& !ft_iswhitespace(arg[len]) && !is_equalssign(arg[len]))
 		len++;
 	len -= *i;
 	sub = ft_substr(&arg[*i], 0, len);
