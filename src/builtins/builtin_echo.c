@@ -16,18 +16,21 @@ void	ft_echo(char **arguments, t_minishell *shell)
 {
 	size_t	i;
 	bool	newline;
+	bool	still_flags;
 
 	(void)shell;
 	newline = true;
 	i = 1;
+	still_flags = true;
 	while (arguments[i])
 	{
-		if (arguments[i] && !ft_strncmp(arguments[i], "-n", 2))
+		if (still_flags && arguments[i] && !ft_strncmp(arguments[i], "-n", 2))
 		{
 			newline = false;
 			i++;
 			continue ;
 		}
+		still_flags = false;
 		write(STDOUT_FILENO, arguments[i], ft_strlen(arguments[i]));
 		i++;
 		if (arguments[i])
