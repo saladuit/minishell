@@ -58,7 +58,7 @@ static void	process_command(t_execute *command, int32_t *i,
 		return ;
 	get_next_command(ct, &cmd);
 	command->pid = fork();
-	if (command->pid == -1)
+	if (command->pid == ERROR)
 		return ;
 	if (command->pid == 0)
 	{
