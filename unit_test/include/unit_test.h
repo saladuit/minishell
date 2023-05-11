@@ -32,5 +32,8 @@
 # include <custom_malloc.h>
 
 void redirect_all_std(void);
+void redirect_stderr(void);
+void redirect_stdout(void);
+void redirect_stdin(void);
 
 #endif

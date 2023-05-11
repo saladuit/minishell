@@ -20,12 +20,3 @@ void	export_error_msg_not_valid(char *arg, t_status *status)
 	ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
 	*status = E_GENERAL;
 }
-
-void	export_error_msg_out_of_memory(t_minishell *shell, size_t *i,
-											bool *ret)
-{
-	ft_putstr_fd("export: error: out of memory\n", STDERR_FILENO);
-	shell->status = E_GENERAL;
-	(*i)++;
-	*ret = true;
-}

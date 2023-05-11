@@ -17,3 +17,18 @@ void redirect_all_std(void)
     cr_redirect_stdout();
     cr_redirect_stderr();
 }
+
+void redirect_stdin(void)
+{
+    cr_redirect_stdin();
+}
+
+void redirect_stdout(void)
+{
+    cr_redirect_stdout();
+}
+
+void redirect_stderr(void)
+{
+    cr_redirect_stderr();
+}

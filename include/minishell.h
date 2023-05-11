@@ -289,6 +289,7 @@ t_status			message_child_status(t_status status);
 t_status			message_general_error(t_status status, const char *msg);
 
 // Minitypes
+bool				is_alnumunderscore(int c);
 bool				is_pipe(int c);
 bool				is_dollar(int c);
 bool				is_meta(int c);
@@ -339,7 +340,7 @@ void				ft_exit(char **args, t_minishell *shell);
 void				export_error_msg_not_valid(char *arg, t_status *status);
 void				export_error_msg_out_of_memory(t_minishell *shell,
 						size_t *i, bool *ret);
-bool				validate_alpha(char *arg, size_t *i, t_status *status);
+// bool				validate_alpha(char *arg, size_t *i, t_status *status);
 void				validate_arg(char *arg, bool *ret);
 bool				validate_dict(t_minishell *shell, char *key,
 						size_t *i, bool *ret);
