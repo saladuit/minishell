@@ -39,7 +39,7 @@ int32_t	execute_builtin(char **arguments, t_minishell *shell)
 
 	builtin_function = builtin_lookup(arguments[0]);
 	if (builtin_function.name == NULL)
-		return (-1);
+		return (ERROR);
 	builtin_function.func(arguments, shell);
 	return (shell->status);
 }

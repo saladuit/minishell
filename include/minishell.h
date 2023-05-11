@@ -332,6 +332,7 @@ void				ft_echo(char **arguments, t_minishell *shell);
 void				ft_cd(char **arguments, t_minishell *shell);
 void				ft_pwd(char **arguments, t_minishell *shell);
 void				ft_export(char **arguments, t_minishell *shell);
+void				free_key_value(char **key, char **value);
 void				ft_unset(char **arguments, t_minishell *shell);
 void				ft_env(char **arguments, t_minishell *shell);
 void				ft_exit(char **args, t_minishell *shell);
