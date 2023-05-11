@@ -81,6 +81,7 @@ E_EXIT_STATUS_OUT_OF_RANGE:
 // Mininums
 typedef enum e_status
 {
+	E_NO_STATUS = -42,
 	E_USAGE = 0,
 	E_GENERAL = 1,
 	E_BUILTIN = 2,
