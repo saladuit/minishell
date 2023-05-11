@@ -4,15 +4,17 @@ extern char	**environ;
 
 void setup_env(void)
 {
-  setenv("HELLO", "Hello", 1);
-  setenv("WORLD", "World", 1);
-  unsetenv("UNSET");
-  setenv("SPACE", "Spa ce", 1);
+	setenv("HELLO", "Hello", 1);
+	setenv("WORLD", "World", 1);
+	unsetenv("UNSET");
+	setenv("SPACE", "Spa ce", 1);
 	setenv("VAR", "b c d", 1);
 	setenv("EMPTY", "", 1);
 	setenv("A", "b c d", 1);
 	setenv("B", "e f g", 1);
 	setenv("IFS", "IFS", 1);
+	setenv("_", "", 1);
+
 }
 
 TestSuite(expand_token, .init=setup_env);
@@ -353,4 +355,14 @@ Test(expand_token, dollar_0)
 Test(expand_token, key_key_equal_sign_string_key)
 {
 	assert_expand_token("$HELLO$HELLO=lol$HELLO", "HelloHello=lolHello", 0);
+}
+
+Test(expand_token, dollar_in_double_quotes)
+{
+	assert_expand_token("\"$\"", "$", 0);
+}
+
+Test(expand_token, input_dollar_in_double_quotes_plus_char)
+{
+	assert_expand_token("\"$\"a", "$a", 0);
 }
