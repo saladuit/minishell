@@ -302,6 +302,11 @@ Test(expand_token, various_4)
     assert_expand_token("echo $SPACE", "echo Spa ce", 0);
 }
 
+Test(expand_token, dollar_invalid_key)
+{
+	assert_expand_token("echo $z", "echo ", 0);
+}
+
 /*******************************************************************************/
 /*                           Last_github_test_cases                            */
 /*******************************************************************************/
