@@ -12,14 +12,6 @@
 
 #include <unit_test.h>
 
-void redirect_all_std_for_exit(void)
-{
-	cr_redirect_stdout();
-	cr_redirect_stderr();
-}
-
-TestSuite(exit, .init=redirect_all_std_for_exit);
-
 /*******************************************************************************/
 /*                                Exit_cases                                   */
 /*******************************************************************************/
@@ -284,25 +276,25 @@ void	assert_exit_error(char **in, bool expected_stop, t_status expected_status, 
 	cr_expect_stderr_eq_str(expected_message);
 }
 
-Test(exit, input_alphabetical)
+Test(exit, input_alphabetical, .init=redirect_stderr)
 {
 	char	*in[] = {"exit", "abc", NULL};
 	assert_exit_error(in, true, 255, "Sheldon: exit: abc: numeric argument required\n");
 }
 
-Test(exit, input_at_sign)
+Test(exit, input_at_sign, .init=redirect_stderr)
 {
 	char	*in[] = {"exit", "@", NULL};
 	assert_exit_error(in, true, 255, "Sheldon: exit: @: numeric argument required\n");
 }
 
-Test(exit, input_exclamation_mark)
+Test(exit, input_exclamation_mark, .init=redirect_stderr)
 {
 	char	*in[] = {"exit", "!", NULL};
 	assert_exit_error(in, true, 255, "Sheldon: exit: !: numeric argument required\n");
 }
 
-Test(exit, input_num_num)
+Test(exit, input_num_num, .init=redirect_stderr)
 {
 	char	*in[] = {"exit", "1", "1", NULL};
 	assert_exit_error(in, false, 1, "Sheldon: exit: too many arguments\n");

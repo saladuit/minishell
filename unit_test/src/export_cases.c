@@ -46,6 +46,7 @@ void	assert_export(char **in, char *key, char *expected_value, t_status expected
 	cr_expect_eq(shell.status, expected_status, "expected status %d, got %d", expected_status, shell.status);
 	expression = dict_get(&shell.env, key);
 	cr_expect_str_eq(expression, expected_value, "expected value %s, got %s", expected_value, expression);
+	dict_destroy(&shell.env);
 }
 
 Test(export, one_arg)
@@ -203,6 +204,7 @@ Test(export, invalid_key_and_a_valid_key)
 	cr_assert_eq(shell.status, E_GENERAL);
 	expression = dict_get(&shell.env, "check");
 	cr_assert_str_eq(expression, "");
+	dict_destroy(&shell.env);
 }
 
 /*******************************************************************************/
@@ -232,6 +234,7 @@ void	assert_export_malloc_check(char **in, t_status expected_status, char **envi
 		dict_destroy(&shell.env);
 		condition--;
 	}
+		dict_destroy(&shell.env);
 }
 
 Test(export, malloc_check_one_arg)
