@@ -75,7 +75,7 @@ static void	handle_count_is_bigger_then_two(char **args, t_status *status, bool 
 
 static void	handle_count_equals_two(char **args, t_status *status)
 {
-	long long	res;
+	long	res;
 
 	if (ft_strlen(args[1]) == 0 || !ft_strncmp(args[1], "--", 3))
 		*status = E_USAGE;
