@@ -1,6 +1,18 @@
-#include <limits.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   ft_str_count.c                                     :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lvan-bus <lvan-bus@student.codam.n>          +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/05/12 13:25:39 by lvan-bus      #+#    #+#                 */
+/*   Updated: 2023/05/12 13:25:40 by lvan-bus      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
 
-size_t	ft_array_len(char **args)
+#include <stddef.h>
+
+size_t	ft_str_count(char **args)
 {
 	size_t	count;
 
