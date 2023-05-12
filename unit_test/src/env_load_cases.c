@@ -41,6 +41,15 @@ void assert_envp_load(char **input,char *key, char *expected)
   }
 }
 
+Test(envp_load, null)
+{
+  t_dictionary env[HASH_TABLE_SIZE];
+
+  bzero(env, sizeof(env));
+  envp_load(env, NULL);
+  dict_destroy(env);
+}
+
 Test(envp_load, basic)
 {
   char *input[] = {"HELLO=Hello", NULL};
