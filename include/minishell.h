@@ -121,7 +121,7 @@ typedef struct s_pair
 
 typedef struct s_expander
 {
-	bool e_continue ;
+	bool			e_continue;
 	bool			is_single;
 	bool			is_double;
 	char			*new_arg;
@@ -232,15 +232,15 @@ char				**dict_to_envp(t_dictionary *dict);
 t_list				*lexer(const char *command_line, t_status *status);
 void				ft_skip_whitespaces(const char **input);
 bool				quotes_even_or_odd(const char *str);
-bool	check_lexical_conventions(const char *command,
-								t_status *exit);
-bool	check_meta_conventions(const char *command,
-							const char **error_msg);
+bool				check_lexical_conventions(const char *command,
+						t_status *exit);
+bool				check_meta_conventions(const char *command,
+						const char **error_msg);
 void				lexer_initialize(t_lexer *lex);
 bool				control_conventions(const char *command, t_status *exit,
 						t_lexer *lex, const char **error_msg);
-int	compare_command_ignore_spaces(const char *command,
-									const char *cmp);
+int					compare_command_ignore_spaces(const char *command,
+						const char *cmp);
 bool				check_final_conditions(t_lexer *lex, t_status *exit);
 bool				check_initial_conditions(const char *command_line,
 						t_status *exit);
@@ -249,8 +249,8 @@ bool				check_initial_conditions(const char *command_line,
 t_list				*parser(t_list *tokens, t_status *status,
 						t_dictionary *env);
 // Getters
-void	get_one_command_table(t_list **ast,
-							t_command_table **command_table);
+void				get_one_command_table(t_list **ast,
+						t_command_table **command_table);
 char				**get_arguments(t_command *cmd);
 void				get_next_redir(t_command *cmd, t_redir **redir);
 void				get_next_command(t_command_table *cmd, t_command **command);
@@ -345,10 +345,8 @@ void				ft_exit(char **args, t_minishell *shell);
 
 // Builtin export sub functions
 void				export_error_msg_not_valid(char *arg, t_status *status);
-void	export_error_msg_out_of_memory(t_minishell *shell,
-									size_t *i,
-									bool *ret);
-// bool				validate_alpha(char *arg, size_t *i, t_status *status);
+void				export_error_msg_out_of_memory(t_minishell *shell,
+						size_t *i, bool *ret);
 void				validate_arg(char *arg, bool *ret);
 bool				validate_dict(t_minishell *shell, char *key, size_t *i,
 						bool *ret);

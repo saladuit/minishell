@@ -27,6 +27,8 @@ void			ft_array_print(char **list);
  * @return The total "length" of the 2d array. */
 size_t			ft_matrixlen(void **matrix);
 
+size_t			ft_str_count(char **args);
+
 char			*ft_joinmatrix(const char **matrix, size_t count);
 
 /**
