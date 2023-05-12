@@ -46,6 +46,24 @@ Test(exit, input_123)
 	assert_exit(in, true, 123);
 }
 
+Test(exit, input_minus_one)
+{
+	char	*in[] = {"exit", "-1", NULL};
+	assert_exit(in, true, 255);
+}
+
+Test(exit, input_minus_four)
+{
+	char	*in[] = {"exit", "-4", NULL};
+	assert_exit(in, true, 252);
+}
+
+Test(exit, input_minus_255)
+{
+	char	*in[] = {"exit", "-255", NULL};
+	assert_exit(in, true, 1);
+}
+
 Test(exit, input_2147483647)
 {
 	char	*in[] = {"exit", "2147483647", NULL};
@@ -154,6 +172,12 @@ Test(exit, input_another_big_num)
 	assert_exit(in, true, 0);
 }
 
+Test(exit, input_another_big_num_many_ones)
+{
+	char	*in[] = {"exit", "1111111111111111", NULL};
+	assert_exit(in, true, 0);
+}
+
 Test(exit, input_plus_num)
 {
 	char	*in[] = {"exit", "+5", NULL};
@@ -169,7 +193,7 @@ Test(exit, input_dash)
 Test(exit, input_dash_dash)
 {
 	char	*in[] = {"exit", "--", NULL};
-	assert_exit(in, true, 255);
+	assert_exit(in, true, 0);
 }
 
 Test(exit, input_twice_dash_dash)
@@ -202,6 +226,18 @@ Test(exit, input_float_and_multiple_nums)
 	assert_exit(in, true, 255);
 }
 
+Test(exit, input_exit_exit_num)
+{
+	char	*in[] = {"exit", "exit", "3", NULL};
+	assert_exit(in, true, 255);
+}
+
+Test(exit, input_exit_exit_num_char)
+{
+	char	*in[] = {"exit", "exit", "3a", NULL};
+	assert_exit(in, true, 255);
+}
+
 Test(exit, input_exit_exit_num_num)
 {
 	char	*in[] = {"exit", "exit", "3", "3", NULL};
@@ -210,13 +246,13 @@ Test(exit, input_exit_exit_num_num)
 
 Test(exit, input_dollar)
 {
-	char	*in[] = {"exit", "$z", NULL};
-	assert_exit(in, true, 0);
+	char	*in[] = {"exit", "$", NULL};
+	assert_exit(in, true, 255);
 }
 
-Test(exit, input_dollar_char)
+Test(exit, input_empty)
 {
-	char	*in[] = {"exit", "$z", NULL};
+	char	*in[] = {"exit", "", NULL};
 	assert_exit(in, true, 0);
 }
 
@@ -224,6 +260,12 @@ Test(exit, input_question_mark)
 {
 	char	*in[] = {"exit", "?", NULL};
 	assert_exit(in, true, 1);
+}
+
+Test(exit, input_three_times_exit)
+{
+	char	*in[] = {"exit", "exit", "exit", NULL};
+	assert_exit(in, true, 255);
 }
 
 /*******************************************************************************/
