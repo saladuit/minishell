@@ -12,36 +12,6 @@
 
 #include <minishell.h>
 
-// returns true if the count of quotes (' or ") is even
-// applied on the first found quote in the string
-static bool	are_quotes_closed(const char *str)
-{
-	size_t	count;
-	size_t	i;
-	char	quote;
-
-	i = 0;
-	count = 0;
-	quote = 0;
-	while (str[i])
-	{
-		if (is_quote(str[i]) && !quote)
-		{
-			quote = str[i];
-			count++;
-		}
-		else if (str[i] == quote)
-		{
-			quote = 0;
-			count++;
-		}
-		i++;
-	}
-	if (count % 2 == 0)
-		return (true);
-	return (false);
-}
-
 static size_t	get_token_len(const char *command_line)
 {
 	size_t	next_quote;
@@ -110,9 +80,24 @@ static t_list	*create_token_node(const char **command_line,
 	return (node);
 }
 
-bool	is_whitespace(int c)
+static bool	process_command_line(t_lexer *lex, const char **command_line,
+	t_status *exit)
 {
-	return (ft_iswhitespace(c));
+	while (**command_line && lex->meta_count < 2)
+	{
+		ft_skip_whitespaces(command_line);
+		if (**command_line)
+		{
+			lex->node = create_token_node(command_line, exit, lex);
+			if (!lex->node)
+			{
+				ft_lstclear(&lex->tokens, free);
+				return (false);
+			}
+			ft_lstadd_back(&lex->tokens, lex->node);
+		}
+	}
+	return (true);
 }
 
 t_list	*lexer(const char *command_line, t_status *exit)
@@ -120,27 +105,11 @@ t_list	*lexer(const char *command_line, t_status *exit)
 	t_lexer	lex;
 
 	lexer_initialize(&lex);
-	if (ft_strbapi(command_line, is_whitespace) == true
-		|| check_lexical_conventions(command_line, exit) == false)
+	if (!check_initial_conditions(command_line, exit))
 		return (NULL);
-	if (are_quotes_closed(command_line) == false)
-		return (*exit = message_general_error(E_QUOTES, command_line), NULL);
-	while (*command_line && lex.meta_count < 2)
-	{
-		ft_skip_whitespaces(&command_line);
-		if (*command_line)
-		{
-			lex.node = create_token_node(&command_line, exit, &lex);
-			if (!lex.node)
-				return (ft_lstclear(&lex.tokens, free), NULL);
-			ft_lstadd_back(&lex.tokens, lex.node);
-		}
-	}
-	if (lex.meta_count > 1 || !check_meta_conventions(ft_lstlast(
-				lex.tokens)->content, &lex.error_msg))
-	{
-		*exit = message_general_error(E_UNEXPECTED_TOKEN, lex.error_msg);
-		return (ft_lstclear(&lex.tokens, free), NULL);
-	}
+	if (!process_command_line(&lex, &command_line, exit))
+		return (NULL);
+	if (!check_final_conditions(&lex, exit))
+		return (NULL);
 	return (lex.tokens);
 }
