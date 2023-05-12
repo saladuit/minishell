@@ -12,40 +12,51 @@
 
 #include <minishell.h>
 
-static void	write_arg_and_set_flag(char **arguments, size_t *i,
-									bool *still_flags)
+static void	write_arg(char *arg)
 {
-	write(STDOUT_FILENO, arguments[*i], ft_strlen(arguments[*i]));
-	if (arguments[++*i])
-		write(STDOUT_FILENO, " ", 1);
-	*still_flags = false;
+	write(STDOUT_FILENO, arg, ft_strlen(arg));
+}
+
+static bool check_flag(char *arg)
+{
+    size_t  i;
+
+	i = 0;
+    if (arg[i++] != '-')
+        return (false);
+    while (arg[i])
+    {
+        if (arg[i] != 'n')
+            return (false);
+        i++;
+    }
+    return (i > 1);
 }
 
 void	ft_echo(char **arguments, t_minishell *shell)
 {
 	size_t	i;
-	bool	newline;
-	bool	still_flags;
+	bool	no_trailing_newline;
 
-	(void)shell;
-	newline = true;
 	i = 1;
-	still_flags = true;
+	(void)shell;
+	if (!arguments[i])
+	{
+		write(STDOUT_FILENO, "\n", 1);
+		return ;
+	}
+	while (arguments[i] && check_flag(arguments[i]))
+	{
+		no_trailing_newline = true;
+		i++;
+	}
 	while (arguments[i])
 	{
-		if (still_flags && arguments[i] && !ft_strncmp(arguments[i], "-n", 2))
-		{
-			newline = false;
-			i++;
-			continue ;
-		}
-		if (ft_strlen(arguments[i]) == 0)
-		{
-			i++;
-			continue ;
-		}
-		write_arg_and_set_flag(arguments, &i, &still_flags);
+		write_arg(arguments[i]);
+		i++;
+		if (arguments[i])
+			write(STDOUT_FILENO, " ", 1);
 	}
-	if (newline)
+	if (!no_trailing_newline)
 		write(STDOUT_FILENO, "\n", 1);
 }
