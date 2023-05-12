@@ -17,6 +17,7 @@ void	signal_ctrl_c(int sig)
 	(void)sig;
 	ft_putstr_fd("\n", 1);
 	g_signal_error = E_GENERAL;
+	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
 	signal(SIGQUIT, SIG_IGN);
