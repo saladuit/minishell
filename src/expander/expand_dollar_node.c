@@ -33,8 +33,6 @@ static char	*edge_case_handling(char c, size_t *i, t_status *status, char *arg)
 		return (++(*i), ft_strdup(""));
 	if (c == '0')
 		return (++(*i), ft_strdup(SHELDON));
-//	if (c == '=')
-//		return (ft_strdup(arg));
 	return (NULL);
 }
 

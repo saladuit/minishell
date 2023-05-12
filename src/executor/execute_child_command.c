@@ -76,7 +76,6 @@ void	execute_child_command(t_minishell *shell, char **arguments)
 		message_general_error(E_COMMAND_NOT_FOUND, NULL);
 		_exit(E_COMMAND_NOT_FOUND);
 	}
-
 	envp = dict_to_envp(&shell->env);
 	initialize_signal_handling_for_execve(&shell->status);
 	execve(command_path, arguments, envp);
