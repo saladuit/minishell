@@ -4,8 +4,6 @@
 /*                               Env_cases                                     */
 /*******************************************************************************/
 
-TestSuite(env_builtin, .init=redirect_all_std);
-
 void assert_env(char **input, char *expected, char **environ)
 {
 	t_minishell	shell;
@@ -19,7 +17,7 @@ void assert_env(char **input, char *expected, char **environ)
 	dict_destroy(&shell.env);
 }
 
-Test(env_builtin, empty)
+Test(env_builtin, empty, .init=redirect_stdout)
 {
 	char	*environ[] = {"", NULL};
 	char	*input[] = {"env", NULL};
@@ -27,7 +25,7 @@ Test(env_builtin, empty)
 	assert_env(input, expected, environ);
 }
 
-Test(env_builtin, non_existent_key)
+Test(env_builtin, non_existent_key, .init=redirect_stdout)
 {
 	char	*environ[] = {"", NULL};
 	char	*input[] = {"env", NULL};
@@ -35,7 +33,7 @@ Test(env_builtin, non_existent_key)
 	assert_env(input, expected, environ);
 }
 
-Test(env_builtin, only_value_is_empty)
+Test(env_builtin, only_value_is_empty, .init=redirect_stdout)
 {
 	char	*environ[] = {"EMPTY=", NULL};
 	char	*input[] = {"env", NULL};
@@ -43,7 +41,7 @@ Test(env_builtin, only_value_is_empty)
 	assert_env(input, expected, environ);
 	}
 
-Test(env_builtin, key_and_value)
+Test(env_builtin, key_and_value, .init=redirect_stdout)
 {
 	char	*environ[] = {"HELLO=Hello", NULL};
 	char	*input[] = {"env", NULL};
@@ -51,7 +49,7 @@ Test(env_builtin, key_and_value)
 	assert_env(input, expected, environ);
 }
 
-Test(env_builtin, two_keys_with_value)
+Test(env_builtin, two_keys_with_value, .init=redirect_stdout)
 {
 	char	*environ[] = {"HELLO=Hello\nBYE=Bye", NULL};
 	char	*input[] = {"env", NULL};
