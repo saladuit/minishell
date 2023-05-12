@@ -175,7 +175,7 @@ Test(exit, input_another_big_num)
 Test(exit, input_another_big_num_many_ones)
 {
 	char	*in[] = {"exit", "1111111111111111", NULL};
-	assert_exit(in, true, 0);
+	assert_exit(in, true, 199);
 }
 
 Test(exit, input_plus_num)
