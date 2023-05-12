@@ -458,12 +458,11 @@ MINISHELL_TEST(echo_hello, "echo hello");
 MINISHELL_TEST(echo_n_option_several, "echo -n -n a -n -n");
 MINISHELL_TEST(echo_n_option_nn, "echo -nn a -nn");
 MINISHELL_TEST(echo_n_option_nan, "echo -nan a -nan");
-// MINISHELL_TEST(echo_n_option_na, "echo -na a -na");
-// MINISHELL_TEST(echo_n_option_ana, "echo -ana a -ana");
-// MINISHELL_TEST(echo_n_option_an, "echo -an a -an");
-// MINISHELL_TEST(echo_n_option_first, "echo -n a\necho -n a b");
-// MINISHELL_TEST(echo_n_option_last, "echo a -n\necho a b -n");
-// MINISHELL_TEST(echo_expansion, "echo $whitespace_center");
+MINISHELL_TEST(echo_n_option_na, "echo -na a -na");
+MINISHELL_TEST(echo_n_option_ana, "echo -ana a -ana");
+MINISHELL_TEST(echo_n_option_an, "echo -an a -an");
+MINISHELL_TEST(echo_n_option_first, "echo -n a\necho -n a b");
+MINISHELL_TEST(echo_n_option_last, "echo a -n\necho a b -n");
 
 /*******************************************************************************/
 /*                                  Expand                                     */
