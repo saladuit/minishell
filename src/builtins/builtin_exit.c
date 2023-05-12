@@ -47,17 +47,8 @@ static bool	numeric(char *arg)
 	return (true);
 }
 
-static size_t	ft_array_len(char **args)
-{
-	size_t	count;
-
-	count = 0;
-	while (args[count])
-		count++;
-	return (count);
-}
-
-static void	handle_count_is_bigger_then_two(char **args, t_status *status, bool *stop)
+static void	handle_count_is_bigger_then_two(char **args, t_status *status,
+											bool *stop)
 {
 	if (numeric(args[1]) == true || ft_strncmp(args[1], "?", 2) == 0)
 	{
@@ -100,7 +91,7 @@ void	ft_exit(char **args, t_minishell *shell)
 	bool		stop;
 
 	stop = true;
-	count = ft_array_len(args);
+	count = ft_str_count(args);
 	if (count > 2)
 		handle_count_is_bigger_then_two(args, &shell->status, &stop);
 	if (count == 2 && stop == true)
