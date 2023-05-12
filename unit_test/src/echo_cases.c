@@ -22,10 +22,11 @@ void	assert_echo_case(char **input, char *expected)
 
 	bzero(&shell, sizeof(shell));
 	ft_echo(input, &shell);
+	fflush(stdout);
 	cr_assert_stdout_eq_str(expected);
 }
 
-TestSuite(echo, .init=redirect_all_std);
+TestSuite(echo, .init=redirect_stdout);
 
 Test(echo, input_empty)
 {
@@ -37,6 +38,20 @@ Test(echo, input_empty)
 Test(echo, input_empty_with_flag)
 {
 	char		*input[] = {"echo", "-n", NULL};
+	char		*expected = "";
+	assert_echo_case(input, expected);
+}
+
+Test(echo, input_string_with_multiple_flags)
+{
+	char		*input[] = {"echo", "-n", "-n", "-n", "test", NULL};
+	char		*expected = "test";
+	assert_echo_case(input, expected);
+}
+
+Test(echo, input_empty_with_two_flags)
+{
+	char		*input[] = {"echo", "-n", "-n", NULL};
 	char		*expected = "";
 	assert_echo_case(input, expected);
 }

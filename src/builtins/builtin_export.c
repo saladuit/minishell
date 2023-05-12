@@ -12,49 +12,79 @@
 
 #include <minishell.h>
 
-static void	get_value(char **value, char *key)
+static char	*get_value(char *key)
 {
-	*value = ft_strchr(key, '=');
-	if (*value == NULL)
-		*value = ft_strdup("");
-	else
-	{
-		**value = '\0';
-		*value = ft_strdup(++(*value));
-	}
+	char	*value;
+
+	value = NULL;
+	if (*key == '=')
+		return (ft_strdup(""));
+	value = ft_strchr(key, '=');
+	if (value == NULL)
+		return (ft_strdup(""));
+	*value = '\0';
+	return (ft_strdup(++value));
 }
 
-static void	initialize_export(bool *ret, size_t *i)
+bool	validate_alpha(char *arg, t_status *status)
 {
-	*ret = false;
-	*i = 1;
+	if ((ft_isalpha(arg[0]) == false && arg[0] != UNDERSCORE) || ft_strbapi(arg,
+			is_alnumunderscore) == false)
+	{
+		export_error_msg_not_valid(arg, status);
+		return (false);
+	}
+	return (true);
+}
+
+bool	allocate_key_value(char *arg, char **key, char **value)
+{
+	*key = ft_strdup(arg);
+	if (*key == NULL)
+		return (false);
+	*value = get_value(*key);
+	if (!*value)
+	{
+		free_key_value(key, NULL);
+		return (false);
+	}
+	return (true);
+}
+
+void	process_arg(char *arg, t_minishell *shell)
+{
+	char	*key;
+	char	*value;
+
+	key = NULL;
+	value = NULL;
+	if (!allocate_key_value(arg, &key, &value))
+	{
+		shell->status = message_system_call_error("export: ");
+		return ;
+	}
+	if (!validate_alpha(key, &shell->status))
+	{
+		free_key_value(&key, &value);
+		return ;
+	}
+	if (dict_set(&shell->env, key, value) == ERROR)
+	{
+		shell->status = message_system_call_error("export: ");
+		free_key_value(&key, &value);
+		return ;
+	}
+	free_key_value(&key, &value);
 }
 
 void	ft_export(char **arguments, t_minishell *shell)
 {
-	char	*key;
-	char	*value;
 	size_t	i;
-	bool	ret;
 
-	initialize_export(&ret, &i);
-	validate_arg(arguments[i], &ret);
-	while (arguments[i] != NULL && ret == false)
+	i = 1;
+	while (arguments[i] != NULL)
 	{
-		if (!validate_alpha(arguments[i], &i, &shell->status))
-			continue ;
-		key = ft_strdup(arguments[i]);
-		if (key == NULL)
-		{
-			export_error_msg_out_of_memory(shell, &i, &ret);
-			return ;
-		}
-		get_value(&value, key);
-		if (!value)
-			export_error_msg_out_of_memory(shell, &i, &ret);
-		dict_set(&shell->env, key, value);
-		if (!validate_dict(shell, key, &i, &ret))
-			return ;
+		process_arg(arguments[i], shell);
 		i++;
 	}
 }

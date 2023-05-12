@@ -76,7 +76,7 @@ char	*expand_token(char *arg, t_status *status, t_dictionary *env)
 	while (arg[exp.i])
 	{
 		exp.e_continue = false;
-		if (is_dollar(arg[exp.i]) && !exp.is_single)
+		if (ft_strncmp(arg, "$=", 2) && is_dollar(arg[exp.i]) && !exp.is_single)
 			exp.node = expand_dollar_node(arg, &exp.i, status, env);
 		else if (is_double_quote(arg[exp.i]) && !exp.is_single)
 			xor(&exp, 0);

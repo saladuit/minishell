@@ -27,6 +27,8 @@ void			ft_array_print(char **list);
  * @return The total "length" of the 2d array. */
 size_t			ft_matrixlen(void **matrix);
 
+size_t			ft_str_count(char **args);
+
 char			*ft_joinmatrix(const char **matrix, size_t count);
 
 /**
@@ -81,7 +83,7 @@ int				ft_iswhitespace(char c);
  * @return The converted integer value. */
 int				ft_atoi(const char *str);
 
-int				ft_ltoi_with_overflow(const char *str, long long *result);
+bool			ft_ltoi_with_overflow(const char *str, long *result);
 /**
  * @brief The ft_hextoi() function converts the initial portion of the
  * string pointed to by str, if its hexadecimal, to int representation.

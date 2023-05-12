@@ -35,7 +35,7 @@
 # define SPACE ' '
 # define READ_END 0
 # define WRITE_END 1
-
+# define UNDERSCORE '_'
 # define NOT_FOUND 1
 
 # include <assert.h>
@@ -55,7 +55,7 @@
 # include <unistd.h>
 
 // GLOBAL VARIABLE
-extern int	g_signal_error;
+extern int			g_signal_error;
 
 /*
 E_GENERAL:
@@ -81,6 +81,7 @@ E_EXIT_STATUS_OUT_OF_RANGE:
 // Mininums
 typedef enum e_status
 {
+	E_NO_STATUS = -42,
 	E_USAGE = 0,
 	E_GENERAL = 1,
 	E_BUILTIN = 2,
@@ -193,6 +194,13 @@ typedef struct s_tokenerror
 	const char		*error_msg;
 }					t_tokenerror;
 
+typedef struct s_execute
+{
+	int32_t			pipe_fds[2];
+	int32_t			prev_read;
+	pid_t			pid;
+}					t_execute;
+
 // Minishell
 
 int32_t				minishell(char **envp);
@@ -233,6 +241,9 @@ bool				control_conventions(const char *command, t_status *exit,
 						t_lexer *lex, const char **error_msg);
 int					compare_command_ignore_spaces(const char *command,
 						const char *cmp);
+bool				check_final_conditions(t_lexer *lex, t_status *exit);
+bool				check_initial_conditions(const char *command_line,
+						t_status *exit);
 
 // Parser
 t_list				*parser(t_list *tokens, t_status *status,
@@ -282,6 +293,9 @@ t_status			message_child_status(t_status status);
 t_status			message_general_error(t_status status, const char *msg);
 
 // Minitypes
+
+bool				is_whitespace(int c);
+bool				is_alnumunderscore(int c);
 bool				is_pipe(int c);
 bool				is_dollar(int c);
 bool				is_meta(int c);
@@ -291,6 +305,7 @@ bool				is_quote(int c);
 bool				is_double_quote(int c);
 bool				is_single_quote(int c);
 bool				is_metachar(const char *str);
+bool				is_equalssign(int c);
 size_t				metachar_len(const char *str);
 
 // Expander
@@ -306,8 +321,8 @@ size_t				len_until_quote_or_dollar(char *str);
 void				executor(t_minishell *shell);
 int32_t				open_fd_type(char *path, t_type type);
 int32_t				setup_redirects(t_command *command);
-int32_t				pipes_handle(int32_t *pipe_fds, int32_t *std_fds,
-						int32_t n_commands, int32_t i);
+int32_t				pipes_handle(int32_t *pipe_fds, int32_t n_commands,
+						int32_t i, int32_t prev_read);
 void				close_pipe(int32_t *pipe_fd);
 int32_t				execute_builtin(char **arguments, t_minishell *shell);
 void				execute_child_command(t_minishell *shell, char **arguments);
@@ -323,6 +338,7 @@ void				ft_echo(char **arguments, t_minishell *shell);
 void				ft_cd(char **arguments, t_minishell *shell);
 void				ft_pwd(char **arguments, t_minishell *shell);
 void				ft_export(char **arguments, t_minishell *shell);
+void				free_key_value(char **key, char **value);
 void				ft_unset(char **arguments, t_minishell *shell);
 void				ft_env(char **arguments, t_minishell *shell);
 void				ft_exit(char **args, t_minishell *shell);
@@ -331,16 +347,14 @@ void				ft_exit(char **args, t_minishell *shell);
 void				export_error_msg_not_valid(char *arg, t_status *status);
 void				export_error_msg_out_of_memory(t_minishell *shell,
 						size_t *i, bool *ret);
-bool				validate_alpha(char *arg, size_t *i, t_status *status);
 void				validate_arg(char *arg, bool *ret);
-bool				validate_dict(t_minishell *shell, char *key,
-						size_t *i, bool *ret);
+bool				validate_dict(t_minishell *shell, char *key, size_t *i,
+						bool *ret);
 
 // Signals
 void				initialize_signal_handling(t_status *status);
 void				initialize_signal_handling_for_execve(t_status *status);
 void				signal_ctrl_c(int sig);
-bool				signal_ctrl_d(char *str, char **env, t_status *status);
 void				signal_ctrl_c_heredoc(int sig);
 
 #endif

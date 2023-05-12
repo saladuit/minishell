@@ -39,6 +39,8 @@ int32_t	envp_load(t_dictionary *env, char **envp)
 	int		i;
 
 	i = 0;
+	if (!envp)
+		return (SUCCESS);
 	while (envp[i])
 	{
 		key = ft_strdup(envp[i++]);

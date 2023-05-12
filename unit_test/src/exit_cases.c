@@ -46,6 +46,24 @@ Test(exit, input_123)
 	assert_exit(in, true, 123);
 }
 
+Test(exit, input_minus_one)
+{
+	char	*in[] = {"exit", "-1", NULL};
+	assert_exit(in, true, 255);
+}
+
+Test(exit, input_minus_four)
+{
+	char	*in[] = {"exit", "-4", NULL};
+	assert_exit(in, true, 252);
+}
+
+Test(exit, input_minus_255)
+{
+	char	*in[] = {"exit", "-255", NULL};
+	assert_exit(in, true, 1);
+}
+
 Test(exit, input_2147483647)
 {
 	char	*in[] = {"exit", "2147483647", NULL};
@@ -138,13 +156,115 @@ Test(exit, input_only_zeros)
 
 Test(exit, input_only_spaces)
 {
-	char	*in[] = {"exit", "    ", NULL};
+	char	*in[] = {"exit                ", NULL};
 	assert_exit(in, true, 0);
 }
 
 Test(exit, input_very_big_number)
 {
 	char	*in[] = {"exit", "129052340578423590778257728345834758", NULL};
+	assert_exit(in, true, 255);
+}
+
+Test(exit, input_another_big_num)
+{
+	char	*in[] = {"exit", "-9223372036854775808", NULL};
+	assert_exit(in, true, 0);
+}
+
+Test(exit, input_another_big_num_many_ones)
+{
+	char	*in[] = {"exit", "1111111111111111", NULL};
+	assert_exit(in, true, 199);
+}
+
+Test(exit, input_plus_num)
+{
+	char	*in[] = {"exit", "+5", NULL};
+	assert_exit(in, true, 5);
+}
+
+Test(exit, input_dash)
+{
+	char	*in[] = {"exit", "-", NULL};
+	assert_exit(in, true, 255);
+}
+
+Test(exit, input_dash_dash)
+{
+	char	*in[] = {"exit", "--", NULL};
+	assert_exit(in, true, 0);
+}
+
+Test(exit, input_twice_dash_dash)
+{
+	char	*in[] = {"exit", "--", "--", NULL};
+	assert_exit(in, true, 255);
+}
+
+Test(exit, input_minus_and_num)
+{
+	char	*in[] = {"exit", "-", "1", NULL};
+	assert_exit(in, true, 255);
+}
+
+Test(exit, input_plus_and_num)
+{
+	char	*in[] = {"exit", "+", "1", NULL};
+	assert_exit(in, true, 255);
+}
+
+Test(exit, input_num_char_and_string)
+{
+	char	*in[] = {"exit", "2a", "dfg", NULL};
+	assert_exit(in, true, 255);
+}
+
+Test(exit, input_float_and_multiple_nums)
+{
+	char	*in[] = {"exit", "2.2", "3", "3", NULL};
+	assert_exit(in, true, 255);
+}
+
+Test(exit, input_exit_exit_num)
+{
+	char	*in[] = {"exit", "exit", "3", NULL};
+	assert_exit(in, true, 255);
+}
+
+Test(exit, input_exit_exit_num_char)
+{
+	char	*in[] = {"exit", "exit", "3a", NULL};
+	assert_exit(in, true, 255);
+}
+
+Test(exit, input_exit_exit_num_num)
+{
+	char	*in[] = {"exit", "exit", "3", "3", NULL};
+	assert_exit(in, true, 255);
+}
+
+Test(exit, input_dollar)
+{
+	char	*in[] = {"exit", "$", NULL};
+	assert_exit(in, true, 255);
+}
+
+Test(exit, input_empty)
+{
+	char	*in[] = {"exit", "", NULL};
+	assert_exit(in, true, 0);
+}
+
+Test(exit, input_question_mark)
+{
+	char	*in[] = {"exit", "?", NULL};
+	assert_exit(in, true, 1);
+}
+
+Test(exit, input_three_times_exit)
+{
+	char	*in[] = {"exit", "exit", "exit", NULL};
 	assert_exit(in, true, 255);
 }
 
@@ -182,7 +302,7 @@ Test(exit, input_exclamation_mark)
 	assert_exit_error(in, true, 255, "Sheldon: exit: !: numeric argument required\n");
 }
 
-Test(exit, input_one_one)
+Test(exit, input_num_num)
 {
 	char	*in[] = {"exit", "1", "1", NULL};
 	assert_exit_error(in, false, 1, "Sheldon: exit: too many arguments\n");
