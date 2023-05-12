@@ -64,6 +64,7 @@ void	ft_echo(char **arguments, t_minishell *shell)
 
 	i = 1;
 	(void)shell;
+	no_trailing_newline = false;
 	if (!arguments[i])
 	{
 		write(STDOUT_FILENO, "\n", 1);
