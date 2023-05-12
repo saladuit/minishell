@@ -16,8 +16,6 @@
 /*                           Envp_load                                         */
 /*******************************************************************************/
 
-TestSuite(envp_load, .init=redirect_all_std);
-
 void assert_envp_load(char **input,char *key, char *expected)
 {
   int condition;
@@ -55,11 +53,17 @@ Test(envp_load, basic)
   char *input[] = {"HELLO=Hello", NULL};
   assert_envp_load(input , "HELLO", "Hello");
 }
-
+          
 Test(envp_load, empty_equals)
 {
   char *input[] = {"HELLO=", NULL};
   assert_envp_load(input , "HELLO", "");
+}
+
+Test(envp_load, two_equals)
+{
+  char *input[] = {"HELLO==", NULL};
+  assert_envp_load(input , "HELLO", "=");
 }
 
 Test(envp_load, empty)
