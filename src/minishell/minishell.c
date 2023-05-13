@@ -14,75 +14,71 @@
 
 int	g_signal_error = E_USAGE;
 
-static int32_t	minishell_clean(t_minishell *sheldon)
+static int32_t	minishell_clean(t_minishell *shell)
 {
-	if (sheldon->tokens)
-		ft_lstclear(&sheldon->tokens, free);
-	if (sheldon->ast)
-		deconstruct_ast(&sheldon->ast);
-	if (sheldon->command_line)
-		free(sheldon->command_line);
+	if (shell->tokens)
+		ft_lstclear(&shell->tokens, free);
+	if (shell->ast)
+		deconstruct_ast(&shell->ast);
+	if (shell->command_line)
+		free(shell->command_line);
 	return (CONTINUE);
 }
 
-int32_t	minishell_loop(t_minishell *sheldon)
+int32_t	minishell_loop(t_minishell *shell)
 {
-	sheldon->command_line = readline(PROMPT);
+	shell->command_line = readline(PROMPT);
 	if (g_signal_error)
-		set_status_reset_signal(&sheldon->status);
-	if (!sheldon->command_line)
+		set_status_reset_signal(&shell->status);
+	if (!shell->command_line)
 		return (STOP);
-	if (!*sheldon->command_line)
+	if (!*shell->command_line)
 	{
-		free(sheldon->command_line);
+		free(shell->command_line);
 		return (CONTINUE);
 	}
-	add_history(sheldon->command_line);
-	sheldon->tokens = lexer(sheldon->command_line, &sheldon->status);
-	if (!sheldon->tokens)
-		return (minishell_clean(sheldon));
-	sheldon->ast = parser(sheldon->tokens, &sheldon->status, &sheldon->env);
-	if (!sheldon->ast)
-		return (minishell_clean(sheldon));
+	add_history(shell->command_line);
+	shell->tokens = lexer(shell->command_line, &shell->status);
+	if (!shell->tokens)
+		return (minishell_clean(shell));
+	shell->ast = parser(shell->tokens, &shell->status, &shell->env);
+	if (!shell->ast)
+		return (minishell_clean(shell));
 	if (LOG)
-		debug_ast(sheldon->ast);
-	executor(sheldon);
-	return (minishell_clean(sheldon));
+		debug_ast(shell->ast);
+	executor(shell);
+	return (minishell_clean(shell));
 }
 
-void	minishell_init(t_minishell *sheldon, char **envp)
+void	minishell_init(t_minishell *shell, char **envp)
 {
-	ft_bzero(sheldon, sizeof(t_minishell));
-	initialize_signal_handling(&sheldon->status);
-	sheldon->status = envp_load(&sheldon->env, envp);
+	ft_bzero(shell, sizeof(t_minishell));
+	initialize_signal_handling(&shell->status);
+	shell->status = envp_load(&shell->env, envp);
 	if (LOG)
-		dict_print(&sheldon->env);
+		dict_print(&shell->env);
 	if (!isatty(STDIN_FILENO))
 	{
 		message_system_call_error("isatty");
 		rl_outstream = stdin;
 	}
-	std_fds_dup(sheldon->std_fds, &sheldon->status);
+	std_fds_dup(shell->std_fds, &shell->status);
 }
 
-void	minishell_deinit(t_minishell *sheldon)
+void	minishell_deinit(t_minishell *shell)
 {
-	dict_destroy(&sheldon->env);
-	std_fds_close(sheldon->std_fds, &sheldon->status);
+	dict_destroy(&shell->env);
+	std_fds_close(shell->std_fds, &shell->status);
 	clear_history();
-	rl_cleanup_after_signal();
-	rl_free_line_state();
-	rl_free_undo_list();
-	rl_deprep_terminal();
 }
 
 int32_t	minishell(char **envp)
 {
-	t_minishell	sheldon;
+	t_minishell	shell;
 
-	minishell_init(&sheldon, envp);
-	while (minishell_loop(&sheldon) && !sheldon.stop)
+	minishell_init(&shell, envp);
+	while (minishell_loop(&shell) && !shell.stop)
 		;
-	minishell_deinit(&sheldon);
-	return (sheldon.status);
+	minishell_deinit(&shell);
+	return (shell.status);
 }

@@ -65,7 +65,7 @@ static int32_t	process_token(t_list **tokens, t_status *status,
 	}
 	if (is_redir(*token))
 	{
-		if (handle_redir(tokens, command) == ERROR)
+		if (handle_redir(tokens, status, env, command) == ERROR)
 			return (ERROR);
 	}
 	else
