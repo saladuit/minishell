@@ -29,6 +29,7 @@ static int32_t	redirect(t_redir *redir, t_type type)
 		return (ERROR);
 	if (redirect_file_descriptor(fd, type) == ERROR)
 	{
+		message_system_call_error("redirect");
 		close(fd);
 		return (ERROR);
 	}
