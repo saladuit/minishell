@@ -42,23 +42,23 @@ UNIT_HEADERS		:=$(wildcard $(UNIT_DIR)/$(INCLUDE_DIR)/*.h)
 UNIT_INCLUDE_FLAGS	:=$(addprefix -I, $(sort $(dir $(UNIT_HEADERS))))
 
 ifeq ($(shell uname -s), Darwin)
-    INCLUDE_FLAGS   +=$(addprefix -I, $(shell brew --prefix readline)/include)
-    LDFLAGS         :=-lreadline -L$(shell brew --prefix readline)/lib
+    INCLUDE_FLAGS	+=$(addprefix -I, $(shell brew --prefix readline)/include)
+    LDFLAGS			=-lreadline -L$(shell brew --prefix readline)/lib
   else
-		LDFLAGS     :=-lreadline
+	LDFLAGS			=-lreadline
 endif
 
 ifdef TEST
-    LDFLAGS         +=-lcriterion
+    LDFLAGS			+=-lcriterion
 endif
 
 ifdef COV
-	LDFLAGS     +=-lcriterion
+	LDFLAGS			+=-lcriterion
 endif
 
 #	Libraries
 LIBFT				:=$(LIBFT_DIR)/libft.a
-COVERAGE_GCDA      :=build/**/*.gcda unit_test/build/*.gcda
-COVERAGE_GCNO      :=build/**/*.gcno unit_test/build/*.gcno
-COVERAGE_FILES      :=build/coverage.info
-COVERAGE           :=$(COVERAGE_FILES) $(COVERAGE_GCDA) $(COVERAGE_GCNO)
+COVERAGE_GCDA		:=build/**/*.gcda unit_test/build/*.gcda
+COVERAGE_GCNO		:=build/**/*.gcno unit_test/build/*.gcno
+COVERAGE_FILES		:=build/coverage.info
+COVERAGE			:=$(COVERAGE_FILES) $(COVERAGE_GCDA) $(COVERAGE_GCNO)
