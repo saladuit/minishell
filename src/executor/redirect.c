@@ -83,7 +83,7 @@ int32_t	setup_redirects(t_command *command)
 		{
 			close_fd_if_open(&input_fd);
 			close_fd_if_open(&output_fd);
-			return (message_system_call_error("setup_redirects: "));
+			return (E_GENERAL);
 		}
 		i++;
 	}
