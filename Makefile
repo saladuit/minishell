@@ -47,13 +47,13 @@ fsan:
 .PHONY: fsan
 
 test:
-	@$(MAKE) DEBUG=1 FSAN=1 unit_test
+	@$(MAKE) DEBUG=1 FSAN=1 TEST=1 unit_test
 	@./$(UNIT_TEST) -j4 $(F)
 .PHONY: test
 
 coverage:
 	@$(RM) $(COVERAGE_GCDA) $(COVERAGE_FILES)
-	@$(MAKE) DEBUG=1 COV=1 unit_test
+	@$(MAKE) DEBUG=1 COV=1 TEST=1 unit_test
 	@./$(UNIT_TEST) -j4 $(F)
 	@lcov -q -d build -c --output-file build/coverage.info --rc lcov_branch_coverage=1
 	@genhtml -q build/coverage.info -o build/coverage_report --rc genhtml_branch_coverage=1

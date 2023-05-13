@@ -42,12 +42,6 @@ UNIT_HEADERS		:=$(wildcard $(UNIT_DIR)/$(INCLUDE_DIR)/*.h)
 UNIT_INCLUDE_FLAGS	:=$(addprefix -I, $(sort $(dir $(UNIT_HEADERS))))
 
 
-ifeq ($(shell uname -s), Darwin)
-    INCLUDE_FLAGS	+=$(addprefix -I, $(shell brew --prefix readline)/include)
-    LDFLAGS			+=-lreadline -lcriterion -L$(shell brew --prefix readline)/lib
-  else
-	LDFLAGS			+=-lreadline -lcriterion
-endif
 
 #	Libraries
 LIBFT				:=$(LIBFT_DIR)/libft.a

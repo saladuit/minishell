@@ -20,6 +20,7 @@ RM							:=rm -rf
 
 #	Compiler	flags
 CFLAGS						=-Wall -Wextra -Werror
+LDFLAGS						=-lreadline
 
 #	Directories
 SRC_DIR						:=src
@@ -38,13 +39,22 @@ UNIT_BUILD_DIR				:=$(UNIT_DIR)/$(BUILD_DIR)
 UNIT_SRC_DIR				:=$(UNIT_DIR)/$(SRC_DIR)
 UNIT_INCLUDE_DIR			:=$(UNIT_DIR)/$(INCLUDE_DIR)
 
+ifeq ($(shell uname -s), Darwin)
+    INCLUDE_FLAGS	+=$(addprefix -I, $(shell brew --prefix readline)/include)
+    LDFLAGS			+=-L$(shell brew --prefix readline)/lib
+endif
+
 #	Flags
 ifdef	DEBUG
 	CFLAGS					+=-g -MMD -MP
 endif
 
-ifdef LOG
+ifdef	LOG
 	CFLAGS					+=-D LOG=1
+endif
+
+ifdef	TEST
+	LDFLAGS					+=-lcriterion
 endif
 
 ifdef	COV
