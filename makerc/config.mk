@@ -43,9 +43,17 @@ UNIT_INCLUDE_FLAGS	:=$(addprefix -I, $(sort $(dir $(UNIT_HEADERS))))
 
 ifeq ($(shell uname -s), Darwin)
     INCLUDE_FLAGS   +=$(addprefix -I, $(shell brew --prefix readline)/include)
-    LDFLAGS         :=-lcriterion -lreadline -L$(shell brew --prefix readline)/lib
+    LDFLAGS         :=-lreadline -L$(shell brew --prefix readline)/lib
   else
-		LDFLAGS     :=-lcriterion -lreadline
+		LDFLAGS     :=-lreadline
+endif
+
+ifdef TEST
+    LDFLAGS         +=-lcriterion
+endif
+
+ifdef COV
+	LDFLAGS     +=-lcriterion
 endif
 
 #	Libraries

@@ -29,7 +29,6 @@ unit_test: $(UNIT_TEST) all
 
 $(MINISHELL): SHELL :=/bin/bash
 
-
 $(MINISHELL): $(OBJS) $(MAIN_OBJ) $(LIBFT)
 	$(CC) $(CFLAGS) $^ $(LDFLAGS) $(INCLUDE_FLAGS) -o $(MINISHELL)
 
