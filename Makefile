@@ -13,14 +13,6 @@
 include makerc/common.mk
 include makerc/config.mk
 
-#-include $(UNIT_DEPENDS)
-#-include $(DEPENDS)
-#-include $(MAIN_DEPENDS)
-
-# $(info $(UNIT_DEPENDS))
-# $(info  $(DEPENDS))
-# $(info $(MAIN_DEPENDS))
-
 all: $(MINISHELL)
 .PHONY: all
 
