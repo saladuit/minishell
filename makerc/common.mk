@@ -40,8 +40,8 @@ UNIT_SRC_DIR				:=$(UNIT_DIR)/$(SRC_DIR)
 UNIT_INCLUDE_DIR			:=$(UNIT_DIR)/$(INCLUDE_DIR)
 
 ifeq ($(shell uname -s), Darwin)
-    INCLUDE_FLAGS	+=$(addprefix -I, $(shell brew --prefix readline)/include)
-    LDFLAGS			+=-L$(shell brew --prefix readline)/lib
+    INCLUDE_FLAGS			+=$(addprefix -I, $(shell brew --prefix readline)/include)
+    LDFLAGS					+=-L$(shell brew --prefix readline)/lib
 endif
 
 #	Flags
