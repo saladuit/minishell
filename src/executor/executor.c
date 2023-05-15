@@ -24,7 +24,7 @@ static int32_t	setup_and_get_args(t_command *cmd, t_minishell *shell,
 		return (ERROR);
 	}
 	*arguments = get_arguments(cmd);
-	if (*arguments == NULL)
+	if (*arguments == NULL || **arguments == NULL)
 	{
 		shell->status = message_system_call_error("setup_and_get_args: ");
 		return (ERROR);
