@@ -34,6 +34,7 @@ static int32_t	open_heredoc(char *delimiter)
 		_exit(E_COMMAND_NOT_FOUND);
 	}
 	waitpid(child, &status, WUNTRACED);
+	status = WIFEXITED(status);
 	if (close(pipe_fd[WRITE_END]) != SUCCESS)
 		return (ERROR);
 	return (pipe_fd[READ_END]);
