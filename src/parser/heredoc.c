@@ -33,7 +33,7 @@ int32_t	here_doc(char *delimiter, int fd_write_end)
 {
 	char	*line;
 
-	if (!delimiter)
+	if (!delimiter || *delimiter == '\0')
 		return (ERROR);
 	signal(SIGINT, signal_ctrl_c_heredoc);
 	while (1)
