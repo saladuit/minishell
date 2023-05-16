@@ -41,6 +41,7 @@ UNIT_INCLUDE_DIR			:=$(UNIT_DIR)/$(INCLUDE_DIR)
 
 ifeq ($(shell uname -s), Darwin)
     INCLUDE_FLAGS			+=$(addprefix -I, $(shell brew --prefix readline)/include)
+    # INCLUDE_FLAGS			+=/Users/safoh/.brew/opt/readline
     LDFLAGS					+=-L$(shell brew --prefix readline)/lib
 endif
 

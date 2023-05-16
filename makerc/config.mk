@@ -37,7 +37,7 @@ UNIT_OBJS			:=$(patsubst $(UNIT_DIR)/$(SRC_DIR)/%.c, $(UNIT_DIR)/$(BUILD_DIR)/%.
 HEADERS				=$(LIBFT_INCLUDE_DIR)/libft.h \
 					 $(INCLUDE_DIR)/minishell.h \
 					 $(READLINE_INCLUDE_DIR)/readline.h
-INCLUDE_FLAGS		:=$(addprefix -I, $(sort $(dir $(HEADERS))))
+INCLUDE_FLAGS		+=$(addprefix -I, $(sort $(dir $(HEADERS))))
 UNIT_HEADERS		:=$(wildcard $(UNIT_DIR)/$(INCLUDE_DIR)/*.h)
 UNIT_INCLUDE_FLAGS	:=$(addprefix -I, $(sort $(dir $(UNIT_HEADERS))))
 

@@ -60,7 +60,7 @@ static void	execute_simple_command(t_command *cmd, t_minishell *shell)
 
 	if (setup_and_get_args(cmd, shell, &arguments) == ERROR)
 		return ;
-	if (arguments == NULL)
+	if (arguments == NULL || *arguments == NULL)
 		return ;
 	status = execute_builtin(arguments, shell);
 	if (status >= SUCCESS)
