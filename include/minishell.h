@@ -263,7 +263,7 @@ t_type				set_type(char *symbol, size_t len);
 
 int32_t				handle_argument(char *token, t_status *status,
 						t_dictionary *env, t_command *command);
-int32_t				handle_redir(t_list **tokens, t_status *status, 
+int32_t				handle_redir(t_list **tokens, t_status *status,
 						t_dictionary *env, t_command *command);
 
 // Constructers

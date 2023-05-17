@@ -83,7 +83,7 @@ static t_list	*create_token_node(const char **command_line,
 static bool	process_command_line(t_lexer *lex, const char **command_line,
 	t_status *exit)
 {
-	while (**command_line)
+	while (**command_line && lex->meta_count <= 2)
 	{
 		ft_skip_whitespaces(command_line);
 		if (**command_line)

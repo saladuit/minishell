@@ -53,7 +53,7 @@ static bool	handle_redirection(t_redir *redir, int32_t *input_fd,
 	return (true);
 }
 
-int32_t redirect_fds(int32_t input_fd, int32_t output_fd)
+int32_t	redirect_fds(int32_t input_fd, int32_t output_fd)
 {
 	int32_t	status;
 

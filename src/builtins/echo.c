@@ -30,12 +30,12 @@ static bool	check_flag(char *arg)
 
 static void	process_args(char **arguments, size_t *i)
 {
-	size_t arg_index;
-	int32_t write_count;
+	size_t	arg_index;
+	int32_t	write_count;
 
 	arg_index = 0;
 	write_count = 0;
-	while (arguments[*i +arg_index])
+	while (arguments[*i + arg_index])
 	{
 		if (*arguments[*i + arg_index] == '\0' && write_count == 0)
 			;
@@ -43,7 +43,8 @@ static void	process_args(char **arguments, size_t *i)
 		{
 			if (arg_index >= 1 && write_count > 0)
 				write(STDOUT_FILENO, " ", 1);
-			write(STDOUT_FILENO, arguments[*i + arg_index], ft_strlen(arguments[*i + arg_index]));
+			write(STDOUT_FILENO, arguments[*i + arg_index],
+				ft_strlen(arguments[*i + arg_index]));
 			write_count++;
 		}
 		arg_index++;

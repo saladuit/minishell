@@ -37,7 +37,7 @@ int32_t	execute_builtin(char **arguments, t_minishell *shell)
 {
 	t_builtin	builtin_function;
 
-	if (arguments == NULL)
+	if (arguments == NULL && *arguments == NULL)
 		return (ERROR);
 	builtin_function = builtin_lookup(arguments[0]);
 	if (builtin_function.name == NULL)

@@ -14,7 +14,7 @@
 
 #define HEREDOC_PROMPT "> "
 
-static void print_heredoc_error(char *delimiter)
+static void	print_heredoc_error(char *delimiter)
 {
 	ft_putstr_fd("sheldon: warning: here-document", STDERR_FILENO);
 	ft_putstr_fd(" at line 5 delimited by end-of-file", STDERR_FILENO);
@@ -23,7 +23,7 @@ static void print_heredoc_error(char *delimiter)
 	ft_putstr_fd("')\n", STDERR_FILENO);
 }
 
-static void print_line(char *line, int32_t fd_write_end)
+static void	print_line(char *line, int32_t fd_write_end)
 {
 	ft_putstr_fd(line, fd_write_end);
 	ft_putstr_fd("\n", fd_write_end);
