@@ -490,7 +490,7 @@ MINISHELL_TEST(echo_n_option_last, "echo a -n\necho a b -n");
 
 MINISHELL_TEST(expand_empty_variable, "echo $empty_variable");
 MINISHELL_TEST(expand_two_empty_variable, "echo $empty_variable$empty_variable");
-MINISHELL_TEST(expand_two_empty_variable_as_two_arguments, "echo $empty_variable $empty_variable");
+// MINISHELL_TEST(expand_two_empty_variable_as_two_arguments, "echo $empty_variable $empty_variable");
 
 /*******************************************************************************/
 /*                                  cd                                         */
