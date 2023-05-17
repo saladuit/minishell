@@ -12,30 +12,31 @@
 
 #include <minishell.h>
 
-static int32_t	open_heredoc(char *path)
+static int32_t	open_heredoc(char *delimiter)
 {
 	pid_t		child;
 	int32_t		pipe_fd[2];
 	int32_t		status;
 
 	if (pipe(pipe_fd) == ERROR)
-		return (ERROR);
+		return (message_system_call_error("open_heredoc"));
 	child = fork();
-	if (child == -1)
+	if (child == ERROR)
 		return (close_pipe(pipe_fd), ERROR);
 	if (child == 0)
 	{
 		if (close(pipe_fd[READ_END]) != SUCCESS)
-			_exit(E_COMMAND_NOT_FOUND);
-		if (here_doc(path, pipe_fd[WRITE_END]) != SUCCESS)
-			_exit(E_COMMAND_NOT_FOUND);
+			_exit(message_system_call_error("open_heredoc"));
+		if (here_doc(delimiter, pipe_fd[WRITE_END]) != SUCCESS)
+			_exit(message_system_call_error("open_heredoc"));
 		if (pipe_fd[WRITE_END] == ERROR)
-			_exit(E_COMMAND_NOT_FOUND);
+			_exit(message_system_call_error("open_heredoc"));
 		_exit(E_COMMAND_NOT_FOUND);
 	}
+	waitpid(child, &status, WUNTRACED);
+	status = WIFEXITED(status);
 	if (close(pipe_fd[WRITE_END]) != SUCCESS)
 		return (ERROR);
-	waitpid(child, &status, WUNTRACED);
 	return (pipe_fd[READ_END]);
 }
 

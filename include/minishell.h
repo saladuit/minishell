@@ -263,7 +263,8 @@ t_type				set_type(char *symbol, size_t len);
 
 int32_t				handle_argument(char *token, t_status *status,
 						t_dictionary *env, t_command *command);
-int32_t				handle_redir(t_list **tokens, t_command *command);
+int32_t				handle_redir(t_list **tokens, t_status *status,
+						t_dictionary *env, t_command *command);
 
 // Constructers
 t_list				*construct_ast(t_list *tokens, t_status *status,
@@ -272,7 +273,8 @@ t_command_table		*construct_command_table(t_list **tokens, t_status *status,
 						t_dictionary *env);
 t_command			*construct_command(t_list **tokens, t_status *status,
 						t_dictionary *env);
-t_redir				*construct_redir(t_list **tokens);
+t_redir				*construct_redir(t_list **tokens, t_status *status,
+						t_dictionary *env);
 // Deconstructers
 void				deconstruct_ast(t_list **ast);
 void				deconstruct_command_table(void *ct);
@@ -316,6 +318,7 @@ t_list				*expand_dollar_node(char *arg, size_t *i, t_status *status,
 char				*expand_token(char *arg, t_status *status,
 						t_dictionary *envd);
 size_t				len_until_quote_or_dollar(char *str);
+bool				handle_edge_cases(char *str);
 
 // Executor
 void				executor(t_minishell *shell);

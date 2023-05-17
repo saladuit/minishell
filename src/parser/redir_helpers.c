@@ -12,11 +12,12 @@
 
 #include <minishell.h>
 
-int32_t	handle_redir(t_list **tokens, t_command *command)
+int32_t	handle_redir(t_list **tokens, t_status *status, t_dictionary *env,
+		t_command *command)
 {
 	t_redir	*redir;
 
-	redir = construct_redir(tokens);
+	redir = construct_redir(tokens, status, env);
 	if (!redir || !ft_lstadd_backnew(&command->redirs, redir))
 	{
 		deconstruct_redirs(redir);

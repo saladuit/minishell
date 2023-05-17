@@ -12,25 +12,44 @@
 
 #include <minishell.h>
 
+#define HEREDOC_PROMPT "> "
+
+static void	print_heredoc_error(char *delimiter)
+{
+	ft_putstr_fd("sheldon: warning: here-document", STDERR_FILENO);
+	ft_putstr_fd(" at line 5 delimited by end-of-file", STDERR_FILENO);
+	ft_putstr_fd(" (wanted `", STDERR_FILENO);
+	ft_putstr_fd(delimiter, STDERR_FILENO);
+	ft_putstr_fd("')\n", STDERR_FILENO);
+}
+
+static void	print_line(char *line, int32_t fd_write_end)
+{
+	ft_putstr_fd(line, fd_write_end);
+	ft_putstr_fd("\n", fd_write_end);
+}
+
 int32_t	here_doc(char *delimiter, int fd_write_end)
 {
 	char	*line;
 
-	if (!delimiter || ft_strlen(delimiter) == 0)
+	if (!delimiter || *delimiter == '\0')
 		return (ERROR);
 	signal(SIGINT, signal_ctrl_c_heredoc);
 	while (1)
 	{
-		line = readline("> ");
+		line = readline(HEREDOC_PROMPT);
 		if (!line)
-			_exit(E_COMMAND_NOT_FOUND);
+		{
+			print_heredoc_error(delimiter);
+			_exit(SUCCESS);
+		}
 		if (ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0)
 		{
 			free(line);
 			break ;
 		}
-		write(fd_write_end, line, ft_strlen(line));
-		write(fd_write_end, "\n", 1);
+		print_line(line, fd_write_end);
 		free(line);
 	}
 	return (SUCCESS);

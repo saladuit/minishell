@@ -47,7 +47,7 @@ static char	*get_cmd_path(char *path, char *cmd)
 	char	*cmd_path;
 	char	*slash_cmd;
 
-	if (!path || !cmd)
+	if (!cmd)
 		return (NULL);
 	if (cmd[0] == '/' || cmd[0] == '.')
 	{

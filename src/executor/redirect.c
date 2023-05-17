@@ -12,14 +12,6 @@
 
 #include <minishell.h>
 
-static int32_t	redirect_file_descriptor(int source_fd, t_type redirection)
-{
-	if (redirection == INPUT || redirection == HEREDOC)
-		return (dup2(source_fd, STDIN_FILENO));
-	else
-		return (dup2(source_fd, STDOUT_FILENO));
-}
-
 static int32_t	redirect(t_redir *redir, t_type type)
 {
 	int32_t	fd;
@@ -27,11 +19,6 @@ static int32_t	redirect(t_redir *redir, t_type type)
 	fd = open_fd_type(redir->filename, type);
 	if (fd == ERROR)
 		return (ERROR);
-	if (redirect_file_descriptor(fd, type) == ERROR)
-	{
-		close(fd);
-		return (ERROR);
-	}
 	return (fd);
 }
 
@@ -66,6 +53,18 @@ static bool	handle_redirection(t_redir *redir, int32_t *input_fd,
 	return (true);
 }
 
+int32_t	redirect_fds(int32_t input_fd, int32_t output_fd)
+{
+	int32_t	status;
+
+	status = SUCCESS;
+	if (input_fd != ERROR)
+		status = dup2(input_fd, STDIN_FILENO);
+	if (status != ERROR && output_fd != ERROR)
+		status = dup2(output_fd, STDOUT_FILENO);
+	return (status);
+}
+
 int32_t	setup_redirects(t_command *command)
 {
 	t_redir	*redir;
@@ -83,9 +82,11 @@ int32_t	setup_redirects(t_command *command)
 		{
 			close_fd_if_open(&input_fd);
 			close_fd_if_open(&output_fd);
-			return (message_system_call_error("setup_redirects: "));
+			return (E_GENERAL);
 		}
 		i++;
 	}
+	if (redirect_fds(input_fd, output_fd) == ERROR)
+		return (E_GENERAL);
 	return (SUCCESS);
 }

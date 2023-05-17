@@ -63,7 +63,7 @@ void	get_next_redir(t_command *cmd, t_redir **redir)
 	return ;
 }
 
-t_redir	*construct_redir(t_list **tokens)
+t_redir	*construct_redir(t_list **tokens, t_status *status, t_dictionary *env)
 {
 	t_redir	*redir;
 
@@ -72,7 +72,7 @@ t_redir	*construct_redir(t_list **tokens)
 		return (NULL);
 	redir->type = set_type((*tokens)->content, ft_strlen((*tokens)->content));
 	*tokens = (*tokens)->next;
-	redir->filename = ft_strdup((char *)(*tokens)->content);
+	redir->filename = expand_token((char *)(*tokens)->content, status, env);
 	if (!redir->filename)
 	{
 		free(redir);

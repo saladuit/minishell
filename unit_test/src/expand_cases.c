@@ -226,6 +226,11 @@ Test(expand_token, echo_abcdef)
 	assert_expand_token("a$VAR\'ef\'", "ab c def", 0);
 }
 
+Test(expand_token, echo_double_quotes_dollar_equals_txt)
+{
+	assert_expand_token("\"$=UNSET\"", "$=UNSET", 0);
+}
+
 Test(expand_token, echo_abcdef_empty_input)
 {
 	assert_expand_token("a$EMPTY\'ef\'", "aef", 0);
