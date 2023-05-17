@@ -28,22 +28,25 @@ static bool	check_flag(char *arg)
 	return (i > 1);
 }
 
-static void	write_spaces_between_args(char **arguments, size_t i)
-{
-	if (arguments[i + 1])
-		write(STDOUT_FILENO, " ", 1);
-}
-
 static void	process_args(char **arguments, size_t *i)
 {
-	while (arguments[*i])
+	size_t arg_index;
+	int32_t write_count;
+
+	arg_index = 0;
+	write_count = 0;
+	while (arguments[*i +arg_index])
 	{
-		if (ft_strlen(arguments[*i]) > 0)
+		if (*arguments[*i + arg_index] == '\0' && write_count == 0)
+			;
+		else
 		{
-			write(STDOUT_FILENO, arguments[*i], ft_strlen(arguments[*i]));
-			write_spaces_between_args(arguments, *i);
+			if (arg_index >= 1 && write_count > 0)
+				write(STDOUT_FILENO, " ", 1);
+			write(STDOUT_FILENO, arguments[*i + arg_index], ft_strlen(arguments[*i + arg_index]));
+			write_count++;
 		}
-		(*i)++;
+		arg_index++;
 	}
 }
 
