@@ -38,7 +38,7 @@ static void	process_args(char **arguments, size_t *i)
 		if (arg_index >= 1)
 			write(STDOUT_FILENO, " ", 1);
 		write(STDOUT_FILENO, arguments[*i + arg_index],
-		ft_strlen(arguments[*i + arg_index]));
+			ft_strlen(arguments[*i + arg_index]));
 		arg_index++;
 	}
 }
