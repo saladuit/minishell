@@ -94,7 +94,7 @@ Test(echo, input_space)
 Test(echo, input_txt_empty_txt_empty_txt)
 {
 	char		*input[] = {"echo", "txt", "", "txt", "", "test", NULL};
-	char		*expected = " \n";
+	char		*expected = "txt  txt  test\n";
 	assert_echo_case(input, expected);
 }
 
