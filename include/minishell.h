@@ -318,6 +318,7 @@ t_list				*expand_dollar_node(char *arg, size_t *i, t_status *status,
 char				*expand_token(char *arg, t_status *status,
 						t_dictionary *envd);
 size_t				len_until_quote_or_dollar(char *str);
+bool				handle_edge_cases(char *str);
 
 // Executor
 void				executor(t_minishell *shell);
