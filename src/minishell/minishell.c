@@ -12,9 +12,9 @@
 
 #include <minishell.h>
 
-int	g_signal_error = E_USAGE;
+int g_signal_error = E_USAGE;
 
-static int32_t	minishell_clean(t_minishell *shell)
+static int32_t minishell_clean(t_minishell *shell)
 {
 	if (shell->tokens)
 		ft_lstclear(&shell->tokens, free);
@@ -25,7 +25,7 @@ static int32_t	minishell_clean(t_minishell *shell)
 	return (CONTINUE);
 }
 
-int32_t	minishell_loop(t_minishell *shell)
+int32_t minishell_loop(t_minishell *shell)
 {
 	shell->command_line = readline(PROMPT);
 	if (g_signal_error)
@@ -50,31 +50,29 @@ int32_t	minishell_loop(t_minishell *shell)
 	return (minishell_clean(shell));
 }
 
-void	minishell_init(t_minishell *shell, char **envp)
+void minishell_init(t_minishell *shell, char **envp)
 {
 	ft_bzero(shell, sizeof(t_minishell));
 	initialize_signal_handling(&shell->status);
 	shell->status = envp_load(&shell->env, envp);
 	if (LOG)
-		dict_print(&shell->env);
+		dict_print(&shell->env, STDOUT_FILENO);
 	if (!isatty(STDIN_FILENO))
 	{
 		message_system_call_error("isatty");
 		rl_outstream = stdin;
 	}
-	std_fds_dup(shell->std_fds, &shell->status);
 }
 
-void	minishell_deinit(t_minishell *shell)
+void minishell_deinit(t_minishell *shell)
 {
 	dict_destroy(&shell->env);
-	std_fds_close(shell->std_fds, &shell->status);
 	clear_history();
 }
 
-int32_t	minishell(char **envp)
+int32_t minishell(char **envp)
 {
-	t_minishell	shell;
+	t_minishell shell;
 
 	minishell_init(&shell, envp);
 	while (minishell_loop(&shell) && !shell.stop)

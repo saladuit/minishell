@@ -45,6 +45,7 @@ static int32_t pipe_handle_last_command(int32_t *pipe_fds, int32_t prev_read)
 	close(pipe_fds[WRITE_END]);
 	if (dup2(prev_read, STDIN_FILENO) == ERROR)
 		return (ERROR);
+	assert(close(prev_read) != ERROR);
 	return (close(pipe_fds[READ_END]));
 }
 

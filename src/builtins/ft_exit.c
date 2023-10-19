@@ -12,7 +12,7 @@
 
 #include <minishell.h>
 
-static void	exit_err_msg(char *arg)
+static void exit_err_msg(char *arg)
 {
 	ft_putstr_fd(SHELDON, STDERR_FILENO);
 	ft_putstr_fd(": exit: ", STDERR_FILENO);
@@ -25,19 +25,17 @@ static void	exit_err_msg(char *arg)
 	}
 }
 
-static bool	numeric(char *arg)
+static bool numeric(char *arg)
 {
-	size_t	i;
+	size_t i;
 
 	i = 0;
-	while (arg[i] && ft_iswhitespace(arg[i]))
-		i++;
+	while (arg[i] && ft_iswhitespace(arg[i])) i++;
 	if (arg[i] == '-' || arg[i] == '+')
 		i++;
 	if (!arg[i])
 		return (false);
-	while (arg[i] && arg[i] == '0')
-		i++;
+	while (arg[i] && arg[i] == '0') i++;
 	while (arg[i] && arg[i] != '#' && arg[i] != ';')
 	{
 		if (!ft_isdigit(arg[i]))
@@ -47,8 +45,8 @@ static bool	numeric(char *arg)
 	return (true);
 }
 
-static void	handle_count_is_bigger_then_two(char **args, t_status *status,
-											bool *stop)
+static void handle_count_is_bigger_then_two(
+	char **args, t_status *status, bool *stop)
 {
 	if (numeric(args[1]) == true || ft_strncmp(args[1], "?", 2) == 0)
 	{
@@ -64,9 +62,9 @@ static void	handle_count_is_bigger_then_two(char **args, t_status *status,
 	}
 }
 
-static void	handle_count_equals_two(char **args, t_status *status)
+static void handle_count_equals_two(char **args, t_status *status)
 {
-	long	res;
+	long res;
 
 	if (ft_strlen(args[1]) == 0 || !ft_strncmp(args[1], "--", 3))
 		*status = E_USAGE;
@@ -79,16 +77,16 @@ static void	handle_count_equals_two(char **args, t_status *status)
 	}
 	else
 	{
-		*status = (t_status) ft_atoi(args[1]) % 256;
+		*status = (t_status)ft_atoi(args[1]) % 256;
 		if (*status < 0)
 			*status += 256;
 	}
 }
 
-void	ft_exit(char **args, t_minishell *shell)
+void ft_exit(char **args, t_minishell *shell)
 {
-	size_t		count;
-	bool		stop;
+	size_t count;
+	bool   stop;
 
 	stop = true;
 	count = ft_str_count(args);

@@ -12,9 +12,9 @@
 
 #include <minishell.h>
 
-static bool	check_flag(char *arg)
+static bool check_flag(char *arg)
 {
-	size_t	i;
+	size_t i;
 
 	i = 0;
 	if (arg[i++] != '-')
@@ -28,23 +28,21 @@ static bool	check_flag(char *arg)
 	return (i > 1);
 }
 
-static void	process_args(char **arguments, size_t *i)
+static void process_args(char **arguments, size_t *i, t_minishell *shell)
 {
-	size_t	arg_index;
+	size_t arg_index;
 
 	arg_index = 0;
 	while (arguments[*i + arg_index])
 	{
 		if (arg_index >= 1)
-			write(STDOUT_FILENO, " ", 1);
-		write(STDOUT_FILENO, arguments[*i + arg_index],
-			ft_strlen(arguments[*i + arg_index]));
+			put_builtin("", shell->out_fd);
+		put_builtin(arguments[*i + arg_index], shell->out_fd);
 		arg_index++;
 	}
 }
 
-static void	process_flags(char **arguments, size_t *i,
-		bool *no_trailing_newline)
+static void process_flags(char **arguments, size_t *i, bool *no_trailing_newline)
 {
 	while (arguments[*i] && check_flag(arguments[*i]))
 	{
@@ -53,21 +51,20 @@ static void	process_flags(char **arguments, size_t *i,
 	}
 }
 
-void	ft_echo(char **arguments, t_minishell *shell)
+void ft_echo(char **arguments, t_minishell *shell)
 {
-	size_t	i;
-	bool	no_trailing_newline;
+	size_t i;
+	bool   no_trailing_newline;
 
 	i = 1;
-	(void)shell;
 	no_trailing_newline = false;
 	if (!arguments[i])
 	{
-		write(STDOUT_FILENO, "\n", 1);
-		return ;
+		put_builtin("\n", shell->out_fd);
+		return;
 	}
 	process_flags(arguments, &i, &no_trailing_newline);
-	process_args(arguments, &i);
+	process_args(arguments, &i, shell);
 	if (!no_trailing_newline)
-		write(STDOUT_FILENO, "\n", 1);
+		put_builtin("\n", shell->out_fd);
 }

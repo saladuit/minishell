@@ -1,0 +1,12 @@
+build
+compile_commands.json
+echo
+include
+libs
+Makefile
+makerc
+minishell
+out.txt
+README.md
+src
+unit_test

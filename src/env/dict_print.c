@@ -12,10 +12,10 @@
 
 #include <minishell.h>
 
-void	dict_print(t_dictionary *dict)
+void dict_print(t_dictionary *dict, int fd)
 {
 	size_t	i;
-	t_pair	*pair;
+	t_pair *pair;
 
 	i = 0;
 	while (i < HASH_TABLE_SIZE)
@@ -23,7 +23,9 @@ void	dict_print(t_dictionary *dict)
 		pair = dict->table[i];
 		while (pair && ft_strlen(pair->key) > 0)
 		{
-			printf("%s=%s\n", pair->key, pair->value);
+			put_builtin(pair->key, fd);
+			put_builtin(pair->value, fd);
+			put_builtin("\n", fd);
 			pair = pair->next;
 		}
 		i++;

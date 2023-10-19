@@ -12,10 +12,10 @@
 
 #include <minishell.h>
 
-static void	wait_for_child_processes(pid_t *pid_array, size_t array_length,
-		t_minishell *shell)
+static void wait_for_child_processes(
+	pid_t *pid_array, size_t array_length, t_minishell *shell)
 {
-	int32_t	status;
+	int32_t status;
 	size_t	i;
 
 	i = 0;
@@ -30,18 +30,15 @@ static void	wait_for_child_processes(pid_t *pid_array, size_t array_length,
 		;
 }
 
-static int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
+static int32_t execute_pipe_command(t_command *cmd, t_minishell *shell)
 {
-	char	**arguments;
-	int32_t	status;
+	char  **arguments;
+	int32_t status;
 
-	status = setup_redirects(cmd);
-	if (status)
-		_exit(status);
 	arguments = get_arguments(cmd);
 	if (!arguments)
 		_exit(E_COMMAND_NOT_FOUND);
-	status = execute_builtin(arguments, shell);
+	status = execute_builtin(arguments, shell, cmd);
 	if (status >= 0)
 		_exit(status);
 	execute_child_command(shell, arguments);
@@ -49,21 +46,22 @@ static int32_t	execute_pipe_command(t_command *cmd, t_minishell *shell)
 	return (status);
 }
 
-static void	process_command(t_execute *command, int32_t *i,
-							t_command_table *ct, t_minishell *shell)
+static void process_command(
+	t_execute *command, int32_t *i, t_command_table *ct, t_minishell *shell)
 {
-	t_command	*cmd;
+	t_command *cmd;
 
 	if (pipe(command->pipe_fds) == ERROR)
-		return ;
+		return;
 	get_next_command(ct, &cmd);
 	command->pid = fork();
 	if (command->pid == ERROR)
-		return ;
+		return;
 	if (command->pid == 0)
 	{
-		if (pipes_handle(command->pipe_fds, ct->n_commands, *i,
-				command->prev_read) == ERROR)
+		if (pipes_handle(
+				command->pipe_fds, ct->n_commands, *i, command->prev_read) ==
+			ERROR)
 		{
 			close_pipe(command->pipe_fds);
 			_exit(message_general_error(E_GENERAL, "Execute pipeline: "));
@@ -72,10 +70,10 @@ static void	process_command(t_execute *command, int32_t *i,
 	}
 }
 
-void	execute_pipeline(t_command_table *ct, t_minishell *shell)
+void execute_pipeline(t_command_table *ct, t_minishell *shell)
 {
-	t_execute	command;
-	int32_t		i;
+	t_execute command;
+	int32_t	  i;
 
 	i = 0;
 	shell->is_pipeline = true;
@@ -90,9 +88,9 @@ void	execute_pipeline(t_command_table *ct, t_minishell *shell)
 		if (ct->pids[i] == ERROR)
 		{
 			close_pipe(command.pipe_fds);
-			shell->status = message_general_error(E_GENERAL,
-					"Execute pipeline: ");
-			break ;
+			shell->status =
+				message_general_error(E_GENERAL, "Execute pipeline: ");
+			break;
 		}
 		i++;
 	}

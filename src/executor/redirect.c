@@ -12,9 +12,9 @@
 
 #include <minishell.h>
 
-static int32_t	redirect(t_redir *redir, t_type type)
+static int32_t redirect(t_redir *redir, t_type type)
 {
-	int32_t	fd;
+	int32_t fd;
 
 	fd = open_fd_type(redir->filename, type);
 	if (fd == ERROR)
@@ -22,7 +22,7 @@ static int32_t	redirect(t_redir *redir, t_type type)
 	return (fd);
 }
 
-static int32_t	close_fd_if_open(int32_t *fd)
+static int32_t close_fd_if_open(int32_t *fd)
 {
 	if (*fd != -1)
 	{
@@ -32,15 +32,17 @@ static int32_t	close_fd_if_open(int32_t *fd)
 	return (SUCCESS);
 }
 
-static bool	handle_redirection(t_redir *redir, int32_t *input_fd,
-		int32_t *output_fd)
+static bool handle_redirection(
+	t_redir *redir, int32_t *input_fd, int32_t *output_fd)
 {
-	int32_t	ret;
+	int32_t ret;
 
+	if (input_fd == NULL && redir->type == INPUT)
+		return (false);
 	ret = redirect(redir, redir->type);
 	if (ret == ERROR)
 		return (false);
-	if (redir->type == INPUT || redir->type == HEREDOC)
+	if (input_fd != NULL && (redir->type == INPUT || redir->type == HEREDOC))
 	{
 		close_fd_if_open(input_fd);
 		*input_fd = ret;
@@ -53,9 +55,9 @@ static bool	handle_redirection(t_redir *redir, int32_t *input_fd,
 	return (true);
 }
 
-int32_t	redirect_fds(int32_t input_fd, int32_t output_fd)
+int32_t redirect_fds(int32_t input_fd, int32_t output_fd)
 {
-	int32_t	status;
+	int32_t status;
 
 	status = SUCCESS;
 	if (input_fd != ERROR)
@@ -65,12 +67,33 @@ int32_t	redirect_fds(int32_t input_fd, int32_t output_fd)
 	return (status);
 }
 
-int32_t	setup_redirects(t_command *command)
+void set_simple_builtin_output(t_command *command, t_minishell *shell)
 {
-	t_redir	*redir;
-	int32_t	i;
-	int32_t	input_fd;
-	int32_t	output_fd;
+	t_redir *redir;
+	int32_t	 i;
+	int32_t	 output_fd;
+
+	i = 0;
+	output_fd = -1;
+	while (i < command->n_redirs)
+	{
+		get_next_redir(command, &redir);
+		if (handle_redirection(redir, NULL, &output_fd) == false)
+			close_fd_if_open(&output_fd);
+		i++;
+	}
+	if (output_fd != -1)
+		shell->out_fd = output_fd;
+	else
+		shell->out_fd = STDOUT_FILENO;
+}
+
+int32_t setup_redirects(t_command *command)
+{
+	t_redir *redir;
+	int32_t	 i;
+	int32_t	 input_fd;
+	int32_t	 output_fd;
 
 	i = 0;
 	input_fd = -1;

@@ -12,17 +12,8 @@
 
 #include <minishell.h>
 
-static int32_t	setup_and_get_args(t_command *cmd, t_minishell *shell,
-		char ***arguments)
+static int32_t get_args(t_command *cmd, t_minishell *shell, char ***arguments)
 {
-	int32_t	status;
-
-	status = setup_redirects(cmd);
-	if (status)
-	{
-		shell->status = status;
-		return (ERROR);
-	}
 	*arguments = get_arguments(cmd);
 	if (*arguments == NULL)
 	{
@@ -32,10 +23,11 @@ static int32_t	setup_and_get_args(t_command *cmd, t_minishell *shell,
 	return (SUCCESS);
 }
 
-static int32_t	execute_non_builtin(char **arguments, t_minishell *shell)
+static int32_t execute_non_builtin(
+	t_command *cmd, char **arguments, t_minishell *shell)
 {
 	pid_t	pid;
-	int32_t	status;
+	int32_t status;
 
 	pid = fork();
 	if (pid == ERROR)
@@ -45,6 +37,8 @@ static int32_t	execute_non_builtin(char **arguments, t_minishell *shell)
 	}
 	if (pid == 0)
 	{
+		if (setup_redirects(cmd) == ERROR)
+			_exit(E_COMMAND_NOT_FOUND);
 		execute_child_command(shell, arguments);
 		_exit(E_COMMAND_NOT_FOUND);
 	}
@@ -53,29 +47,29 @@ static int32_t	execute_non_builtin(char **arguments, t_minishell *shell)
 	return (SUCCESS);
 }
 
-static void	execute_simple_command(t_command *cmd, t_minishell *shell)
+static void execute_simple_command(t_command *cmd, t_minishell *shell)
 {
-	char	**arguments;
-	int32_t	status;
+	char  **arguments;
+	int32_t status;
 
-	if (setup_and_get_args(cmd, shell, &arguments) == ERROR)
-		return ;
+	if (get_args(cmd, shell, &arguments) == ERROR)
+		return;
 	if (arguments == NULL || *arguments == NULL)
-		return ;
-	status = execute_builtin(arguments, shell);
+		return;
+	status = execute_builtin(arguments, shell, cmd);
 	if (status >= SUCCESS)
 	{
 		free(arguments);
 		shell->status = status;
-		return ;
+		return;
 	}
-	execute_non_builtin(arguments, shell);
+	execute_non_builtin(cmd, arguments, shell);
 	free(arguments);
 }
 
-void	executor(t_minishell *shell)
+void executor(t_minishell *shell)
 {
-	t_command_table	*ct;
+	t_command_table *ct;
 	t_command		*cmd;
 
 	shell->status = E_USAGE;
@@ -87,5 +81,4 @@ void	executor(t_minishell *shell)
 	}
 	else
 		execute_pipeline(ct, shell);
-	std_fds_reset(shell->std_fds, &shell->status);
 }

@@ -12,15 +12,15 @@
 
 #include <minishell.h>
 
-static void	pwd_error_msg(void)
+static void pwd_error_msg(void)
 {
 	ft_putstr_fd("pwd: ", STDERR_FILENO);
 	ft_putendl_fd(strerror(errno), STDERR_FILENO);
 }
 
-void	ft_pwd(char **arguments, t_minishell *shell)
+void ft_pwd(char **arguments, t_minishell *shell)
 {
-	char	*buf;
+	char *buf;
 
 	if (arguments)
 		buf = getcwd(NULL, 0);
@@ -30,7 +30,7 @@ void	ft_pwd(char **arguments, t_minishell *shell)
 	{
 		shell->status = E_GENERAL;
 		pwd_error_msg();
-		return ;
+		return;
 	}
 	write(STDOUT_FILENO, buf, ft_strlen(buf));
 	write(STDOUT_FILENO, "\n", 1);
